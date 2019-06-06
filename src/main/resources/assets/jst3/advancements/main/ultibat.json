@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:itemjst1",
+			"data": 12022
+		},
+		"title": {
+			"translate": "jst3.adv.ultibat"
+		},
+		"description": {
+			"translate": "jst3.adv.ultibat.desc"
+		}
+	},
+	"parent": "jst3:main/sconduct",
+	"criteria": {
+		"jst3_ultibat": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:itemjst1",
+						"data": 12022
+					}
+				]
+			}
+		}
+	}
+}

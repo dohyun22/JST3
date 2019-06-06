@@ -1,0 +1,152 @@
+{
+   "teleport": {
+     "category": "master",
+     "sounds": [
+       "jst3:teleport"
+     ]
+   },
+   "laser": {
+     "category": "master",
+     "sounds": [
+       "jst3:laser"
+     ]
+   },
+   "aie": {
+     "category": "master",
+     "sounds": [
+       "jst3:aie"
+     ]
+   },
+   "shock": {
+     "category": "master",
+     "sounds": [
+       "jst3:shock"
+     ]
+   },
+   "shock2": {
+     "category": "master",
+     "sounds": [
+       "jst3:shock2"
+     ]
+   },
+   "wrench": {
+     "category": "master",
+     "sounds": [
+       "jst3:wrench"
+     ]
+   },
+   "boom": {
+     "category": "master",
+     "sounds": [
+       "jst3:boom"
+     ]
+   },
+   "downline": {
+     "category": "master",
+     "sounds": [
+       "jst3:downline"
+     ]
+   },
+   "upline": {
+     "category": "master",
+     "sounds": [
+       "jst3:upline"
+     ]
+   },
+   "level": {
+     "category": "master",
+     "sounds": [
+       "jst3:level"
+     ]
+   },
+   "bonus": {
+     "category": "master",
+     "sounds": [
+       "jst3:bonus"
+     ]
+   },
+   "scan": {
+     "category": "master",
+     "sounds": [
+       "jst3:scan"
+     ]
+   },
+   "bicycle": {
+     "category": "master",
+     "sounds": [
+       "jst3:bicycle"
+     ]
+   },
+   "geiger": {
+     "category": "master",
+     "sounds": [
+       "jst3:geiger"
+     ]
+   },
+   "dingdong": {
+     "category": "master",
+     "sounds": [
+       "jst3:dingdong"
+     ]
+   },
+   "switch": {
+     "category": "master",
+     "sounds": [
+       "jst3:switch"
+     ]
+   },
+   "switch2": {
+     "category": "master",
+     "sounds": [
+       "jst3:switch2"
+     ]
+   },
+   "forcefield": {
+     "category": "master",
+     "sounds": [
+       "jst3:forcefield"
+     ]
+   },
+   "transformer": {
+     "category": "master",
+     "sounds": [
+       "jst3:transformer"
+     ]
+   },
+   "micro": {
+     "category": "master",
+     "sounds": [
+       "jst3:micro"
+     ]
+   },
+   "eject": {
+     "category": "master",
+     "sounds": [
+       "jst3:eject"
+     ]
+   },
+   "pump": {
+     "category": "master",
+     "sounds": [
+       "jst3:pump"
+     ]
+   },
+   "interrupt": {
+     "category": "master",
+     "sounds": [
+       "jst3:interrupt"
+     ]
+   },
+   "flame": {
+     "category": "master",
+     "sounds": [
+       "jst3:flame"
+     ]
+   },
+   "engine": {
+     "category": "master",
+     "sounds": [
+       "jst3:engine"
+     ]
+   }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "jst3:items/metaitems/tool_sph_sh"
+  }
+}

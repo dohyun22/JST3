@@ -1,0 +1,32 @@
+{
+    "textures": {
+        "arrow": "jst3:items/compat/tcon/no_effect",
+        "battleaxe": "jst3:items/compat/tcon/electric_battleaxe_effect",
+        "battlesign": "jst3:items/compat/tcon/electric_battlesign_effect",
+        "bolt": "jst3:items/compat/tcon/no_effect",
+        "broadsword": "jst3:items/compat/tcon/electric_sword_effect",
+        "cleaver": "jst3:items/compat/tcon/electric_cleaver_effect",
+        "crossbow": "jst3:items/compat/tcon/electric_crossbow_effect",
+        "excavator": "jst3:items/compat/tcon/electric_excavator_effect",
+        "frypan": "jst3:items/compat/tcon/electric_frypan_effect",
+        "hammer": "jst3:items/compat/tcon/electric_hammer_effect",
+        "hatchet": "jst3:items/compat/tcon/electric_axe_effect",
+        "kama": "jst3:items/compat/tcon/electric_kama_effect",
+        "longbow": "jst3:items/compat/tcon/electric_bow_effect",
+        "longbow1": "jst3:items/compat/tcon/electric_bow_effect",
+        "longbow2": "jst3:items/compat/tcon/electric_bow_effect",
+        "longbow3": "jst3:items/compat/tcon/electric_bow_effect",
+        "longsword": "jst3:items/compat/tcon/electric_longsword_effect",
+        "lumberaxe": "jst3:items/compat/tcon/electric_lumberaxe_effect",
+        "mattock": "jst3:items/compat/tcon/electric_mattock_effect",
+        "pickaxe": "jst3:items/compat/tcon/electric_pickaxe_effect",
+        "rapier": "jst3:items/compat/tcon/electric_rapier_effect",
+        "scythe": "jst3:items/compat/tcon/electric_scythe_effect",
+        "shortbow": "jst3:items/compat/tcon/electric_bow_effect",
+        "shortbow1": "jst3:items/compat/tcon/electric_bow_effect",
+        "shortbow2": "jst3:items/compat/tcon/electric_bow_effect",
+        "shortbow3": "jst3:items/compat/tcon/electric_bow_effect",
+        "shovel": "jst3:items/compat/tcon/electric_shovel_effect",
+        "shuriken": "jst3:items/compat/tcon/no_effect"
+    }
+}

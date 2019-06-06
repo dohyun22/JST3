@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 231
+		},
+		"title": {
+			"translate": "jst3.adv.assembler"
+		},
+		"description": {
+			"translate": "jst3.adv.assembler.desc"
+		}
+	},
+	"parent": "jst3:main/simplemachine",
+	"criteria": {
+		"jst3_assembler": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 231
+					}
+				]
+			}
+		}
+	}
+}

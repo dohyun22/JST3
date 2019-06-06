@@ -1,0 +1,32 @@
+{
+    "textures": {
+        "arrow": "jst3:items/compat/tcon/no_effect",
+        "battleaxe": "jst3:items/compat/tcon/solar_battleaxe_effect",
+        "battlesign": "jst3:items/compat/tcon/solar_battlesign_effect",
+        "bolt": "jst3:items/compat/tcon/no_effect",
+        "broadsword": "jst3:items/compat/tcon/solar_sword_effect",
+        "cleaver": "jst3:items/compat/tcon/solar_cleaver_effect",
+        "crossbow": "jst3:items/compat/tcon/solar_crossbow_effect",
+        "excavator": "jst3:items/compat/tcon/solar_excavator_effect",
+        "frypan": "jst3:items/compat/tcon/solar_frypan_effect",
+        "hammer": "jst3:items/compat/tcon/solar_hammer_effect",
+        "hatchet": "jst3:items/compat/tcon/solar_axe_effect",
+        "kama": "jst3:items/compat/tcon/solar_kama_effect",
+        "longbow": "jst3:items/compat/tcon/solar_bow_effect",
+        "longbow1": "jst3:items/compat/tcon/solar_bow_effect",
+        "longbow2": "jst3:items/compat/tcon/solar_bow_effect",
+        "longbow3": "jst3:items/compat/tcon/solar_bow_effect",
+        "longsword": "jst3:items/compat/tcon/solar_longsword_effect",
+        "lumberaxe": "jst3:items/compat/tcon/solar_lumberaxe_effect",
+        "mattock": "jst3:items/compat/tcon/solar_mattock_effect",
+        "pickaxe": "jst3:items/compat/tcon/solar_pickaxe_effect",
+        "rapier": "jst3:items/compat/tcon/solar_rapier_effect",
+        "scythe": "jst3:items/compat/tcon/solar_scythe_effect",
+        "shortbow": "jst3:items/compat/tcon/solar_bow_effect",
+        "shortbow1": "jst3:items/compat/tcon/solar_bow_effect",
+        "shortbow2": "jst3:items/compat/tcon/solar_bow_effect",
+        "shortbow3": "jst3:items/compat/tcon/solar_bow_effect",
+        "shovel": "jst3:items/compat/tcon/solar_shovel_effect",
+        "shuriken": "jst3:items/compat/tcon/no_effect"
+    }
+}

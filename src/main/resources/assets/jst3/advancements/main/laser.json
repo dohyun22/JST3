@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:itemjst1",
+			"data": 10007
+		},
+		"title": {
+			"translate": "jst3.adv.laser"
+		},
+		"description": {
+			"translate": "jst3.adv.laser.desc"
+		}
+	},
+	"parent": "jst3:main/mvmachine",
+	"criteria": {
+		"jst3_laser": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:itemjst1",
+						"data": 10007
+					}
+				]
+			}
+		}
+	}
+}

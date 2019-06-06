@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 6044
+		},
+		"title": {
+			"translate": "jst3.adv.refinery"
+		},
+		"description": {
+			"translate": "jst3.adv.refinery.desc"
+		}
+	},
+	"parent": "jst3:main/mvmachine",
+	"criteria": {
+		"jst3_refinery": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 6044
+					}
+				]
+			}
+		}
+	}
+}

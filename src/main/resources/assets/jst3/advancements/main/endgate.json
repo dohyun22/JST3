@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockjst1",
+			"data": 6
+		},
+		"title": {
+			"translate": "jst3.adv.endgate"
+		},
+		"description": {
+			"translate": "jst3.adv.endgate.desc"
+		}
+	},
+	"parent": "jst3:main/root",
+	"criteria": {
+		"jst3_endgate": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockjst1",
+						"data": 6
+					}
+				]
+			}
+		}
+	}
+}

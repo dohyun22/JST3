@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 4012
+		},
+		"title": {
+			"translate": "jst3.adv.sconduct"
+		},
+		"description": {
+			"translate": "jst3.adv.sconduct.desc"
+		}
+	},
+	"parent": "jst3:main/hvassembler",
+	"criteria": {
+		"jst3_sconduct": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 4012
+					}
+				]
+			}
+		}
+	}
+}

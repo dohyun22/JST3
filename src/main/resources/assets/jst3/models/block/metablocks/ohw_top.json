@@ -1,0 +1,20 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "blocks/anvil_base",
+		"wire": "blocks/anvil_base"
+	},
+	"elements": [
+		{
+			"name": "center",
+			"from": [7.5, 12, 7.5],
+			"to": [8.5, 16, 8.5],
+			"faces": {
+				"north": {"uv": [7.5, 0, 8.5, 2], "texture": "#wire"},
+				"east": {"uv": [7.5, 0, 8.5, 2], "texture": "#wire"},
+				"south": {"uv": [7.5, 0, 8.5, 2], "texture": "#wire"},
+				"west": {"uv": [7.5, 0, 8.5, 2], "texture": "#wire"}
+			}
+		}
+	]
+}

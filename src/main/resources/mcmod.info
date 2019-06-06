@@ -1,0 +1,16 @@
+[
+{
+  "modid": "jst3",
+  "name": "Just Server Tweak 3",
+  "description": "Custom mod for JustServer Modpacks.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["dohyun22"],
+  "credits": "dohyun22",
+  "logoFile": "/assets/jst3/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

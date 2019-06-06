@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "jst3:blocks/metablocks/ore_js_15"
+    }
+}

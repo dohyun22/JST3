@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 233
+		},
+		"title": {
+			"translate": "jst3.adv.hvassembler"
+		},
+		"description": {
+			"translate": "jst3.adv.hvassembler.desc"
+		}
+	},
+	"parent": "jst3:main/mvmachine",
+	"criteria": {
+		"jst3_hvassembler": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 233
+					}
+				]
+			}
+		}
+	}
+}

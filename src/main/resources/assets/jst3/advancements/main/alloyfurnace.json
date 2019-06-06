@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 6003
+		},
+		"title": {
+			"translate": "jst3.adv.alloyfurnace"
+		},
+		"description": {
+			"translate": "jst3.adv.alloyfurnace.desc"
+		}
+	},
+	"parent": "jst3:main/root",
+	"criteria": {
+		"jst3_alloyfurnace": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 6003
+					}
+				]
+			}
+		}
+	}
+}

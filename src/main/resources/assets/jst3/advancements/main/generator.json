@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 31
+		},
+		"title": {
+			"translate": "jst3.adv.generator"
+		},
+		"description": {
+			"translate": "jst3.adv.generator.desc"
+		}
+	},
+	"parent": "jst3:main/simplemachine",
+	"criteria": {
+		"jst3_generator": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 31
+					}
+				]
+			}
+		}
+	}
+}

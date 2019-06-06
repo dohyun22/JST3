@@ -1,0 +1,67 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "jst3:metablocks/ohw_center",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "insl": "true"
+      },
+      "apply": {
+        "model": "jst3:metablocks/ohw_insl",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "jst3:metablocks/ohw_top",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "jst3:metablocks/ohw_side",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "jst3:metablocks/ohw_side",
+        "y": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "jst3:metablocks/ohw_side",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "jst3:metablocks/ohw_side",
+        "y": 270,
+        "uvlock": true
+      }
+    }
+  ]
+}

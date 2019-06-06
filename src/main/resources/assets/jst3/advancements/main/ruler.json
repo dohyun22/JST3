@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:itemjst1",
+			"data": 10003
+		},
+		"title": {
+			"translate": "jst3.adv.ruler"
+		},
+		"description": {
+			"translate": "jst3.adv.ruler.desc"
+		}
+	},
+	"parent": "jst3:main/root",
+	"criteria": {
+		"jst3_ruler": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

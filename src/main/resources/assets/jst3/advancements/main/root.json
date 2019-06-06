@@ -1,0 +1,27 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockore1",
+			"data": 3
+		},
+		"title": {
+			"translate": "itemGroup.JST3"
+		},
+		"description": {
+			"translate": "jst3.adv.root.desc"
+		},
+		"background": "jst3:textures/blocks/metablocks/plated_block.png"
+	},
+	"criteria": {
+		"jst3_root": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockore1"
+					}
+				]
+			}
+		}
+	}
+}

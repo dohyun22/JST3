@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+	    "particle": "jst3:blocks/metablocks/end_gate_bottom",
+        "down": "jst3:blocks/metablocks/end_gate_bottom",
+        "up": "jst3:blocks/metablocks/end_gate_top",
+        "north": "jst3:blocks/metablocks/end_gate_side",
+        "east": "jst3:blocks/metablocks/end_gate_side",
+        "south": "jst3:blocks/metablocks/end_gate_side",
+        "west": "jst3:blocks/metablocks/end_gate_side"
+    }
+}

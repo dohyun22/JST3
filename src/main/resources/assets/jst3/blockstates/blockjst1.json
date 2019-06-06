@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "meta=0": { "model": "jst3:metablocks/error" },
+        "meta=1": { "model": "jst3:metablocks/plated_block" },
+        "meta=2": { "model": "jst3:metablocks/b_advmachine" },
+        "meta=3": { "model": "jst3:metablocks/b_machine" },
+        "meta=4": { "model": "jst3:metablocks/b_solar" },
+        "meta=5": { "model": "jst3:metablocks/rich_block" },
+        "meta=6": { "model": "jst3:metablocks/end_gate" },
+        "meta=7": { "model": "jst3:metablocks/radiation_block" },
+        "meta=8": { "model": "jst3:metablocks/csandstone" },
+        "meta=9": { "model": "jst3:metablocks/error" },
+        "meta=10": { "model": "jst3:metablocks/error" },
+        "meta=11": { "model": "jst3:metablocks/block_ni" },
+        "meta=12": { "model": "jst3:metablocks/block_nt" },
+        "meta=13": { "model": "jst3:metablocks/deadwood" },
+        "meta=14": { "model": "jst3:metablocks/wood_plank" },
+        "meta=15": { "model": "jst3:metablocks/slate" }
+    }
+}

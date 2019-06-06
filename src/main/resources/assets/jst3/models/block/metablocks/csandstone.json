@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+	    "particle": "jst3:blocks/metablocks/c_sandstone_s",
+        "down": "jst3:blocks/metablocks/c_sandstone_b",
+        "up": "jst3:blocks/metablocks/c_sandstone_u",
+        "north": "jst3:blocks/metablocks/c_sandstone_s",
+        "east": "jst3:blocks/metablocks/c_sandstone_s",
+        "south": "jst3:blocks/metablocks/c_sandstone_s",
+        "west": "jst3:blocks/metablocks/c_sandstone_s"
+    }
+}

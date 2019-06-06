@@ -1,0 +1,31 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "blocks/anvil_base",
+		"wire": "blocks/anvil_base"
+	},
+	"elements": [
+		{
+			"name": "uwire",
+			"from": [7.5, 11, 0],
+			"to": [8.5, 12, 7.5],
+			"faces": {
+				"east": {"uv": [0, 3, 7.5, 4], "texture": "#wire"},
+				"west": {"uv": [0, 3, 7.5, 4], "texture": "#wire"},
+				"up": {"uv": [7.5, 0, 8.5, 7.5], "texture": "#wire"},
+				"down": {"uv": [7.5, 0, 8.5, 7.5], "texture": "#wire"}
+			}
+		},
+		{
+			"name": "dwire",
+			"from": [7.5, 0, 0],
+			"to": [8.5, 1, 7.5],
+			"faces": {
+				"east": {"uv": [0, 15, 7.5, 16], "texture": "#wire"},
+				"west": {"uv": [0, 15, 7.5, 16], "texture": "#wire"},
+				"up": {"uv": [7.5, 0, 8.5, 7.5], "texture": "#wire"},
+				"down": {"uv": [7.5, 0, 8.5, 7.5], "texture": "#wire"}
+			}
+		}
+	]
+}

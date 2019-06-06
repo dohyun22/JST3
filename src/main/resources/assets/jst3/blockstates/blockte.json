@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "jst3:tileentity/blocktile" }
+        ]
+    }
+}

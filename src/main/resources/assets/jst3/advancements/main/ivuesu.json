@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 25
+		},
+		"title": {
+			"translate": "jst3.adv.ivuesu"
+		},
+		"description": {
+			"translate": "jst3.adv.ivuesu.desc"
+		}
+	},
+	"parent": "jst3:main/hvuesu",
+	"criteria": {
+		"jst3_ivuesu": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 25
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "jst3:blockte",
+			"data": 91
+		},
+		"title": {
+			"translate": "jst3.adv.thermal"
+		},
+		"description": {
+			"translate": "jst3.adv.thermal.desc"
+		}
+	},
+	"parent": "jst3:main/simplemachine",
+	"criteria": {
+		"jst3_thermal": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 91
+					}
+				]
+			}
+		}
+	}
+}
