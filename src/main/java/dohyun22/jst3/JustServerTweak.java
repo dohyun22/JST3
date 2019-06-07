@@ -55,8 +55,6 @@ public class JustServerTweak {
 
 	@Mod.Instance(JustServerTweak.MODID)
 	public static JustServerTweak INSTANCE;
-
-	//public static boolean Debug;
 	
 	public static CreativeTabs JSTTab = new CreativeTabs("JST3") {
 		@Override
@@ -85,7 +83,6 @@ public class JustServerTweak {
 		JSTCfg.bcLoaded = Loader.isModLoaded("buildcraftcore");
 		JSTCfg.teLoaded = Loader.isModLoaded("thermalexpansion");
 		JSTCfg.tfLoaded = Loader.isModLoaded("thermalfoundation");
-		//JSTCfg.rfLoaded = ReflectionUtils.checkClassExists("cofh.redstoneflux.api.IEnergyConnection") && ReflectionUtils.checkClassExists("cofh.redstoneflux.api.IEnergyStorage");
 		JSTCfg.ticLoaded = Loader.isModLoaded("tconstruct");
 		JSTCfg.rcLoaded = Loader.isModLoaded("railcraft");
 		JSTCfg.ieLoaded = Loader.isModLoaded("immersiveengineering");
