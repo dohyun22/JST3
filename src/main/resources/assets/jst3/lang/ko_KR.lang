@@ -146,6 +146,8 @@ tile.blockte.111.name=저전압 마법 발전기
 tile.blockte.112.name=중전압 마법 발전기
 tile.blockte.113.name=고전압 마법 발전기
 
+tile.blockte.121.name=크리에이티브 발전기
+
 tile.blockte.181.name=저전압 배터리 버퍼
 tile.blockte.182.name=중전압 배터리 버퍼
 tile.blockte.183.name=고전압 배터리 버퍼
