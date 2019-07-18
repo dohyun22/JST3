@@ -314,7 +314,7 @@ public class RecipeLoader extends Loadable {
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10043), "AIA", "ABA", "SMS", 'A', ItemList.baseMaterial[2], 'I', ItemList.circuits[2], 'B', new ItemStack(JSTItems.item1, 1, 12011), 'S', obj, 'M', ItemList.motors[2]);
 
 		addToolRecipes(10100, "gemRuby", true);
-		addToolRecipes(10106, "gemOlivine", true);
+		addToolRecipes(10106, "gemPeridot", true);
 		addToolRecipes(10112, "gemSapphire", true);
 
 		//Materials
