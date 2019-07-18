@@ -8,6 +8,7 @@ import dohyun22.jst3.tiles.earlytech.*;
 import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
+import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -84,6 +85,9 @@ public class MTELoader {
 		MetaTileBase.registerTE(111, new MetaTileMagicGenerator(1));
 		MetaTileBase.registerTE(112, new MetaTileMagicGenerator(2));
 		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
+		
+		//test
+		MetaTileBase.registerTE(121, new MetaTileCreativeGenerator(1));
 		
 		for (int n = 1; n <= 9; n++)
 			MetaTileBase.registerTE(180 + n, new MetaTileBESU(n));
