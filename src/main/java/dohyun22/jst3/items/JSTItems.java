@@ -51,10 +51,11 @@ public class JSTItems {
     			null, "mt1", "mt2", "mt3", "mt4", "mt5", "mt6", "mt7", "mt8", null,
     			null, "se1", "se2", "se3", "se4", "se5", "se6", "se7", "se8", null,
     			null, "re1", "re2", "re3", "re4", "re5", "re6", "re7", "re8", null,
-    			null, null, null, null, null, null, null, null, null, null,
+    			null, null, null, null, null, null, null, null, null, null, //140~149: Reserved for tiered part
     			"cnt", new Object[] {"oilberry", new IB_Food(6, 10, 32, false, false, new PotionEffect(MobEffects.NAUSEA, 200))}, "vtube", "inf_circuit", ac("arsolar", fl[0]), null, null, "est_ingot", "est_dust", "est_plate",
-    			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null,
-    			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1])
+    			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null, //160~169: Reserved for molds
+    			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1]), null,
+    			null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null, null, null
     	};
 
 		for (int n = 0; n < obj.length; n++) {

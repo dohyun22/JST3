@@ -552,6 +552,9 @@ item.itemjst1.175.name=Tin Plate
 item.itemjst1.176.name=Lead Ingot
 item.itemjst1.177.name=Lead Dust
 item.itemjst1.178.name=Lead Plate
+item.itemjst1.181.name=Solder Ingot
+item.itemjst1.182.name=Solder Dust
+item.itemjst1.183.name=Solder Wire
 
 item.itemjst1.9000.name=Empty Cell
 item.itemjst1.9001.name=Water Cell

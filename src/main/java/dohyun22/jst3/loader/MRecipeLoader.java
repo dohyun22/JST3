@@ -162,6 +162,15 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addAlloyFurnaceRecipe(new ItemStack(Blocks.SAND, 16, Short.MAX_VALUE), new ItemStack(Items.COAL, 8, Short.MAX_VALUE), new ItemStack(JSTItems.item1, 1, 33), 20, 500);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("dustLithium"), new ItemStack(JSTItems.item1, 1, 9000), new ItemStack(JSTItems.item1, 1, 9014), 5, 100);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("dustSodium"), new ItemStack(JSTItems.item1, 1, 9000), new ItemStack(JSTItems.item1, 1, 9018), 5, 100);
+		ItemStack st = JSTUtils.getFirstItem("ingotSolder", 10);
+		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotTin", 6), new OreDictStack("ingotLead", 4), st, 5, 200);
+		obj = new OreDictStack("ingotTin", 10);
+		MRecipes.addAlloyFurnaceRecipe(obj, new OreDictStack("nuggetCopper"), st, 10, 200);
+		MRecipes.addAlloyFurnaceRecipe(obj, new OreDictStack("nuggetSilver"), st, 10, 200);
+
+		//Press
+		obj = new Object[] {new AdvRecipeItem(JSTItems.item1, 0, 160)};
+		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ((Object[])obj)[0], new ItemStack(JSTItems.item1, 4, 183), null, 10, 64);
 
 		//Assembler
 		obj = new OreDictStack(JSTCfg.ic2Loaded && JSTUtils.oreValid("platePlatinum") ? "platePlatinum" : JSTUtils.oreValid("ingotPlatinum") ? "ingotPlatinum" : "gemDiamond");
@@ -189,7 +198,7 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addAssemblerRecipe(new Object[] {obj, obj, obj, obj, new ItemStack(Items.APPLE), obj, obj, obj, obj}, null, new ItemStack(Items.GOLDEN_APPLE, 1, 1), ItemStack.EMPTY, 30, 800);
 		obj = new ItemStack(Items.LEATHER, 2);
 		obj2 = new OreDictStack(pf + "Aluminum", 2);
-		ItemStack st = new ItemStack(Blocks.END_ROD, 4);
+		st = new ItemStack(Blocks.END_ROD, 4);
 		MRecipes.addAssemblerRecipe(new Object[] {obj, obj2, obj, obj, obj2, obj, st, new ItemStack(Items.SHULKER_SHELL), st}, null, new ItemStack(Items.ELYTRA), ItemStack.EMPTY, 50, 1200);
 		
 		obj = new ItemStack(JSTItems.item1, 1, 105);
