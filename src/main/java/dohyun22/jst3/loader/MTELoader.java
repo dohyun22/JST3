@@ -16,6 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MTELoader {
 	public static void preinit() {
+		//#0 represents broken MetaTileEntity and should not be used.
+		/* #1~10: Machine Casings */
 		MetaTileBase.registerTE(1, new MetaTileCasing("t0_side"));
 		MetaTileBase.registerTE(2, new MetaTileCasing("t1_side"));
 		MetaTileBase.registerTE(3, new MetaTileCasing("t2_side"));
@@ -26,14 +28,16 @@ public class MTELoader {
 		MetaTileBase.registerTE(8, new MetaTileCasing("t7_side"));
 		MetaTileBase.registerTE(9, new MetaTileCasing("t8_side"));
 		MetaTileBase.registerTE(10, new MetaTileCasing("t9_side"));
-		
+
+		/* #11~20: MultiBlock Ports */
 		MetaTileBase.registerTE(11, new MT_EnergyPort(false));
 		MetaTileBase.registerTE(12, new MT_EnergyPort(true));
 		MetaTileBase.registerTE(13, new MT_ItemPort(false));
 		MetaTileBase.registerTE(14, new MT_ItemPort(true));
 		MetaTileBase.registerTE(15, new MT_FluidPort(false));
 		MetaTileBase.registerTE(16, new MT_FluidPort(true));
-		
+
+		/* #21~3999: Tiered Machines */
 		MetaTileBase.registerTE(21, new MetaTileUESU(1, 50000L));
 		MetaTileBase.registerTE(22, new MetaTileUESU(2, 400000L));
 		MetaTileBase.registerTE(23, new MetaTileUESU(3, 3000000L));
@@ -85,9 +89,6 @@ public class MTELoader {
 		MetaTileBase.registerTE(111, new MetaTileMagicGenerator(1));
 		MetaTileBase.registerTE(112, new MetaTileMagicGenerator(2));
 		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
-		
-		//test
-		MetaTileBase.registerTE(121, new MetaTileCreativeGenerator(1));
 		
 		for (int n = 1; n <= 9; n++)
 			MetaTileBase.registerTE(180 + n, new MetaTileBESU(n));
@@ -256,6 +257,8 @@ public class MTELoader {
 		if (Loader.isModLoaded("toughasnails"))
 		MetaTileBase.registerTE(6050, new MT_WaterPurifier());
 		MetaTileBase.registerTE(6060, new MT_Fueler());
+		//test
+		MetaTileBase.registerTE(6061, new MetaTileCreativeGenerator(1));
 		
 		/* #7000: EarlyTech Kinetic energy based machines */
 		MetaTileBase.registerTE(7000, new MetaTileGearBox(true));

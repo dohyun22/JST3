@@ -146,8 +146,6 @@ tile.blockte.111.name=저전압 마법 발전기
 tile.blockte.112.name=중전압 마법 발전기
 tile.blockte.113.name=고전압 마법 발전기
 
-tile.blockte.121.name=크리에이티브 발전기
-
 tile.blockte.181.name=저전압 배터리 버퍼
 tile.blockte.182.name=중전압 배터리 버퍼
 tile.blockte.183.name=고전압 배터리 버퍼
@@ -395,6 +393,7 @@ tile.blockte.6045.name=워프 에너지 공급기
 tile.blockte.6046.name=마이크로웨이브 발전기
 tile.blockte.6050.name=정수기
 tile.blockte.6060.name=연료 주유기
+tile.blockte.6061.name=크리에이티브 발전기
 
 tile.jst.ohw.name=가공전차선
 tile.jst.exhs.name=초고속 레일
