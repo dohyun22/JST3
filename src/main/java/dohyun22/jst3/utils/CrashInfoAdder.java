@@ -30,7 +30,7 @@ public class CrashInfoAdder implements ICrashCallable {
 	
 	@Override
 	public String getLabel() {
-		return "JST Zero";
+		return "JST3";
 	}
 
 	private static String getLang() {

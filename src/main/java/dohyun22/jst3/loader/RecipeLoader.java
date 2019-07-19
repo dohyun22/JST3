@@ -410,7 +410,7 @@ public class RecipeLoader extends Loadable {
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 161), " P ", " S ", "   ", 'P', pf + "Iron", 'S', st);
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 162), "  P", " S ", "   ", 'P', pf + "Iron", 'S', st);
 
-		addShapedRecipe(new ItemStack(JSTItems.item1, 6, 183), "SSS", 'S', "ingotSolder");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 6, 185), "SSS", 'S', "ingotSolder");
 
 		addShapedRecipe(new ItemStack(JSTItems.item1, 16, 9000), 
 				" I ", "IGI", " I ",

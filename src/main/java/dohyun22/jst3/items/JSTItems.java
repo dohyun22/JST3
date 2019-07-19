@@ -55,7 +55,7 @@ public class JSTItems {
     			"cnt", new Object[] {"oilberry", new IB_Food(6, 10, 32, false, false, new PotionEffect(MobEffects.NAUSEA, 200))}, "vtube", "inf_circuit", ac("arsolar", fl[0]), null, null, "est_ingot", "est_dust", "est_plate",
     			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null, //160~169: Reserved for molds
     			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1]), null,
-    			null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null, null, null
+    			null, null, null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null
     	};
 
 		for (int n = 0; n < obj.length; n++) {

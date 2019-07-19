@@ -170,7 +170,7 @@ public class MRecipeLoader extends Loadable {
 
 		//Press
 		obj = new Object[] {new AdvRecipeItem(JSTItems.item1, 0, 160)};
-		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ((Object[])obj)[0], new ItemStack(JSTItems.item1, 4, 183), null, 10, 64);
+		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ((Object[])obj)[0], new ItemStack(JSTItems.item1, 4, 185), null, 10, 64);
 
 		//Assembler
 		obj = new OreDictStack(JSTCfg.ic2Loaded && JSTUtils.oreValid("platePlatinum") ? "platePlatinum" : JSTUtils.oreValid("ingotPlatinum") ? "ingotPlatinum" : "gemDiamond");
