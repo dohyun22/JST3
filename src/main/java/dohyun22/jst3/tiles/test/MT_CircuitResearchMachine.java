@@ -23,13 +23,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_CircuitResearchMachine extends MT_MachineGeneric {
-	public final int row = 9;
-	public final int column = 12;
+	public final int row = 12;
+	public final int column = 9;
 	public byte[] listOfGame = new byte[row * column];
 
 	public MT_CircuitResearchMachine(int tier) {
-		// 4°³ÀÇ ÀÎÇ²Àº ¼ø¼­´ë·Î È¸·Î±âÆÇ,Á¾ÀÌ,³³¶«±Ý¼Ó,ÀÎµÎ±âÀÌ´Ù
-		// 1°³ÀÇ ¾Æ¿ôÇ²Àº ÃÖÁ¾ Ã»»çÁøÀÌ´Ù
+		// 4ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½Î±ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½,ï¿½ÎµÎ±ï¿½ï¿½Ì´ï¿½
+		// 1ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½Ç²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½
 		// 9*6(tier 0~2)->12*9(tier 3)
 		super(tier, 4, 1, 0, 0, 0, null, false, false);
 	}
@@ -44,28 +44,20 @@ public class MT_CircuitResearchMachine extends MT_MachineGeneric {
 		super.onPostTick();
 		if (isClient())
 			return;
-		
-		/*ItemStack stEnd = inv.get(inputNum - 1);
-		if(!stEnd.isEmpty()) 
-			return;
-		
-		for (int n = 0; n < inputNum - 1; n++) {
-			ItemStack st = inv.get(n);
-			if (st.isEmpty())
-				return;
-			switch(n) {
-			case 0:
-				break;
-				
-			default:
-				break;
-			}
-		}*/
-		
+
+		/*
+		 * ItemStack stEnd = inv.get(inputNum - 1); if(!stEnd.isEmpty()) return;
+		 * 
+		 * for (int n = 0; n < inputNum - 1; n++) { ItemStack st = inv.get(n); if
+		 * (st.isEmpty()) return; switch(n) { case 0: break;
+		 * 
+		 * default: break; } }
+		 */
+
 		Random r = new Random();
-		for(int i : listOfGame) {
-			byte value = (byte) r.nextInt(2);
-			listOfGame[i] = (byte)1;
+		for (int i = 0; i < listOfGame.length; i++) {
+			byte value = (byte) r.nextInt(3);
+			listOfGame[i] = (byte) value;
 		}
 	}
 
@@ -97,11 +89,16 @@ public class MT_CircuitResearchMachine extends MT_MachineGeneric {
 	}
 
 	@Override
+	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
+		if (id == 1)
+			return new ContainerCircuitResearch(inv, te);
+		return null;
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		for (int i = 0; i < listOfGame.length; i++) {
-			listOfGame = tag.getByteArray("ListOfMiniGame");
-		}
+		listOfGame = tag.getByteArray("ListOfMiniGame");
 	}
 
 	@Override
@@ -120,5 +117,6 @@ public class MT_CircuitResearchMachine extends MT_MachineGeneric {
 		gg.addSlot(185, 98, 0);
 	}
 
-	protected void saveGameToBlueprint(ItemStack bp) {}
+	protected void saveGameToBlueprint(ItemStack bp) {
+	}
 }
