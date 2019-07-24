@@ -8,6 +8,7 @@ import dohyun22.jst3.tiles.earlytech.*;
 import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
+import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
 import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -89,6 +90,10 @@ public class MTELoader {
 		MetaTileBase.registerTE(111, new MetaTileMagicGenerator(1));
 		MetaTileBase.registerTE(112, new MetaTileMagicGenerator(2));
 		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
+		
+		MetaTileBase.registerTE(171, new MT_CircuitResearchMachine(1));
+		MetaTileBase.registerTE(172, new MT_CircuitResearchMachine(2));
+		MetaTileBase.registerTE(173, new MT_CircuitResearchMachine(3));
 		
 		for (int n = 1; n <= 9; n++)
 			MetaTileBase.registerTE(180 + n, new MetaTileBESU(n));

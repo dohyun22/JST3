@@ -3,8 +3,10 @@ package dohyun22.jst3.container;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
 import dohyun22.jst3.utils.JSTChunkData;
+import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -14,9 +16,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCircuitResearch extends ContainerMTE {
-	public final int row = 9;
-	public final int coloum = 12;
-	public byte[] listOfGame = new byte[row * coloum];
+	public final int row = 12;
+	public final int column = 9;
+	public byte[] listOfGame = new byte[row * column];
 
 	public ContainerCircuitResearch(IInventory inv, TileEntityMeta te) {
 		super(te);
@@ -25,47 +27,49 @@ public class ContainerCircuitResearch extends ContainerMTE {
 		addPlayerInventorySlots(inv, 29, 141);
 	}
 
-	public int num = 10;
-	
+	public int num = 100;
+
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		if (this.te.getWorld().isRemote || !(te.mte instanceof MT_CircuitResearchMachine)) {
-			return;
-		}
+		if(JSTUtils.isClient())return;
+		
 		MT_CircuitResearchMachine circuitResearch = (MT_CircuitResearchMachine) te.mte;
 
 		for (int i = 0; i < this.listeners.size(); ++i) {
 			IContainerListener icl = (IContainerListener) this.listeners.get(i);
-			for (int j = 0; j < this.listOfGame.length; j++) {
-				byte r = circuitResearch.listOfGame[j];
-				if (this.listOfGame[j] != r) {
-					icl.sendWindowProperty(this, j + num, (int) r);
-					System.out.println((j + num) + ":" + r + ":" + (int)r);
+			for (int j = 0; j < this.listOfGame.length / 2; j++) {
+				byte a = circuitResearch.listOfGame[j * 2];
+				byte b = circuitResearch.listOfGame[j * 2 + 1];
+				if (this.listOfGame[j * 2] != a || this.listOfGame[j * 2 + 1] != b) {
+					this.combineByteAndSend(icl, this, a, b, j + num);
 				}
-				this.listOfGame[j] = r;
+				this.listOfGame[j * 2] = a;
+				this.listOfGame[j * 2 + 1] = b;
 			}
 		}
-	}
-
-	@Override
-	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
-		/*if (!pl.world.isRemote && si == 6 && ct == ClickType.PICKUP) {
-			((MT_CircuitResearchMachine)te.mte).displayRF = !((MT_CircuitResearchMachine)te.mte).displayRF;
-		}*/
-		return super.slotClick(si, mc, ct, pl);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		super.updateProgressBar(id, data);
-		System.out.println(id);
-		if (id - num >= 0 && id - num < row * coloum) {
-			System.out.println((byte) data);
-			this.listOfGame[id - num] = (byte) data;
+		if (id - num >= 0 && id - num < row * column / 2) {
+			int newId = id - num;
+			newId *= 2;
+			byte a = (byte)(data >> 8);
+			byte b = (byte)(data & 0xFF);
+			this.listOfGame[newId] = a;
+			this.listOfGame[newId + 1] = b;
 		}
 	}
 
+	public static void combineByteAndSend(IContainerListener icl, Container con, byte a, byte b, int in) {
+		short combined = a;
+		combined <<= 8;
+		combined += b;
+		icl.sendWindowProperty(con, in, combined);
+	}
+	
 }
