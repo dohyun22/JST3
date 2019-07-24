@@ -89,4 +89,8 @@ public class ContainerMTE extends Container {
 		if (id == s + 1) {return (org & 0xFFFF | data << 16);}
 		return org;
 	}
+
+	public static void combineBytesAndSend(IContainerListener icl, Container con, int s, byte a, byte b) {
+		icl.sendWindowProperty(con, s, ((short)a << 8) +  (short)b);
+	}
 }

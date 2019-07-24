@@ -55,12 +55,16 @@ public class CompatForestry extends Loadable {
 		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("forestry:wood_pile", 4), new ItemStack(Items.COAL, 32, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 300);
 
 		FluidStack fs = FluidRegistry.getFluidStack("bio.ethanol", 4000);
-		if (fs != null) MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9017)}, fs, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 1, 9000), null, 48, 400);
+		ItemStack st = new ItemStack(JSTItems.item1, 1, 9017);
+		if (fs != null) {
+			MRecipes.addChemMixerRecipe(new Object[] {st}, fs, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 1, 9000), null, 30, 500);
+			MRecipes.addChemMixerRecipe(new Object[] {st, new ItemStack(JSTItems.item1, 4, 9028)}, fs, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 5, 9000), null, 30, 500);
+		}
 		
 		fs = FluidRegistry.getFluidStack("ic2distilled_water", 10);
 	    if (fs != null) RecipeManagers.stillManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, 10), fs);
 		
-		ItemStack st = JSTUtils.getModItemStack("forestry:can", 16);
+		st = JSTUtils.getModItemStack("forestry:can", 16);
 		if (!st.isEmpty()) {
 			RecipeLoader.addShapedRecipe(st, " I ", "I I", 'I', "ingotAluminum");
 			RecipeLoader.addShapedRecipe(st, " I ", "I I", 'I', "ingotZinc");
@@ -99,7 +103,7 @@ public class CompatForestry extends Loadable {
 						f.set(c.getField(str).get(null), 0);
 					
 				} catch (Throwable t) {
-					System.err.println("[JST3] Failed to disable hive lighting for MagicBees");
+					JSTUtils.LOG.error("[JST3] Failed to disable hive lighting for MagicBees");
 					t.printStackTrace();
 				}
 			}

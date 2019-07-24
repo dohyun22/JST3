@@ -313,9 +313,8 @@ public class MRecipeLoader extends Loadable {
 		st = JSTUtils.getFirstItem("dustSaltpeter", 5);
 		if (!st.isEmpty()) {
 			MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustSodium"), new ItemStack(JSTItems.item1, 1, 9016), new ItemStack(JSTItems.item1, 3, 9017)}, null, st, new ItemStack(JSTItems.item1, 4, 9000), null, 5, 100);
-			obj = new OreDictStack("dustSulfur");
-			if (JSTUtils.oreValid((OreDictStack)obj))
-				MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustSaltpeter", 2), new OreDictStack("dustCarbon"), obj}, null, new ItemStack(Items.GUNPOWDER, 5), null, null, 5, 100);
+			if (JSTUtils.oreValid("dustSulfur"))
+				MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustSaltpeter", 2), new OreDictStack("dustCarbon"), new OreDictStack("dustSulfur")}, null, new ItemStack(Items.GUNPOWDER, 5), null, null, 5, 100);
 		}
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9005), new ItemStack(JSTItems.item1, 1, 9016)}, null, new ItemStack(Items.GUNPOWDER, 32), new ItemStack(JSTItems.item1, 2, 9000), null, 5, 100);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(Items.SUGAR, 16), new ItemStack(JSTItems.item1, 1, 9021)}, null, new ItemStack(JSTItems.item1, 16, 109), new ItemStack(JSTItems.item1, 1, 9000), null, 10, 400);
