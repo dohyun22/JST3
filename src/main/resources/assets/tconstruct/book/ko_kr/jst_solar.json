@@ -1,0 +1,14 @@
+{
+	"modifier": "jst_solar",
+	"text": [
+		{"text": "태양광 패널을 도구에 붙이면 햇빛으로 도구를 충전할 수 있습니다. 주의: 전동 도구에만 적용 가능합니다."}
+	],
+	"effects": [
+		"햇빛에 노출되면 도구가 충전됩니다."
+	],
+	"demoTool": [
+		"tconstruct:pickaxe",
+		"tconstruct:hammer",
+		"tconstruct:broadsword"
+	]
+}

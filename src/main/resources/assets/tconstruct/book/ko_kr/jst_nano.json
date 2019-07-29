@@ -1,0 +1,14 @@
+{
+	"modifier": "jst_nano",
+	"text": [
+		{"text": "나노 크리스탈은 에너지를 사용하여 도구를 수리해줍니다. 주의: 전동 도구에만 적용 가능합니다."}
+	],
+	"effects": [
+		"자동으로 손상된 도구를 수리합니다."
+	],
+	"demoTool": [
+		"tconstruct:pickaxe",
+		"tconstruct:hammer",
+		"tconstruct:broadsword"
+	]
+}

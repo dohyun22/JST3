@@ -286,6 +286,10 @@ tile.blockte.332.name=MV Combined Air Conditioner
 tile.blockte.333.name=HV Combined Air Conditioner
 tile.blockte.334.name=EV Combined Air Conditioner
 
+tile.blockte.341.name=Basic Circuit Research Table
+tile.blockte.342.name=Advanced Circuit Research Table
+tile.blockte.343.name=High Tech Circuit Research Table
+
 tile.blockte.4001.name=Tin Cable
 tile.blockte.4002.name=Uninsulated Tin Cable
 tile.blockte.4003.name=Copper Cable
@@ -629,6 +633,7 @@ item.itemjst1.10040.name=Mob Target Setter
 item.itemjst1.10041.name=Multimeter
 item.itemjst1.10042.name=Diesel Engine Vehicle
 item.itemjst1.10043.name=Electric Vehicle
+item.itemjst1.10044.name=Minetris 1.0
 
 item.itemjst1.10100.name=Ruby Sword
 item.itemjst1.10101.name=Ruby Shovel
@@ -804,7 +809,7 @@ jst.tooltip.tile.cable.loss=Voltage Drop: §c%s§r Per Meter
 jst.tooltip.tile.cable.uninsulated=§cWarning: Shock Hazard
 jst.tooltip.tile.cable.tip=Use Shears or Wire Cutter to disconnect/connect cable
 jst.tooltip.tile.dummyload=Universal Energy Trash Can<n>CAUTION: This device doesn't have energy transfer limit.<n>If needed, Use Low-Tier Cable or Transformer to limit energy consumption.
-jst.tooltip.tile.multigen=1.2 times more efficient than Single block generators.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>30~31x Generator Casing(§9Blue§r/§aGreen§r)<n>1~8x Fluid Input(§aGreen§r)<n>1x Energy Output(§cRed§r)
+jst.tooltip.tile.multigen=1.2 times more efficient than Single block generators.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>30~31x Generator Casing(§9Blue§r/§aGreen§r)<n>1~2x Fluid Input(§aGreen§r)<n>1x Energy Output(§cRed§r)
 jst.tooltip.tile.multigen.steam=You can add Fluid Output(§aGreen§r) to retrieve Water or Distilled Water
 jst.tooltip.tile.fusion=Produces Energy by fusing elements.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>31x Fusion Casing(§aGreen§r)<n>2x Fluid Input(§9Blue§r)<n>1x Fluid Output(§9Blue§r)<n>1~4x Energy Output(§cRed§r)
 jst.tooltip.tile.shfurnace=Smelt Materials with an extreme temperature.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>10~15x Heat Resistant Casing(§9Blue§r)<n>16x MV~ZPMV Coil(§aGreen§r, Must be same type)<n>1~5x Item Input(§9Blue§r)<n>1x Item Output(§9Blue§r)<n>1~2x Energy Input(§9Blue§r)<n>The input voltage is determined by the type of coil and circuit(4 needed) applied to the controller as an upgrade.
@@ -819,7 +824,7 @@ jst.tooltip.tile.led=The new use for §cL§aE§9D§r technology!<n>Increases pla
 jst.tooltip.tile.tesla=§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>9x LV Casing(§9Blue§r)<n>4x EV Coil(§cRed§r)
 jst.tooltip.tile.greenhouse=Will grow and harvest crops by using LED and advanced technology.<n>§eMultiblock Structure. The structure shown in the GUI is based on the minimum size.<n>Min~Max Size(WxHxD): 5x4x5~25x10x25 (Hollow)<n>Materials Needed:<n>1x Controller(§bthis§r)<n>Glass(§9Blue§r)<n>LED Casing(§cRed§r)<n>1x Energy Input / 1x Item Output(§cRed§r)<n>1x Item Input / 2x Fluid Input(§cRed§r)<n>Non-Air Blocks(§aGreen§r)
 jst.tooltip.tile.ichgr=Will charge inventory items when you are standing on.
-jst.tooltip.tile.coke=Can produce large amounts of charcoal or coal coke.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>12~13x Heat Resistant Casing(§9Blue§r)<n>16x MV~ZPMV Coil(§aGreen§r, Must be same type)<n>1~2x Item Input(§9Blue§r)<n>1x Item Output(§9Blue§r)<n>1x Fluid Output(§9Blue§r)<n>1~2x Energy Input(§9Blue§r)<n>The input voltage is determined by the type of coil and circuit(4 needed) applied to the controller as an upgrade.
+jst.tooltip.tile.coke=Can produce large amounts of charcoal or coal coke.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>12~13x Heat Resistant Casing(§9Blue§r)<n>8x MV~ZPMV Coil(§aGreen§r, Must be same type)<n>1~2x Item Input(§9Blue§r)<n>1x Item Output(§9Blue§r)<n>1x Fluid Output(§9Blue§r)<n>1~2x Energy Input(§9Blue§r)<n>The input voltage is determined by the type of coil and circuit(4 needed) applied to the controller as an upgrade.
 jst.tooltip.tile.grind=Grind ores with byproducts.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>21x Basic Casing(§9Blue§r)<n>1x Item Input(§9Blue§r)<n>1x Item Output(§9Blue§r)<n>1x Fluid Input(§9Blue§r)<n>1x Energy Input(§9Blue§r)<n>The input voltage is determined by the circuit(4 needed) applied to the controller as an upgrade.
 jst.tooltip.tile.refinery=Can refine fluids like oil.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>x Controller(§bthis§r)<n>4x Heat Resistant Casing(§aGreen§r)<n>9~50x Basic Casing(§9Blue§r)<n>1x Fluid Input/Power Input/Item Output(§aGreen§r)<n>1~8x Fluid Output(§9Blue§r/§aGreen§r, 1 needed per every layer)<n>Height of structure can be selected(2~8 blocks).<n>The input voltage is determined by the circuit(4 needed) applied to the controller as an upgrade.
 jst.tooltip.tile.purifier=Removes 9 ㎍ of Fine Dust Pollution per minute.<n>Will not work if all sides are blocked by non-air blocks.
@@ -832,7 +837,7 @@ jst.tooltip.tile.fueler=Provides fuel to nearby vehicles.
 
 jst.tooltip.tile.com.ulvonly=This device can only handle ULV Tiered Recipes.
 jst.tooltip.tile.com.sd.rs=Use Screwdriver to adjust Redstone Behavior.
-jst.tooltip.tile.com.dust=Causes %s ㎍ of Fine Dust Pollution per minute.
+jst.tooltip.tile.com.dust=Causes %s ㎍ of Fine Dust Pollution per minute when operating.
 jst.tooltip.tile.com.error=Error Item!! Please report it to developer if you obtained this without cheating
 
 jst.msg.gti.capacity=Power Capacity Exceeded
@@ -929,7 +934,7 @@ jst.data.nuclear=§bReactor Plan
 jst.compat.for.iridiumframe.desc=Undestructable Bee Frame
 
 jst.compat.tic.mod.elec.name=Electric
-jst.compat.tic.mod.elec.desc=§oElectrify Your Tools!§r\nUses electricity to increase mining speed/attack damage. Also reduces the chance of tool being damaged on use. Only accepts IC2 EU.
+jst.compat.tic.mod.elec.desc=§oElectrify Your Tools!§r\nUses electricity to increase mining speed/attack damage. Also reduces the chance of tool being damaged on use. Only accepts Forge Energy and IC2 EU.
 jst.compat.tic.mod.solar.name=Solar
 jst.compat.tic.mod.solar.desc=§oGreen Energy§r\nWill charge up if you are exposed to sunlight.
 jst.compat.tic.mod.nano.name=Nano-Repair

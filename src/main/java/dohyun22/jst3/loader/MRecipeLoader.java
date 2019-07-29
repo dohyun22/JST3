@@ -164,13 +164,12 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("dustSodium"), new ItemStack(JSTItems.item1, 1, 9000), new ItemStack(JSTItems.item1, 1, 9018), 5, 100);
 		ItemStack st = JSTUtils.getFirstItem("ingotSolder", 10);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotTin", 6), new OreDictStack("ingotLead", 4), st, 5, 200);
-		obj = new OreDictStack("ingotTin", 10);
-		MRecipes.addAlloyFurnaceRecipe(obj, new OreDictStack("nuggetCopper"), st, 10, 200);
-		MRecipes.addAlloyFurnaceRecipe(obj, new OreDictStack("nuggetSilver"), st, 10, 200);
+		obj = new OreDictStack("ingotBismuth", 6);
+		if (JSTUtils.oreValid((OreDictStack)obj)) MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotTin", 4), obj, st, 5, 200);
 
 		//Press
 		obj = new Object[] {new AdvRecipeItem(JSTItems.item1, 0, 160)};
-		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ((Object[])obj)[0], new ItemStack(JSTItems.item1, 4, 185), null, 10, 64);
+		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ((Object[])obj)[0], new ItemStack(JSTItems.item1, 2, 185), null, 10, 64);
 
 		//Assembler
 		obj = new OreDictStack(JSTCfg.ic2Loaded && JSTUtils.oreValid("platePlatinum") ? "platePlatinum" : JSTUtils.oreValid("ingotPlatinum") ? "ingotPlatinum" : "gemDiamond");
@@ -287,7 +286,7 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 9028), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9030)}, null, 10, 10);
 			MRecipes.addSeparatorRecipe(null, null, (FluidStack) obj, null, FluidRegistry.getFluidStack("ethanol", 1000), 10, 10);
 		}
-		MRecipes.addSeparatorRecipe(new OreDictStack("dustNatron", 6), new ItemStack(JSTItems.item1, 3, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 108), new ItemStack(JSTItems.item1, 1, 109), new ItemStack(JSTItems.item1, 3, 9017)}, null, 16, 300);
+		MRecipes.addSeparatorRecipe(new OreDictStack("dustNatron", 12), new ItemStack(JSTItems.item1, 3, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 108), new ItemStack(JSTItems.item1, 1, 109), new ItemStack(JSTItems.item1, 3, 9017)}, null, 16, 300);
 		
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 8, 9004), new ItemStack(JSTItems.item1, 2, 9001), new ItemStack(JSTItems.item1, 2, 9016), new OreDictStack("dustCarbon")}, null, new ItemStack(JSTItems.item1, 12, 9005), null, null, 30, 800);
 		obj = FluidRegistry.getFluidStack("ic2distilled_water", 3000);

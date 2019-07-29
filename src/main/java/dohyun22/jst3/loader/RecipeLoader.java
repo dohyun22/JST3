@@ -128,6 +128,7 @@ public class RecipeLoader extends Loadable {
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 39), new ItemStack(JSTItems.item1, 1, 38), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 104), new ItemStack(JSTItems.item1, 1, 70), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 158), new ItemStack(JSTItems.item1, 1, 157), 0.0F);
+		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 184), new ItemStack(JSTItems.item1, 1, 183), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockOre, 1, 0), new ItemStack(JSTItems.item1, 1, 38), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockOre, 1, 1), new ItemStack(JSTItems.item1, 1, 90), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockOre, 1, 4), new ItemStack(JSTItems.item1, 5, 27), 0.7F);
@@ -409,8 +410,7 @@ public class RecipeLoader extends Loadable {
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 160), "P  ", " S ", "   ", 'P', pf + "Iron", 'S', st);
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 161), " P ", " S ", "   ", 'P', pf + "Iron", 'S', st);
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 162), "  P", " S ", "   ", 'P', pf + "Iron", 'S', st);
-
-		addShapedRecipe(new ItemStack(JSTItems.item1, 6, 185), "SSS", 'S', "ingotSolder");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 3, 185), "SSS", 'S', "ingotSolder");
 
 		addShapedRecipe(new ItemStack(JSTItems.item1, 16, 9000), 
 				" I ", "IGI", " I ",

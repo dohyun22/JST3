@@ -1,0 +1,14 @@
+{
+	"modifier": "jst_solar",
+	"text": [
+		{"text": "Adding a solar panels to your electric tools to allow them to be recharged when the sun is shining. NOTE: can only be used with electric modifier."}
+	],
+	"effects": [
+		"Recharges tool when you are exposed to sunlight."
+	],
+	"demoTool": [
+		"tconstruct:pickaxe",
+		"tconstruct:hammer",
+		"tconstruct:broadsword"
+	]
+}

@@ -647,7 +647,7 @@ public class JSTUtils {
 
 	public static ItemStack getValidOne(String... ores) {
 		for (String s : ores) {
-			ItemStack ret = getFirstItem(s, 1);
+			ItemStack ret = getFirstItem(s);
 			if (!ret.isEmpty())
 				return ret;
 		}

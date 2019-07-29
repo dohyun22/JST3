@@ -224,6 +224,15 @@ public class CompatIC2 extends Loadable {
 		ItemStack st = JSTUtils.getModItemStack("immersiveengineering:seed");
 		new CropJST("hemp", "BluSunrize", 4, 1, -350, st, null, st.isEmpty() ? new ItemStack[] {new ItemStack(Items.STRING)} : new ItemStack[] {JSTUtils.getModItemStack("immersiveengineering:material", 1, 4), st, st}, new String[] {"Industrial", "Hemp", "Addictive"}, 3, 1, 0, 1, 2, 2);
 		new CropJST("oilplant", "SpaceToad", 4, 2, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 151)}, new String[] {"Berries", "Oil", "Fuel"}, 6, 4, 1, 0, 0, 0);
+		new CropJST("oak", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 0), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.SAPLING, 1, 0), new ItemStack(Items.APPLE)}, new String[] {"Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
+		new CropJST("saltgrass", "dohyun22", 4, 3, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 107), JSTUtils.getValidOne("dustRockSalt", "foodRockSalt")}, new String[] {"Food", "Salt"}, 4, 2, 1, 1, 2, 2);
+
+		new CropJST("spruce", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 1), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 1), new ItemStack(Blocks.SAPLING, 1, 1)}, new String[] {"Spruce", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
+		new CropJST("birch", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 2), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 2), new ItemStack(Blocks.SAPLING, 1, 2)}, new String[] {"Birch", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
+		new CropJST("jungle", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 3), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 3), new ItemStack(Blocks.SAPLING, 1, 3)}, new String[] {"Jungle", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
+		new CropJST("acacia", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 4), null, new ItemStack[] {new ItemStack(Blocks.LOG2, 1, 0), new ItemStack(Blocks.SAPLING, 1, 4)}, new String[] {"Acacia", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
+		new CropJST("roofedoak", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 5), null, new ItemStack[] {new ItemStack(Blocks.LOG2, 1, 1), new ItemStack(Blocks.SAPLING, 1, 5)}, new String[] {"Dark Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
+		new CropJST("rubwood", "Alblaka", 3, 1, -600, JSTUtils.getModItemStack("ic2:sapling"), null, new ItemStack[] {JSTUtils.getModItemStack("ic2:rubber_wood"), JSTUtils.getModItemStack("ic2:sapling"), JSTUtils.getModItemStack("ic2:misc_resource", 1, 4)}, new String[] {"Rubber", "Wood", "Bonsai"}, 4, 2, 0, 2, 1, 0);
 
 		if (JSTUtils.isClient()) {
 			registerTex();

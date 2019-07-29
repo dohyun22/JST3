@@ -420,4 +420,9 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 	public long getMaxEU(ItemStack st) {
 		return getBehaviour(st).getMaxEnergy(st);
 	}
+
+	@Override
+	public int getEnergyTier(ItemStack st) {
+		return getBehaviour(st).getTier(st);
+	}
 }

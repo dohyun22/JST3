@@ -91,6 +91,6 @@ public class ContainerMTE extends Container {
 	}
 
 	public static void combineBytesAndSend(IContainerListener icl, Container con, int s, byte a, byte b) {
-		icl.sendWindowProperty(con, s, ((short)a << 8) +  (short)b);
+		icl.sendWindowProperty(con, s, ((short)a << 8) + (short)b);
 	}
 }

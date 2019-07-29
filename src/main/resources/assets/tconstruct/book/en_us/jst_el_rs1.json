@@ -1,0 +1,16 @@
+{
+	"modifier": "jst_el_rs1",
+	"text": [
+		{"text": "Use battery and electric motor to boost your tool. Also can be created with MV Nikolite Battery + MV Motor, HV Lithium Battery + HV Motor, Nano Battery + EV Motor."}
+	],
+	"effects": [
+		"Can be recharged with FE or IC2 EU.",
+		"Boosts Mining speed/Attack damage by 100 + (tier * 50)%.",
+		"Decreases the chance of losing tool durability on usage to 20 percent."
+	],
+	"demoTool": [
+		"tconstruct:pickaxe",
+		"tconstruct:hammer",
+		"tconstruct:broadsword"
+	]
+}

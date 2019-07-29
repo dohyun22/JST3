@@ -34,6 +34,8 @@ public class JSTCfg {
 	public static boolean hardEG;
 	public static boolean noSuddenHoes;
 	public static boolean customMat;
+	public static byte researchTier;
+	public static boolean onlyUseJSTCircuit;
 
 	public static void loadCfg(Configuration cfg) {
 		try {

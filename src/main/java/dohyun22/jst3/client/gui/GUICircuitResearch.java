@@ -1,25 +1,29 @@
 package dohyun22.jst3.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.container.ContainerCircuitResearch;
+import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
+import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine.MiniGameTile;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class GUICircuitResearch extends GUIBase {
-	private static final ResourceLocation gui = new ResourceLocation(JustServerTweak.MODID,
-			"textures/gui/circuit_research.png");
+	private static final ResourceLocation gui = new ResourceLocation(JustServerTweak.MODID, "textures/gui/circuit_research.png");
 
 	public GUICircuitResearch(Container c) {
 		super(c);
-		xSize = 216;
-		ySize = 222;
+		xSize = 217;
+		ySize = 225;
 	}
 
 	@Override
@@ -29,20 +33,8 @@ public class GUICircuitResearch extends GUIBase {
 		ContainerCircuitResearch con = (ContainerCircuitResearch) this.inventorySlots;
 		for (int i = 0; i < con.listOfGame.length; i++) {
 			byte value = con.listOfGame[i];
-			if (value == (byte) 0)
-				continue;
-			int a = i % con.row;
-			int b = i / con.row;
-			int xS = 10 + 14 * a;
-			int yS = 10 + 14 * b;
-			switch (value) {
-			case (byte) 1:
-				this.drawTexturedModalRect(xS, yS, 1, 224, 12, 12);
-				break;
-			case (byte) 2:
-				this.drawTexturedModalRect(xS, yS, 15, 224, 12, 12);
-				break;
-			}
+			MiniGameTile mgt = MiniGameTile.getTile(value);
+			if (mgt != null) mgt.draw(this, 10 + 14 * (i % con.row), 10 + 14 * (i / con.row));
 		}
 	}
 
@@ -79,5 +71,14 @@ public class GUICircuitResearch extends GUIBase {
 				.tex((double) ((float) (textureX1) * 0.00390625F), (double) ((float) (textureY1) * 0.00390625F))
 				.endVertex();
 		tessellator.draw();
+	}
+
+	@Override
+	protected void mouseClicked(int mX, int mY, int b) throws IOException {
+		if (isPointInRegion(10, 10, 167, 125, mX, mY)) {
+			int px = (mX - 10 - guiLeft) / 14;
+			int py = (mY - 10 - guiTop) / 14;
+			handleMouseClick(null, px + py * MT_CircuitResearchMachine.row + 1000, b, ClickType.QUICK_CRAFT);
+		} else super.mouseClicked(mX, mY, b);
 	}
 }

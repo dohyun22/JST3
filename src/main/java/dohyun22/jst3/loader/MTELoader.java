@@ -91,10 +91,6 @@ public class MTELoader {
 		MetaTileBase.registerTE(112, new MetaTileMagicGenerator(2));
 		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
 		
-		MetaTileBase.registerTE(171, new MT_CircuitResearchMachine(1));
-		MetaTileBase.registerTE(172, new MT_CircuitResearchMachine(2));
-		MetaTileBase.registerTE(173, new MT_CircuitResearchMachine(3));
-		
 		for (int n = 1; n <= 9; n++)
 			MetaTileBase.registerTE(180 + n, new MetaTileBESU(n));
 		
@@ -144,7 +140,10 @@ public class MTELoader {
 
 		if (Loader.isModLoaded("toughasnails")) for (int n = 1; n <= 4; n++)
 			MetaTileBase.registerTE(330 + n, new MT_AirConditioner(n));
-		
+
+		for (int n = 1; n <= 3; n++)
+			MetaTileBase.registerTE(340 + n, new MT_CircuitResearchMachine(n));
+
 		/* #4000: Cables */
 		//IC2 compatible cables
 	    MetaTileBase.registerTE(4001, new MetaTileCable("cable_sn", 32, 0, 3, 5, 20));

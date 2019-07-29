@@ -56,12 +56,12 @@ public abstract class MetaTileEnergyInput extends MetaTileBase {
 	public boolean canAcceptEnergy() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isEnergyInput(EnumFacing side) {
 		return true;
 	}
-	
+
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		this.onBlockUpdate();

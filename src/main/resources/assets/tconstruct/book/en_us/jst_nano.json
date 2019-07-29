@@ -1,0 +1,14 @@
+{
+	"modifier": "jst_nano",
+	"text": [
+		{"text": "Nano crystal can repair your tools with energy. NOTE: can only be used with electric modifier."}
+	],
+	"effects": [
+		"Repairs damaged tools automatically."
+	],
+	"demoTool": [
+		"tconstruct:pickaxe",
+		"tconstruct:hammer",
+		"tconstruct:broadsword"
+	]
+}

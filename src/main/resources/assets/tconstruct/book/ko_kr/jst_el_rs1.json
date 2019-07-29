@@ -1,0 +1,16 @@
+{
+	"modifier": "jst_el_rs1",
+	"text": [
+		{"text": "배터리와 전기 모터는 도구의 성능을 높혀줍니다. 중압 니콜라이트 전지 + 중압 모터, 고압 리튬 전지 + 고압 모터, 나노 전지 + 특고압 모터로도 제작 가능합니다."}
+	],
+	"effects": [
+		"FE나 IC2 EU로 재충전 가능.",
+		"채굴 속도/공격 피해를 100 + (전압 단계 * 50)% 만큼 늘려줍니다.",
+		"도구 사용시 내구도를 잃을 확률을 20%로 낮춰줍니다."
+	],
+	"demoTool": [
+		"tconstruct:pickaxe",
+		"tconstruct:hammer",
+		"tconstruct:broadsword"
+	]
+}

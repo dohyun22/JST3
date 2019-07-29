@@ -2,7 +2,6 @@ package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
-import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
@@ -24,7 +23,7 @@ public class ContainerCircuitResearch extends ContainerMTE {
 		super(te);
 		for (int r = 0; r < 5; r++)
 			addSlotToContainer(new Slot(te, r, 185, 26 + r * 18));
-		addPlayerInventorySlots(inv, 29, 141);
+		addPlayerInventorySlots(inv, 29, 143);
 	}
 
 	public int num = 100;
@@ -32,21 +31,19 @@ public class ContainerCircuitResearch extends ContainerMTE {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		if(JSTUtils.isClient())return;
+		if (JSTUtils.isClient()) return;
 		
-		MT_CircuitResearchMachine circuitResearch = (MT_CircuitResearchMachine) te.mte;
-
-		for (int i = 0; i < this.listeners.size(); ++i) {
-			IContainerListener icl = (IContainerListener) this.listeners.get(i);
-			for (int j = 0; j < this.listOfGame.length / 2; j++) {
-				byte a = circuitResearch.listOfGame[j * 2];
-				byte b = circuitResearch.listOfGame[j * 2 + 1];
-				if (this.listOfGame[j * 2] != a || this.listOfGame[j * 2 + 1] != b) {
-					this.combineByteAndSend(icl, this, a, b, j + num);
+		MT_CircuitResearchMachine cr = (MT_CircuitResearchMachine) te.mte;
+		for (int i = 0; i < listeners.size(); ++i) {
+			IContainerListener icl = (IContainerListener) listeners.get(i);
+			for (int j = 0; j < listOfGame.length / 2; j++) {
+				byte a = cr.listOfGame[j * 2];
+				byte b = cr.listOfGame[j * 2 + 1];
+				if (listOfGame[j * 2] != a || listOfGame[j * 2 + 1] != b) {
+					ContainerMTE.combineBytesAndSend(icl, this, j + num, a, b);
 				}
-				this.listOfGame[j * 2] = a;
-				this.listOfGame[j * 2 + 1] = b;
+				listOfGame[j * 2] = a;
+				listOfGame[j * 2 + 1] = b;
 			}
 		}
 	}
@@ -60,16 +57,26 @@ public class ContainerCircuitResearch extends ContainerMTE {
 			newId *= 2;
 			byte a = (byte)(data >> 8);
 			byte b = (byte)(data & 0xFF);
-			this.listOfGame[newId] = a;
-			this.listOfGame[newId + 1] = b;
+			listOfGame[newId] = a;
+			listOfGame[newId + 1] = b;
 		}
 	}
 
-	public static void combineByteAndSend(IContainerListener icl, Container con, byte a, byte b, int in) {
-		short combined = a;
-		combined <<= 8;
-		combined += b;
-		icl.sendWindowProperty(con, in, combined);
+	@Override
+	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
+		if (si >= 1000) {
+			if ((mc == 0 || mc == 1) && ct == ClickType.QUICK_CRAFT && si < MT_CircuitResearchMachine.row * MT_CircuitResearchMachine.column + 1000) {
+				try {
+					int dir = si / 1000, id = si % 1000;
+					MT_CircuitResearchMachine cr = (MT_CircuitResearchMachine) te.mte;
+					if (mc == 0)
+						cr.listOfGame[id] = (byte) dir;
+					else
+						cr.listOfGame[id] = 0;
+				} catch (Exception e) {}
+			}
+			return ItemStack.EMPTY;
+		} else
+			return super.slotClick(si, mc, ct, pl);
 	}
-	
 }

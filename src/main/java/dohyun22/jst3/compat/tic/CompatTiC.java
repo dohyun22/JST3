@@ -40,6 +40,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.library.book.TinkerBook;
 import slimeknights.tconstruct.library.client.model.ModifierModelLoader;
 import slimeknights.tconstruct.library.modifiers.IModifier;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -70,8 +73,8 @@ public class CompatTiC extends Loadable {
 		mod.addItem(new ItemStack(JSTItems.item1, 1, 11), 1, 1);
 
 		if (JSTCfg.ic2Loaded) {
-			mod = new ModElec(15000, 1, "rs1");
 			String str = "jst3:models/item/compat/tcon/elec";
+			mod = new ModElec(15000, 1, "rs1");
 			mods.put(mod, str);
 			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12000), new ItemStack(JSTItems.item1, 1, 111)));
 			mod = new ModElec(100000, 2, "nk2");
@@ -80,6 +83,9 @@ public class CompatTiC extends Loadable {
 			mod = new ModElec(2400000, 3, "li3");
 			mods.put(mod, str);
 			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 113)));
+			mod = new ModElec(25000000, 4, "n4");
+			mods.put(mod, str);
+			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 114)));
 			mod = new ModSolar();
 			mods.put(mod, "jst3:models/item/compat/tcon/solar");
 			ItemStack st = JSTUtils.getModItemStack("ic2:te", 1, 8);
@@ -103,7 +109,7 @@ public class CompatTiC extends Loadable {
 					m.invoke(null, e.getKey(), new ResourceLocation(e.getValue()));
 			} catch (Throwable t) {
 				JSTUtils.LOG.error("Failed to register Modifier models");
-				t.printStackTrace();
+				JSTUtils.LOG.catching(t);
 			}
 		}
 	}
@@ -111,6 +117,10 @@ public class CompatTiC extends Loadable {
 	@Override
 	public void init() {
 		MinecraftForge.EVENT_BUS.register(this);
+		if (JSTUtils.isClient())
+			try {
+				doClientStuff();
+			} catch (Throwable t) {}
 	}
 
 	@Override
@@ -290,10 +300,8 @@ public class CompatTiC extends Loadable {
 		});
 	}
 
-	/*public static class CapEvHandler {
-		@SubscribeEvent(priority=EventPriority.LOWEST)
-		public void onAttachCapabilityST(AttachCapabilitiesEvent<ItemStack> ev) {
-			
-		}
-	}*/
+	@SideOnly(Side.CLIENT)
+	private void doClientStuff() {
+		TinkerBook.INSTANCE.addTransformer(new JSTBookTransformer());
+	}
 }
