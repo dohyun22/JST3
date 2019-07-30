@@ -27,6 +27,7 @@ public class ContainerCircuitResearch extends ContainerMTE {
 		super(te);
 		for (int r = 0; r < 5; r++)
 			addSlotToContainer(new Slot(te, r, 185, 26 + r * 18));
+		
 		addPlayerInventorySlots(inv, 29, 143);
 	}
 

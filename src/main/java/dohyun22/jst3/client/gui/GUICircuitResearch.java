@@ -28,15 +28,16 @@ public class GUICircuitResearch extends GUIBase {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int p1, int p2) {
+	protected void drawGuiContainerForegroundLayer(int mx, int my) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(gui);
 		ContainerCircuitResearch con = (ContainerCircuitResearch) this.inventorySlots;
 		for (int i = 0; i < con.listOfGame.length; i++) {
 			byte value = con.listOfGame[i];
 			MiniGameTile mgt = MiniGameTile.getTile(value);
-			if (mgt != null) mgt.draw(this, 10 + 14 * (i % con.row), 10 + 14 * (i / con.row));
+			if (mgt != null) mgt.draw(this, 10 + 14 * (i % con.row), 10 + 14 * (i / con.row));			
 		}
+		
 	}
 
 	@Override
@@ -51,28 +52,6 @@ public class GUICircuitResearch extends GUIBase {
 		
 	}
 	// 184 25
-
-	public void drawTexturedModalRect(int x1, int y1, int x2, int y2, int textureX1, int textureY1, int textureX2,
-			int textureY2) {
-		float f = 0.00390625F;
-		float f1 = 0.00390625F;
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double) (x1), (double) (y2), (double) this.zLevel)
-				.tex((double) ((float) (textureX1) * 0.00390625F), (double) ((float) (textureY2) * 0.00390625F))
-				.endVertex();
-		bufferbuilder.pos((double) (x2), (double) (y2), (double) this.zLevel)
-				.tex((double) ((float) (textureX2) * 0.00390625F), (double) ((float) (textureY2) * 0.00390625F))
-				.endVertex();
-		bufferbuilder.pos((double) (x2), (double) (y1), (double) this.zLevel)
-				.tex((double) ((float) (textureX2) * 0.00390625F), (double) ((float) (textureY1) * 0.00390625F))
-				.endVertex();
-		bufferbuilder.pos((double) (x1), (double) (y1), (double) this.zLevel)
-				.tex((double) ((float) (textureX1) * 0.00390625F), (double) ((float) (textureY1) * 0.00390625F))
-				.endVertex();
-		tessellator.draw();
-	}
 
 	@Override
 	protected void mouseClicked(int mX, int mY, int b) throws IOException {
