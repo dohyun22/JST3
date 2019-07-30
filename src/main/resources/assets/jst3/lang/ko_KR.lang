@@ -1005,7 +1005,11 @@ jst.compat.crop.birch=자작나무
 jst.compat.crop.jungle=정글나무
 jst.compat.crop.acacia=아카시아 나무
 jst.compat.crop.darkoak=짙은 참나무
+jst.compat.crop.rubwood=고무나무
 jst.compat.crop.oilplant=석유 식물
+jst.compat.crop.saltgrass=소금잔디
+jst.compat.crop.cactus=선인장
+jst.compat.crop.nitrowood=니트로우드
 
 jst.compat.top.crop.name=작물 이름: %s
 jst.compat.top.crop.nameu=<미확인 작물>

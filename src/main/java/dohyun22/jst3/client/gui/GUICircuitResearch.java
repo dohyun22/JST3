@@ -1,5 +1,6 @@
 package dohyun22.jst3.client.gui;
 
+import java.awt.Polygon;
 import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
@@ -76,9 +77,18 @@ public class GUICircuitResearch extends GUIBase {
 	@Override
 	protected void mouseClicked(int mX, int mY, int b) throws IOException {
 		if (isPointInRegion(10, 10, 167, 125, mX, mY)) {
-			int px = (mX - 10 - guiLeft) / 14;
-			int py = (mY - 10 - guiTop) / 14;
-			handleMouseClick(null, px + py * MT_CircuitResearchMachine.row + 1000, b, ClickType.QUICK_CRAFT);
+			int u = mX - 10 - guiLeft, v = mY - 10 - guiTop;
+			int px = u / 14;
+			int py = v / 14;
+			int dir = 1000;
+			u %= 14; v %= 14;
+			Polygon p = new Polygon(); p.addPoint(0, 14);  p.addPoint(7, 7); p.addPoint(14, 14);
+		    if (p.contains(u, v)) dir = 2000;
+		    p = new Polygon(); p.addPoint(0, 0); p.addPoint(7, 7); p.addPoint(0, 14);
+		    if (p.contains(u, v)) dir = 3000;
+		    p = new Polygon(); p.addPoint(14, 0); p.addPoint(7, 7); p.addPoint(14, 14);
+		    if (p.contains(u, v)) dir = 4000;
+			handleMouseClick(null, px + py * MT_CircuitResearchMachine.ROW + dir, b, ClickType.QUICK_CRAFT);
 		} else super.mouseClicked(mX, mY, b);
 	}
 }

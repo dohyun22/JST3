@@ -58,6 +58,12 @@ public class CompatThEx extends Loadable {
 			st = JSTUtils.getFirstItem("dustCopper", 3);
 			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotZinc", 1), new ItemStack(JSTItems.item1, 4, 36));
 			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustZinc", 1), new ItemStack(JSTItems.item1, 4, 36));
+			st = JSTUtils.getFirstItem("ingotTin", 6);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotLead", 4), new ItemStack(JSTItems.item1, 10, 183));
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustLead", 4), new ItemStack(JSTItems.item1, 10, 183));
+			st = JSTUtils.getFirstItem("dustTin", 6);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotLead", 4), new ItemStack(JSTItems.item1, 10, 183));
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustLead", 4), new ItemStack(JSTItems.item1, 10, 183));
 		} catch (Throwable t) {}
 	}
 

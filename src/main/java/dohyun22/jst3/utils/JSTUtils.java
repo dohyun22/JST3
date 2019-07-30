@@ -595,13 +595,13 @@ public class JSTUtils {
 	
 	@Nonnull
 	public static Block getModBlock(String id) {
-		if (id == null || id.equals("")) return Blocks.AIR;
+		if (id == null || id.isEmpty()) return Blocks.AIR;
 		return Block.REGISTRY.getObject(new ResourceLocation(id));
 	}
 	
 	@Nullable
 	public static Item getModItem(String id) {
-		if (id == null || id.equals("")) return null;
+		if (id == null || id.isEmpty()) return null;
 		return Item.REGISTRY.getObject(new ResourceLocation(id));
 	}
 	

@@ -1,5 +1,7 @@
 package dohyun22.jst3.tiles.test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -29,15 +31,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
-	public static final int row = 12, column = 9, solderPerWire = 20;
-	public byte[] listOfGame = new byte[row * column];
+	public static final int ROW = 12, COLUMN = 9, SOLDER_PER_WIRE = 20;
+	public byte[] listOfGame = new byte[ROW * COLUMN];
 	private final int tier;
 	private byte solder;
+	private boolean lvlLoaded;
+	private static final HashMap<Integer, ArrayList<byte[][]>> levels = new HashMap();
 
 	static {
 		for (int n = 1; n <= 10; n++) new Wire(n);
-		int[][] c = new int[][] {{0,1}, {1,0}, {0,2}, {2,0}, {0,3}, {3,0}, {1,2}, {2,1}, {1,3}, {3,1}, {2,3}, {3,2}};
+		int[][] c = new int[][]{{0,1},{1,0},{0,2},{2,0},{0,3},{3,0},{1,2},{2,1},{1,3},{3,1},{2,3},{3,2}};
 		for (int d = 0; d < 6; d++) for (int m = 0; m < c.length; m++) new IC(d + m * 6 + 11, c[m][0], c[m][1], d);
+
+		addLvl(1, new byte[][]{{14,16},{20,24},{53,17},{56,71},{62,11},{90,60}});
+		addLvl(1, new byte[][]{{14,11},{29,24},{47,71},{50,17},{75,21},{80,64}});
 	}
 
 	public MT_CircuitResearchMachine(int tier) {
@@ -45,9 +52,33 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		// 9*6(tier 0~2)->12*9(tier 3)
 		this.tier = tier;
 
-		for (int n = 1; n < MiniGameTile.tile.length; n++) {
+		/*for (int n = 1; n < MiniGameTile.tile.length; n++) {
 			MiniGameTile t = MiniGameTile.tile[n];
 			if (t != null) listOfGame[n] = t.id;
+		}*/
+		loadLvl(1);
+	}
+
+	private static void addLvl(int lvl, byte[][] data) {
+		ArrayList<byte[][]> l = levels.get(Integer.valueOf(lvl));
+		if (l == null) {
+			l = new ArrayList();
+			levels.put(Integer.valueOf(lvl), l);
+		}
+		l.add(data);
+	}
+
+	private void loadLvl(int l) {
+		try {
+			ArrayList<byte[][]> lvl = levels.get(l);
+			if (lvl != null && !lvl.isEmpty()) {
+				listOfGame = new byte[ROW * COLUMN];
+				byte[][] dat = lvl.get(new Random().nextInt(lvl.size()));
+				for (int n = 0; n < dat.length; n++) listOfGame[dat[n][0]] = dat[n][1];
+			}
+		} catch (Exception e) {
+			JSTUtils.LOG.error("Can't load level.");
+			JSTUtils.LOG.catching(e);
 		}
 	}
 
@@ -146,34 +177,67 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		return maxEUTransfer() * 100;
 	}
 
-	protected void saveGameToBlueprint(ItemStack bp) {
+	public BlockPos intToPos(int i) {
+		return new BlockPos(i % ROW, 0, i / ROW);
 	}
 
-	private BlockPos intToPos(int i) {
-		return new BlockPos(i % row, i / row, 0);
+	public int posToInt(BlockPos i) {
+		return MathHelper.clamp(i.getZ() * ROW + i.getX(), 0, listOfGame.length - 1);
 	}
 
-	private int posToInt(BlockPos i) {
-		return MathHelper.clamp(i.getY() * row + i.getX(), 0, listOfGame.length - 1);
-	}
-
-	private MiniGameTile getTileAt(BlockPos i) {
+	public MiniGameTile getTileAt(BlockPos i) {
 		return MiniGameTile.getTile(listOfGame[posToInt(i)]);
 	}
 
-	private Colors getColor(BlockPos xy) {
-		MiniGameTile t = getTileAt(xy);
-		if (t instanceof Wire) {
-			for (EnumFacing f : EnumFacing.HORIZONTALS) {
-				
-			}
-		}
-		return null;
+	public boolean isValid(BlockPos p) {
+		return p.getX() >= 0 && p.getX() <= ROW && p.getZ() >= 0 && p.getZ() <= COLUMN;
 	}
 
-	public void placeWire(BlockPos xy, EnumFacing f) {
-		byte i = listOfGame[posToInt(xy)];
+	public void checkClear() {
+		boolean clear = true;
+		for (int n = 0; n < listOfGame.length; n++) {
+			MiniGameTile t = MiniGameTile.getTile(listOfGame[n]);
+			if (t instanceof IC) {
+				int v = 0;
+				for (EnumFacing f : EnumFacing.HORIZONTALS) {
+					Colors c = ((IC)t).getColor(f);
+					if (c != null) {
+						BlockPos p = intToPos(n).offset(f);
+						if (isConnected(p, c, f.getOpposite())) v++;
+					}
+				}
+				if (v < 2) {
+					clear = false;
+					break;
+				}
+			}
+		}
+		if (clear) {
+			listOfGame = new byte[ROW * COLUMN];
+			makeBlueprint();
+		}
 	}
+
+	private boolean isConnected(BlockPos p, Colors c, EnumFacing from) {
+		MiniGameTile t = getTileAt(p);
+		if (t instanceof Wire)
+			for (EnumFacing f : EnumFacing.HORIZONTALS) {
+				if (f == from || !((Wire)t).isConnected(f)) continue;
+				EnumFacing o = f.getOpposite();
+				p = p.offset(f);
+				if (!isValid(p)) continue;
+				t = getTileAt(p);
+				if (t instanceof IC)
+					return ((IC)t).getColor(o) == c;
+				else if (t instanceof Wire && ((Wire)t).isConnected(o))
+					return isConnected(p, c, o);
+			}
+		return false;
+	}
+
+	private void makeBlueprint() {}
+
+	private void reloadMiniGame() {}
 
 	public static abstract class MiniGameTile {
 		static final MiniGameTile[] tile = new MiniGameTile[128];
@@ -185,8 +249,6 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		}
 
 		public abstract void draw(Gui g, int x, int y);
-		public void onNotify(byte[] map, EnumFacing f, BlockPos xy) {}
-		public void onPlace(byte[] map, BlockPos xy) {}
 
 		@Nullable
 		public static MiniGameTile getTile(int i) {
@@ -217,6 +279,27 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			default: u += 5; v += 5; w = 3; h = 3;
 			}
 			g.drawTexturedModalRect(x + u, y + v, 218 + u, 208 + v, w, h);
+		}
+
+		public boolean isConnected(EnumFacing f) {
+			int o = 0;
+			switch (f) {
+			case NORTH: o = 1; break; case SOUTH: o = 2; break;
+			case WEST: o = 3; break; case EAST: o = 4; break;
+			default:}
+			switch (id) {
+			case 1: return o == 1;
+			case 2: return o == 2;
+			case 3: return o == 3;
+			case 4: return o == 4;
+			case 5: return o == 1 || o == 2;
+			case 6: return o == 3 || o == 4;
+			case 7: return o == 1 || o == 3;
+			case 8: return o == 1 || o == 4;
+			case 9: return o == 2 || o == 3;
+			case 10: return o == 2 || o == 4;
+			}
+			return false;
 		}
 	}
 

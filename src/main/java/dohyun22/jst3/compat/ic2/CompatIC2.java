@@ -40,6 +40,8 @@ import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
 import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
+import ic2.api.crops.BaseSeed;
+import ic2.api.crops.CropSoilType;
 import ic2.api.crops.Crops;
 import ic2.api.crops.ICropTile;
 import ic2.api.recipe.IBasicMachineRecipeManager;
@@ -52,6 +54,7 @@ import ic2.api.recipe.Recipes;
 import ic2.api.tile.ExplosionWhitelist;
 import ic2.core.item.armor.ItemArmorHazmat;
 import ic2.core.uu.UuIndex;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
@@ -59,11 +62,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -224,9 +229,11 @@ public class CompatIC2 extends Loadable {
 		ItemStack st = JSTUtils.getModItemStack("immersiveengineering:seed");
 		new CropJST("hemp", "BluSunrize", 4, 1, -350, st, null, st.isEmpty() ? new ItemStack[] {new ItemStack(Items.STRING)} : new ItemStack[] {JSTUtils.getModItemStack("immersiveengineering:material", 1, 4), st, st}, new String[] {"Industrial", "Hemp", "Addictive"}, 3, 1, 0, 1, 2, 2);
 		new CropJST("oilplant", "SpaceToad", 4, 2, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 151)}, new String[] {"Berries", "Oil", "Fuel"}, 6, 4, 1, 0, 0, 0);
-		new CropJST("oak", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 0), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.SAPLING, 1, 0), new ItemStack(Items.APPLE)}, new String[] {"Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
-		new CropJST("saltgrass", "dohyun22", 4, 3, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 107), JSTUtils.getValidOne("dustRockSalt", "foodRockSalt")}, new String[] {"Food", "Salt"}, 4, 2, 1, 1, 2, 2);
+		new CropJST("saltgrass", "dohyun22", 4, 1, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 107), JSTUtils.getValidOne("dustRockSalt", "foodRockSalt")}, new String[] {"Food", "Salt"}, 4, 2, 1, 1, 2, 2);
+		new CropCactus();
+		new CropJST("nitrowood", "Creeper", 3, 1, 0, null, null, new ItemStack[] {new ItemStack(Items.GUNPOWDER)}, new String[] {"Creeper", "Sulfur", "Saltpeter"}, 6, 5, 0, 2, 1, 2);
 
+		new CropJST("oak", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 0), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.SAPLING, 1, 0), new ItemStack(Items.APPLE)}, new String[] {"Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
 		new CropJST("spruce", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 1), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 1), new ItemStack(Blocks.SAPLING, 1, 1)}, new String[] {"Spruce", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
 		new CropJST("birch", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 2), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 2), new ItemStack(Blocks.SAPLING, 1, 2)}, new String[] {"Birch", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
 		new CropJST("jungle", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 3), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 3), new ItemStack(Blocks.SAPLING, 1, 3)}, new String[] {"Jungle", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
@@ -238,8 +245,12 @@ public class CompatIC2 extends Loadable {
 			registerTex();
 			CropJSTBase.tex = null;
 		}
+
+		addCropSoilType("FOR_HUMUS", JSTUtils.getModBlock("forestry:humus"));
+		addCropSoilType("BOP_FARMLANDA", JSTUtils.getModBlock("biomesoplenty:farmland_0"));
+		addCropSoilType("BOP_FARMLANDB", JSTUtils.getModBlock("biomesoplenty:farmland_1"));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static void registerTex() {
 		Map<ResourceLocation, TextureAtlasSprite> map = new HashMap();
@@ -247,7 +258,7 @@ public class CompatIC2 extends Loadable {
 			map.put(rl, FMLClientHandler.instance().getClient().getTextureMapBlocks().getAtlasSprite(rl.toString()));
 		Crops.instance.registerCropTextures(map);
 	}
-	
+
 	@Override
 	@Method(modid = "ic2")
 	public void postInit() {
@@ -311,8 +322,7 @@ public class CompatIC2 extends Loadable {
 		
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("ic2:crop_res", 1, 2));
 		
-		ItemStack st = JSTUtils.getModItemStack("ic2:nuclear", 1, 6);
-		ItemStack st2 = JSTUtils.getModItemStack("ic2:crafting", 1, 9);
+		ItemStack st = JSTUtils.getModItemStack("ic2:nuclear", 1, 6), st2 = JSTUtils.getModItemStack("ic2:crafting", 1, 9);
 		if (!st.isEmpty()) {
 			Item i = st.getItem();
 			st = JSTUtils.getFirstItem("dustUranium", 8);
@@ -649,6 +659,17 @@ public class CompatIC2 extends Loadable {
 			MRecipes.HeatExcFakeRecipes.add(RecipeContainer.newContainer(null, new FluidStack[] {((FluidStack[])obj)[0], inp}, null, new FluidStack[] {((FluidStack[])obj)[2], res}, 0, 0));
 			MRecipes.HeatExcFakeRecipes.add(RecipeContainer.newContainer(null, new FluidStack[] {((FluidStack[])obj)[1], inp}, null, new FluidStack[] {((FluidStack[])obj)[3], res}, 0, 0));
 		}
+
+		try {
+			Map<ItemStack, BaseSeed> baseSeeds = (Map<ItemStack, BaseSeed>) ReflectionUtils.getFieldValue("ic2.core.crop.IC2Crops", "baseSeeds", Crops.instance);
+			for (ItemStack st3 : baseSeeds.keySet()) {
+				if (st3 != null && !st3.isEmpty()) {
+					it = st3.getItem();
+					if ((it == Item.getItemFromBlock(Blocks.RED_FLOWER) || it == Item.getItemFromBlock(Blocks.YELLOW_FLOWER)) && st3.getItemDamage() == 32767)
+						st3.setItemDamage(0);
+				}
+			}
+		} catch (Throwable t) {}
 	}
 	
 	/**addMaceratorRecipe
@@ -855,6 +876,11 @@ public class CompatIC2 extends Loadable {
 					it.remove();
 			}
 		} catch (Throwable t) {}
+	}
+
+	public static void addCropSoilType(String n, Block b) {
+		if (n == null || b == null || n.isEmpty() || b == Blocks.AIR) return;
+		try { EnumHelper.addEnum(CropSoilType.class, n.toUpperCase(), new Class[] {Block.class}, b); } catch (Throwable t) {}
 	}
 	
 	private static void addFuelRecipe(ItemStack mat, ItemStack er, int sID, ItemStack... cen) {

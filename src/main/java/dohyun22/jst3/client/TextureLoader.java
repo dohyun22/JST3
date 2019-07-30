@@ -237,6 +237,7 @@ public class TextureLoader {
 					ls.add("hemp" + n);
 					ls.add("oilplant" + n);
 					ls.add("saltgrass" + n);
+					ls.add("cactus" + n);
 				}
 				if (n <= 3) {
 					ls.add("oak" + n);
@@ -246,6 +247,7 @@ public class TextureLoader {
 					ls.add("acacia" + n);
 					ls.add("roofedoak" + n);
 					ls.add("rubwood" + n);
+					ls.add("nitrowood" + n);
 				}
 			}
 			registerTex(tm, pf, ls);

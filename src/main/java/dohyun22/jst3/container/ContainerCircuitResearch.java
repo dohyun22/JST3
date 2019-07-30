@@ -2,6 +2,8 @@ package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
+import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine.IC;
+import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine.MiniGameTile;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
@@ -10,6 +12,8 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,14 +69,51 @@ public class ContainerCircuitResearch extends ContainerMTE {
 	@Override
 	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
 		if (si >= 1000) {
-			if ((mc == 0 || mc == 1) && ct == ClickType.QUICK_CRAFT && si < MT_CircuitResearchMachine.row * MT_CircuitResearchMachine.column + 1000) {
+			int id = si % 1000;
+			if ((mc == 0 || mc == 1) && ct == ClickType.QUICK_CRAFT && id < MT_CircuitResearchMachine.ROW * MT_CircuitResearchMachine.COLUMN) {
 				try {
-					int dir = si / 1000, id = si % 1000;
 					MT_CircuitResearchMachine cr = (MT_CircuitResearchMachine) te.mte;
-					if (mc == 0)
-						cr.listOfGame[id] = (byte) dir;
-					else
-						cr.listOfGame[id] = 0;
+					byte g = cr.listOfGame[id];
+					if (g >= 0 && g <= 10) {
+						if (mc == 0) {
+							if (g <= 4) {
+								int dir = si / 1000;
+								byte n = 0;
+								switch (g) {
+								case 0:
+									n = (byte)dir; break;
+								case 1:
+									switch (dir) {
+									case 2: n = 5; break;
+									case 3: n = 7; break;
+									case 4: n = 8; break;
+									} break;
+								case 2:
+									switch (dir) {
+									case 1: n = 5; break;
+									case 3: n = 9; break;
+									case 4: n = 10; break;
+									} break;
+								case 3:
+									switch (dir) {
+									case 1: n = 7; break;
+									case 2: n = 9; break;
+									case 4: n = 6; break;
+									} break;
+								case 4:
+									switch (dir) {
+									case 1: n = 8; break;
+									case 2: n = 10; break;
+									case 3: n = 6; break;
+									} break;
+								}
+								if (n > 0) {
+									cr.listOfGame[id] = n;
+									if (g != 0) cr.checkClear();
+								}
+							}
+						} else cr.listOfGame[id] = 0;
+					}
 				} catch (Exception e) {}
 			}
 			return ItemStack.EMPTY;

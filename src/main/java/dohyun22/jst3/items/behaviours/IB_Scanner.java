@@ -71,7 +71,7 @@ public class IB_Scanner extends ItemBehaviour {
 		ArrayList<ITextComponent> str = new ArrayList();
 		int eu = doScan(str, pl, w, p, f);
 		if (eu <= this.getEnergy(st)) {
-			w.playSound(null, p, JSTSounds.SCAN, SoundCategory.BLOCKS, 0.8F, w.rand.nextFloat() * 0.2F + 0.9F);
+			w.playSound(null, p, JSTSounds.SCAN, SoundCategory.BLOCKS, 0.8F, 1.0F);
 			for (ITextComponent s : str) {
 				pl.sendMessage(s);
 			}

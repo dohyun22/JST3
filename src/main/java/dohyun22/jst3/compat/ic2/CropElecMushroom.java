@@ -11,6 +11,7 @@ import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.crops.ICropTile;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Items;
@@ -62,5 +63,10 @@ public class CropElecMushroom extends CropJST {
 			JSTPacketHandler.playCustomEffect(w, p, 1, 0);
 			w.playSound(null, p, JSTSounds.SHOCK2, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
+	}
+
+	@Override
+	public boolean onEntityCollision(ICropTile cr, Entity e) {
+		return false;
 	}
 }
