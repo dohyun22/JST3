@@ -12,6 +12,7 @@ import dohyun22.jst3.client.gui.GUIAssembler;
 import dohyun22.jst3.client.gui.GUICircuitResearch;
 import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.ContainerCircuitResearch;
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -100,19 +101,13 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		 * 
 		 * default: break; } }
 		 */
-
-		/*Random r = new Random();
-		for (int i = 0; i < listOfGame.length; i++) {
-			byte value = (byte) r.nextInt(3);
-			listOfGame[i] = (byte) value;
-		}*/
 	}
 
 	@Override
 	public int getInvSize() {
 		return 5;
 	}
-
+	
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MT_CircuitResearchMachine(tier);
@@ -213,8 +208,15 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			}
 		}
 		if (clear) {
+			int consume = 0;
+			for(byte b : listOfGame) {
+				MiniGameTile t = MiniGameTile.getTile(b);
+				if(t instanceof Wire) {
+					consume++;
+				}
+			}
 			listOfGame = new byte[ROW * COLUMN];
-			makeBlueprint();
+			makeBlueprint(consume);
 		}
 	}
 
@@ -235,7 +237,12 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		return false;
 	}
 
-	private void makeBlueprint() {}
+	private void makeBlueprint(int consume) {
+		ItemStack itemStack = new ItemStack(JSTItems.item1, 1, 10050);
+		NBTTagCompound nbtTag = JSTUtils.getOrCreateNBT(itemStack);
+		nbtTag.setInteger("consumeSize", consume);
+		this.setInventorySlotContents(4, itemStack);
+	}
 
 	private void reloadMiniGame() {}
 

@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTSounds;
@@ -13,9 +16,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -95,7 +101,7 @@ public class IB_Flamethrower extends ItemBehaviour {
 					break;
 				List el = w.getEntitiesWithinAABBExcludingEntity(e, new AxisAlignedBB(px - sz, py - sz, pz - sz, px + sz, py + sz, pz + sz));
 				for (Object obj : el) {
-					if (obj instanceof EntityLivingBase && obj != e.getRidingEntity() && ((EntityLivingBase)obj).attackEntityFrom(JSTDamageSource.causeEntityDamage("flame", e).setFireDamage(), 3)) {
+					if (obj instanceof EntityLivingBase && obj != e.getRidingEntity() && ((EntityLivingBase)obj).attackEntityFrom(JSTDamageSource.causeEntityDamage("flame", e, false).setFireDamage(), 3)) {
 						((EntityLivingBase)obj).setFire(5);
 						if (w.rand.nextInt(30) == 0) ((EntityLivingBase)obj).hurtResistantTime = 0;
 					}
@@ -166,6 +172,14 @@ public class IB_Flamethrower extends ItemBehaviour {
 	@Override
 	public boolean canBeStoredInToolbox(ItemStack st) {
 		return true;
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot sl, ItemStack st) {
+		if (sl != EntityEquipmentSlot.MAINHAND) return null;
+		Multimap<String, AttributeModifier> ret = HashMultimap.create();
+        ret.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(DamageUUID, "Weapon modifier", 1.0D, 0));
+	    return ret;
 	}
 
 	@Override

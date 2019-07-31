@@ -103,7 +103,7 @@ public class CompatForestry extends Loadable {
 						f.set(c.getField(str).get(null), 0);
 					
 				} catch (Throwable t) {
-					JSTUtils.LOG.error("[JST3] Failed to disable hive lighting for MagicBees");
+					JSTUtils.LOG.error("Failed to disable hive lighting for MagicBees");
 					t.printStackTrace();
 				}
 			}

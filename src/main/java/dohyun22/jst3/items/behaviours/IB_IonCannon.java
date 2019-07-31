@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.network.JSTPacketHandler;
@@ -15,7 +17,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -87,7 +92,7 @@ public class IB_IonCannon extends ItemBehaviour {
 					boolean flag = false;
 					ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(e.posX - 3.5F, e.posY - 3.5F, e.posZ - 3.5F, e.posX + 3.5F, e.posY + 3.5F, e.posZ + 3.5F), pr);
 					for (EntityLivingBase e2 : ls)
-						if (e2 instanceof EntityLivingBase && e2 != pl.getRidingEntity() && ((EntityLivingBase)e2).attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl), 7)) {
+						if (e2 instanceof EntityLivingBase && e2 != pl.getRidingEntity() && ((EntityLivingBase)e2).attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl, false), 7)) {
 							JSTPacketHandler.playCustomEffect(w, ((EntityLivingBase)e2).getPosition(), 1, -10);
 							flag = true;
 						}
@@ -96,6 +101,14 @@ public class IB_IonCannon extends ItemBehaviour {
 			}
 		}
 		return new ActionResult(EnumActionResult.PASS, st);
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot sl, ItemStack st) {
+		if (sl != EntityEquipmentSlot.MAINHAND) return null;
+		Multimap<String, AttributeModifier> ret = HashMultimap.create();
+        ret.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(DamageUUID, "Weapon modifier", 1.0D, 0));
+	    return ret;
 	}
 
 	@Override

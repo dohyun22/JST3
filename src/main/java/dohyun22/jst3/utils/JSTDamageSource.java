@@ -14,6 +14,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class JSTDamageSource {
@@ -22,8 +23,9 @@ public class JSTDamageSource {
 	public static final DamageSource DUST = new DamageSource("finedust").setDamageIsAbsolute().setDamageBypassesArmor();
 	public static final HashMap<EnumHazard, List<ItemStack>> HAZMATS = new HashMap();
 
-	public static DamageSource causeEntityDamage(String s, @Nullable Entity e) {
-		return new EntityDamageSource("jst_" + s, e);
+	public static DamageSource causeEntityDamage(String s, @Nullable Entity e, boolean dir) {
+		s = "jst_" + s;
+		return dir ? new EntityDamageSource(s, e) : new EntityDamageSourceIndirect(s, null, e);
 	}
 	
 	public static DamageSource getElectricDamage() {

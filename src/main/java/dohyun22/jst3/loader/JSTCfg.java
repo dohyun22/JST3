@@ -11,31 +11,34 @@ public class JSTCfg {
 	
 	//Config related stuff
 	public static boolean PNT;
-	public static boolean RIC2C;
 	public static boolean DFHL;
 	public static boolean DVEP;
 	public static int ECnc;
 	public static int ECncST;
 	public static boolean genNO;
 	public static boolean genEO;
-	/**volcanoChance*/ public static int VolcCnc;
-	/**marbleChance*/ public static int MarbCnc;
+	public static int VolcCnc;
+	public static int MarbCnc;
 	public static int OilSandCnc;
 	public static int EndBedrockOreCnc;
-	public static boolean NoElecEngine;
 	public static byte RFPerEU = 4;
-	public static boolean CheaperIC2;
-	public static boolean ExpensiveMassFab;
 	public static byte NerfZombies;
-	public static boolean BuffIEDieselGen;
 	public static boolean fineDust;
 	public static String[] fineDustTEs;
-	public static boolean gtOverlaps;
 	public static boolean hardEG;
-	public static boolean noSuddenHoes;
 	public static boolean customMat;
 	public static byte researchTier;
 	public static boolean onlyUseJSTCircuit;
+	public static boolean fireFineDust;
+	//InterMod
+	public static boolean RIC2C;
+	public static boolean CheaperIC2;
+	public static boolean ExpensiveMassFab;
+	public static boolean nerfCS;
+	public static boolean noSuddenHoes;
+	public static boolean NoElecEngine;
+	public static boolean BuffIEDieselGen;
+	public static boolean gtOverlaps;
 
 	public static void loadCfg(Configuration cfg) {
 		try {
@@ -103,6 +106,10 @@ public class JSTCfg {
 			pr = cfg.get(c, "ExplosionChanceWithSilktouch", 100);
 			pr.setComment("Chance of Nether Ore Explosion with Silk Touch enchanted tools.\n(Default: 1 in 100, will not explode if zero)");
 			ECncST = pr.getInt();
+
+			pr = cfg.get(c, "FireCauseFineDust", true);
+			pr.setComment("If true, spreading fire will cause fine dust.");
+			fireFineDust = pr.getBoolean();
 
 			c = "General";
 			pr = cfg.get(c, "RFPerEU", 4);
@@ -173,6 +180,10 @@ public class JSTCfg {
 
 				pr = cfg.get(c, "NoSuddenHoes", false);
 				noSuddenHoes = pr.getBoolean();
+
+				pr = cfg.get(c, "RestrictCropFarmland", false);
+				pr.setComment("If true, IC2 Crops can't be placed on non-farmland blocks.");
+				nerfCS = pr.getBoolean();
 			}
 
 			if (gtceLoaded) {

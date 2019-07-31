@@ -249,6 +249,27 @@ public class CompatIC2 extends Loadable {
 		addCropSoilType("FOR_HUMUS", JSTUtils.getModBlock("forestry:humus"));
 		addCropSoilType("BOP_FARMLANDA", JSTUtils.getModBlock("biomesoplenty:farmland_0"));
 		addCropSoilType("BOP_FARMLANDB", JSTUtils.getModBlock("biomesoplenty:farmland_1"));
+
+		if (JSTCfg.nerfCS) {
+			try {
+				Class c = CropSoilType.class;
+				Field f = null;
+				for (Field f2 : c.getDeclaredFields()) {
+					if (f2.getName().equals("block")) {
+						f2.setAccessible(true);
+						ReflectionUtils.removeFinal(f2);
+						f = f2;
+						break;
+					}
+				}
+				String[] names = new String[] {"MYCELIUM", "SAND", "SOULSAND"};
+				for (String str : names)
+					f.set(c.getField(str).get(null), Blocks.FARMLAND);
+			} catch (Throwable t) {
+				JSTUtils.LOG.error("Failed to modify CropSoilType");
+				JSTUtils.LOG.catching(t);
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
