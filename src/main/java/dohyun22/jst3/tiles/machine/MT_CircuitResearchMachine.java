@@ -1,4 +1,4 @@
-package dohyun22.jst3.tiles.test;
+package dohyun22.jst3.tiles.machine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +13,10 @@ import dohyun22.jst3.client.gui.GUICircuitResearch;
 import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.ContainerCircuitResearch;
 import dohyun22.jst3.items.JSTItems;
+import dohyun22.jst3.items.behaviours.IB_BluePrint;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.machine.MT_MachineGeneric;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -49,14 +49,9 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	}
 
 	public MT_CircuitResearchMachine(int tier) {
-		// Removed broken korean characters.
 		// 9*6(tier 0~2)->12*9(tier 3)
 		this.tier = tier;
-
-		/*for (int n = 1; n < MiniGameTile.tile.length; n++) {
-			MiniGameTile t = MiniGameTile.tile[n];
-			if (t != null) listOfGame[n] = t.id;
-		}*/
+		
 		loadLvl(1);
 	}
 
@@ -92,7 +87,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public void onPostTick() {
 		super.onPostTick();
 		if (isClient()) return;
-
+		
 		/*
 		 * ItemStack stEnd = inv.get(inputNum - 1); if(!stEnd.isEmpty()) return;
 		 * 
@@ -190,6 +185,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 
 	public void checkClear() {
 		boolean clear = true;
+		int gameTier = 1;
 		for (int n = 0; n < listOfGame.length; n++) {
 			MiniGameTile t = MiniGameTile.getTile(listOfGame[n]);
 			if (t instanceof IC) {
@@ -216,7 +212,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 				}
 			}
 			listOfGame = new byte[ROW * COLUMN];
-			makeBlueprint(consume);
+			makeBlueprint(consume, gameTier);
 		}
 	}
 
@@ -237,10 +233,9 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		return false;
 	}
 
-	private void makeBlueprint(int consume) {
+	private void makeBlueprint(int consume, int tier) {
 		ItemStack itemStack = new ItemStack(JSTItems.item1, 1, 10050);
-		NBTTagCompound nbtTag = JSTUtils.getOrCreateNBT(itemStack);
-		nbtTag.setInteger("consumeSize", consume);
+		IB_BluePrint.setSizeOfConsumedLeadAndTier(itemStack, consume, tier);
 		this.setInventorySlotContents(4, itemStack);
 	}
 
@@ -263,7 +258,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			return null;
 		}
 	}
-
+	
 	public static class Wire extends MiniGameTile {
 		public Wire(int i) {
 			super(i);
@@ -287,7 +282,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			}
 			g.drawTexturedModalRect(x + u, y + v, 218 + u, 208 + v, w, h);
 		}
-
+		
 		public boolean isConnected(EnumFacing f) {
 			int o = 0;
 			switch (f) {

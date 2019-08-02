@@ -8,7 +8,6 @@ import dohyun22.jst3.tiles.earlytech.*;
 import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
-import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
 import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;

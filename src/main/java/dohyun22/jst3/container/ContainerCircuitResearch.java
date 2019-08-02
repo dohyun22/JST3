@@ -1,9 +1,9 @@
 package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
-import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine.IC;
-import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine.MiniGameTile;
+import dohyun22.jst3.tiles.machine.MT_CircuitResearchMachine;
+import dohyun22.jst3.tiles.machine.MT_CircuitResearchMachine.IC;
+import dohyun22.jst3.tiles.machine.MT_CircuitResearchMachine.MiniGameTile;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
