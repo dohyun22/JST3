@@ -563,6 +563,7 @@ item.itemjst1.182.name=Gold Plate
 item.itemjst1.183.name=Solder Ingot
 item.itemjst1.184.name=Solder Dust
 item.itemjst1.185.name=Solder Wire
+item.itemjst1.190.name=Circuit Board
 
 item.itemjst1.9000.name=Empty Cell
 item.itemjst1.9001.name=Water Cell

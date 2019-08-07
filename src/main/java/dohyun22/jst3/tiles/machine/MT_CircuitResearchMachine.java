@@ -12,6 +12,7 @@ import dohyun22.jst3.client.gui.GUIAssembler;
 import dohyun22.jst3.client.gui.GUICircuitResearch;
 import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.ContainerCircuitResearch;
+import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.items.behaviours.IB_BluePrint;
 import dohyun22.jst3.tiles.MetaTileBase;
@@ -23,6 +24,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -51,8 +53,6 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public MT_CircuitResearchMachine(int tier) {
 		// 9*6(tier 0~2)->12*9(tier 3)
 		this.tier = tier;
-		
-		loadLvl(1);
 	}
 
 	private static void addLvl(int lvl, byte[][] data) {
@@ -82,22 +82,43 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public boolean isItemValidForSlot(int sl, ItemStack st) {
 		return super.isItemValidForSlot(sl, st) && !inv.get(sl).isEmpty();
 	}
-
+	
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
 		if (isClient()) return;
 		
-		/*
-		 * ItemStack stEnd = inv.get(inputNum - 1); if(!stEnd.isEmpty()) return;
-		 * 
-		 * for (int n = 0; n < inputNum - 1; n++) { ItemStack st = inv.get(n); if
-		 * (st.isEmpty()) return; switch(n) { case 0: break;
-		 * 
-		 * default: break; } }
-		 */
+		for(int i = 0; i < 4; i++) {
+			ItemStack itemStack = getStackInSlot(i);
+			if(itemStack.isEmpty()) {
+				listOfGame = new byte[ROW * COLUMN];
+				return;
+			
+			}
+			/*if(!(itemStack.getItem() instanceof ItemMetaBase)) {
+				listOfGame = new byte[ROW * COLUMN];
+				return;
+			}*/
+		}
+		ItemStack itemStackOfBoard = new ItemStack(JSTItems.item1, 1, 190);
+		if(getStackInSlot(0).isItemEqual(itemStackOfBoard)) {
+			if(isClean()) {
+				loadLvl(1);
+			}
+		}else {
+			listOfGame = new byte[ROW * COLUMN];
+		}
 	}
 
+	public boolean isClean() {
+		for(byte b : listOfGame) {
+			if(b != 0b0000000) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public int getInvSize() {
 		return 5;
@@ -211,6 +232,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 					consume++;
 				}
 			}
+			this.getStackInSlot(0).shrink(1);
 			listOfGame = new byte[ROW * COLUMN];
 			makeBlueprint(consume, gameTier);
 		}
