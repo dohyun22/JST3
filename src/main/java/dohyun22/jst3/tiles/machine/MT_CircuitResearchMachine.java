@@ -15,6 +15,8 @@ import dohyun22.jst3.container.ContainerCircuitResearch;
 import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.items.behaviours.IB_BluePrint;
+import dohyun22.jst3.items.behaviours.IB_SolderingMachine;
+import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -86,22 +88,16 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
-		if (isClient()) return;
+		if (isClient()) return ;
 		
 		for(int i = 0; i < 4; i++) {
 			ItemStack itemStack = getStackInSlot(i);
 			if(itemStack.isEmpty()) {
 				listOfGame = new byte[ROW * COLUMN];
 				return;
-			
 			}
-			/*if(!(itemStack.getItem() instanceof ItemMetaBase)) {
-				listOfGame = new byte[ROW * COLUMN];
-				return;
-			}*/
 		}
-		ItemStack itemStackOfBoard = new ItemStack(JSTItems.item1, 1, 190);
-		if(getStackInSlot(0).isItemEqual(itemStackOfBoard)) {
+		if(isCanRun()) {
 			if(isClean()) {
 				loadLvl(1);
 			}
@@ -110,6 +106,22 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		}
 	}
 
+	public boolean isCanRun() {
+		ItemStack itemStackOfBoard = new ItemStack(JSTItems.item1, 1, 190);
+		if(!getStackInSlot(0).isItemEqual(itemStackOfBoard)) {
+			return false;
+		}
+		ItemStack itemStackOfSolderingMachine = new ItemStack(JSTItems.item1, 1, 10050);
+		if(!getStackInSlot(3).isItemEqual(itemStackOfSolderingMachine)) {
+			return false;
+		}
+		long eu = JSTUtils.getEUInItem(getStackInSlot(3));
+		if(eu < JSTUtils.getVoltFromTier(this.tier)) {
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean isClean() {
 		for(byte b : listOfGame) {
 			if(b != 0b0000000) {
@@ -205,6 +217,12 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	}
 
 	public void checkClear() {
+		if (isClient()) return ;
+		
+		ItemStack itemStackIn3 = this.getStackInSlot(3);
+		int euForTier = JSTUtils.getVoltFromTier(this.tier);
+		long euInItem = ItemBehaviour.INSTANCE.getEnergy(itemStackIn3);
+		ItemBehaviour.INSTANCE.setEnergy(itemStackIn3, euInItem-euForTier);
 		boolean clear = true;
 		int gameTier = 1;
 		for (int n = 0; n < listOfGame.length; n++) {
@@ -256,7 +274,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	}
 
 	private void makeBlueprint(int consume, int tier) {
-		ItemStack itemStack = new ItemStack(JSTItems.item1, 1, 10050);
+		ItemStack itemStack = new ItemStack(JSTItems.item1, 1, 10051);
 		IB_BluePrint.setSizeOfConsumedLeadAndTier(itemStack, consume, tier);
 		this.setInventorySlotContents(4, itemStack);
 	}

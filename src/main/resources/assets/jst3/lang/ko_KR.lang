@@ -635,7 +635,8 @@ item.itemjst1.10041.name=멀티미터
 item.itemjst1.10042.name=디젤 엔진 차량
 item.itemjst1.10043.name=전기 차량
 item.itemjst1.10044.name=마인트리스 1.0
-item.itemjst1.10050.name=청사진
+item.itemjst1.10050.name=납땜기
+item.itemjst1.10051.name=청사진
 
 item.itemjst1.10100.name=루비 검
 item.itemjst1.10101.name=루비 삽
@@ -780,6 +781,7 @@ jst.tooltip.flamethrower=13블록 범위 내의 몹을 태울 수 있습니다.<
 jst.tooltip.cardesl=디젤 발전기 연료로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>액체 용기로 우클릭하여 연료를 보충하세요.
 jst.tooltip.carelec=EU/RF 배터리로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>shift+우클릭으로 GUI를 열 수 있습니다.
 jst.tooltip.blueprint=회로 제작시 사용되는 납과 같은 금속의 양을 표시합니다.<n>이 청사진은 %s의 티어로, %s의 금속을 사용합니다.
+jst.tooltip.solderingmachine=납떔을 위한 도구입니다.
 
 jst.tooltip.energy.eu=%s / %s EU
 jst.tooltip.energy.rf=%s / %s RF

@@ -635,6 +635,7 @@ item.itemjst1.10041.name=Multimeter
 item.itemjst1.10042.name=Diesel Engine Vehicle
 item.itemjst1.10043.name=Electric Vehicle
 item.itemjst1.10044.name=Minetris 1.0
+item.itemjst1.10051.name=Soldering Machine
 item.itemjst1.10050.name=Blueprint
 
 item.itemjst1.10100.name=Ruby Sword
@@ -780,6 +781,7 @@ jst.tooltip.flamethrower=Can burn mobs within 13 block range.<n>Uses fluid fuel.
 jst.tooltip.cardesl=Run on diesel generator fuel.<n>Faster on Asphalt/Concrete Blocks.<n>Right-Click with fluid container to refuel.
 jst.tooltip.carelec=Run on EU/RF Batteries<n>Faster on Asphalt/Concrete Blocks.<n>Shift+Right-Click to open GUI.
 jst.tooltip.blueprint=Display amount of used Metalic material like lead when you making Circuit.<n>This Blueprint is $s tier, it will use amount of %s metals.
+jst.tooltip.solderingmachine=Can be used to soldering circuit.
 
 jst.tooltip.energy.eu=%s / %s EU
 jst.tooltip.energy.rf=%s / %s RF
