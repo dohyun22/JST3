@@ -106,7 +106,7 @@ public class JSTItems {
 		item1.registerMetaItem(10043, "car_e", new IB_EntityEgg(JustServerTweak.MODID + ":carelec", "jst.tooltip.carelec"));
 		item1.registerMetaItem(10044, "tool_minigame", new IB_Minetris());
 
-		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingMachine());
+		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingIron());
 		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
 
 		item1.registerMetaItem(10100, "tool_rby_sw", new IB_GenericTool(500, EnumToolType.SWORD, 7.0F, 2, 8.0F, 10));

@@ -21,7 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -101,12 +100,10 @@ public class IB_NeutroniumDrill extends ItemBehaviour {
 	}
 	
 	@Override
-	@Nullable
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> ret = addEnergyTip(st, null);
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		addEnergyTip(st, ls);
 		int m = st.hasTagCompound() ? st.getTagCompound().getInteger("mode") : 0;
-		ret.add(I18n.format("jst.tooltip.neutdrill.mode" + m));
-		return ret;
+		ls.add(I18n.format("jst.tooltip.neutdrill.mode" + m));
 	}
 
 	@Override

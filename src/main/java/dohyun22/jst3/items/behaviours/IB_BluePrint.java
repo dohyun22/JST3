@@ -1,7 +1,6 @@
 package dohyun22.jst3.items.behaviours;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -9,7 +8,6 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,14 +15,12 @@ import net.minecraft.world.World;
 
 public class IB_BluePrint extends ItemBehaviour {	
 	public IB_BluePrint() {}
+
 	@Override
-	@Nullable
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		int size = getSizeOfComsumedLead(st);
 		int tier = getSizeOfTier(st);
-		List<String> ret = new ArrayList();
-		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", tier, size));
-		return ret;
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", tier, size));
 	}	
 	
 	public static int getSizeOfComsumedLead(ItemStack st) {

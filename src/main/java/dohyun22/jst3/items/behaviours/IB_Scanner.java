@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Nullable;
-
 import dohyun22.jst3.api.FineDustCapability;
 import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.loader.JSTCfg;
@@ -53,8 +51,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_Scanner extends ItemBehaviour {
 
@@ -244,10 +240,8 @@ public class IB_Scanner extends ItemBehaviour {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		return addEnergyTip(st, null);
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		addEnergyTip(st, ls);
 	}
 
 	@Override

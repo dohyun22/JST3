@@ -6,7 +6,6 @@ import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,8 +15,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import toughasnails.api.TANPotions;
 import toughasnails.api.stat.capability.ITemperature;
 import toughasnails.api.temperature.Temperature;
@@ -92,10 +89,8 @@ public class IB_AirConditioner extends ItemBehaviour {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> ls = addEnergyTip(st, null);
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		addEnergyTip(st, ls);
 		ls.add(I18n.format("jst.msg.com." + (st.hasTagCompound() && st.getTagCompound().getBoolean("isON") ? "on" : "off")));
-		return ls;
 	}
 }

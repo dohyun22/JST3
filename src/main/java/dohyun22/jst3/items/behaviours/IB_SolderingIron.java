@@ -4,7 +4,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,11 +11,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class IB_SolderingMachine extends ItemBehaviour{
-	public IB_SolderingMachine() {
+public class IB_SolderingIron extends ItemBehaviour {
+
+	public IB_SolderingIron() {
 		maxEnergy = 20000;
 	}
 
@@ -46,11 +44,9 @@ public class IB_SolderingMachine extends ItemBehaviour{
 	}
 
 	@Override
-	@Nullable
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> ret = addEnergyTip(st, null);
-		ret.add(I18n.format("jst.tooltip.solderingiron"));
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		addEnergyTip(st, ls);
+		ls.add(I18n.format("jst.tooltip.solderingiron"));
 	}
 
 	@Override

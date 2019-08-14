@@ -125,17 +125,13 @@ public class ItemBehaviour {
 	public int getMaxItemUseDuration(ItemStack st) {
 		return 0;
 	}
-	
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		return null;
-	}
-    
+
+	public void getInformation(ItemStack st, @Nullable World w, List<String> ls, boolean adv) {}
+
 	public long getMaxEnergy(ItemStack st) {
 		return maxEnergy;
 	}
-    
+
 	public boolean canCharge(ItemStack st) {
 		return false;
 	}
@@ -364,8 +360,8 @@ public class ItemBehaviour {
 		return 0;
 	}
 
-	protected static List<String> addFluidTip(@Nonnull ItemStack s, @Nullable List<String> l) {
-		if (l == null) l = new ArrayList();
+	protected static void addFluidTip(@Nonnull ItemStack s, @Nullable List<String> l) {
+		if (l == null) return;
 		IFluidHandlerItem fh = FluidUtil.getFluidHandler(s);
 		if (fh != null) {
 			IFluidTankProperties[] tank = fh.getTankProperties();
@@ -374,17 +370,15 @@ public class ItemBehaviour {
 				l.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
 			}
 		}
-		return l;
 	}
 
-	protected static List<String> addEnergyTip(@Nonnull ItemStack s, @Nullable List<String> l) {
-		if (l == null) l = new ArrayList();
+	protected static void addEnergyTip(@Nonnull ItemStack s, @Nullable List<String> l) {
+		if (l == null) return;
 		ItemBehaviour b = JSTItems.item1.getBehaviour(s);
 		long e = b.getEnergy(s);
 		l.add(I18n.format("jst.tooltip.energy.eu", e, b.maxEnergy));
 		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
 		l.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(b.maxEnergy).multiply(bi)));
-		return l;
 	}
 
 	protected class InternalStroage implements net.minecraftforge.energy.IEnergyStorage {

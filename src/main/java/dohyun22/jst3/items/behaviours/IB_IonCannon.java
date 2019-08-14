@@ -123,8 +123,7 @@ public class IB_IonCannon extends ItemBehaviour {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		return addEnergyTip(st, null);
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		addEnergyTip(st, ls);
 	}
 }

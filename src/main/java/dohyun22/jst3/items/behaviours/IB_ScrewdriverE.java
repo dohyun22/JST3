@@ -17,7 +17,6 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -32,8 +31,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_ScrewdriverE extends ItemBehaviour {
 	
@@ -136,12 +133,10 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> r = addEnergyTip(st, null);
-		r.add(I18n.format("jst.tooltip.screwdriver"));
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		addEnergyTip(st, ls);
+		ls.add(I18n.format("jst.tooltip.screwdriver"));
 		if (Loader.isModLoaded("immersiveengineering"))
-			r.add(I18n.format("jst.tooltip.screwdriver.ie"));
-		return r;
+			ls.add(I18n.format("jst.tooltip.screwdriver.ie"));
 	}
 }

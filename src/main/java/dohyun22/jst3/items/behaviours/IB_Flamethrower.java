@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -14,7 +13,6 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -49,8 +47,6 @@ import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_Flamethrower extends ItemBehaviour {
 
@@ -166,12 +162,9 @@ public class IB_Flamethrower extends ItemBehaviour {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		ArrayList<String> ret = new ArrayList();
-		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.flamethrower", st.hasTagCompound() && st.getTagCompound().getBoolean("UPG") ? 20 : 13));
-		addFluidTip(st, ret);
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.flamethrower", st.hasTagCompound() && st.getTagCompound().getBoolean("UPG") ? 20 : 13));
+		addFluidTip(st, ls);
 	}
 
 	public static void throwFlame(World w, Object o, Vec3d ag, int pwr, int rng) {

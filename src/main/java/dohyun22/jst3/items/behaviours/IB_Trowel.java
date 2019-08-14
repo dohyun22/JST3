@@ -15,7 +15,6 @@ import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -28,8 +27,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_Trowel extends IB_Damageable {
 	
@@ -127,12 +124,9 @@ public class IB_Trowel extends IB_Damageable {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> ret = super.getInformation(st, w, adv);
-		if (JSTCfg.ic2Loaded) ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.trowel.ic2"));
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		super.getInformation(st, w, ls, adv);
+		if (JSTCfg.ic2Loaded) ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.trowel.ic2"));
 	}
 	
 	@Override

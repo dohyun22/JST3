@@ -1,12 +1,10 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import dohyun22.jst3.utils.JSTUtils;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +16,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_EntityEgg extends ItemBehaviour {
 	private final String en, tt;
@@ -48,10 +44,7 @@ public class IB_EntityEgg extends ItemBehaviour {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		ArrayList<String> ret = new ArrayList();
-		if (tt != null) ret.addAll(JSTUtils.getListFromTranslation(tt));
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		if (tt != null) ls.addAll(JSTUtils.getListFromTranslation(tt));
 	}
 }

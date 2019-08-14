@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,8 +20,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class IB_Charger extends IB_Battery {
@@ -69,14 +65,11 @@ public class IB_Charger extends IB_Battery {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> ret = new ArrayList();
-		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.charger"));
-		if (isSolar) ret.add(I18n.format("jst.tooltip.scharger"));
-		ret.addAll(super.getInformation(st, w, adv));
-		ret.add(I18n.format("jst.msg.com." + (st.hasTagCompound() && st.getTagCompound().getBoolean("isON") ? "on" : "off")));
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.charger"));
+		if (isSolar) ls.add(I18n.format("jst.tooltip.scharger"));
+		super.getInformation(st, w, ls, adv);
+		ls.add(I18n.format("jst.msg.com." + (st.hasTagCompound() && st.getTagCompound().getBoolean("isON") ? "on" : "off")));
 	}
 	
 	@Override

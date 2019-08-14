@@ -72,7 +72,7 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 		setMaxDamage(0);
 		setNoRepair();
 	}
-	
+
 	@Override
     public EnumActionResult onItemUse(EntityPlayer pl, World w, BlockPos p, EnumHand h, EnumFacing f, float hx, float hy, float hz) {
 		ItemStack st = pl.getHeldItem(h);
@@ -93,7 +93,7 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 			return new ActionResult(EnumActionResult.PASS, st);
 		}
     }
-    
+
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer pl, World w, BlockPos p, EnumFacing f, float hX, float hY, float hZ, EnumHand h) {
 		ItemStack st = pl.getHeldItem(h);
@@ -104,68 +104,72 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 			return EnumActionResult.PASS;
 		}
 	}
-	
+
 	@Override
-    public boolean onLeftClickEntity(ItemStack st, EntityPlayer p, Entity e) {
+	public boolean onLeftClickEntity(ItemStack st, EntityPlayer p, Entity e) {
 		try {
 			return getBehaviour(st).onLeftClickEntity(st, p, e);
 		} catch (Throwable t) {
 			return false;
 		}
-    }
-	
-    @Nullable
-    @Override
-    public ItemStack onItemUseFinish(ItemStack st, World w, EntityLivingBase e) {
-        return getBehaviour(st).onUseFinish(st, w, e);
-    }
-    
-    @Override
-    public void onUpdate(ItemStack st, World w, Entity e, int sl, boolean select) {
-    	try {
-    		getBehaviour(st).update(st, w, e, sl, select);
-    	} catch (Exception ex) {}
-    }
-    
-    @Override
-    public void onCreated(ItemStack st, World w, EntityPlayer pl) {
-    	getBehaviour(st).onCreate(st, w, pl);
-    }
-	
-    @Override
-    public EnumAction getItemUseAction(ItemStack st) {
-        return getBehaviour(st).useAction(st);
-    }
-    
+	}
+
+	@Nullable
+	@Override
+	public ItemStack onItemUseFinish(ItemStack st, World w, EntityLivingBase e) {
+		return getBehaviour(st).onUseFinish(st, w, e);
+	}
+
+	@Override
+	public void onUpdate(ItemStack st, World w, Entity e, int sl, boolean select) {
+		try {
+			getBehaviour(st).update(st, w, e, sl, select);
+		} catch (Exception ex) {}
+	}
+
+	@Override
+	public void onCreated(ItemStack st, World w, EntityPlayer pl) {
+		getBehaviour(st).onCreate(st, w, pl);
+	}
+
+	@Override
+	public EnumAction getItemUseAction(ItemStack st) {
+		return getBehaviour(st).useAction(st);
+	}
+
     @Override
     public int getHarvestLevel(ItemStack st, String tc, @Nullable EntityPlayer pl, @Nullable IBlockState bs) {
     	return getBehaviour(st).harvestLevel(st, tc, pl, bs);
     }
-    
+
     @Override
     public int getItemStackLimit(ItemStack st) {
     	return getBehaviour(st).getItemStackLimit(st);
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack st, @Nullable World w, List<String> ls, ITooltipFlag adv) {
-		List str = getBehaviour(st).getInformation(st, w, adv);
-		if (str == null)
-			return;
-		ls.addAll(str);
+    	try {
+    		getBehaviour(st).getInformation(st, w, ls, adv == null ? false : adv.isAdvanced());
+    	} catch (Throwable t) {
+    		if (ls != null) {
+    			ls.add("Error loading info.");
+    			ls.add(t.toString());
+    		}
+    	}
     }
-    
+
     @SideOnly(Side.CLIENT)
     @Override
     public boolean hasEffect(ItemStack st) {
         return getBehaviour(st).hasEffect(st);
     }
-    
+
     @Override
     public void onUsingTick(ItemStack st, EntityLivingBase pl, int cnt) {
     	getBehaviour(st).onUsingTick(st, pl, cnt);
     }
-	
+
     @Override
     public boolean showDurabilityBar(ItemStack st) {
         return getBehaviour(st).showDurability(st);

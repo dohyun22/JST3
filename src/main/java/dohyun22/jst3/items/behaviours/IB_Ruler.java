@@ -1,13 +1,11 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -67,21 +65,19 @@ public class IB_Ruler extends ItemBehaviour {
 	}
 
 	@Override
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		NBTTagCompound nbt = st.getTagCompound();
-		ArrayList<String> list = new ArrayList();
 		if (nbt == null || !nbt.hasKey("coord")) {
-			list.add(I18n.format("jst.tooltip.ruler.tip"));
+			ls.add(I18n.format("jst.tooltip.ruler.tip"));
 		} else {
 			NBTTagCompound tag = nbt.getCompoundTag("coord");
 			int x = tag.getInteger("x");
 			int y = tag.getInteger("y");
 			int z = tag.getInteger("z");
 			String c = x + ", " + y + ", " + z;
-			list.add(I18n.format("jst.tooltip.ruler.coord", c));
+			ls.add(I18n.format("jst.tooltip.ruler.coord", c));
 		}
-		list.add(I18n.format("jst.tooltip.ruler.mode" + (nbt == null ? 0 : nbt.getInteger("mode"))));
-		return list;
+		ls.add(I18n.format("jst.tooltip.ruler.mode" + (nbt == null ? 0 : nbt.getInteger("mode"))));
 	}
 	
 	@Override

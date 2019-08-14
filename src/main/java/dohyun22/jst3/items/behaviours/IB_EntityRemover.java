@@ -10,7 +10,6 @@ import com.google.common.collect.Multimap;
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -25,8 +24,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_EntityRemover extends ItemBehaviour {
 
@@ -69,9 +66,8 @@ public class IB_EntityRemover extends ItemBehaviour {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		return JSTUtils.getListFromTranslation("jst.tooltip.entityremover");
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.entityremover"));
 	}
 	
 	@Override

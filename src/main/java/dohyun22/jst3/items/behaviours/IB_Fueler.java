@@ -1,10 +1,7 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTUtils;
@@ -29,8 +26,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_Fueler extends ItemBehaviour {
 	
@@ -40,7 +35,6 @@ public class IB_Fueler extends ItemBehaviour {
 	}
 
 	@Override
-	@Nullable
 	public <T> T getCapability(Capability<T> cap, ItemStack st) {
 		if (cap == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
 			return (T) new FuelerFluidHandler(st);
@@ -109,11 +103,8 @@ public class IB_Fueler extends ItemBehaviour {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		ArrayList<String> ret = new ArrayList();
-		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.fueler"));
-		addFluidTip(st, ret);
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.fueler"));
+		addFluidTip(st, ls);
 	}
 }

@@ -1,7 +1,6 @@
 package dohyun22.jst3.items.behaviours;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -14,7 +13,6 @@ import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -28,8 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_Laser extends ItemBehaviour {
 	
@@ -63,12 +59,9 @@ public class IB_Laser extends ItemBehaviour {
 	}
 	
 	@Override
-	@SideOnly(value=Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.laser"));
-		addEnergyTip(st, ret);
-		return ret;
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.add(I18n.format("jst.tooltip.laser"));
+		addEnergyTip(st, ls);
 	}
 	
 	@Override

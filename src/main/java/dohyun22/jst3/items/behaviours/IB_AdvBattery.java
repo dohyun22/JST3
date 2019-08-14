@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -26,8 +25,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IB_AdvBattery extends ItemBehaviour {
 	/** 0 = RTG, 1 = Fuel Cell */
@@ -111,16 +108,13 @@ public class IB_AdvBattery extends ItemBehaviour {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		ArrayList<String> ret = new ArrayList();
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		if (type == 1) {
-			ret.add(I18n.format("jst.tooltip.advbat.fuelcell"));
-			addFluidTip(st, ret);
+			ls.add(I18n.format("jst.tooltip.advbat.fuelcell"));
+			addFluidTip(st, ls);
 		}
 		int e = getOutput();
-		ret.add(I18n.format("jst.msg.com.out") + " " + e + " EU/t, " + (e * JSTCfg.RFPerEU) + " RF/t");
-		return ret;
+		ls.add(I18n.format("jst.msg.com.out") + " " + e + " EU/t, " + (e * JSTCfg.RFPerEU) + " RF/t");
 	}
 	
 	private int getOutput() {

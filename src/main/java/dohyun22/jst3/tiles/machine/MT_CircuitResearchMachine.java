@@ -15,7 +15,6 @@ import dohyun22.jst3.container.ContainerCircuitResearch;
 import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.items.behaviours.IB_BluePrint;
-import dohyun22.jst3.items.behaviours.IB_SolderingMachine;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
@@ -50,6 +49,12 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 
 		addLvl(1, new byte[][]{{14,16},{20,24},{53,17},{56,71},{62,11},{90,60}});
 		addLvl(1, new byte[][]{{14,11},{29,24},{47,71},{50,17},{75,21},{80,64}});
+		addLvl(2, new byte[][]{{22,21},{26,76},{37,26},{52,80},{55,29},{56,65},{65,22},{99,68}});
+		addLvl(2, new byte[][]{{27,77},{32,69},{42,24},{52,20},{57,65},{62,23},{80,79},{88,12}});
+		addLvl(2, new byte[][]{{6,69},{15,19},{38,77},{41,34},{59,11},{65,24},{69,81},{87,68}});
+		addLvl(3, new byte[][]{{11,21},{13,22},{27,18},{42,12},{53,24},{74,66},{81,23},{87,75},{89,78},{105,66}});
+		addLvl(3, new byte[][]{{13,14},{22,15},{41,33},{47,11},{56,65},{62,73},{63,28},{78,72},{87,12},{106,61}});
+		addLvl(3, new byte[][]{{8,21},{13,16},{22,81},{40,64},{54,28},{57,72},{75,31},{86,21},{90,13},{93,65}});
 	}
 
 	public MT_CircuitResearchMachine(int tier) {
