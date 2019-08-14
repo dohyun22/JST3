@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import dohyun22.jst3.compat.jei.JEISupport;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,9 +20,13 @@ public abstract class GUIBase extends GuiContainer {
 	}
 
 	@Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void drawScreen(int mx, int my, float pt) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+        super.drawScreen(mx, my, pt);
+        this.renderHoveredToolTip(mx, my);
     }
+
+	public void playSound(SoundEvent s, float p) {
+		mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(s, p));
+	}
 }

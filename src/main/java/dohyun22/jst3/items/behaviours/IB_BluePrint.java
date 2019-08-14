@@ -15,28 +15,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class IB_BluePrint extends ItemBehaviour {
-	protected int consumeLead;
-	
-	public IB_BluePrint() {
-		//consumeLead = consume;
-	}
+public class IB_BluePrint extends ItemBehaviour {	
+	public IB_BluePrint() {}
 	@Override
 	@Nullable
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
 		int size = getSizeOfComsumedLead(st);
+		int tier = getSizeOfTier(st);
 		List<String> ret = new ArrayList();
-		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", size));
+		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", tier, size));
 		return ret;
 	}	
 	
-	public int getSizeOfComsumedLead(ItemStack st) {
+	public static int getSizeOfComsumedLead(ItemStack st) {
 		return st.hasTagCompound() ? st.getTagCompound().getInteger("consumeSize") : 0;
 	}
 	
-	public void setSizeOfConsumedLead(ItemStack st, long e) {
+	public static int getSizeOfTier(ItemStack st) {
+		return st.hasTagCompound() ? st.getTagCompound().getInteger("tier") : 0;
+	}
+	
+	public static void setSizeOfConsumedLeadAndTier(ItemStack st, int lead, int tier) {
 		NBTTagCompound nbt = JSTUtils.getOrCreateNBT(st);
-		nbt.setInteger("consumeSize", (int) Math.max(0, e));
+		nbt.setInteger("consumeSize", lead);
+		nbt.setInteger("tier", tier);
 	}
 	
 	@Override

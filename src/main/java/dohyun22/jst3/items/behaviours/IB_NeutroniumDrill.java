@@ -1,7 +1,6 @@
 package dohyun22.jst3.items.behaviours;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -104,11 +103,7 @@ public class IB_NeutroniumDrill extends ItemBehaviour {
 	@Override
 	@Nullable
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, this.maxEnergy));
-		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
-		ret.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(this.maxEnergy).multiply(bi)));
+		List<String> ret = addEnergyTip(st, null);
 		int m = st.hasTagCompound() ? st.getTagCompound().getInteger("mode") : 0;
 		ret.add(I18n.format("jst.tooltip.neutdrill.mode" + m));
 		return ret;

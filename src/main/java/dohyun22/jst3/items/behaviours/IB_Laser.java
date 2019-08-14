@@ -65,12 +65,9 @@ public class IB_Laser extends ItemBehaviour {
 	@Override
 	@SideOnly(value=Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
 		List<String> ret = new ArrayList();
 		ret.add(I18n.format("jst.tooltip.laser"));
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, this.maxEnergy));
-		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
-		ret.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(this.maxEnergy).multiply(bi)));
+		addEnergyTip(st, ret);
 		return ret;
 	}
 	
@@ -127,18 +124,12 @@ public class IB_Laser extends ItemBehaviour {
 	}
 
 	@Override
-	@Nullable
 	public Object getServerGUI(int id, EntityPlayer pl, World w, BlockPos p) {
-		if (id == 1000)
-			return new ContainerLaser(pl.inventory);
-		return null;
+		return new ContainerLaser(pl.inventory);
 	}
 
 	@Override
-	@Nullable
 	public Object getClientGUI(int id, EntityPlayer pl, World w, BlockPos p) {
-		if (id == 1000)
-			return new GUILaser(new ContainerLaser(pl.inventory));
-		return null;
+		return new GUILaser(new ContainerLaser(pl.inventory));
 	}
 }

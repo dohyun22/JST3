@@ -50,7 +50,7 @@ public class JustServerTweak {
 	public static CommonProxy proxy;
 	
 	public static final String MODID = "jst3";
-	public static final String VERSION = "3.5.4MC1.12";
+	public static final String VERSION = "3.6MC1.12";
 	public static final String NAME = "Just Server Tweak 3";
 
 	@Mod.Instance(JustServerTweak.MODID)
@@ -73,7 +73,7 @@ public class JustServerTweak {
 		}
 		FluidRegistry.enableUniversalBucket();
 	}
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		new CrashInfoAdder();
@@ -107,8 +107,8 @@ public class JustServerTweak {
 		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "laserbeam"), EntityLaserBeam.class, "laserbeam", 0, INSTANCE, 100, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "oreexplosion"), EntityPrimedOre.class, "oreexplosion", 1, INSTANCE, 80, 5, false);
 		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "ecart"), EntityPoweredCart.class, "ecart", 2, INSTANCE, 150, 5, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "cardesl"), EntityCarDiesel.class, "cardesl", 3, INSTANCE, 64, 10, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "carelec"), EntityCarElec.class, "carelec", 4, INSTANCE, 64, 10, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "cardesl"), EntityCarDiesel.class, "cardesl", 3, INSTANCE, 64, 2, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(JustServerTweak.MODID, "carelec"), EntityCarElec.class, "carelec", 4, INSTANCE, 64, 2, true);
 
 		GameRegistry.registerWorldGenerator(new JSTWorldgenHandler(), 0);
 

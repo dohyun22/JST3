@@ -914,12 +914,17 @@ public class JSTUtils {
 	}
 	
 	public static boolean oreMatches(ItemStack st, String id) {
-	      for (int i : OreDictionary.getOreIDs(st)) if (OreDictionary.getOreName(i).equals(id)) return true;
-	      return false;
+		if (st != null && !st.isEmpty()) for (int i : OreDictionary.getOreIDs(st)) if (OreDictionary.getOreName(i).equals(id)) return true;
+		return false;
 	}
 	
 	public static boolean oreMatches(Block bl, String id) {
 	      return oreMatches(new ItemStack(bl), id);
+	}
+
+	public static boolean oreMatches(IBlockState bl, String id) {
+		if (bl == null) return false;
+		return oreMatches(new ItemStack(bl.getBlock(), 1, bl.getBlock().getMetaFromState(bl)), id);
 	}
 
 	public static int getMultiplier(int tier, int use) {
@@ -944,6 +949,12 @@ public class JSTUtils {
         Vec3d v3d2 = v3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
         return w.rayTraceBlocks(v3d, v3d2, liq, !liq, false);
     }
+
+    /*public static Vec3d getDiffRatio(Vec3d a, Vec3d b) {
+        double xd = a.x - b.x, yd = a.y - b.y,  zd = a.y - b.y;
+        double di = Math.sqrt(xd * xd + yd * yd + zd * zd);
+        return new Vec3d(xd / di, yd / di, zd / di);
+    }*/
 
 	public static boolean checkSun(World w, BlockPos p) {
 		return !w.provider.isNether() && w.getLightFor(EnumSkyBlock.SKY, p.up()) > 7 && w.isDaytime() && (!w.isRaining() || w.getBiome(p).getRainfall() <= 0.0F) && w.canBlockSeeSky(p.up());

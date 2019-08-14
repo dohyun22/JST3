@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -139,13 +138,10 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, maxEnergy));
-		ret.add(I18n.format("jst.tooltip.energy.rf", e * JSTCfg.RFPerEU, maxEnergy * JSTCfg.RFPerEU));
-		ret.add(I18n.format("jst.tooltip.screwdriver"));
+		List<String> r = addEnergyTip(st, null);
+		r.add(I18n.format("jst.tooltip.screwdriver"));
 		if (Loader.isModLoaded("immersiveengineering"))
-			ret.add(I18n.format("jst.tooltip.screwdriver.ie"));
-		return ret;
+			r.add(I18n.format("jst.tooltip.screwdriver.ie"));
+		return r;
 	}
 }

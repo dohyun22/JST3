@@ -149,6 +149,7 @@ public class TextureLoader {
 		ls.add("recycler");
 		//ls.add("fl_recycler");
 		ls.add("circuit_research");
+		ls.add("bioprocess");
 		
 		ls.add("gen");
 		ls.add("heatres");
@@ -248,6 +249,9 @@ public class TextureLoader {
 					ls.add("roofedoak" + n);
 					ls.add("rubwood" + n);
 					ls.add("nitrowood" + n);
+					ls.add("barley" + n);
+					ls.add("rice" + n);
+					ls.add("bamboo" + n);
 				}
 			}
 			registerTex(tm, pf, ls);

@@ -127,19 +127,7 @@ public class IB_WaterPurifier extends ItemBehaviour {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ls = new ArrayList();
-		ls.add(I18n.format("jst.tooltip.energy.eu", e, maxEnergy));
-		ls.add(I18n.format("jst.tooltip.energy.rf", e * JSTCfg.RFPerEU, maxEnergy * JSTCfg.RFPerEU));
-		IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
-		if (fh != null) {
-			IFluidTankProperties[] tank = fh.getTankProperties();
-			if (tank != null && tank.length > 0) {
-				FluidStack fs = tank[0].getContents();
-				ls.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
-			}
-		}
-		return ls;
+		return addFluidTip(st, addEnergyTip(st, new ArrayList()));
     }
 
 	@Override

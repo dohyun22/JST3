@@ -62,7 +62,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -231,7 +230,7 @@ public class CompatIC2 extends Loadable {
 		new CropJST("oilplant", "SpaceToad", 4, 2, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 151)}, new String[] {"Berries", "Oil", "Fuel"}, 6, 4, 1, 0, 0, 0);
 		new CropJST("saltgrass", "dohyun22", 4, 1, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 107), JSTUtils.getValidOne("dustRockSalt", "foodRockSalt")}, new String[] {"Food", "Salt"}, 4, 2, 1, 1, 2, 2);
 		new CropCactus();
-		new CropJST("nitrowood", "Creeper", 3, 1, 0, null, null, new ItemStack[] {new ItemStack(Items.GUNPOWDER)}, new String[] {"Creeper", "Sulfur", "Saltpeter"}, 6, 5, 0, 2, 1, 2);
+		new CropJST("nitrowood", "Creepers", 3, 1, 0, null, null, new ItemStack[] {new ItemStack(Items.GUNPOWDER)}, new String[] {"Creeper", "Sulfur", "Saltpeter"}, 6, 5, 0, 2, 1, 2);
 
 		new CropJST("oak", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 0), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.SAPLING, 1, 0), new ItemStack(Items.APPLE)}, new String[] {"Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
 		new CropJST("spruce", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 1), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 1), new ItemStack(Blocks.SAPLING, 1, 1)}, new String[] {"Spruce", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
@@ -240,6 +239,13 @@ public class CompatIC2 extends Loadable {
 		new CropJST("acacia", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 4), null, new ItemStack[] {new ItemStack(Blocks.LOG2, 1, 0), new ItemStack(Blocks.SAPLING, 1, 4)}, new String[] {"Acacia", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
 		new CropJST("roofedoak", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 5), null, new ItemStack[] {new ItemStack(Blocks.LOG2, 1, 1), new ItemStack(Blocks.SAPLING, 1, 5)}, new String[] {"Dark Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
 		new CropJST("rubwood", "Alblaka", 3, 1, -600, JSTUtils.getModItemStack("ic2:sapling"), null, new ItemStack[] {JSTUtils.getModItemStack("ic2:rubber_wood"), JSTUtils.getModItemStack("ic2:sapling"), JSTUtils.getModItemStack("ic2:misc_resource", 1, 4)}, new String[] {"Rubber", "Wood", "Bonsai"}, 4, 2, 0, 2, 1, 0);
+
+		st = JSTUtils.getValidOne("cropBarley", "plantBarley");
+		if (!st.isEmpty()) new CropJST("barley", "mDiyo", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Barley", "Crop", "Edible"}, 2, 0, 3, 1, 2, 1);
+		st = JSTUtils.getValidOne("cropRice", "plantRice", "plantWildrice");
+		if (!st.isEmpty()) new CropJST("rice", "dohyun22", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Rice", "Crop", "Edible"}, 2, 0, 4, 0, 2, 1);
+		st = JSTUtils.getModItemStack("biomesoplenty:bamboo");
+		if (!st.isEmpty()) new CropJST("bamboo", "glitchfiend", 3, 1, -200, st, null, new ItemStack[] {st}, new String[] {"Bamboo", "Stick"}, 3, 0, 1, 1, 1, 2);
 
 		if (JSTUtils.isClient()) {
 			registerTex();
@@ -703,7 +709,7 @@ public class CompatIC2 extends Loadable {
 				Recipes.macerator.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
 			else if (in instanceof OreDictStack)
 				Recipes.macerator.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
-		} catch (Throwable a_1) {
+		} catch (Throwable t) {
 		}
 	}
 	
@@ -717,7 +723,7 @@ public class CompatIC2 extends Loadable {
 				Recipes.extractor.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
 			else if (in instanceof OreDictStack)
 				Recipes.extractor.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
-		} catch (Throwable a_1) {
+		} catch (Throwable t) {
 		}
 	}
 	
@@ -731,7 +737,7 @@ public class CompatIC2 extends Loadable {
 				Recipes.compressor.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
 			else if (in instanceof OreDictStack)
 				Recipes.compressor.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
-		} catch (Throwable a_1) {
+		} catch (Throwable t) {
 		}
 	}
 	

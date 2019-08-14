@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dohyun22.jst3.loader.JSTCfg;
@@ -95,10 +94,7 @@ public class IB_AirConditioner extends ItemBehaviour {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ls = new ArrayList();
-		ls.add(I18n.format("jst.tooltip.energy.eu", e, maxEnergy));
-		ls.add(I18n.format("jst.tooltip.energy.rf", e * JSTCfg.RFPerEU, maxEnergy * JSTCfg.RFPerEU));
+		List<String> ls = addEnergyTip(st, null);
 		ls.add(I18n.format("jst.msg.com." + (st.hasTagCompound() && st.getTagCompound().getBoolean("isON") ? "on" : "off")));
 		return ls;
 	}

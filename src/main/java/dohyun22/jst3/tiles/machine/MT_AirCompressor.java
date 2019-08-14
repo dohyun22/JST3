@@ -9,6 +9,7 @@ import dohyun22.jst3.container.JSTSlot;
 import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -47,7 +49,7 @@ public class MT_AirCompressor extends MT_Machine {
 
 	@Override
 	protected boolean checkCanWork() {
-		if (!isBlocked && tank.getFluidAmount() + 2000 <= tank.getCapacity()) {
+		if (!isBlocked && tank.getFluidAmount() + 2000 <= tank.getCapacity() && JSTChunkData.getFineDust(getWorld(), new ChunkPos(getPos())) <= 100000) {
 			energyUse = 20;
 			mxprogress = 100;
 			return true;

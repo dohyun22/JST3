@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import dohyun22.jst3.JustServerTweak;
+import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.forestry.ItemIridiumFrame;
 import dohyun22.jst3.items.JSTItems;
@@ -54,7 +55,7 @@ public class CompatForestry extends Loadable {
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_bio"));
 		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("forestry:wood_pile", 4), new ItemStack(Items.COAL, 32, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 300);
 
-		FluidStack fs = FluidRegistry.getFluidStack("bio.ethanol", 4000);
+		FluidStack fs = FluidRegistry.getFluidStack("bio.ethanol", 4000), fs2;
 		ItemStack st = new ItemStack(JSTItems.item1, 1, 9017);
 		if (fs != null) {
 			MRecipes.addChemMixerRecipe(new Object[] {st}, fs, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 1, 9000), null, 30, 500);
@@ -79,7 +80,7 @@ public class CompatForestry extends Loadable {
 					'I', st2.isEmpty() ? "ingotIridium" : st2
 					);
 		}
-	    
+
 	    if (JSTCfg.DFHL) {
 			Block b = JSTUtils.getModBlock("forestry:beehives");
 			if (b != Blocks.AIR) b.setLightLevel(0.0f);

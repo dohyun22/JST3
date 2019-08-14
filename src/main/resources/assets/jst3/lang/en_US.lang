@@ -398,6 +398,8 @@ tile.blockte.6046.name=Microwave Rectenna
 tile.blockte.6050.name=Water Purifier
 tile.blockte.6060.name=Fueling Machine
 tile.blockte.6061.name=Creative Generator
+tile.blockte.6062.name=Bio Processor
+tile.blockte.6063.name=Flamethrower Trap
 
 tile.jst.ohw.name=Overhead Catenary
 tile.jst.exhs.name=Extra High Speed Rail
@@ -563,6 +565,10 @@ item.itemjst1.182.name=Gold Plate
 item.itemjst1.183.name=Solder Ingot
 item.itemjst1.184.name=Solder Dust
 item.itemjst1.185.name=Solder Wire
+item.itemjst1.190.name=Basic Circuit Board
+item.itemjst1.191.name=Advanced Circuit Board
+item.itemjst1.192.name=High Tech Circuit Board
+item.itemjst1.193.name=Ultimate Circuit Board
 
 item.itemjst1.9000.name=Empty Cell
 item.itemjst1.9001.name=Water Cell
@@ -634,7 +640,8 @@ item.itemjst1.10041.name=Multimeter
 item.itemjst1.10042.name=Diesel Engine Vehicle
 item.itemjst1.10043.name=Electric Vehicle
 item.itemjst1.10044.name=Minetris 1.0
-item.itemjst1.10050.name=Blueprint
+item.itemjst1.10050.name=Soldering Iron
+item.itemjst1.10051.name=Blueprint
 
 item.itemjst1.10100.name=Ruby Sword
 item.itemjst1.10101.name=Ruby Shovel
@@ -775,10 +782,10 @@ jst.tooltip.laser=Sneak + Right-Click to open Configuration GUI.
 jst.tooltip.scharger=Will charge up if you are exposed to sunlight.
 jst.tooltip.screwdriver=Can adjust machine's behavior.
 jst.tooltip.screwdriver.ie=Can be used on Immersive Engineering machines
-jst.tooltip.flamethrower=Can burn mobs within 13 block range.<n>Uses fluid fuel.<n>Can boost Elytra.
+jst.tooltip.flamethrower=Can burn mobs within %s block range.<n>Uses fluid fuel.<n>Can boost Elytra.
 jst.tooltip.cardesl=Run on diesel generator fuel.<n>Faster on Asphalt/Concrete Blocks.<n>Right-Click with fluid container to refuel.
 jst.tooltip.carelec=Run on EU/RF Batteries<n>Faster on Asphalt/Concrete Blocks.<n>Shift+Right-Click to open GUI.
-jst.tooltip.blueprint=Display amount of used Metalic material like lead when you making Circuit.<n>This Blueprint will use amount of %s metals.
+jst.tooltip.blueprint=Needed for creating circuits.<n>This Blueprint is $s tier and will use %s amount of solder.<n>Number of removed wires: %s
 
 jst.tooltip.energy.eu=%s / %s EU
 jst.tooltip.energy.rf=%s / %s RF
@@ -836,6 +843,8 @@ jst.tooltip.tile.microwave=Generates power from microwave beam sent by satellite
 jst.tooltip.tile.exhs=Very, Very Fast!<n>Max Speed: 40m/s. (144km/h or 90mph)<n>Can't make corners or slopes.
 jst.tooltip.tile.exhs.rc=Use Unpowered Booster or Transition Railcraft H.S Tracks to slow down safely.
 jst.tooltip.tile.fueler=Provides fuel to nearby vehicles.
+jst.tooltip.tile.bioprocess=Dedicated machine for biofuel mass production.<n>§eMultiblock Structure. Check GUI for instruction.<n>Materials Needed:<n>1x Controller(§bthis§r)<n>19-20x Advanced Casing(§9Blue§r)<n>1-2x Item Input(§9Blue§r)<n>1x Item Output(§9Blue§r)<n>1x Fluid Input(§9Blue§r)<n>1x Fluid Output(§9Blue§r)<n>1x Energy Input(§9Blue§r)<n>The input voltage is determined by the circuit(4 needed) applied to the controller as an upgrade.
+jst.tooltip.tile.flamethrower=Automatically burns nearby mobs. Requires liquid fuel to work.<n>Can be disabled by redstone signal.
 
 jst.tooltip.tile.com.ulvonly=This device can only handle ULV Tiered Recipes.
 jst.tooltip.tile.com.sd.rs=Use Screwdriver to adjust Redstone Behavior.
@@ -967,6 +976,7 @@ jst.compat.jei.oregrinder=Ore Processor
 jst.compat.jei.refinery=Oil Refinery
 jst.compat.jei.crystalizer=Crystalizer
 jst.compat.jei.heatexc=Large Heat Boiler
+jst.compat.jei.bioprocess=Bio Processor
 
 jst.compat.jei.total=Total:
 jst.compat.jei.totalgen=Total Out:
@@ -1012,6 +1022,9 @@ jst.compat.crop.oilplant=Oilplant
 jst.compat.crop.saltgrass=Saltgrass
 jst.compat.crop.cactus=Cactus
 jst.compat.crop.nitrowood=Nitrowood
+jst.compat.crop.bamboo=Bamboo
+jst.compat.crop.barley=Barley
+jst.compat.crop.rice=Rice
 
 jst.compat.top.crop.name=Crop Name: %s
 jst.compat.top.crop.nameu=<Unidentified Crop>
@@ -1044,6 +1057,7 @@ death.attack.electric=%1$s was electrocuted
 death.attack.delete=%1$s was deleted
 death.attack.finedust=%1$s was suffocated due to fine dust
 death.attack.emp=%1$s's circuit has been shorted out by EMP
+death.attack.flametrap=%1$s was burnt to crisp by flame trap
 death.attack.jst_flame=%1$s was burnt to crisp by %2$s's flame
 death.attack.jst_ion=%1$s was electrocuted by %2$s's electron cannon
 

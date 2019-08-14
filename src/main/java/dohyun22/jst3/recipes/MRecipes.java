@@ -13,6 +13,8 @@ import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.api.recipe.RecipeList;
 import dohyun22.jst3.utils.JSTUtils;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -45,11 +47,13 @@ public class MRecipes {
 	public static final RecipeList FusionRecipes = new RecipeList("fusion");
 	public static final RecipeList FusionBreederRecipes = new RecipeList("fusionbreeder");
 	public static final RecipeList HeatExcFakeRecipes = new RecipeList("heatexc");
+	public static final RecipeList BioRecipes = new RecipeList("bioprocess");
 	/** Key: ItemStack, OreDictStack, or String name of the Material. Value: Mass value per Item. Denser Item (i.e gold, osmium) will have higher value. */
 	public static final HashMap<Object, Integer> CompressorValue = new HashMap();
 	public static final HashMap<Object, Integer> MagicGenFuel = new HashMap();
 	public static final ArrayList<ItemStack> NuclearItems = new ArrayList();
 	public static final ArrayList<ItemStack> Fertilizers = new ArrayList();
+	public static final ArrayList<Block> LEDCrops = new ArrayList();
     
     @Nullable
     public static RecipeContainer getRecipe(RecipeList recipe, ItemStack[] input, FluidTank[] finput, int tier, boolean sl, boolean fsl) {
@@ -194,6 +198,11 @@ public class MRecipes {
     		MRecipes.CrystalRecipes.add(RecipeContainer.newContainer(new Object[] {in1, in2}, new FluidStack[] {fin}, new ItemStack[] {out}, null, energy, tick));
     }
 
+    public static void addBioRecipe(Object in, FluidStack fin, ItemStack out, FluidStack fout, int energy, int tick) {
+    	if ((isValid(in) || isValid(fin)) && (isValid(fout) || isValid(out)))
+    		MRecipes.BioRecipes.add(RecipeContainer.newContainer(new Object[] {in}, new FluidStack[] {fin}, new ItemStack[] {out}, new FluidStack[] {fout}, energy, tick));
+    }
+
     public static void addDieselFuel(String name, int e) {
     	addFluidFuel(DieselGenFuel, name, e);
     }
@@ -226,6 +235,11 @@ public class MRecipes {
 				return true;
 		return false;
 	}
+
+    public static void addLEDCrop(Block in) {
+    	if (in != null && in != Blocks.AIR)
+    		LEDCrops.add(in);
+    }
     
     public static void addFluidFuel(Map<String, Integer> map, String name, int e) {
     	if (name == null) return;

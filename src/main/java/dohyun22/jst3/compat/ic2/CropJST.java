@@ -27,7 +27,7 @@ public class CropJST extends CropJSTBase {
 	private final String[] attribute;
 	private final CropProperties prop;
 	
-	public CropJST(String name, String disc, int mxs, int ahs, int gs, ItemStack seed, Object[] blb, ItemStack[] drops, String[] att, int lvl, int che, int con, int def, int col, int wed) {
+	public CropJST(String name, String disc, int mxs, int ahs, int gs, Object[] blb, ItemStack[] drops, String[] att, int lvl, int che, int con, int def, int col, int wed, ItemStack... seeds) {
 		this.name = name;
 		this.discover = disc;
 		this.maxSize = mxs;
@@ -38,8 +38,12 @@ public class CropJST extends CropJSTBase {
 		this.attribute = att;
 		this.prop = new CropProperties(lvl, che, con, def, col, wed);
 		Crops.instance.registerCrop(this);
-		if (seed != null && !seed.isEmpty()) Crops.instance.registerBaseSeed(seed, this, 1, 1, 1, 1);
+		for (ItemStack s : seeds) if (s != null && !s.isEmpty()) Crops.instance.registerBaseSeed(s, this, 1, 1, 1, 1);
 		loadTex();
+	}
+
+	public CropJST(String name, String disc, int mxs, int ahs, int gs, ItemStack seed, Object[] blb, ItemStack[] drops, String[] att, int lvl, int che, int con, int def, int col, int wed) {
+		this(name, disc, mxs, ahs, gs, blb, drops, att, lvl, che, con, def, col, wed, seed);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -76,12 +75,13 @@ public class IB_DustMeter extends ItemBehaviour {
 	}
 
 	@Override
+	public int getItemStackLimit(ItemStack st) {
+		return 1;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, maxEnergy));
-		ret.add(I18n.format("jst.tooltip.energy.rf", e * JSTCfg.RFPerEU, maxEnergy * JSTCfg.RFPerEU));
-		return ret;
+		return addEnergyTip(st, null);
 	}
 }

@@ -493,6 +493,11 @@ public class EvHandler {
 		}
 	}
 
+    @SubscribeEvent
+    public void onLoad(final WorldEvent.Load ev) {
+        if (JSTCfg.fireFineDust) ev.getWorld().addEventListener(FireEvListener.INSTANCE);
+    }
+
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload ev) {
 		if (!ev.getWorld().isRemote && ev.getWorld().provider.getDimension() == 0 && !ev.getWorld().getMinecraftServer().isServerRunning()) {

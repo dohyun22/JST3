@@ -21,11 +21,11 @@ public class JSTDamageSource {
 	public static final DamageSource ELECTRIC = new DamageSource("electric");
 	public static final DamageSource DELETE = new DamageSource("delete").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
 	public static final DamageSource DUST = new DamageSource("finedust").setDamageIsAbsolute().setDamageBypassesArmor();
+	public static final DamageSource FLAME = new DamageSource("flametrap").setFireDamage();
 	public static final HashMap<EnumHazard, List<ItemStack>> HAZMATS = new HashMap();
 
-	public static DamageSource causeEntityDamage(String s, @Nullable Entity e, boolean dir) {
-		s = "jst_" + s;
-		return dir ? new EntityDamageSource(s, e) : new EntityDamageSourceIndirect(s, null, e);
+	public static DamageSource causeEntityDamage(String s, @Nullable Entity e) {
+		return new EntityDamageSource("jst_" + s, e);
 	}
 	
 	public static DamageSource getElectricDamage() {

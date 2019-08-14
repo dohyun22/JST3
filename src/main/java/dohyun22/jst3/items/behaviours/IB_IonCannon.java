@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -92,7 +91,7 @@ public class IB_IonCannon extends ItemBehaviour {
 					boolean flag = false;
 					ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(e.posX - 3.5F, e.posY - 3.5F, e.posZ - 3.5F, e.posX + 3.5F, e.posY + 3.5F, e.posZ + 3.5F), pr);
 					for (EntityLivingBase e2 : ls)
-						if (e2 instanceof EntityLivingBase && e2 != pl.getRidingEntity() && ((EntityLivingBase)e2).attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl, false), 7)) {
+						if (e2 instanceof EntityLivingBase && e2 != pl.getRidingEntity() && ((EntityLivingBase)e2).attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl), 7)) {
 							JSTPacketHandler.playCustomEffect(w, ((EntityLivingBase)e2).getPosition(), 1, -10);
 							flag = true;
 						}
@@ -126,10 +125,6 @@ public class IB_IonCannon extends ItemBehaviour {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, maxEnergy));
-		ret.add(I18n.format("jst.tooltip.energy.rf", e * JSTCfg.RFPerEU, maxEnergy * JSTCfg.RFPerEU));
-		return ret;
+		return addEnergyTip(st, null);
 	}
 }

@@ -292,12 +292,10 @@ public class RecipeLoader extends Loadable {
 				'B', new ItemStack(JSTItems.item1, 1, 12010)
 				);
 
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10019), 
-				"BB ", "FCB", " BC",
-				'B', "ingotBrass",
-				'C', new ItemStack(JSTItems.item1, 1, 9000),
-				'F', Items.FLINT_AND_STEEL
-				);
+		ItemStack st = new ItemStack(JSTItems.item1, 1, 10019), st2 = st;
+		addShapedRecipe(st2, "BB ", "FCB", " BC", 'B', "ingotBrass", 'C', new ItemStack(JSTItems.item1, 1, 9000), 'F', Items.FLINT_AND_STEEL);
+		st = st.copy(); JSTUtils.getOrCreateNBT(st).setBoolean("UPG", true);
+		addShapedRecipe(st, " B ", "BFB", " B ", 'B', Items.FIRE_CHARGE, 'F', st2);
 
 		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10020), 
 				"CCR", "LLT",
@@ -313,6 +311,7 @@ public class RecipeLoader extends Loadable {
 		obj = JSTUtils.getValidOne("stickIron", "ingotIron");
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10042), "ABA", "AAA", "SMS", 'A', ItemList.baseMaterial[2], 'B', new ItemStack(JSTItems.item1, 1, 12004), 'S', obj, 'M', ItemList.motors[1]);
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10043), "AIA", "ABA", "SMS", 'A', ItemList.baseMaterial[2], 'I', ItemList.circuits[2], 'B', new ItemStack(JSTItems.item1, 1, 12011), 'S', obj, 'M', ItemList.motors[2]);
+		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10044), "NGN", " C ", 'N', "dustNikolite", 'G', Blocks.GLASS_PANE, 'C', ItemList.circuits[1]);
 
 		addToolRecipes(10100, "gemRuby", true);
 		addToolRecipes(10106, "gemPeridot", true);
@@ -406,7 +405,7 @@ public class RecipeLoader extends Loadable {
 				'R', "dustRedstone"
 				);
 
-		ItemStack st = new ItemStack(JSTItems.item1, 1, 10013);
+		st = new ItemStack(JSTItems.item1, 1, 10013);
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 160), "P  ", " S ", "   ", 'P', pf + "Iron", 'S', st);
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 161), " P ", " S ", "   ", 'P', pf + "Iron", 'S', st);
 		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 162), "  P", " S ", "   ", 'P', pf + "Iron", 'S', st);
@@ -463,7 +462,7 @@ public class RecipeLoader extends Loadable {
 					'M', ItemList.machineBlock[1]
 					);
 			if (f) {
-				ItemStack st2 = new ItemStack(JSTBlocks.blockTile, 1, 12 + n);
+				st2 = new ItemStack(JSTBlocks.blockTile, 1, 12 + n);
 				addShapelessRecipe(st, st2);
 				addShapelessRecipe(st2, st);
 			}
@@ -973,6 +972,20 @@ public class RecipeLoader extends Loadable {
 				'C', ItemList.circuits[1],
 				'M', ItemList.machineBlock[1],
 				'F', new ItemStack(JSTItems.item1, 1, 10009)
+				);
+
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6062), "AcA", "MMM", "AmA",
+				'A', new ItemStack(JSTBlocks.blockTile, 1, 5003),
+				'M', ItemList.motors[2],
+				'c', new ItemStack(JSTBlocks.blockTile, 1, 252),
+				'm', new ItemStack(JSTBlocks.blockTile, 1, 242)
+				);
+
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6063), " F ", "cMc", " C ",
+				'c', new ItemStack(JSTItems.item1, 1, 9000),
+				'C', ItemList.circuits[1],
+				'M', ItemList.machineBlock[1],
+				'F', new ItemStack(JSTItems.item1, 1, 10019)
 				);
 
 		//Generators

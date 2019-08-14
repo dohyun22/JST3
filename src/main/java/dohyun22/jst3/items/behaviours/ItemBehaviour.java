@@ -1,5 +1,7 @@
 package dohyun22.jst3.items.behaviours;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +13,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 
 import dohyun22.jst3.items.ItemJST1;
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
@@ -18,6 +21,7 @@ import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentDurability;
@@ -46,6 +50,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -355,7 +363,30 @@ public class ItemBehaviour {
 	public int getBurnTime(ItemStack st) {
 		return 0;
 	}
-	
+
+	protected static List<String> addFluidTip(@Nonnull ItemStack s, @Nullable List<String> l) {
+		if (l == null) l = new ArrayList();
+		IFluidHandlerItem fh = FluidUtil.getFluidHandler(s);
+		if (fh != null) {
+			IFluidTankProperties[] tank = fh.getTankProperties();
+			if (tank != null && tank.length > 0) {
+				FluidStack fs = tank[0].getContents();
+				l.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
+			}
+		}
+		return l;
+	}
+
+	protected static List<String> addEnergyTip(@Nonnull ItemStack s, @Nullable List<String> l) {
+		if (l == null) l = new ArrayList();
+		ItemBehaviour b = JSTItems.item1.getBehaviour(s);
+		long e = b.getEnergy(s);
+		l.add(I18n.format("jst.tooltip.energy.eu", e, b.maxEnergy));
+		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
+		l.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(b.maxEnergy).multiply(bi)));
+		return l;
+	}
+
 	protected class InternalStroage implements net.minecraftforge.energy.IEnergyStorage {
 		private final ItemStack st;
 		

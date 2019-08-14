@@ -116,14 +116,7 @@ public class IB_AdvBattery extends ItemBehaviour {
 		ArrayList<String> ret = new ArrayList();
 		if (type == 1) {
 			ret.add(I18n.format("jst.tooltip.advbat.fuelcell"));
-			IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
-			if (fh != null) {
-				IFluidTankProperties[] tank = fh.getTankProperties();
-				if (tank != null && tank.length > 0) {
-					FluidStack fs = tank[0].getContents();
-					ret.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
-				}
-			}
+			addFluidTip(st, ret);
 		}
 		int e = getOutput();
 		ret.add(I18n.format("jst.msg.com.out") + " " + e + " EU/t, " + (e * JSTCfg.RFPerEU) + " RF/t");

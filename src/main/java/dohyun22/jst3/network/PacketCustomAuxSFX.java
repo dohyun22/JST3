@@ -76,9 +76,10 @@ public class PacketCustomAuxSFX implements IMessage {
 					zd = zd / (double) cnt;
 					for (int i = 0; i < cnt; i++)
 						w.spawnParticle(EnumParticleTypes.REDSTONE, true, p.getX() + 0.5 - xd * i, p.getY() + 0.5 - yd * i, p.getZ() + 0.5 - zd * i, 0.1D, 1.0D, 1.0D);
+					break;
 				}
 				case 3:
-					w.spawnParticle(EnumParticleTypes.REDSTONE, true, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 0.0D, 0.0D, 0.0D);
+					w.spawnParticle(EnumParticleTypes.REDSTONE, true, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 0.0D, 0.0D, 0.0D); break;
 				}
 			} catch (Throwable t) {}
 		}

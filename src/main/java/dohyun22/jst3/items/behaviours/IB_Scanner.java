@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -248,12 +247,7 @@ public class IB_Scanner extends ItemBehaviour {
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, this.maxEnergy));
-		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
-		ret.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(this.maxEnergy).multiply(bi)));
-		return ret;
+		return addEnergyTip(st, null);
 	}
 
 	@Override

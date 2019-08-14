@@ -1,6 +1,5 @@
 package dohyun22.jst3.items.behaviours;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -117,10 +116,6 @@ public class IB_ELighter extends ItemBehaviour {
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
-		long e = getEnergy(st);
-		List<String> ret = new ArrayList();
-		ret.add(I18n.format("jst.tooltip.energy.eu", e, maxEnergy));
-		ret.add(I18n.format("jst.tooltip.energy.rf", e * JSTCfg.RFPerEU, maxEnergy * JSTCfg.RFPerEU));
-		return ret;
+		return addEnergyTip(st, null);
 	}
 }

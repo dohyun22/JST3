@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.compat.ic2.CompatIC2;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -97,7 +98,7 @@ public class MT_LEDLight extends MetaTileEnergyInput {
 			            if (b == Blocks.AIR || b == null) continue;
 			            if (JSTCfg.ic2Loaded && CompatIC2.growCrop(getWorld().getTileEntity(mp), 8 + getWorld().rand.nextInt(4), false))
 			            	break;
-			            if (b instanceof IGrowable || b instanceof IPlantable) {
+			            if (b instanceof IGrowable || b instanceof IPlantable || MRecipes.LEDCrops.contains(b)) {
 			            	if (getWorld().rand.nextInt(4) != 0)
 			            		getWorld().scheduleBlockUpdate(mp, b, 0, 1);
 			            	break;

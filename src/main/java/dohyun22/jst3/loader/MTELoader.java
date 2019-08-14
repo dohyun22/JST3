@@ -8,7 +8,6 @@ import dohyun22.jst3.tiles.earlytech.*;
 import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
-import dohyun22.jst3.tiles.test.MT_CircuitResearchMachine;
 import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -261,9 +260,10 @@ public class MTELoader {
 		if (Loader.isModLoaded("toughasnails"))
 		MetaTileBase.registerTE(6050, new MT_WaterPurifier());
 		MetaTileBase.registerTE(6060, new MT_Fueler());
-		//test
 		MetaTileBase.registerTE(6061, new MetaTileCreativeGenerator(1));
-		
+		MetaTileBase.registerTE(6062, new MT_BioProcessor());
+		MetaTileBase.registerTE(6063, new MT_FlameTrap());
+
 		/* #7000: EarlyTech Kinetic energy based machines */
 		MetaTileBase.registerTE(7000, new MetaTileGearBox(true));
 		MetaTileBase.registerTE(7001, new MetaTileGearBox(false));

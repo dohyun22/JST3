@@ -3,14 +3,12 @@ package dohyun22.jst3.tiles.multiblock;
 import java.util.List;
 
 import dohyun22.jst3.JustServerTweak;
-import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.client.gui.GUIMulti;
 import dohyun22.jst3.container.ContainerMulti;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,23 +16,24 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_OreGrinder extends MT_Multiblock {
+public class MT_BioProcessor extends MT_Multiblock {
 
-	public MT_OreGrinder() {
+	public MT_BioProcessor() {
 		circuitTier = 2;
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MT_OreGrinder();
+		return new MT_BioProcessor();
 	}
 
 	@Override
@@ -47,20 +46,17 @@ public class MT_OreGrinder extends MT_Multiblock {
 				for (int z = 0; z <= 2; z++) {
 					BlockPos p = getPosFromCoord(x, y, z);
 					if (y == -1 || y == 1) {
-						if (MetaTileBase.getMTEId(getWorld(), p) != 5002 && !getAndAddPort(p, 29, "csg_b"))
-							return false;
+						if (MetaTileBase.getMTEId(getWorld(), p) != 5003 && !getAndAddPort(p, 61, "csg_r")) return false;
 					} else {
 						if ((x | y | z) == 0) continue;
 						if (x == 0 && y == 0 && z == 1) {
 							if (!w.isAirBlock(p)) return false;
-						} else if (MetaTileBase.getMTEId(w, p) != 5002 && !getAndAddPort(p, 29, "csg_b")) {
-							return false;
-						}
+						} else if (MetaTileBase.getMTEId(w, p) != 5003 && !getAndAddPort(p, 61, "csg_r")) return false;
 					}
 				}
 			}
 		}
-		if (itemInput.size() != 1 || fluidInput.size() != 1 || itemOutput.size() != 1) return false;
+		if (itemInput.size() < 1 || itemInput.size() > 2 || fluidInput.size() != 1 || itemOutput.size() != 1 || fluidOutput.size() != 1) return false;
 		int v = JSTUtils.getVoltFromTier(circuitTier);
 		updateEnergyPort(v, v * 8, false);
 		return true;
@@ -68,12 +64,18 @@ public class MT_OreGrinder extends MT_Multiblock {
 
 	@Override
 	protected boolean checkCanWork() {
-		return checkRecipe(MRecipes.OreProcessRecipes);
+		return checkRecipe(MRecipes.BioRecipes);
+	}
+
+	@Override
+	protected void onStartWork() {
+		getWorld().playSound(null, getPos(), SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1.0F, 0.8F);
 	}
 
 	@Override
 	protected void finishWork() {
 		sendItem();
+		sendFluid();
 		super.finishWork();
 	}
 
@@ -145,8 +147,8 @@ public class MT_OreGrinder extends MT_Multiblock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite t = getTETex("csg_b");
-		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("upulv")};
+		TextureAtlasSprite t = getTETex("csg_r");
+		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("bioprocess")};
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class MT_OreGrinder extends MT_Multiblock {
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++)
-			ret[n] = getTETex(baseTile.facing == JSTUtils.getFacingFromNum(n) ? "upulv" + (baseTile.isActive() ? "" : "_off") : "csg_b");
+			ret[n] = getTETex(baseTile.facing == JSTUtils.getFacingFromNum(n) ? "bioprocess" : "csg_r");
 		return ret;
 	}
 
@@ -176,6 +178,6 @@ public class MT_OreGrinder extends MT_Multiblock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.grind"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.bioprocess"));
 	}
 }

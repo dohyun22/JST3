@@ -415,6 +415,37 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addCrystalRecipe(new OreDictStack("dustCarbon", 32), new OreDictStack("dustNiobium"), null, new ItemStack(JSTItems.item1, 1, 150), 250, 400);
 		MRecipes.addCrystalRecipe(new OreDictStack("dustCarbon", 32), JSTUtils.getValidOne("dustGold", "ingotGold"), null, new ItemStack(JSTItems.item1, 1, 150), 250, 400);
 		MRecipes.HeatExcFakeRecipes.add(RecipeContainer.newContainer(null, new FluidStack[] {new FluidStack(FluidRegistry.WATER, 2), new FluidStack(FluidRegistry.LAVA, 333)}, null, new FluidStack[] {new FluidStack(JSTFluids.steam, 16000), FluidRegistry.getFluidStack("ic2pahoehoe_lava", 333)}, 0, 0));
+
+		fa[0] = new FluidStack(FluidRegistry.WATER, 2000); fa[1] = FluidRegistry.getFluidStack("bio.ethanol", 1000);
+		if (fa[1] == null) fa[1] = FluidRegistry.getFluidStack("ethanol", 1000);
+		if (fa[1] != null) {
+			MRecipes.addBioRecipe(new OreDictStack("treeSapling", 8), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("sugarcane", 10), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("blockCactus", 10), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("cropPotato", 12), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("cropCarrot", 12), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("treeLeaves", 20), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("cropWheat", 20), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("logWood", 12), fa[0], null, fa[1], 200, 200);
+			MRecipes.addBioRecipe(new ItemStack(Items.APPLE, 8), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new ItemStack(Blocks.BROWN_MUSHROOM, 10), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new ItemStack(Blocks.RED_MUSHROOM, 10), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new ItemStack(Items.SUGAR, 10), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new ItemStack(Items.BEETROOT, 10), fa[0], null, fa[1], 100, 250);
+		}
+		fa[0] = FluidRegistry.getFluidStack("biodiesel", 1000);
+		if (fa[0] == null) fa[0] = FluidRegistry.getFluidStack("biodiesel", 1000);
+		if (fa[0] != null) {
+			MRecipes.addBioRecipe(new ItemStack(Items.WHEAT_SEEDS, 12), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new ItemStack(Items.BEETROOT_SEEDS, 12), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new ItemStack(Items.PUMPKIN_SEEDS, 20), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new ItemStack(Items.MELON_SEEDS, 20), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(JSTUtils.getModItemStack("immersiveengineering:seed", 8), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropPeanut", 4), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropWalnut", 4), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropChestnut", 4), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropAlmond", 4), null, null, fa[0], 100, 400);
+		}
 	}
 
 	private static void addGrind(String ore, int mu, String pf, boolean m, Object s1, boolean m1, FluidStack[] pr) {

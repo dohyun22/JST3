@@ -113,14 +113,7 @@ public class IB_Fueler extends ItemBehaviour {
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
 		ArrayList<String> ret = new ArrayList();
 		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.fueler"));
-		IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
-		if (fh != null) {
-			IFluidTankProperties[] tank = fh.getTankProperties();
-			if (tank != null && tank.length > 0) {
-				FluidStack fs = tank[0].getContents();
-				ret.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
-			}
-		}
+		addFluidTip(st, ret);
 		return ret;
 	}
 }

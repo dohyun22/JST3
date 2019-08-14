@@ -51,11 +51,12 @@ public class JSTItems {
     			null, "mt1", "mt2", "mt3", "mt4", "mt5", "mt6", "mt7", "mt8", null,
     			null, "se1", "se2", "se3", "se4", "se5", "se6", "se7", "se8", null,
     			null, "re1", "re2", "re3", "re4", "re5", "re6", "re7", "re8", null,
-    			null, null, null, null, null, null, null, null, null, null, //140~149: Reserved for tiered part
+    			null, null, null, null, null, null, null, null, null, null, //140~149: Reserved for new tiered part
     			"cnt", new Object[] {"oilberry", new IB_Food(6, 10, 32, false, false, new PotionEffect(MobEffects.NAUSEA, 200))}, "vtube", "inf_circuit", ac("arsolar", fl[0]), null, null, "est_ingot", "est_dust", "est_plate",
     			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null, //160~169: Reserved for molds
     			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1]), null,
-    			null, null, null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null
+    			null, null, null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null,
+    			"circ_board", null, null, null, null, null, null, null, null, null
     	};
 
 		for (int n = 0; n < obj.length; n++) {
@@ -103,9 +104,11 @@ public class JSTItems {
 		item1.registerMetaItem(10041, "tool_meter", new IB_Meter());
 		item1.registerMetaItem(10042, "car_f", new IB_EntityEgg(JustServerTweak.MODID + ":cardesl", "jst.tooltip.cardesl"));
 		item1.registerMetaItem(10043, "car_e", new IB_EntityEgg(JustServerTweak.MODID + ":carelec", "jst.tooltip.carelec"));
-		
-		item1.registerMetaItem(10050, "blueprint_write", new IB_BluePrint());
-		
+		item1.registerMetaItem(10044, "tool_minigame", new IB_Minetris());
+
+		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingMachine());
+		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
+
 		item1.registerMetaItem(10100, "tool_rby_sw", new IB_GenericTool(500, EnumToolType.SWORD, 7.0F, 2, 8.0F, 10));
 		item1.registerMetaItem(10101, "tool_rby_sh", new IB_GenericTool(500, EnumToolType.SHOVEL, 5.5F, 2, 8.0F, 10));
 		item1.registerMetaItem(10102, "tool_rby_pi", new IB_GenericTool(500, EnumToolType.PICK, 5.0F, 2, 8.0F, 10));

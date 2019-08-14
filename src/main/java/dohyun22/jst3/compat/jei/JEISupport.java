@@ -65,9 +65,9 @@ public class JEISupport implements IModPlugin {
 	@Method(modid = "jei")
 	public void register(IModRegistry rg) {
 	    IGuiHelper guiHelper = rg.getJeiHelpers().getGuiHelper();
-	    
+
 	    rg.addRecipeHandlers(new GenericRecipeHandler(), new FluidFuelHandler(), new ItemFuelHandler());
-	    
+
 	    addGenericRecipe(rg, guiHelper, MRecipes.AlloyFurnaceRecipes);
 	    addGenericRecipe(rg, guiHelper, MRecipes.SeparatorRecipes);
 	    addGenericRecipe(rg, guiHelper, MRecipes.FusionBreederRecipes);
@@ -78,13 +78,14 @@ public class JEISupport implements IModPlugin {
 	    addGenericRecipe(rg, guiHelper, MRecipes.OreProcessRecipes);
 	    addGenericRecipe(rg, guiHelper, MRecipes.CrystalRecipes);
 	    addGenericRecipe(rg, guiHelper, MRecipes.HeatExcFakeRecipes);
-	    
+	    addGenericRecipe(rg, guiHelper, MRecipes.BioRecipes);
+
 		rg.addRecipeCategories(new FusionCategory());
         rg.addRecipes(FusionRecipeWrapper.make(), JustServerTweak.MODID + "." + MRecipes.FusionRecipes.name);
-	    
+
 	    rg.addRecipeCategories(new AssemblerCategory());
 	    rg.addRecipes(AssemblerRecipeWrapper.make(), JustServerTweak.MODID + "." + MRecipes.AssemblerRecipes.name);
-	    
+
 		rg.addRecipeCategories(new DisassemblerCategory());
         rg.addRecipes(DisassemblerRecipeWrapper.make(), JustServerTweak.MODID + "." + MRecipes.DisassemblerRecipes.name);
 
@@ -93,68 +94,68 @@ public class JEISupport implements IModPlugin {
 
 	    rg.addRecipeCategories(new FluidFuelCategory("dieselfuel"));
 	    rg.addRecipes(FluidFuelRecipeWrapper.make(MRecipes.DieselGenFuel), JustServerTweak.MODID + ".dieselfuel");
-	    
+
 	    rg.addRecipeCategories(new FluidFuelCategory("gasfuel"));
 	    rg.addRecipes(FluidFuelRecipeWrapper.make(MRecipes.GasGenFuel), JustServerTweak.MODID + ".gasfuel");
-	    
+
 	    rg.addRecipeCategories(new FluidFuelCategory("steamfuel"));
 	    rg.addRecipes(FluidFuelRecipeWrapper.make(MRecipes.AcceptableSteam), JustServerTweak.MODID + ".steamfuel");
-	    
+
 	    rg.addRecipeCategories(new FluidFuelCategory("heatfuel"));
 	    rg.addRecipes(FluidFuelRecipeWrapper.make(MRecipes.HeatGenFuel), JustServerTweak.MODID + ".heatfuel");
-	    
+
 	    rg.addRecipeCategories(new ItemFuelCategory("magicfuel"));
 	    rg.addRecipes(ItemFuelRecipeWrapper.make(MRecipes.MagicGenFuel), JustServerTweak.MODID + ".magicfuel");
-	    
+
 	    rg.addRecipeCategories(new ItemFuelCategory("fgenfuel"));
 	    rg.addRecipes(ItemFuelRecipeWrapper.makeFGFuelList(rg), JustServerTweak.MODID + ".fgenfuel");
-	    
+
 	    rg.addRecipeCategories(new FluidResourceCategory());
 	    rg.addRecipes(FluidResourceWrapper.make(), JustServerTweak.MODID + ".fluidresource");
-	    
+
 	    Block b = JSTBlocks.blockTile;
 	    String str = JustServerTweak.MODID + ".fgenfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 31), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 32), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 33), str);
-		
+
 		str = JustServerTweak.MODID + ".dieselfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 61), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 62), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 63), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6010), str);
 		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 10042), str);
-		
+
 		str = JustServerTweak.MODID + ".gasfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 71), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 72), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 73), str);
 		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 12031), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6011), str);
-		
+
 		str = JustServerTweak.MODID + ".steamfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 81), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 82), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 83), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6012), str);
-		
+
 		str = JustServerTweak.MODID + ".heatfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 91), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 92), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 93), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6013), str);
-		
+
 		str = JustServerTweak.MODID + ".magicfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 111), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 112), str);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 113), str);
-		
+
 		String[] list = new String[] {JustServerTweak.MODID + ".fusion", JustServerTweak.MODID + ".fusionbreeder"};
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 101), list);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 102), list);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 103), list);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 104), list);
-	
+
 	    rg.addRecipeCatalyst(new ItemStack(b, 1, 6003), JustServerTweak.MODID + ".alloyfurnace", "minecraft.fuel");
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6004), "minecraft.smelting");
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6020), JustServerTweak.MODID + ".shfurnace");
@@ -163,14 +164,15 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6041), JustServerTweak.MODID + ".cokeoven");
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6043), JustServerTweak.MODID + ".oregrinder");
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6044), JustServerTweak.MODID + ".refinery");
-		
+		rg.addRecipeCatalyst(new ItemStack(b, 1, 6062), JustServerTweak.MODID + ".bioprocess");
+
 		rg.addRecipeClickArea(GUIFurnaceGen.class, 40, 36, 13, 13, JustServerTweak.MODID + ".fgenfuel");
 		rg.addRecipeClickArea(GUISolarFurnace.class, 78, 32, 28, 23, "minecraft.smelting");
 	    rg.addRecipeClickArea(GUIAlloyFurnace.class, 78, 32, 28, 23, JustServerTweak.MODID + ".alloyfurnace", "minecraft.fuel");
 	    rg.addRecipeClickArea(GUIAssembler.class, 101, 25, 24, 17, JustServerTweak.MODID + ".assembler");
 	    rg.addRecipeClickArea(GUIFusion.class, 152, 8, 16, 16, list);
 	    rg.addRecipeClickArea(GUIMagicGen.class, 39, 32, 16, 17, JustServerTweak.MODID + ".magicfuel");
-	    
+
 	    str = JustServerTweak.MODID + ".alloyfurnace";
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 220 + n), str);
 		str = JustServerTweak.MODID + ".assembler";

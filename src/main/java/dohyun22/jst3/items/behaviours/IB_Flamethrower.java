@@ -15,6 +15,7 @@ import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -25,6 +26,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -66,7 +68,9 @@ public class IB_Flamethrower extends ItemBehaviour {
 	@Override
     public void onUsingTick(ItemStack st, EntityLivingBase e, int cnt) {
 		World w = e.world;
-		if (e.isElytraFlying() && e.posY <= 256) {
+		if (e.isElytraFlying() && e.posY <= 300) {
+			if (!w.isRemote && w.getTotalWorldTime() % 5 == 0)
+				w.playSound(null, e.posX, e.posY, e.posZ, JSTSounds.FLAME, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			Vec3d d = e.getLookVec();
             e.motionX += d.x * 0.05D + (d.x - e.motionX) * 0.25D;
             e.motionY += d.y * 0.05D + (d.y - e.motionY) * 0.25D;
@@ -75,39 +79,15 @@ public class IB_Flamethrower extends ItemBehaviour {
 				for (int n = 0; n < 4; n++)
 					((WorldServer)w).spawnParticle(EnumParticleTypes.FLAME, false, e.posX, e.posY, e.posZ, 0, -d.x + w.rand.nextFloat() * 0.2F - 0.1F, -d.y + w.rand.nextFloat() * 0.3F - 0.15F, -d.z + w.rand.nextFloat() * 0.2F - 0.1F, 1.0D);
 		}
-		if (w == null || w.isRemote) return;
+		if (w == null || w.isRemote || !st.hasTagCompound()) return;
 		int du = getMaxItemUseDuration(st) - cnt;
+		boolean u = st.getTagCompound().getBoolean("UPG");
 		FluidStack fs = FluidUtil.getFluidContained(st);
 		if (!(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode) && (fs == null || du * getFuelVal(fs.getFluid()) > fs.amount)) {
 			e.stopActiveHand();
 			return;
 		}
-		if (e.ticksExisted % 5 == 0)
-			w.playSound(null, e.getPosition(), JSTSounds.FLAME, SoundCategory.PLAYERS, 1.0F, 1.0F);
-		if (!e.isElytraFlying()) {
-			Vec3d d = e.getLookVec();
-			if (w instanceof WorldServer)
-				for (int n = 0; n < 4; n++)
-					((WorldServer)w).spawnParticle(EnumParticleTypes.FLAME, false, e.posX + d.x * 1.0F, e.posY + e.getEyeHeight() + d.y * 1.0F, e.posZ + d.z * 1.0F, 0, d.x + w.rand.nextFloat() * 0.2F - 0.1F, d.y + w.rand.nextFloat() * 0.3F - 0.15F, d.z + w.rand.nextFloat() * 0.2F - 0.1F, 1.0D);
-			double sz = 1.2D;
-			MutableBlockPos p = new MutableBlockPos();
-			for (int n = 1; n < 13; n++) {
-				double px = e.posX + d.x * n;
-				double py = e.posY + e.getEyeHeight() + d.y * n;
-				double pz = e.posZ + d.z * n;
-				p.setPos(px, py, pz);
-				IBlockState bs = w.getBlockState(p);
-				if (bs.getMaterial().blocksMovement() || bs.getMaterial().isLiquid())
-					break;
-				List el = w.getEntitiesWithinAABBExcludingEntity(e, new AxisAlignedBB(px - sz, py - sz, pz - sz, px + sz, py + sz, pz + sz));
-				for (Object obj : el) {
-					if (obj instanceof EntityLivingBase && obj != e.getRidingEntity() && ((EntityLivingBase)obj).attackEntityFrom(JSTDamageSource.causeEntityDamage("flame", e, false).setFireDamage(), 3)) {
-						((EntityLivingBase)obj).setFire(5);
-						if (w.rand.nextInt(30) == 0) ((EntityLivingBase)obj).hurtResistantTime = 0;
-					}
-				}
-			}
-		}
+		if (!e.isElytraFlying()) throwFlame(w, e, null, 3, u ? 20 : 13);
 	}
 
 	@Override
@@ -156,6 +136,9 @@ public class IB_Flamethrower extends ItemBehaviour {
 		if (fh != null) {
 			fh.fill(new FluidStack(JSTFluids.fuel, 4000), true);
 			sub.add(st);
+			st = st.copy();
+			JSTUtils.getOrCreateNBT(st).setBoolean("UPG", true);
+			sub.add(st);
 		}
 	}
 
@@ -186,19 +169,57 @@ public class IB_Flamethrower extends ItemBehaviour {
 	@SideOnly(Side.CLIENT)
 	public List<String> getInformation(ItemStack st, World w, ITooltipFlag adv) {
 		ArrayList<String> ret = new ArrayList();
-		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.flamethrower"));
-		IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
-		if (fh != null) {
-			IFluidTankProperties[] tank = fh.getTankProperties();
-			if (tank != null && tank.length > 0) {
-				FluidStack fs = tank[0].getContents();
-				ret.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
-			}
-		}
+		ret.addAll(JSTUtils.getListFromTranslation("jst.tooltip.flamethrower", st.hasTagCompound() && st.getTagCompound().getBoolean("UPG") ? 20 : 13));
+		addFluidTip(st, ret);
 		return ret;
 	}
 
-	private static int getFuelVal(Fluid f) {
+	public static void throwFlame(World w, Object o, Vec3d ag, int pwr, int rng) {
+		if (w.isRemote) return;
+		Vec3d sp = null; Entity e = null;
+		if (o instanceof Entity) {
+			e = (Entity) o;
+			sp = ((Entity)o).getPositionVector().addVector(0, ((Entity)o).getEyeHeight(), 0);
+			if (ag == null) ag = e.getLookVec();
+		}
+		if (o instanceof TileEntity && ag != null)
+			sp = new Vec3d(((TileEntity)o).getPos()).addVector(0.5F, 0.5F, 0.5F);
+
+		if (sp != null && ag != null && pwr > 0 && rng > 0) {
+			if (w.getTotalWorldTime() % 5 == 0)
+				w.playSound(null, sp.x, sp.y, sp.z, JSTSounds.FLAME, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			if (w instanceof WorldServer) {
+				double ps = Math.max(0.0075D * rng, 0.12D);
+				for (int n = 0; n < 4; n++) {
+					double vx = ag.x + w.rand.nextFloat() * ps - 0.075F;
+					double vy = ag.y + w.rand.nextFloat() * ps - 0.075F;
+					double vz = ag.z + w.rand.nextFloat() * ps - 0.075F;
+					((WorldServer)w).spawnParticle(EnumParticleTypes.FLAME, true, sp.x + ag.x, sp.y + ag.y, sp.z + ag.z, 0, vx, vy, vz, 1.0D);
+				}
+			}
+			double sz = 1.2D;
+			MutableBlockPos p = new MutableBlockPos();
+			for (int n = 1; n < rng; n++) {
+				double px = sp.x + ag.x * n;
+				double py = sp.y + ag.y * n;
+				double pz = sp.z + ag.z * n;
+				p.setPos(px, py, pz);
+				IBlockState bs = w.getBlockState(p);
+				if (bs.getMaterial().blocksMovement() || bs.getMaterial().isLiquid()) break;
+				List<EntityLivingBase> el =  w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(px - sz, py - sz, pz - sz, px + sz, py + sz, pz + sz));
+				for (EntityLivingBase elb : el) {
+					if (e != null && (elb == e || elb == e.getRidingEntity())) continue;
+					DamageSource ds = e == null ? JSTDamageSource.FLAME : JSTDamageSource.causeEntityDamage("flame", e).setFireDamage();
+					if (elb.attackEntityFrom(ds, pwr)) {
+						elb.setFire(2 * pwr);
+						if (w.rand.nextInt(30) == 0) elb.hurtResistantTime = 0;
+					}
+				}
+			}
+		}
+	}
+
+	public static int getFuelVal(Fluid f) {
 		if (f != null) {
 			String s = f.getName();
 			if (s != null) {
