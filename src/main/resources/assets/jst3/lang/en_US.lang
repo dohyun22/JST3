@@ -786,6 +786,7 @@ jst.tooltip.flamethrower=Can burn mobs within %s block range.<n>Uses fluid fuel.
 jst.tooltip.cardesl=Run on diesel generator fuel.<n>Faster on Asphalt/Concrete Blocks.<n>Right-Click with fluid container to refuel.
 jst.tooltip.carelec=Run on EU/RF Batteries<n>Faster on Asphalt/Concrete Blocks.<n>Shift+Right-Click to open GUI.
 jst.tooltip.blueprint=Needed for creating circuits.<n>This Blueprint is $s tier and will use %s amount of solder.<n>Number of removed wires: %s
+jst.tooltip.solderingiron=Can be used for soldering circuits.
 
 jst.tooltip.energy.eu=%s / %s EU
 jst.tooltip.energy.rf=%s / %s RF
