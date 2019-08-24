@@ -6,7 +6,7 @@
 	"effects": [
 		"Can be recharged with FE or IC2 EU.",
 		"Boosts Mining speed/Attack damage by 100 + (tier * 50)%.",
-		"Decreases the chance of losing tool durability on usage to 20 percent."
+		"Decreases the chance of losing tool durability on usage to 10 percent."
 	],
 	"demoTool": [
 		"tconstruct:pickaxe",

@@ -65,9 +65,8 @@ public class IB_AirConditioner extends ItemBehaviour {
 
 	@Override
     public void update(ItemStack st, World w, Entity e, int sl, boolean select) {
-		if (!w.isRemote && w.getTotalWorldTime() % 100L == 0 && e instanceof EntityPlayer && getEnergy(st) > 400 && st.getTagCompound().getBoolean("isON")) {
+		if (!w.isRemote && w.getTotalWorldTime() % 100L == 0 && e instanceof EntityPlayer && useEnergy(st, 400, (EntityPlayer)e, false) && st.getTagCompound().getBoolean("isON")) {
 			try {
-				setEnergy(st, getEnergy(st) - 400);
 				ITemperature td = TemperatureHelper.getTemperatureData((EntityPlayer)e);
 				Temperature pt = td.getTemperature();
 				int ct = pt.getRawValue();

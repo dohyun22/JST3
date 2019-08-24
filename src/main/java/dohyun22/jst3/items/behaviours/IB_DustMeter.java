@@ -47,9 +47,7 @@ public class IB_DustMeter extends ItemBehaviour {
 
 	@Override
 	public ActionResult<ItemStack> onRightClick(ItemStack st, World w, EntityPlayer pl, EnumHand h) {
-		if (!w.isRemote && getEnergy(st) >= 100) {
-			if (!pl.capabilities.isCreativeMode)
-				setEnergy(st, getEnergy(st) - 100);
+		if (!w.isRemote && useEnergy(st, 100, pl, pl.isCreative())) {
 			int p = JSTChunkData.getFineDust(w, new ChunkPos(pl.getPosition()));
 			float pm = p / 1000.0F;
 			w.playSound(null, pl.getPosition(), JSTSounds.SCAN, SoundCategory.PLAYERS, 1.0F, 1.0F);

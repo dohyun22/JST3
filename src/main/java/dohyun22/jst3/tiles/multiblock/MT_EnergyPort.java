@@ -171,16 +171,6 @@ public class MT_EnergyPort extends MetaTileEnergyInput implements IGenericGUIMTE
 	public boolean isMBOutput() {
 		return isOutput;
 	}
-
-	@Override
-	public int getPrg() {
-		return 0;
-	}
-
-	@Override
-	public int getMxPrg() {
-		return 0;
-	}
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {

@@ -47,6 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 	private static Method PMngCache;
+	private static boolean error;
 	private byte mode;
 
 	public MT_UPulverizer(int tier) {
@@ -55,14 +56,17 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MT_UPulverizer(tier);
+		MT_UPulverizer r = new MT_UPulverizer(tier);
+		r.updateMode();
+		return r;
 	}
 
 	@Override
 	@Nullable
 	protected RecipeContainer getContainer(RecipeList recipe, ItemStack[] in, FluidTank[] fin, boolean sl, boolean fsl) {
 		if (in == null || in.length <= 0 || in[0] == null || in[0].isEmpty()) return null;
-		return getPulvRecipe(in[0], getWorld().rand, mode);
+		if (JSTCfg.ic2Loaded || JSTCfg.teLoaded) return getPulvRecipe(in[0], getWorld().rand, mode);
+		return null;
 	}
 	
 	@Override
@@ -89,7 +93,7 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
-		ls.add(I18n.format("jst.tooltip.tile.com.sd.rs"));
+		if (JSTCfg.ic2Loaded && JSTCfg.teLoaded) ls.add(I18n.format("jst.tooltip.tile.com.sd.rs"));
 	}
 
 	@Override
@@ -147,6 +151,7 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		mode = tag.getByte("MD");
+		updateMode();
 	}
 
 	@Override
@@ -175,6 +180,19 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 		if (io[0].isEmpty() || !MRecipes.isValid(io[1]))
 			return null;
 		return RecipeContainer.newContainer(new Object[] {io[0]}, null, new ItemStack[] {io[1], MRecipes.isValid(io[2]) ? io[2] : null}, null, 5, dur);
+	}
+
+	@Override
+	public boolean onScrewDriver(EntityPlayer pl, EnumFacing f, double px, double py, double pz) {
+		byte prev = mode;
+		mode++;
+		if (mode > 3) mode = 0;
+		updateMode();
+		if (prev != mode && mode >= 0) {
+			JSTUtils.sendMessage(pl, "jst.msg.pulverizer." + mode);
+			return true;
+		}
+		return false;
 	}
 
 	private static void getIC2(ItemStack in, ItemStack[] io) {
@@ -209,15 +227,15 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 				int cnc = (int) ReflectionUtils.callMethod(obj, "getSecondaryOutputChance");
 				io[2] = cnc >= 100 || r.nextInt(100) < cnc ? (ItemStack)ReflectionUtils.callMethod(obj, "getSecondaryOutput") : null;
 			}
-		} catch (Throwable t) {}
+		} catch (Throwable t) {
+			t.printStackTrace(); error = true;
+		}
 		return ret;
 	}
 
-	@Override
-	public boolean onScrewDriver(EntityPlayer pl, EnumFacing f, double px, double py, double pz) {
-		mode++;
-		if (mode > 3) mode = 0;
-		JSTUtils.sendMessage(pl, "jst.msg.pulverizer." + mode);
-		return true;
+	private void updateMode() {
+		if (!JSTCfg.ic2Loaded && !JSTCfg.teLoaded) mode = -1;
+		else if (!JSTCfg.ic2Loaded) mode = 3;
+		else if (!JSTCfg.teLoaded) mode = 2;
 	}
 }

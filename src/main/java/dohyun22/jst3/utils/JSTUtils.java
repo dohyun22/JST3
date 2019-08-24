@@ -482,9 +482,8 @@ public class JSTUtils {
 	/** Multiplies two long integers without over/underflow */
 	public static long safeMultiplyLong(long a, long b) {
 		long max = Long.signum(a) == Long.signum(b) ? Long.MAX_VALUE : Long.MIN_VALUE;
-		if (a != 0 && (b > 0 && b > max / a || b < 0 && b < max / a)) {
+		if (a != 0 && (b > 0 && b > max / a || b < 0 && b < max / a))
 			return max;
-		}
 		return a * b;
 	}
 	
@@ -647,7 +646,11 @@ public class JSTUtils {
 
 	public static ItemStack getValidOne(String... ores) {
 		for (String s : ores) {
-			ItemStack ret = getFirstItem(s);
+			ItemStack ret;
+			if (s.contains(":"))
+				ret = JSTUtils.getModItemStack(s);
+			else
+				ret = getFirstItem(s);
 			if (!ret.isEmpty())
 				return ret;
 		}

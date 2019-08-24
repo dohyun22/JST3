@@ -19,7 +19,7 @@ public class IB_Minetris extends ItemBehaviour {
 
 	@Override
 	public ActionResult<ItemStack> onRightClick(ItemStack st, World w, EntityPlayer pl, EnumHand h) {
-		if (!JSTUtils.isClient() && h == EnumHand.MAIN_HAND) {
+		if (!JSTUtils.isClient()) {
 			pl.openGui(JustServerTweak.INSTANCE, 1000, w, MathHelper.floor(pl.posX), MathHelper.floor(pl.posY), MathHelper.floor(pl.posZ));
 			return new ActionResult(EnumActionResult.SUCCESS, st);
 		}

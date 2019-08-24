@@ -615,6 +615,10 @@ public abstract class MetaTileBase {
     	injectEnergyToSide(f, maxEUTransfer());
     }
 
+	public boolean tryUpgrade(String id) {
+		return false;
+	}
+
 	public void onBreak() {
 		for (int i = 0; i < baseTile.getSizeInventory(); i++) {
 			if (!canSlotDrop(i)) continue;

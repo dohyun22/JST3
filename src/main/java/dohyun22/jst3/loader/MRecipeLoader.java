@@ -117,6 +117,8 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addMagicFuel("dustMithril", 320000);
 		MRecipes.addMagicFuel("ingotMithril", 320000);
 		MRecipes.addMagicFuel("ingotThaumium", 120000);
+		MRecipes.addMagicFuel("gemAmber", 50000);
+		MRecipes.addMagicFuel("ingotVoid", 2000000);
 		
 		MRecipes.addFertilizer(new ItemStack(Items.DYE, 1, 15));
 		
@@ -280,7 +282,8 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addSeparatorRecipe(new OreDictStack("dustSodium", 16), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 67)}, null, 50, 400);
 		MRecipes.addSeparatorRecipe(new ItemStack(Items.ROTTEN_FLESH, 32), new ItemStack(JSTItems.item1, 1, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9007)}, null, 20, 1200);
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 20, 21), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 49), new ItemStack(JSTItems.item1, 1, 39), new ItemStack(JSTItems.item1, 16, 74)}, null, 1000, 1200);
-		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 151), null, null, null, new FluidStack(JSTFluids.oil, 500), 5, 200);
+		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 151), null, null, null, new FluidStack(JSTFluids.oil, 500), 10, 200);
+		MRecipes.addSeparatorRecipe(new ItemStack(Items.REEDS, 2), null, null, new ItemStack[] {new ItemStack(Items.SUGAR, 5)}, null, 5, 400);
 		obj = FluidRegistry.getFluidStack("bio.ethanol", 1000);
 		if (obj != null) {
 			MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 9028), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9030)}, null, 10, 10);
@@ -440,11 +443,11 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addBioRecipe(new ItemStack(Items.BEETROOT_SEEDS, 12), null, null, fa[0], 100, 400);
 			MRecipes.addBioRecipe(new ItemStack(Items.PUMPKIN_SEEDS, 20), null, null, fa[0], 100, 400);
 			MRecipes.addBioRecipe(new ItemStack(Items.MELON_SEEDS, 20), null, null, fa[0], 100, 400);
-			MRecipes.addBioRecipe(JSTUtils.getModItemStack("immersiveengineering:seed", 8), null, null, fa[0], 100, 400);
-			MRecipes.addBioRecipe(new OreDictStack("cropPeanut", 4), null, null, fa[0], 100, 400);
-			MRecipes.addBioRecipe(new OreDictStack("cropWalnut", 4), null, null, fa[0], 100, 400);
-			MRecipes.addBioRecipe(new OreDictStack("cropChestnut", 4), null, null, fa[0], 100, 400);
-			MRecipes.addBioRecipe(new OreDictStack("cropAlmond", 4), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(JSTUtils.getModItemStack("immersiveengineering:seed", 10), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropPeanut", 10), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropWalnut", 10), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropChestnut", 10), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropAlmond", 10), null, null, fa[0], 100, 400);
 		}
 	}
 

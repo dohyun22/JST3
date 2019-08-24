@@ -39,7 +39,7 @@ public class ModElec extends ModifierTrait {
 	@Override
 	public void applyEffect(NBTTagCompound root, NBTTagCompound mod) {
 		super.applyEffect(root, mod);
-		if (!root.hasKey("JST_EU")) {
+		if (tier > 0 && energy > 0) {
 			root.setLong("JST_EU", 0);
 			root.setLong("JST_EU_MAX", energy);
 			root.setInteger("JST_EU_LVL", tier);
@@ -57,7 +57,7 @@ public class ModElec extends ModifierTrait {
 	    	if (dmg * EU_PER_DMG * tier <= eu) {
 	    		eu -= dmg * EU_PER_DMG * tier;
 	    		tag.setLong("JST_EU", eu);
-	    		if (e.getEntityWorld().rand.nextInt(5) != 0)
+	    		if (e.getEntityWorld().rand.nextInt(10) != 0)
 	    			return 0;
 	    	}
 	    }

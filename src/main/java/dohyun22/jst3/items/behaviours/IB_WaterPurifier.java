@@ -11,6 +11,7 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -104,7 +105,7 @@ public class IB_WaterPurifier extends ItemBehaviour {
 				IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
 				if (fh != null && fh.fill(fs, false) == 1000) {
 					fh.fill(fs, true);
-					w.setBlockToAir(p.offset(f));
+					w.setBlockState(p, Blocks.AIR.getDefaultState(), 11);
 					w.playSound(null, p, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.25F, 1.0F);
 				}
 			}

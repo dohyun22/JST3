@@ -17,6 +17,7 @@ import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.MultiTankHandler;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
+import dohyun22.jst3.utils.FluidItemPredicate;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.crops.CropCard;
@@ -96,7 +97,7 @@ public class MT_AdvCropMatron extends MetaTileEnergyInput implements IGenericGUI
 		if (fs != null && fs.getFluid() == FluidRegistry.WATER)
 			JSTUtils.drainFluidItemInv(tank.getTank(0), 1000, baseTile, 2, 3);
 		fs = FluidUtil.getFluidContained(inv.get(4));
-		if (fs != null && "ic2weed_ex".equals(fs.getFluid().getName()))
+		if (fs != null && JSTUtils.getRegName(fs).equals("ic2weed_ex"))
 			JSTUtils.drainFluidItemInv(tank.getTank(1), 1000, baseTile, 4, 5);
 		
 		if (baseTile.energy < 200) return;
@@ -221,16 +222,6 @@ public class MT_AdvCropMatron extends MetaTileEnergyInput implements IGenericGUI
 		TextureAtlasSprite s = getTETex("cmatron");
 		return new TextureAtlasSprite[] {getTieredTex(3), getTieredTex(3), s, s, s, s};
 	}
-
-	@Override
-	public int getPrg() {
-		return 0;
-	}
-
-	@Override
-	public int getMxPrg() {
-		return 0;
-	}
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -244,9 +235,9 @@ public class MT_AdvCropMatron extends MetaTileEnergyInput implements IGenericGUI
 		ContainerGeneric ret = new ContainerGeneric(inv, te);
 		ret.addSlot(new JSTSlot(te, 0, 128, 35, false, false, 64, false));
 		ret.addSlot(new JSTSlot(te, 1, 152, 35, false, false, 64, false));
-		ret.addSlot(new JSTSlot(te, 2, 128, 11).setPredicate(new FluidPredicate("water")));
+		ret.addSlot(new JSTSlot(te, 2, 128, 11).setPredicate(new FluidItemPredicate("water")));
 		ret.addSlot(new JSTSlot(te, 3, 128, 59, false, true, 64, true));
-		ret.addSlot(new JSTSlot(te, 4, 152, 11).setPredicate(new FluidPredicate("ic2weed_ex")));
+		ret.addSlot(new JSTSlot(te, 4, 152, 11).setPredicate(new FluidItemPredicate("ic2weed_ex")));
 		ret.addSlot(new JSTSlot(te, 5, 152, 59, false, true, 64, true));
 		ret.addSlot(new BatterySlot(te, 6, 8, 53, false, true));
 		Predicate p = new Predicate<ItemStack>() {
@@ -278,19 +269,5 @@ public class MT_AdvCropMatron extends MetaTileEnergyInput implements IGenericGUI
 	    		ret.addSlot(42 + c * 18, 26 + r * 18, 0);
 		ret.addPwr(12, 31);
 		return ret;
-	}
-	
-	private static class FluidPredicate implements Predicate<ItemStack> {
-		private final String fluidName;
-		
-		public FluidPredicate(String name) {
-			fluidName = name;
-		}
-		
-		@Override
-		public boolean apply(ItemStack in) {
-			FluidStack fs = FluidUtil.getFluidContained(in);
-			return fs != null && fluidName.equals(fs.getFluid().getName());
-		}
 	}
 }

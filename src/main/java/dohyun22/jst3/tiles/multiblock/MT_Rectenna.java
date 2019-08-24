@@ -182,7 +182,8 @@ public class MT_Rectenna extends MT_Multiblock {
 		TextureAtlasSprite a = getTETex("csg_b"), b = getTETex("hvsign");
 		return new TextureAtlasSprite[] {a, a, b, b, b, b};
 	}
-	
+
+	@Override
 	@SideOnly(value=Side.CLIENT)
 	public String getModelKey() {
 		return "jst_micro";

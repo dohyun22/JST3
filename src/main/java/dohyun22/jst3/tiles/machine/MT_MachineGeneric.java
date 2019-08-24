@@ -293,4 +293,8 @@ public abstract class MT_MachineGeneric extends MT_Machine {
 			tag.setTag("fluidOut", t);
 		}
 	}
+
+	public static enum EnumFaceIO {
+		NONE, ST_IN, ST_OUT, FL_IN, FL_OUT;
+	}
 }

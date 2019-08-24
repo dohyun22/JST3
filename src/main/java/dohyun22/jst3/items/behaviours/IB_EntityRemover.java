@@ -41,11 +41,12 @@ public class IB_EntityRemover extends ItemBehaviour {
 
 		e.world.playSound(null, e.posX, e.posY, e.posZ, JSTSounds.LEVEL, SoundCategory.MASTER, 1.0F, 1.0F);
 		if (e instanceof EntityLivingBase) {
-			((EntityLivingBase) e).setHealth(0);
 			if (e instanceof EntityPlayer) {
 				if (e instanceof EntityPlayerMP)
-					((EntityPlayerMP) e).connection.disconnect(new TextComponentString("You have been instant-deleted by Entity Remover!"));
+					((EntityPlayerMP) e).connection.disconnect(new TextComponentString("You have been instantly deleted by Entity Remover!"));
 				return true;
+			} else {
+				((EntityLivingBase) e).setHealth(0);
 			}
 		}
 		e.attackEntityFrom(JSTDamageSource.DELETE, Float.POSITIVE_INFINITY);
@@ -55,10 +56,7 @@ public class IB_EntityRemover extends ItemBehaviour {
 	
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot sl, ItemStack st) {
-		if (sl != EntityEquipmentSlot.MAINHAND) {
-			return null;
-		}
-
+		if (sl != EntityEquipmentSlot.MAINHAND) return null;
 		Multimap<String, AttributeModifier> ret = HashMultimap.create();
         ret.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(SpeedUUID, "Weapon modifier", 1000.0D, 0));
         ret.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(DamageUUID, "Weapon modifier", Double.POSITIVE_INFINITY, 0));

@@ -1,5 +1,7 @@
 package dohyun22.jst3.container;
 
+import dohyun22.jst3.container.JSTSlot.ItemMatcher;
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.machine.MT_CircuitResearchMachine;
 import dohyun22.jst3.tiles.machine.MT_CircuitResearchMachine.IC;
@@ -25,8 +27,11 @@ public class ContainerCircuitResearch extends ContainerMTE {
 
 	public ContainerCircuitResearch(IInventory inv, TileEntityMeta te) {
 		super(te);
-		for (int r = 0; r < 5; r++)
-			addSlotToContainer(new Slot(te, r, 185, 26 + r * 18));
+		addSlotToContainer(new JSTSlot(te, 0, 185, 26).setPredicate(new ItemMatcher(new ItemStack(JSTItems.item1, 1, 190))));
+		addSlotToContainer(new JSTSlot(te, 1, 185, 44).setPredicate(new ItemMatcher("paper")));
+		addSlotToContainer(new JSTSlot(te, 2, 185, 62).setPredicate(new ItemMatcher("wireSolder")));
+		addSlotToContainer(new JSTSlot(te, 3, 185, 80).setPredicate(new ItemMatcher(new ItemStack(JSTItems.item1, 1, 10050))));
+		addSlotToContainer(new JSTSlot(te, 4, 185, 98, false, true, 64, false));
 		
 		addPlayerInventorySlots(inv, 29, 143);
 	}
@@ -74,6 +79,7 @@ public class ContainerCircuitResearch extends ContainerMTE {
 			if ((mc == 0 || mc == 1) && ct == ClickType.QUICK_CRAFT && id < MT_CircuitResearchMachine.ROW * MT_CircuitResearchMachine.COLUMN) {
 				try {
 					MT_CircuitResearchMachine cr = (MT_CircuitResearchMachine) te.mte;
+					if (!cr.canRun()) return ItemStack.EMPTY;
 					byte g = cr.listOfGame[id];
 					if (g >= 0 && g <= 10) {
 						if (mc == 0) {
@@ -109,6 +115,12 @@ public class ContainerCircuitResearch extends ContainerMTE {
 									} break;
 								}
 								if (n > 0) {
+									if (cr.solder <= 0) {
+										cr.getStackInSlot(2).shrink(1);
+										cr.solder = MT_CircuitResearchMachine.SOLDER_PER_WIRE;
+									}
+									cr.solder--;
+									JSTItems.item1.getBehaviour(cr.getStackInSlot(3)).useEnergy(cr.getStackInSlot(3), 100, false);
 									cr.listOfGame[id] = n;
 									if (g != 0) cr.checkClear();
 								}
@@ -118,7 +130,9 @@ public class ContainerCircuitResearch extends ContainerMTE {
 				} catch (Exception e) {}
 			}
 			return ItemStack.EMPTY;
-		} else
+		} else {
+			try {((MT_CircuitResearchMachine)te.mte).checkAndLoad();} catch (Exception e) {}
 			return super.slotClick(si, mc, ct, pl);
+		}
 	}
 }

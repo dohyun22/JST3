@@ -65,11 +65,8 @@ public class IB_IonCannon extends ItemBehaviour {
 
 	@Override
 	public ActionResult<ItemStack> onRightClick(ItemStack st, World w, EntityPlayer pl, EnumHand h) {
-		long eu = this.getEnergy(st);
-		if (eu >= 2500) {
+		if (useEnergy(st, 2000, pl, pl.isCreative())) {
 			pl.world.playSound(null, pl.posX, pl.posY, pl.posZ, JSTSounds.SHOCK2, SoundCategory.PLAYERS, 0.8F, 1.0F);
-			if (!pl.capabilities.isCreativeMode)
-				setEnergy(st, eu - 2000);
 			Vec3d d = pl.getLookVec();
 			double sz = 2.4D;
 			MutableBlockPos p = new MutableBlockPos();

@@ -92,8 +92,8 @@ public class IB_Flamethrower extends ItemBehaviour {
 		IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
 		FluidStack fs = FluidUtil.getFluidContained(st);
 		if (fh != null && fs != null) {
-			int fv = getFuelVal(fs.getFluid());
-			fh.drain((getMaxItemUseDuration(st) - t) * fv, true);
+			double fv = getFuelVal(fs.getFluid());
+			fh.drain(Math.max(1, (int)((getMaxItemUseDuration(st) - t) * fv)), true);
 		}
 	}
 
@@ -212,30 +212,30 @@ public class IB_Flamethrower extends ItemBehaviour {
 		}
 	}
 
-	public static int getFuelVal(Fluid f) {
+	public static double getFuelVal(Fluid f) {
 		if (f != null) {
 			String s = f.getName();
 			if (s != null) {
 				switch (s) {
 				case "napalm":
-				case "nitrofuel": return 1;
+				case "nitrofuel": return 0.5D;
 				case "rocketfuel":
 				case "refined_fuel":
 				case "fuel":
 				case "gasoline":
-				case "liquid_lpg": return 2;
+				case "liquid_lpg": return 1.0D;
 				case "liquid_lng":
-				case "refined_oil": return 3;
+				case "refined_oil":
 				case "biofuel":
 				case "refined_biofuel":
 				case "ethanol":
 				case "ic2biogas":
-				case "bio.ethanol": return 4;
-				case "heavyfuel": return 6;
-				case "creosote": return 10;
+				case "bio.ethanol": return 2.0D;
+				case "heavyfuel": return 4.0D;
+				case "creosote": return 10.0D;
 				case "oil":
 				case "crude_oil":
-				case "coal": return 15;
+				case "coal": return 15.0D;
 				}
 			}
 		}

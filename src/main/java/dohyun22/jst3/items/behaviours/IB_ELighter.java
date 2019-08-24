@@ -60,8 +60,7 @@ public class IB_ELighter extends ItemBehaviour {
             return EnumActionResult.PASS;
         } else {
             if (!w.isRemote && w.isAirBlock(p)) {
-        		if (!pl.isCreative())
-        			setEnergy(st, getEnergy(st) - 100);
+            	useEnergy(st, 100, pl, pl.isCreative());
                 if (pl instanceof EntityPlayerMP)
                     CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)pl, p, st);
                 w.playSound(null, p, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);

@@ -132,7 +132,7 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 		if (this.isOutput && this.tank.getFluidAmount() > 0 && this.getFacing() != null) {
 			int amt = JSTUtils.fillTank(this.getWorld(), this.getPos(), this.getFacing(), new FluidStack(this.tank.getFluid(), Math.min(this.tank.getFluidAmount(), transfer)));
 			if (amt > 0)
-				this.tank.drain(amt, true);
+				tank.drain(amt, true);
 		}
 	}
 	

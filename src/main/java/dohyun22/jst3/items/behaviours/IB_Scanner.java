@@ -11,7 +11,7 @@ import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IScanSupport;
+import dohyun22.jst3.api.IScanSupport;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.crops.CropCard;
@@ -62,23 +62,15 @@ public class IB_Scanner extends ItemBehaviour {
 	public EnumActionResult onUseFirst(ItemStack st, EntityPlayer pl, World w, BlockPos p, EnumFacing f, float hx, float hy, float hz, EnumHand h) {
 		if (w.isRemote)
 			return EnumActionResult.PASS;
-
 		ArrayList<ITextComponent> str = new ArrayList();
 		int eu = doScan(str, pl, w, p, f);
-		if (eu <= this.getEnergy(st)) {
+		if (useEnergy(st, eu, pl, pl.isCreative())) {
 			w.playSound(null, p, JSTSounds.SCAN, SoundCategory.BLOCKS, 0.8F, 1.0F);
-			for (ITextComponent s : str) {
+			for (ITextComponent s : str)
 				pl.sendMessage(s);
-			}
-			if (!pl.capabilities.isCreativeMode) {
-				this.setEnergy(st, this.getEnergy(st) - eu);
-				this.chargeFromArmor(st, pl);
-			}
 		} else {
 			JSTUtils.sendSimpleMessage(pl, TextFormatting.RED + "Not enough energy");
-			return EnumActionResult.FAIL;
 		}
-
 		return EnumActionResult.SUCCESS;
 	}
 
@@ -95,6 +87,14 @@ public class IB_Scanner extends ItemBehaviour {
 			addTranslation(list, "jst.msg.scan.data2", h < 0 ? "\u221E" : h, bs.getBlock().getExplosionResistance(w, p, pl, new Explosion(w, pl, pl.posX, pl.posY, pl.posZ, 0.0F, false, false)) * 5);
 			if (bs.getBlock().isBeaconBase(w, p, p.up())) addTranslation(list, "jst.msg.scan.beacon");
 			if (te != null) addTranslation(list, "jst.msg.scan.tile" + (w.tickableTileEntities.contains(te) ? "2" : ""));
+			if (te instanceof IScanSupport) {
+				Map<String, Object[]> map = new LinkedHashMap();
+				((IScanSupport)te).getInfo(map);
+				for (Entry<String, Object[]> e : map.entrySet()) {
+					Object[] val = e.getValue();
+					addTranslation(list, e.getKey(), val == null ? new Object[0] : val);
+				}
+			}
 		} catch (Throwable t) {
 			err = true;
 			t.printStackTrace();

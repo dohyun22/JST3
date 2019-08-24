@@ -4,12 +4,16 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
 
+import dohyun22.jst3.api.recipe.OreDictStack;
+import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class JSTSlot extends Slot {
 	public final int si;
@@ -74,5 +78,30 @@ public class JSTSlot extends Slot {
     @Override
     public boolean isEnabled() {
         return hov;
+    }
+
+    public static class ItemMatcher implements Predicate<ItemStack> {
+    	private final Object[] obj;
+    	public ItemMatcher(Object... o) {
+    		obj = o;
+    	}
+    	
+		@Override
+		public boolean apply(ItemStack in) {
+			if (obj != null && in != null) {
+				for (Object o : obj) {
+					if (o instanceof ItemStack) {
+						if (OreDictionary.itemMatches((ItemStack)o, in, false)) return true;
+					} else if (o instanceof Item) {
+						if (in.getItem() == o) return true;
+					} else if (o instanceof String) {
+						if (JSTUtils.oreMatches(in, (String)o)) return true;
+					} else if (o instanceof OreDictStack) {
+						if (JSTUtils.oreMatches(in, ((OreDictStack)o).name)) return true;
+					}
+				}
+			}
+			return false;
+		}
     }
 }

@@ -49,9 +49,9 @@ public class MT_FlameTrap extends MetaTileBase {
 		if (isClient()) return;
 		boolean flag = baseTile.getTimer() % 20 == 0;
 		FluidStack fs = tank.getFluid();
-		int c = IB_Flamethrower.getFuelVal(fs == null ? null : fs.getFluid());
+		double c = IB_Flamethrower.getFuelVal(fs == null ? null : fs.getFluid());
 		EnumFacing f = baseTile.facing;
-		if (c <= 0 || baseTile.isActive() || f == null) {
+		if (c <= 0.0D || baseTile.isActive() || f == null) {
 			target = null;
 			return;
 		}
@@ -72,7 +72,7 @@ public class MT_FlameTrap extends MetaTileBase {
 					target = null;
 					return;
 				}
-				tank.drainInternal(c * 2, true);
+				tank.drainInternal((int)(c * 2), true);
 			}
 			IB_Flamethrower.throwFlame(getWorld(), baseTile, new Vec3d(f.getFrontOffsetX(), f.getFrontOffsetY(), f.getFrontOffsetZ()), 4, 10);
 		}

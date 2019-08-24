@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import dohyun22.jst3.JustServerTweak;
-import dohyun22.jst3.client.gui.GUIFurnaceGen;
-import dohyun22.jst3.container.ContainerFurnaceGen;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTUtils;
@@ -90,7 +88,7 @@ public class MetaTileCreativeGenerator extends TestMetaTileEntityGenerator{
 	
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		return new GUIFurnaceGen(new ContainerFurnaceGen(inv, te));
+		return null;
 	}
 
 	@Override

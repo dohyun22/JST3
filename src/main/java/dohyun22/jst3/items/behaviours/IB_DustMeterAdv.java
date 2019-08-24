@@ -51,9 +51,7 @@ public class IB_DustMeterAdv extends ItemBehaviour {
 
 	@Override
 	public ActionResult<ItemStack> onRightClick(ItemStack st, World w, EntityPlayer pl, EnumHand h) {
-		if (!JSTUtils.isClient() && getEnergy(st) > 2500) {
-			if (!pl.capabilities.isCreativeMode)
-				setEnergy(st, getEnergy(st) - 2500);
+		if (!JSTUtils.isClient() && useEnergy(st, 2500, pl, pl.isCreative())) {
 			w.playSound(null, pl.getPosition(), JSTSounds.SCAN, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			pl.openGui(JustServerTweak.INSTANCE, 1000, w, MathHelper.floor(pl.posX), MathHelper.floor(pl.posY), MathHelper.floor(pl.posZ));
 			return new ActionResult(EnumActionResult.SUCCESS, st);

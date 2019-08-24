@@ -82,7 +82,7 @@ public class ClientEvHandler implements IResourceManagerReloadListener {
 				for (String s : str) if (s != null) tl.add(s);
 			} else if (st.hasTagCompound() && CompatTiC.isTiCTool(st)) {
 				NBTTagCompound tag = st.getTagCompound();
-				if (tag.hasKey("JST_EU")) {
+				if (tag.hasKey("JST_EU_MAX")) {
 					long e = tag.getLong("JST_EU"), m = tag.getLong("JST_EU_MAX");
 					tl.add("\u00A7a" + e + " / " + m + " EU");
 					tl.add("\u00A7a" + (e * JSTCfg.RFPerEU) + " / " + (m * JSTCfg.RFPerEU) + " RF");

@@ -102,9 +102,9 @@ tile.blockte.25.name=IV UESU
 tile.blockte.26.name=LuV UESU
 tile.blockte.27.name=ZPMV UESU
 
-tile.blockte.31.name=LV Furnace Generator
-tile.blockte.32.name=MV Furnace Generator
-tile.blockte.33.name=HV Furnace Generator
+tile.blockte.31.name=LV Stirling Generator
+tile.blockte.32.name=MV Stirling Generator
+tile.blockte.33.name=HV Stirling Generator
 
 tile.blockte.40.name=Solar Generator
 tile.blockte.41.name=Basic Solar Array
@@ -121,9 +121,9 @@ tile.blockte.51.name=EV Naquadah Generator
 tile.blockte.52.name=IV Naquadah Generator
 tile.blockte.53.name=LuV Naquadah Generator
 
-tile.blockte.61.name=LV Diesel Generator
-tile.blockte.62.name=MV Diesel Generator
-tile.blockte.63.name=HV Diesel Generator
+tile.blockte.61.name=LV Combustion Generator
+tile.blockte.62.name=MV Combustion Generator
+tile.blockte.63.name=HV Combustion Generator
 
 tile.blockte.71.name=LV Gas Turbine
 tile.blockte.72.name=MV Gas Turbine
@@ -369,7 +369,7 @@ tile.blockte.6006.name=Degenerate Compressor
 tile.blockte.6007.name=Block Breaker
 tile.blockte.6008.name=Thermal Monitor
 tile.blockte.6009.name=Reactor Planner
-tile.blockte.6010.name=Large Diesel Generator
+tile.blockte.6010.name=Large Combustion Generator
 tile.blockte.6011.name=Large Gas Turbine
 tile.blockte.6012.name=Large Steam Turbine
 tile.blockte.6013.name=Large Thermal Generator
@@ -637,7 +637,7 @@ item.itemjst1.10030.name=Electric Cart Controller
 item.itemjst1.10031.name=Electric Cart
 item.itemjst1.10040.name=Mob Target Setter
 item.itemjst1.10041.name=Multimeter
-item.itemjst1.10042.name=Diesel Engine Vehicle
+item.itemjst1.10042.name=Combustion Engine Vehicle
 item.itemjst1.10043.name=Electric Vehicle
 item.itemjst1.10044.name=Minetris 1.0
 item.itemjst1.10050.name=Soldering Iron
@@ -705,6 +705,8 @@ item.itemjst1.12051.name=MV Portable Charger (Solar Powered)
 item.itemjst1.12052.name=HV Portable Charger (Solar Powered)
 item.itemjst1.12053.name=EV Portable Charger (Solar Powered)
 
+item.itemjst1.13000.name=Boiler Conversion Kit
+
 item.iridiumframe.name=Iridium Frame
 item.jst.mask.name=Fine Dust Mask
 
@@ -759,7 +761,7 @@ item.jstnuclear.47.name=Quad Fuel Rod (Depleted Magical)
 entity.laserbeam.name=Laser Beam
 entity.oreexplosion.name=Ignited Ore
 entity.ecart.name=Electric Cart
-entity.cardesl.name=Diesel Engine Vehicle
+entity.cardesl.name=Combustion Engine Vehicle
 entity.carelec.name=Electric Vehicle
 
 itemGroup.JST3=Just Server Tweak 3
@@ -783,10 +785,12 @@ jst.tooltip.scharger=Will charge up if you are exposed to sunlight.
 jst.tooltip.screwdriver=Can adjust machine's behavior.
 jst.tooltip.screwdriver.ie=Can be used on Immersive Engineering machines
 jst.tooltip.flamethrower=Can burn mobs within %s block range.<n>Uses fluid fuel.<n>Can boost Elytra.
-jst.tooltip.cardesl=Run on diesel generator fuel.<n>Faster on Asphalt/Concrete Blocks.<n>Right-Click with fluid container to refuel.
+jst.tooltip.cardesl=Run on combustion generator fuel.<n>Faster on Asphalt/Concrete Blocks.<n>Right-Click with fluid container to refuel.
 jst.tooltip.carelec=Run on EU/RF Batteries<n>Faster on Asphalt/Concrete Blocks.<n>Shift+Right-Click to open GUI.
 jst.tooltip.blueprint=Needed for creating circuits.<n>This Blueprint is $s tier and will use %s amount of solder.<n>Number of removed wires: %s
 jst.tooltip.solderingiron=Can be used for soldering circuits.
+
+jst.tooltip.upg.boiler=Converts Stirling Generator into Steam Boiler<n>Use with Steam Turbine to generate power at 400%% efficiency.<n>Water is also needed.
 
 jst.tooltip.energy.eu=%s / %s EU
 jst.tooltip.energy.rf=%s / %s RF
@@ -960,7 +964,7 @@ jst.compat.jei.alloyfurnace=Alloy Furnace
 jst.compat.jei.assembler=Assembler
 jst.compat.jei.separator=Molecular Separator
 jst.compat.jei.shfurnace=Superheated Furnace
-jst.compat.jei.dieselfuel=Diesel Generator Fuel
+jst.compat.jei.dieselfuel=Combustion Generator Fuel
 jst.compat.jei.gasfuel=Gas Turbine Fuel
 jst.compat.jei.steamfuel=Steam Turbine
 jst.compat.jei.heatfuel=Thermal Generator Fuel
@@ -970,7 +974,7 @@ jst.compat.jei.magicfuel=Magic Generator Fuel
 jst.compat.jei.chemmixer=Chemical Mixer
 jst.compat.jei.disassembler=Disassembler
 jst.compat.jei.press=Press Machine
-jst.compat.jei.fgenfuel=Furance Generator Fuel
+jst.compat.jei.fgenfuel=Stirling Generator Fuel
 jst.compat.jei.fluidresource=Underground Fluid Resources
 jst.compat.jei.cokeoven=Industrial Coke Oven
 jst.compat.jei.oregrinder=Ore Processor
@@ -1111,9 +1115,9 @@ jst3.adv.hvassembler.desc=Build a HV Assembler
 jst3.adv.separator=Separate It!
 jst3.adv.separator.desc=Build a LV Molecular Separator
 jst3.adv.diesel=Environmentally Unfriendly
-jst3.adv.diesel.desc=Build a LV Diesel Generator
+jst3.adv.diesel.desc=Build a LV Combustion Generator
 jst3.adv.hvdiesel=It's Over 500 EU!
-jst3.adv.hvdiesel.desc=Build a HV Diesel Generator
+jst3.adv.hvdiesel.desc=Build a HV Combustion Generator
 jst3.adv.thermal=Thermal Expansion?
 jst3.adv.thermal.desc=Build a LV Thermal Generator
 jst3.adv.hvthermal=Don't Spam Lava Generator

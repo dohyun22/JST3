@@ -76,44 +76,44 @@ public class RecipeLoader extends Loadable {
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 5), new ItemStack(Items.REDSTONE, 5), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 5), new ItemStack(Items.REDSTONE, 5), 0.7F);
 		
-		ItemStack od = JSTUtils.getFirstItem("ingotCopper");
-		if (!od.isEmpty()) {
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 6), od, 0.7F);
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 6), od, 0.7F);
+		ItemStack st = JSTUtils.getFirstItem("ingotCopper");
+		if (!st.isEmpty()) {
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 6), st, 0.7F);
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 6), st, 0.7F);
 		}
-		od = JSTUtils.getFirstItem("ingotTin");
-		if (!od.isEmpty()) {
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 7), od, 0.7F);
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 7), od, 0.7F);
+		st = JSTUtils.getFirstItem("ingotTin");
+		if (!st.isEmpty()) {
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 7), st, 0.7F);
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 7), st, 0.7F);
 		}
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 8), new ItemStack(Items.EMERALD), 1.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 8), new ItemStack(Items.EMERALD), 1.0F);
-		od = JSTUtils.getFirstItem("ingotSilver");
-		if (!od.isEmpty()) {
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 9), od, 0.7F);
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 9), od, 0.7F);
+		st = JSTUtils.getFirstItem("ingotSilver");
+		if (!st.isEmpty()) {
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 9), st, 0.7F);
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 9), st, 0.7F);
 		}
-		od = JSTUtils.getFirstItem("ingotLead");
-		if (!od.isEmpty()) {
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 10), od, 0.7F);
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 10), od, 0.7F);
+		st = JSTUtils.getFirstItem("ingotLead");
+		if (!st.isEmpty()) {
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 10), st, 0.7F);
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 10), st, 0.7F);
 		}
-		od = JSTUtils.getFirstItem("ingotUranium");
-		if (!od.isEmpty()) {
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 11), od, 0.7F);
-			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 11), od, 0.7F);
+		st = JSTUtils.getFirstItem("ingotUranium");
+		if (!st.isEmpty()) {
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 11), st, 0.7F);
+			GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 11), st, 0.7F);
 		}
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 12), new ItemStack(JSTItems.item1, 5, 27), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 12), new ItemStack(JSTItems.item1, 5, 27), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 13), new ItemStack(JSTItems.item1, 1, 16), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 13), new ItemStack(JSTItems.item1, 1, 17), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 15), new ItemStack(JSTItems.item1, 1, 29), 0.7F);
-		od = JSTUtils.getFirstItem("dustSulfur");
-		if (!od.isEmpty()) GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 14), od, 0.5F);
-		od = JSTUtils.getFirstItem("ingotNickel");
-		if (!od.isEmpty()) GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 15), od, 0.7F);
-		od = JSTUtils.getFirstItem("ingotPlatinum");
-		if (!od.isEmpty()) GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 14), od, 2.0F);
+		st = JSTUtils.getFirstItem("dustSulfur");
+		if (!st.isEmpty()) GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 14), st, 0.5F);
+		st = JSTUtils.getFirstItem("ingotNickel");
+		if (!st.isEmpty()) GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 15), st, 0.7F);
+		st = JSTUtils.getFirstItem("ingotPlatinum");
+		if (!st.isEmpty()) GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockEO, 1, 14), st, 2.0F);
 		
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 2), new ItemStack(JSTItems.item1, 1, 1), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 34), new ItemStack(JSTItems.item1, 1, 25), 0.0F);
@@ -128,6 +128,10 @@ public class RecipeLoader extends Loadable {
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 39), new ItemStack(JSTItems.item1, 1, 38), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 104), new ItemStack(JSTItems.item1, 1, 70), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 158), new ItemStack(JSTItems.item1, 1, 157), 0.0F);
+		st = new ItemStack(Items.IRON_INGOT, 2);
+		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 160), st, 0.0F);
+		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 161), st, 0.0F);
+		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 162), st, 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 184), new ItemStack(JSTItems.item1, 1, 183), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockOre, 1, 0), new ItemStack(JSTItems.item1, 1, 38), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockOre, 1, 1), new ItemStack(JSTItems.item1, 1, 90), 0.7F);
@@ -406,9 +410,10 @@ public class RecipeLoader extends Loadable {
 				);
 
 		st = new ItemStack(JSTItems.item1, 1, 10013);
-		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 160), "P  ", " S ", "   ", 'P', pf + "Iron", 'S', st);
-		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 161), " P ", " S ", "   ", 'P', pf + "Iron", 'S', st);
-		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 162), "  P", " S ", "   ", 'P', pf + "Iron", 'S', st);
+		obj = Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE;
+		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 160), "P  ", " S ", "   ", 'P', obj, 'S', st);
+		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 161), " P ", " S ", "   ", 'P', obj, 'S', st);
+		addShapedRecipe(false, new ItemStack(JSTItems.item1, 1, 162), "  P", " S ", "   ", 'P', obj, 'S', st);
 		addShapedRecipe(new ItemStack(JSTItems.item1, 3, 185), "SSS", 'S', "ingotSolder");
 
 		addShapedRecipe(new ItemStack(JSTItems.item1, 16, 9000), 
@@ -542,7 +547,7 @@ public class RecipeLoader extends Loadable {
 			
 			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 190 + n), 
 					"mCm", "cMD",
-					'm', n >= 3 ? "ingotElectricalSteel" : "ingotIron",
+					'm', n >= 3 ? "plateElectricalSteel" : "ingotIron",
 					'C', ItemList.coils[n],
 					'c', ItemList.cables[n],
 					'M', ItemList.machineBlock[n],

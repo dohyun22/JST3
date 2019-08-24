@@ -47,6 +47,12 @@ public class MT_Recycler extends MT_MachineGeneric implements IScrewDriver {
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MT_Recycler(tier);
 	}
+
+	@Override
+	protected boolean checkCanWork() {
+		if (inv.get(1).getCount() >= inv.get(1).getMaxStackSize()) return false;
+		return super.checkCanWork();
+	}
 	
 	@Override
 	@Nullable

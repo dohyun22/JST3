@@ -57,7 +57,7 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
 	}
 	
 	@Override
@@ -71,13 +71,12 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++) {
-			if (this.baseTile.facing == JSTUtils.getFacingFromNum(n)) {
-				ret[n] = getTETex("alloy" + (this.baseTile.isActive() ? "" : "_off"));
-			} else if (n == 0 || n == 1) {
+			if (baseTile.facing == JSTUtils.getFacingFromNum(n))
+				ret[n] = getTETex("alloy" + (baseTile.isActive() ? "" : "_off"));
+			else if (n == 0 || n == 1)
 				ret[n] = getTex("minecraft:blocks/furnace_top");
-			} else {
+			else
 				ret[n] = getTex("minecraft:blocks/furnace_side");
-			}
 		}
 		return ret;
 	}
@@ -97,7 +96,7 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
                     burnTime = TileEntityFurnace.getItemBurnTime(st);
                     currentBurnTime = burnTime;
 
-                    if (this.burnTime > 0) {
+                    if (burnTime > 0) {
                         update = true;
                         if (!st.isEmpty()) {
                             Item it = st.getItem();
@@ -105,7 +104,7 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
                             
                             if (st.isEmpty()) {
                                 ItemStack st2 = it.getContainerItem(st);
-                                this.inv.set(3, st2);
+                                inv.set(3, st2);
                             }
                         }
                     }
@@ -124,28 +123,28 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
                     cookTime = 0;
                 }
             } else if (burnTime <= 0 && cookTime > 0) {
-                this.cookTime = MathHelper.clamp(cookTime - 2, 0, totalCookTime);
+                cookTime = MathHelper.clamp(cookTime - 2, 0, totalCookTime);
             }
 
             if (burn != (burnTime > 0)) {
                 update = true;
-                baseTile.setActive(this.burnTime > 0);
+                baseTile.setActive(burnTime > 0);
                 updateLight();
             }
             
-            if (update) this.baseTile.issueUpdate();
+            if (update) baseTile.issueUpdate();
         } else if (baseTile.isActive() && getWorld().rand.nextInt(8) == 0) {
-            EnumFacing ef = this.baseTile.facing;
-            World w = this.baseTile.getWorld();
+            EnumFacing ef = baseTile.facing;
+            World w = baseTile.getWorld();
             Random rd = w.rand;
             
-            double x = (double)this.baseTile.getPos().getX() + 0.5D;
-			double y = (double)this.baseTile.getPos().getY() + rd.nextDouble() * 6.0D / 16.0D;
-            double z = (double)this.baseTile.getPos().getZ() + 0.5D;
+            double x = (double)baseTile.getPos().getX() + 0.5D;
+			double y = (double)baseTile.getPos().getY() + rd.nextDouble() * 6.0D / 16.0D;
+            double z = (double)baseTile.getPos().getZ() + 0.5D;
             double o = rd.nextDouble() * 0.6D - 0.3D;
 
             if (rd.nextInt(8) == 0)
-            	this.baseTile.getWorld().playSound((double)this.baseTile.getPos().getX() + 0.5D, (double)this.baseTile.getPos().getY(), (double)this.baseTile.getPos().getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+            	baseTile.getWorld().playSound((double)baseTile.getPos().getX() + 0.5D, (double)baseTile.getPos().getY(), (double)baseTile.getPos().getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 
             switch (ef) {
                 case WEST:
@@ -171,18 +170,18 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	
 	@Override
     public void readFromNBT(NBTTagCompound nbt) {
-        this.burnTime = nbt.getShort("BurnTime");
-        this.cookTime = nbt.getShort("CookTime");
-        this.totalCookTime = nbt.getShort("CookTimeT");
-        this.currentBurnTime = nbt.getShort("BurnTimeC");
+        burnTime = nbt.getShort("BurnTime");
+        cookTime = nbt.getShort("CookTime");
+        totalCookTime = nbt.getShort("CookTimeT");
+        currentBurnTime = nbt.getShort("BurnTimeC");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
-        nbt.setShort("BurnTime", (short)this.burnTime);
-        nbt.setShort("CookTime", (short)this.cookTime);
-        nbt.setShort("CookTimeT", (short)this.totalCookTime);
-        nbt.setShort("BurnTimeC", (short)this.currentBurnTime);
+        nbt.setShort("BurnTime", (short)burnTime);
+        nbt.setShort("CookTime", (short)cookTime);
+        nbt.setShort("CookTimeT", (short)totalCookTime);
+        nbt.setShort("BurnTimeC", (short)currentBurnTime);
     }
     
     @Override
@@ -197,7 +196,7 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
         } else if (sl == 0 || sl == 1) {
             return true;
         } else if (sl == 3) {
-            ItemStack st2 = (ItemStack)this.inv.get(3);
+            ItemStack st2 = (ItemStack)inv.get(3);
             return TileEntityFurnace.isItemFuel(st) || SlotFurnaceFuel.isBucket(st) && st2.getItem() != Items.BUCKET;
         }
 		return false;
@@ -227,7 +226,7 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote)
+		if (baseTile == null || getWorld().isRemote)
 			return true;
 		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
@@ -240,18 +239,18 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	
 	@Override
     public void setInventorySlotContents(int sl, ItemStack st) {
-		ItemStack st2 = (ItemStack)this.inv.get(sl);
+		ItemStack st2 = (ItemStack)inv.get(sl);
         boolean flag = !st.isEmpty() && st.isItemEqual(st2) && ItemStack.areItemStackTagsEqual(st, st2);
-        this.inv.set(sl, st);
+        inv.set(sl, st);
 
         if (st.getCount() > baseTile.getInventoryStackLimit()) {
             st.setCount(baseTile.getInventoryStackLimit());
         }
 
-        if (sl == 0 && !flag) {
-            this.totalCookTime = 200;
-            this.cookTime = 0;
-            this.markDirty();
+        if ((sl == 0 || sl == 1) && !flag) {
+            totalCookTime = 200;
+            cookTime = 0;
+            markDirty();
         }
     }
 	
@@ -262,15 +261,15 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	}
 	
 	private void smeltItem() {
-		RecipeContainer rc = this.getRecipe();
+		RecipeContainer rc = getRecipe();
         if (rc != null) {
-            ItemStack out = (ItemStack)this.inv.get(2);
+            ItemStack out = (ItemStack)inv.get(2);
             ItemStack ro = rc.getOutputItems()[0];
             
-            rc.process(new ItemStack[] {(ItemStack)this.inv.get(0), (ItemStack)this.inv.get(1)}, null, 0, true, false, true);
+            rc.process(new ItemStack[] {(ItemStack)inv.get(0), (ItemStack)inv.get(1)}, null, 0, true, false, true);
 
             if (out.isEmpty()) {
-                this.inv.set(2, ro.copy());
+                inv.set(2, ro.copy());
             } else if (out.getItem() == ro.getItem()) {
                 out.grow(ro.getCount());
             }
@@ -278,19 +277,19 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	}
 
 	private RecipeContainer getRecipe() {
-        if (this.inv.get(0).isEmpty() || this.inv.get(1).isEmpty()) {
+        if (inv.get(0).isEmpty() || inv.get(1).isEmpty()) {
             return null;
         } else {
-            RecipeContainer rc = MRecipes.getRecipe(MRecipes.AlloyFurnaceRecipes, new ItemStack[] {(ItemStack)this.inv.get(0), (ItemStack)this.inv.get(1)}, null, 0, true, false);
+            RecipeContainer rc = MRecipes.getRecipe(MRecipes.AlloyFurnaceRecipes, new ItemStack[] {(ItemStack)inv.get(0), (ItemStack)inv.get(1)}, null, 0, true, false);
             if (rc == null) {
                 return null;
             } else {
             	ItemStack ro = rc.getOutputItems()[0];
-                ItemStack out = (ItemStack)this.inv.get(2);
+                ItemStack out = (ItemStack)inv.get(2);
                 if (out.isEmpty()) return rc;
                 if (!out.isItemEqual(ro)) return null;
                 int cnt = out.getCount() + ro.getCount();
-                return cnt <= this.baseTile.getInventoryStackLimit() && cnt <= out.getMaxStackSize() ? rc : null;
+                return cnt <= baseTile.getInventoryStackLimit() && cnt <= out.getMaxStackSize() ? rc : null;
             }
         }
 	}

@@ -11,6 +11,7 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.compat.jei.JEISupport;
 import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
@@ -47,7 +48,15 @@ public class GUIGeneric extends GUIBase {
 	public void addPwr2(int x, int y) {
 		components.add(new ComponentPwrBar2(x, y));
 	}
-	
+
+	public void addFuel(int x, int y) {
+		components.add(new ComponentFuelBar(x, y));
+	}
+
+	public void addJEI(int x, int y, String... jei) {
+		if (Loader.isModLoaded("jei")) components.add(new ComponentJEIButton(x, y, jei));
+	}
+
 	@Override
 	protected void drawGuiContainerForegroundLayer(int p1, int p2) {
 		for (GUIComponent c : components)
@@ -165,7 +174,7 @@ public class GUIGeneric extends GUIBase {
 			ContainerGeneric con = (ContainerGeneric)g.inventorySlots;
 			g.drawTexturedModalRect(sX + _X, sY + _Y, 183, 34, 7, 15);
 			if (con.energy <= 0 || con.mxenergy <= 0) return;
-	        int s = (int)(con.energy * 14 / con.mxenergy);
+	        int s = (int)(JSTUtils.safeMultiplyLong(con.energy, 14) / con.mxenergy);
 	        g.drawTexturedModalRect(sX + _X, sY + _Y  + 14 - s, 176, 34 + 14 - s, 7, s);
 		}
 	}
@@ -191,6 +200,50 @@ public class GUIGeneric extends GUIBase {
 			g.drawTexturedModalRect(sX + _X, sY + _Y, 200, 0, 32, 17);
 			if (con.energy <= 0 || con.mxenergy <= 0) return;
 	        g.drawTexturedModalRect(sX + _X + 4, sY + _Y, 200, 17, (int) (con.energy * 24 / con.mxenergy), 17);
+		}
+	}
+
+	public static class ComponentFuelBar extends GUIComponent {
+		public ComponentFuelBar(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void draw(GUIGeneric g, int sX, int sY) {
+			ContainerGeneric con = (ContainerGeneric)g.inventorySlots;
+			g.drawTexturedModalRect(sX + _X, sY + _Y, 204, 35, 14, 14);
+			if (con.fuel <= 0 || con.mxfuel <= 0) return;
+	        int s = Math.min((con.fuel * 14 / con.mxfuel), 14);
+	        g.drawTexturedModalRect(sX + _X, sY + _Y + 14 - s, 190, 35 + 14 - s, 14, s);
+		}
+	}
+
+	public static class ComponentJEIButton extends GUIComponent {
+		private final String[] jei;
+
+		public ComponentJEIButton(int x, int y, String... jei) {
+			super(x, y);
+			this.jei = Loader.isModLoaded("jei") ? jei : null;
+		}
+
+		@Override
+		public void onHover(GUIGeneric g, int mX, int mY) {
+			if (jei != null && jei.length > 0 && g.isPointInRegion(_X + 1, _Y + 1, 16, 16, mX, mY))
+				g.drawHoveringText(I18n.format("jei.tooltip.show.recipes"), mX, mY);
+		}
+
+		@Override
+		public void draw(GUIGeneric g, int sX, int sY) {
+			if (jei != null && jei.length > 0) g.drawTexturedModalRect(sX + _X, sY + _Y, 212, 49, 18, 18);
+		}
+
+		@Override
+		public boolean onClick(GUIGeneric g, int mX, int mY, int b) {
+			if (b == 0 && g.isPointInRegion(_X, _Y, 24, 17, mX, mY) && jei != null && jei.length > 0) {
+				JEISupport.loadJEI(Arrays.asList(jei));
+				return true;
+			}
+			return false;
 		}
 	}
 }

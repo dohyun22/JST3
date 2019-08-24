@@ -102,9 +102,9 @@ tile.blockte.25.name=초고압 UESU
 tile.blockte.26.name=극초고압 UESU
 tile.blockte.27.name=영점 모듈 전압 UESU
 
-tile.blockte.31.name=저전압 화로 발전기
-tile.blockte.32.name=중전압 화로 발전기
-tile.blockte.33.name=고전압 화로 발전기
+tile.blockte.31.name=저전압 스털링 발전기
+tile.blockte.32.name=중전압 스털링 발전기
+tile.blockte.33.name=고전압 스털링 발전기
 
 tile.blockte.40.name=태양광 발전기
 tile.blockte.41.name=기본 태양광 어레이
@@ -121,9 +121,9 @@ tile.blockte.51.name=특고압 나콰다 발전기
 tile.blockte.52.name=초고압 나콰다 발전기
 tile.blockte.53.name=극초고압 나콰다 발전기
 
-tile.blockte.61.name=저전압 디젤 발전기
-tile.blockte.62.name=중전압 디젤 발전기
-tile.blockte.63.name=고전압 디젤 발전기
+tile.blockte.61.name=저전압 연소 발전기
+tile.blockte.62.name=중전압 연소 발전기
+tile.blockte.63.name=고전압 연소 발전기
 
 tile.blockte.71.name=저전압 가스 터빈
 tile.blockte.72.name=중전압 가스 터빈
@@ -369,7 +369,7 @@ tile.blockte.6006.name=축퇴 압축기
 tile.blockte.6007.name=블록 파괴기
 tile.blockte.6008.name=열 모니터
 tile.blockte.6009.name=원자로 설계기
-tile.blockte.6010.name=대형 디젤 발전기
+tile.blockte.6010.name=대형 연소 발전기
 tile.blockte.6011.name=대형 가스 터빈
 tile.blockte.6012.name=대형 증기 터빈
 tile.blockte.6013.name=대형 열 발전기
@@ -637,7 +637,7 @@ item.itemjst1.10030.name=전동 광산 수레 제어기
 item.itemjst1.10031.name=전동 광산 수레
 item.itemjst1.10040.name=몹 표적 설정기
 item.itemjst1.10041.name=멀티미터
-item.itemjst1.10042.name=디젤 엔진 차량
+item.itemjst1.10042.name=연소 엔진 차량
 item.itemjst1.10043.name=전기 차량
 item.itemjst1.10044.name=마인트리스 1.0
 item.itemjst1.10050.name=납땜 인두
@@ -705,6 +705,8 @@ item.itemjst1.12051.name=중전압 휴대용 충전기 (태양광)
 item.itemjst1.12052.name=고전압 휴대용 충전기 (태양광)
 item.itemjst1.12053.name=특고압 휴대용 충전기 (태양광)
 
+item.itemjst1.13000.name=보일러 변환 키트
+
 item.iridiumframe.name=이리듐 프레임
 item.jst.mask.name=미세먼지 마스크
 
@@ -759,7 +761,7 @@ item.jstnuclear.47.name=4중 연료봉 (소진된 마법)
 entity.laserbeam.name=레이저 광선
 entity.oreexplosion.name=점화된 광석
 entity.ecart.name=전동 광산 수레
-entity.cardesl.name=디젤 엔진 차량
+entity.cardesl.name=연소 엔진 차량
 entity.carelec.name=전기 차량
 
 itemGroup.JST3=저스트서버트윅 3
@@ -783,10 +785,12 @@ jst.tooltip.scharger=햇빛에 노출될 경우 충전됩니다.
 jst.tooltip.screwdriver=기계의 동작 방식을 설정 가능합니다.
 jst.tooltip.screwdriver.ie=이머시브 엔지니어링 기계에도 사용 가능합니다.
 jst.tooltip.flamethrower=%s블록 범위 내의 몹을 태울 수 있습니다.<n>액체 연료를 사용합니다.<n>겉날개 비행 중 사용하면 가속됩니다.
-jst.tooltip.cardesl=디젤 발전기 연료로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>액체 용기로 우클릭하여 연료를 보충하세요.
+jst.tooltip.cardesl=연소 발전기 연료로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>액체 용기로 우클릭하여 연료를 보충하세요.
 jst.tooltip.carelec=EU/RF 배터리로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>shift+우클릭으로 GUI를 열 수 있습니다.
 jst.tooltip.blueprint=회로 제작에 필요합니다.<n>이 청사진은 %s의 티어로, %s의 땜납을 사용합니다.<n>배선 제거 횟수: %s
 jst.tooltip.solderingiron=납땜을 위한 도구입니다.
+
+jst.tooltip.upg.boiler=스털링 발전기를 보일러로 변환합니다.<n>증기 터빈과 같이 이용하여 400%%의 효율로 발전이 가능합니다.<n>물 또한 필요합니다.
 
 jst.tooltip.energy.eu=%s / %s EU
 jst.tooltip.energy.rf=%s / %s RF
@@ -960,7 +964,7 @@ jst.compat.jei.alloyfurnace=합금 화로
 jst.compat.jei.assembler=조립 기계
 jst.compat.jei.separator=분자 분리기
 jst.compat.jei.shfurnace=초고열 화로
-jst.compat.jei.dieselfuel=디젤 발전기 연료
+jst.compat.jei.dieselfuel=연소 발전기 연료
 jst.compat.jei.gasfuel=가스 터빈 연료
 jst.compat.jei.steamfuel=증기 터빈
 jst.compat.jei.heatfuel=열 발전기 연료
@@ -970,7 +974,7 @@ jst.compat.jei.magicfuel=마법 발전기 연료
 jst.compat.jei.chemmixer=화학 혼합기
 jst.compat.jei.disassembler=분해 기계
 jst.compat.jei.press=프레스 기계
-jst.compat.jei.fgenfuel=화로 발전기 연료
+jst.compat.jei.fgenfuel=스털링 발전기 연료
 jst.compat.jei.fluidresource=지하 유동체 자원
 jst.compat.jei.cokeoven=공업용 코크스 오븐
 jst.compat.jei.oregrinder=광석 처리기
@@ -1110,9 +1114,9 @@ jst3.adv.hvassembler.desc=고전압 조립 기계를 만드세요
 jst3.adv.separator=분해하기!
 jst3.adv.separator.desc=저전압 분자 분리기를 만드세요
 jst3.adv.diesel=환경 친화적이지 않다
-jst3.adv.diesel.desc=저전압 디젤 발전기를 만드세요
+jst3.adv.diesel.desc=저전압 연소 발전기를 만드세요
 jst3.adv.hvdiesel=500 EU 이상!
-jst3.adv.hvdiesel.desc=고전압 디젤 발전기를 만드세요
+jst3.adv.hvdiesel.desc=고전압 연소 발전기를 만드세요
 jst3.adv.thermal=써멀 익스펜션?
 jst3.adv.thermal.desc=저전압 열 발전기를 만드세요
 jst3.adv.hvthermal=용암 발전기 도배보다 낫다

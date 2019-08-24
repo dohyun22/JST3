@@ -343,19 +343,35 @@ public class ItemBehaviour {
 		NBTTagCompound nbt = JSTUtils.getOrCreateNBT(st);
 		nbt.setLong("energy", Math.max(0, e));
 	}
-	
+
+	public boolean useEnergy(ItemStack st, long use, @Nullable EntityLivingBase en, boolean sim) {
+		long e = getEnergy(st);
+		if (e >= use) {
+			if (!sim) {
+				setEnergy(st, e - use);
+				if (en != null && canCharge(st)) chargeFromArmor(st, en);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean useEnergy(ItemStack st, long use, boolean sim) {
+		return useEnergy(st, use, null, sim);
+	}
+
 	public boolean hasCapability(Capability<?> cap, ItemStack st) {
 		if (cap == CapabilityEnergy.ENERGY && (this.canCharge(st) || this.canDischarge(st)))
 			return true;
 		return this.getCapability(cap, st) != null;
 	}
-	
+
 	@Nullable
 	public <T> T getCapability(Capability<T> cap, ItemStack st) {
 		if (cap == CapabilityEnergy.ENERGY && (this.canCharge(st) || this.canDischarge(st))) return (T) new InternalStroage(st);
 		return null;
 	}
-	
+
 	public int getBurnTime(ItemStack st) {
 		return 0;
 	}

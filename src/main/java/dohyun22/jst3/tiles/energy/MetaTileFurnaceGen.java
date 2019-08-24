@@ -1,14 +1,26 @@
 package dohyun22.jst3.tiles.energy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import dohyun22.jst3.JustServerTweak;
-import dohyun22.jst3.client.gui.GUIFurnaceGen;
-import dohyun22.jst3.container.ContainerFurnaceGen;
+import dohyun22.jst3.client.gui.GUIGeneric;
+import dohyun22.jst3.container.BatterySlot;
+import dohyun22.jst3.container.ContainerGeneric;
+import dohyun22.jst3.container.JSTSlot;
+import dohyun22.jst3.items.JSTItems;
+import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
+import dohyun22.jst3.tiles.MultiTankHandler;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
+import dohyun22.jst3.utils.FluidItemPredicate;
 import dohyun22.jst3.utils.JSTChunkData;
+import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,15 +42,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileFurnaceGen extends MetaTileGenerator {
+public class MetaTileFurnaceGen extends MetaTileGenerator implements IGenericGUIMTE {
 	public double fuelLeft;
 	public int fuelValue;
+	/** 10¥ìB */
+	private int water;
+	private MultiTankHandler tank;
+	private boolean steam;
 	
 	public MetaTileFurnaceGen(int tier) {
 		super(tier, true);
@@ -50,20 +70,37 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
 
 	@Override
 	protected void checkCanGenerate() {
-		if (baseTile.setActive(fuelLeft > 0.0D))
+		if (baseTile.setActive((long)fuelLeft > 0))
 			updateLight();
 	}
 
 	@Override
 	protected void doGenerate() {
 		double use = Math.min(fuelLeft, JSTUtils.getVoltFromTier(tier) / 2.5D);
+		if (tank != null) {
+			FluidTank t = tank.getTank(0);
+			if (t.getFluidAmount() > 0) {
+				use = tank.getTank(1).fillInternal(new FluidStack(JSTFluids.steam, (int)(use * 2.5D)), true);
+				use /= 10.0D;
+				if (use > 0) {
+					water += use;
+					int amt = water / 100;
+					if (amt > 0) {
+						tank.getTank(0).drainInternal(amt, true);
+						water -= amt * 100;
+					}
+				}
+			} else
+				use = 0.0D;
+		} else {
+			baseTile.energy += use * 2.5D;
+		}
 		fuelLeft -= use;
-		baseTile.energy += use * 2.5D;
 	}
 	
 	@Override
 	public int getInvSize() {
-		return 2;
+		return 6;
 	}
 	
 	@Override
@@ -75,7 +112,7 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
 	public void onPreTick() {
 		if (isClient()) return;
 		ItemStack in = inv.get(0);
-		if (this.fuelLeft <= 0.0D) {
+		if ((long)fuelLeft <= 0) {
 			int fv = getFuelValue(in);
 			if (fv > 0) {
 				fuelLeft = fv;
@@ -91,8 +128,38 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
 	    in = inv.get(1);
 	    if (!in.isEmpty() && baseTile.energy > 0L)
 	    	baseTile.energy -= JSTUtils.chargeItem(in, Math.min(baseTile.energy, maxEUTransfer()), tier, false, false);
+	    if (tank != null) {
+			if (tank.getTank(1).getFluidAmount() > 0) {
+				int amt = JSTUtils.fillTank(getWorld(), getPos(), EnumFacing.UP, new FluidStack(tank.getTank(1).getFluid(), tank.getTank(1).getFluidAmount()));
+				if (amt > 0)
+					tank.drain(amt, true);
+			}
+	    	if (baseTile.getTimer() % 10 == 0) {
+				FluidStack fs = FluidUtil.getFluidContained(inv.get(2));
+				if (fs != null && fs.getFluid() == FluidRegistry.WATER)
+					JSTUtils.drainFluidItemInv(tank.getTank(0), 1000, baseTile, 2, 3);
+				int cap = tank.getTank(1).getCapacity();
+				if (tank.getTank(1).getFluidAmount() >= cap - 100) {
+					tank.getTank(1).drainInternal(cap / 4, true);
+					sendEvent(90, 0);
+				}
+	    	}
+	    }
 	}
-	
+
+	@Override
+	public boolean receiveClientEvent(int id, int arg) {
+		if (id == 90) {
+			if (isClient()) {
+				getWorld().playSound(getPos().getX() + 0.5D, getPos().getY(), getPos().getZ() + 0.5D, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.8F, 0.75F, false);
+				for (int l = 0; l < 8; l++)
+					getWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, getPos().getX() - 0.2D + getWorld().rand.nextFloat() * 1.4D, getPos().getY(), getPos().getZ() - 0.2D + getWorld().rand.nextFloat() * 1.4D, 0.0D, 0.0D, 0.0D);
+			}
+			return true;
+		}
+		return super.receiveClientEvent(id, arg);
+	}
+
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
@@ -107,7 +174,7 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
             double z = (double)baseTile.getPos().getZ() + 0.5D;
             double o = rd.nextDouble() * 0.6D - 0.3D;
 
-            if (rd.nextInt(6) <= this.tier)
+            if (rd.nextInt(6) <= tier)
             	w.playSound(getPos().getX() + 0.5D, getPos().getY(), getPos().getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 
             switch (ef) {
@@ -137,6 +204,11 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
 		super.readFromNBT(tag);
 		fuelLeft = tag.getDouble("fuel");
 		fuelValue = tag.getInteger("fuelval");
+		if (tag.hasKey("tank")) {
+			createTank();
+			tank.readFromNBT(tag);
+			water = tag.getInteger("water");
+		}
 	}
 
 	@Override
@@ -144,71 +216,126 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
 		super.writeToNBT(tag);
 		tag.setDouble("fuel", fuelLeft);
 		tag.setInteger("fuelval", fuelValue);
+		if (tank != null) {
+			NBTTagCompound t2 = new NBTTagCompound();
+			tank.writeToNBT(t2);
+			tag.setTag("tank", t2);
+			tag.setInteger("water", water);
+		}
 	}
-	
+
+	@Override
+	public void readSyncableDataFromNBT(NBTTagCompound tag) {
+		steam = tag.getBoolean("steam");
+	}
+
+	@Override
+	public void writeSyncableDataToNBT(NBTTagCompound tag) {
+		tag.setBoolean("steam", steam);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> c, @Nullable EnumFacing f) {
+		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank != null)
+			return (T) tank;
+		return super.getCapability(c, f);
+	}
+
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
-		return new TextureAtlasSprite[] {getTieredTex(tier), getTieredTex(tier), getTieredTex(tier), getTieredTex(tier), getTieredTex(tier), getTETex("furnacegen")};
+		TextureAtlasSprite t = getTieredTex(tier);
+		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("furnacegen")};
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++) {
-			if (baseTile.facing == JSTUtils.getFacingFromNum(n)) {
+			if (baseTile.facing == JSTUtils.getFacingFromNum(n))
 				ret[n] = getTETex("furnacegen" + (baseTile.isActive() ? "" : "_off"));
-			} else {
+			else
 				ret[n] = getTieredTex(tier);
-			}
 		}
+		if (steam) ret[1] = getTETex("fl_out");
 		return ret;
 	}
-	
+
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (isClient())
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (!isClient()) pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
-	
+
 	@Override
 	public boolean canProvideEnergy() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isEnergyOutput(EnumFacing side) {
 		return true;
 	}
-	
+
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		return new ContainerFurnaceGen(inv, te);
+		ContainerGeneric ret = new ContainerGeneric(inv, te);
+		ret.addSlot(new SlotFurnaceFuel(te, 0, 44, 56));
+		ret.addSlot(steam ? new JSTSlot(te, 1, 44, 13, false, true, 64, true) : new BatterySlot(te, 1, 44, 12, true, false));
+		if (steam) {
+			ret.addSlot(new JSTSlot(te, 2, 71, 12).setPredicate(new FluidItemPredicate("water")));
+			ret.addSlot(new JSTSlot(te, 3, 71, 56, false, true, 64, true));
+			ret.addSlot(new JSTSlot(te, 4, 71, 34, false, false, 64, false));
+			ret.addSlot(new JSTSlot(te, 5, 98, 34, false, false, 64, false));
+		}
+		ret.addPlayerSlots(inv);
+		return ret;
 	}
-	
+
 	@Override
+	@SideOnly(Side.CLIENT)
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		return new GUIFurnaceGen(new ContainerFurnaceGen(inv, te));
+		GUIGeneric ret = new GUIGeneric((ContainerGeneric) getServerGUI(id, inv, te));
+		ret.addSlot(44, 56, 0);
+		ret.addSlot(44, 12, steam ? 1 : 2);
+		if (steam) {
+			ret.addSlot(71, 12, 6);
+			ret.addSlot(71, 56, 7);
+			ret.addSlot(71, 34, 3);
+			ret.addSlot(98, 34, 3);
+		} else
+			ret.addPwr2(80, 32);
+		ret.addFuel(44, 35);
+		ret.addJEI(7, 33, JustServerTweak.MODID + ".fgenfuel");
+		return ret;
 	}
-	
+
+	@Override
+	public boolean canInsertItem(int sl, ItemStack st, EnumFacing dir) {
+		return sl == 0;
+	}
+
 	@Override
 	public boolean canExtractItem(int sl, ItemStack st, EnumFacing dir) {
 		return sl == 0;
 	}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int sl, ItemStack st) {
 		return sl == 0 && getFuelValue(st) > 0;
 	}
-	
+
+	@Override
+	public boolean canSlotDrop(int sl) {
+		return sl < 4;
+	}
+
 	@Override
 	public int getLightValue() {
 		return baseTile.isActive() ? 14 : 0;
@@ -218,11 +345,44 @@ public class MetaTileFurnaceGen extends MetaTileGenerator {
 	public int getDust() {
 		return 15 * JSTUtils.getVoltFromTier(tier) / 32;
 	}
-	
+
 	public static int getFuelValue(ItemStack in) {
 		if (in == null || in.isEmpty()) return 0;
 		FluidStack fs = FluidUtil.getFluidContained(in);
 		if (fs != null && fs.getFluid() == FluidRegistry.LAVA) return 0;
 		return TileEntityFurnace.getItemBurnTime(in);
+	}
+
+	@Override
+	public int getFuel() {
+		return (int)fuelLeft;
+	}
+
+	@Override
+	public int getMxFuel() {
+		return fuelValue;
+	}
+
+	@Override
+	public boolean tryUpgrade(String id) {
+		if (tank == null && id.equals("jst_boiler")) {
+			createTank();
+			steam = true;
+			baseTile.issueUpdate();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	@Nonnull
+	public ArrayList<ItemStack> getDrops() {
+		ArrayList<ItemStack> ret = super.getDrops();
+		if (tank != null) ret.add(new ItemStack(JSTItems.item1, 1, 13000));
+	    return ret;
+	}
+
+	private void createTank() {
+		if (tank == null) tank = new MultiTankHandler(new MTETank(16000 + (tier - 1) * 8000, false, true, this, 4, false, "water"), new MTETank(16000 + (tier - 1) * 8000, true, false, this, 5, false, "steam"));
 	}
 }

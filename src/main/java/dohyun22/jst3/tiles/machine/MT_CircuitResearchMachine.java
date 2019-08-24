@@ -33,12 +33,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public static final int ROW = 12, COLUMN = 9, SOLDER_PER_WIRE = 20;
 	public byte[] listOfGame = new byte[ROW * COLUMN];
 	private final int tier;
-	private byte solder;
+	public byte solder, gameTier;
 	private boolean lvlLoaded;
 	private static final HashMap<Integer, ArrayList<byte[][]>> levels = new HashMap();
 
@@ -57,9 +58,8 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		addLvl(3, new byte[][]{{8,21},{13,16},{22,81},{40,64},{54,28},{57,72},{75,31},{86,21},{90,13},{93,65}});
 	}
 
-	public MT_CircuitResearchMachine(int tier) {
-		// 9*6(tier 0~2)->12*9(tier 3)
-		this.tier = tier;
+	public MT_CircuitResearchMachine(int t) {
+		this.tier = t;
 	}
 
 	private static void addLvl(int lvl, byte[][] data) {
@@ -93,54 +93,40 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
-		if (isClient()) return ;
-		
-		for(int i = 0; i < 4; i++) {
-			ItemStack itemStack = getStackInSlot(i);
-			if(itemStack.isEmpty()) {
-				listOfGame = new byte[ROW * COLUMN];
-				return;
-			}
-		}
-		if(isCanRun()) {
-			if(isClean()) {
+		if (isClient()) return;
+		if (tier != 1)
+			baseTile.energy -= JSTUtils.chargeItem(getStackInSlot(3), Math.min(baseTile.energy, maxEUTransfer()), tier, false, false);
+		if (!lvlLoaded && baseTile.getTimer() % 20 == 0) checkAndLoad();
+	}
+
+	public void checkAndLoad() {
+		if (canRun()) {
+			if (!lvlLoaded) {
+				lvlLoaded = true;
 				loadLvl(1);
 			}
-		}else {
-			listOfGame = new byte[ROW * COLUMN];
+		} else {
+			clearLvl();
 		}
 	}
 
-	public boolean isCanRun() {
-		ItemStack itemStackOfBoard = new ItemStack(JSTItems.item1, 1, 190);
-		if(!getStackInSlot(0).isItemEqual(itemStackOfBoard)) {
+	public boolean canRun() {
+		ItemStack st = new ItemStack(JSTItems.item1, 1, 190);
+		if (!OreDictionary.itemMatches(st, getStackInSlot(0), false))
 			return false;
-		}
-		ItemStack itemStackOfSolderingMachine = new ItemStack(JSTItems.item1, 1, 10050);
-		if(!getStackInSlot(3).isItemEqual(itemStackOfSolderingMachine)) {
+		if (!JSTUtils.oreMatches(getStackInSlot(1), "paper") || (!lvlLoaded && !JSTUtils.oreMatches(getStackInSlot(2), "wireSolder") && solder <= 0))
 			return false;
-		}
-		long eu = JSTUtils.getEUInItem(getStackInSlot(3));
-		if(eu < JSTUtils.getVoltFromTier(this.tier)) {
+		st = new ItemStack(JSTItems.item1, 1, 10050);
+		if (!OreDictionary.itemMatches(st, getStackInSlot(3), false) || (!lvlLoaded && JSTUtils.getEUInItem(getStackInSlot(3)) < 100))
 			return false;
-		}
 		return true;
 	}
-	
-	public boolean isClean() {
-		for(byte b : listOfGame) {
-			if(b != 0b0000000) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
+
 	@Override
 	public int getInvSize() {
 		return 5;
 	}
-	
+
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MT_CircuitResearchMachine(tier);
@@ -155,9 +141,8 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || getWorld().isRemote)
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !getWorld().isRemote)
+			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		return true;
 	}
 
@@ -168,9 +153,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new ContainerCircuitResearch(inv, te);
-		return null;
+		return new ContainerCircuitResearch(inv, te);
 	}
 
 	@Override
@@ -187,12 +170,16 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public void readFromNBT(NBTTagCompound tag) {
 		listOfGame = tag.getByteArray("ListOfMiniGame");
 		solder = tag.getByte("Solder");
+		lvlLoaded = tag.getBoolean("LvlLoaded");
+		gameTier = tag.getByte("Tier");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		tag.setByteArray("ListOfMiniGame", listOfGame);
 		tag.setByte("Solder", solder);
+		tag.setBoolean("LvlLoaded", lvlLoaded);
+		tag.setByte("Tier", gameTier);
 	}
 
 	@Override
@@ -222,14 +209,8 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	}
 
 	public void checkClear() {
-		if (isClient()) return ;
-		
-		ItemStack itemStackIn3 = this.getStackInSlot(3);
-		int euForTier = JSTUtils.getVoltFromTier(this.tier);
-		long euInItem = ItemBehaviour.INSTANCE.getEnergy(itemStackIn3);
-		ItemBehaviour.INSTANCE.setEnergy(itemStackIn3, euInItem-euForTier);
+		if (isClient()) return;
 		boolean clear = true;
-		int gameTier = 1;
 		for (int n = 0; n < listOfGame.length; n++) {
 			MiniGameTile t = MiniGameTile.getTile(listOfGame[n]);
 			if (t instanceof IC) {
@@ -255,8 +236,9 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 					consume++;
 				}
 			}
-			this.getStackInSlot(0).shrink(1);
-			listOfGame = new byte[ROW * COLUMN];
+			getStackInSlot(0).shrink(1);
+			getStackInSlot(0).shrink(1);
+			clearLvl();
 			makeBlueprint(consume, gameTier);
 		}
 	}
@@ -282,6 +264,11 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		ItemStack itemStack = new ItemStack(JSTItems.item1, 1, 10051);
 		IB_BluePrint.setSizeOfConsumedLeadAndTier(itemStack, consume, tier);
 		this.setInventorySlotContents(4, itemStack);
+	}
+
+	private void clearLvl() {
+		listOfGame = new byte[ROW * COLUMN];
+		lvlLoaded = false;
 	}
 
 	private void reloadMiniGame() {}

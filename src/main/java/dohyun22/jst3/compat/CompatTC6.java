@@ -20,5 +20,7 @@ public class CompatTC6 extends Loadable {
 		ItemStack st2 = new ItemStack(JSTItems.item1, 1, 9000);
 		MRecipes.addAlloyFurnaceRecipe(st, st2, new ItemStack(JSTItems.item1, 1, 9022), 5, 100);
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 9022), null, null, new ItemStack[] {st, st2}, null, 5, 100);
+		MRecipes.addMagicFuel(st, 100000);
+		MRecipes.addMagicFuel(JSTUtils.getModItemStack("thaumcraft:crystal_essence"), 100000);
 	}
 }

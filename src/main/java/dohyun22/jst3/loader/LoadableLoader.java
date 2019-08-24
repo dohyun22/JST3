@@ -38,6 +38,7 @@ public class LoadableLoader {
 		addModule(new CompatTAN());
 		addModule(new CompatEIO());
 		addModule(new CompatBOP());
+		addModule(new CompatPR());
 		addModule(new CompatCT());
 		addModule(new CompatTOP());
 		

@@ -57,7 +57,7 @@ public class ReflectionUtils {
 	}
 
 	public static Object callMethod(Object obj, String method, Object... param) {
-		return callMethod(obj, method, param);
+		return callMethod(obj, obj, method, param);
 	}
 
 	public static Object callMethod(Object obj, Object tgt, String name, Object... param) {

@@ -82,7 +82,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CompatIC2 extends Loadable {
 	private static Field crop_dirty;
 	public static Item jstn;
-	
+
 	@Override
 	public boolean canLoad() {
 		return JSTCfg.ic2Loaded;
@@ -92,13 +92,13 @@ public class CompatIC2 extends Loadable {
 	public String getRequiredMod() {
 		return null;
 	}
-	
+
 	@Override
 	@Method(modid = "ic2")
 	public void preInit() {
 		jstn = new ItemReactorComponent();
 		ForgeRegistries.ITEMS.register(jstn);
-		
+
 		ItemReactorComponent rc = (ItemReactorComponent)jstn;
 		rc.registerBehaviour(1, new BehaviourFuelRod(1, 50000, 0.4F, 0.25F, new ItemStack(rc, 1, 4), false, 0));
 		rc.registerBehaviour(2, new BehaviourFuelRod(2, 50000, 0.4F, 0.25F, new ItemStack(rc, 1, 5), false, 0));
@@ -149,7 +149,7 @@ public class CompatIC2 extends Loadable {
 		rc.registerBehaviour(45, d);
 		rc.registerBehaviour(46, d);
 		rc.registerBehaviour(47, d);
-		
+
 		if (JSTUtils.isClient()) registerItemModel(rc);
 		crop_dirty = ReflectionUtils.getField("ic2.core.crop.TileEntityCrop", "dirty");
 		if (JSTCfg.noSuddenHoes) ReflectionUtils.setFieldValue("ic2.core.IC2", "suddenlyHoes", null, false);
@@ -169,7 +169,7 @@ public class CompatIC2 extends Loadable {
 		ExplosionWhitelist.addWhitelistedBlock(Blocks.STRUCTURE_VOID);
 		ExplosionWhitelist.addWhitelistedBlock(JSTBlocks.block1);
 		ExplosionWhitelist.addWhitelistedBlock(JSTBlocks.blockOre);
-		
+
 		addUURecipe(new ItemStack(JSTItems.item1, 1, 16), 9950);
 		addUURecipe(new ItemStack(JSTItems.item1, 1, 17), 6025);
 		addUURecipe(new ItemStack(JSTItems.item1, 1, 18), 6025);
@@ -204,9 +204,9 @@ public class CompatIC2 extends Loadable {
 		addUURecipe("gemSapphire", 8000);
 		addUURecipe("gemPeridot", 8000);
 		addUURecipe("crystalCertusQuartz", 1200);
-		
+
 		if (JSTUtils.isClient()) CropJSTBase.tex = new ArrayList();
-		
+
 		new CropJST("bluewheat", "Eloraam", 7, 1, 100, null, new Object[] {"oreNikolite", "blockNikolite"}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 27), new ItemStack(JSTItems.item1, 1, 59)}, new String[] {"Blue", "Nikolite", "Wheat"}, 6, 2, 1, 0, 3, 0);
 		new CropJST("coalplant", null, 5, 3, 0, null, new Object[] {"oreCoal", "blockCoal"}, new ItemStack[] {new ItemStack(Items.COAL), new ItemStack(Items.COAL, 1)}, new String[] {"Coal", "Fuel", "Carbon"}, 6, 1, 0, 1, 0, 0);
 		new CropJST("blazewood", null, 5, 3, 0, null, null, new ItemStack[] {new ItemStack(Items.BLAZE_POWDER), new ItemStack(Items.BLAZE_ROD)}, new String[] {"Blaze", "Wood"}, 7, 4, 0, 2, 2, 0);
@@ -243,7 +243,7 @@ public class CompatIC2 extends Loadable {
 		st = JSTUtils.getValidOne("cropBarley", "plantBarley");
 		if (!st.isEmpty()) new CropJST("barley", "mDiyo", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Barley", "Crop", "Edible"}, 2, 0, 3, 1, 2, 1);
 		st = JSTUtils.getValidOne("cropRice", "plantRice", "plantWildrice");
-		if (!st.isEmpty()) new CropJST("rice", "dohyun22", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Rice", "Crop", "Edible"}, 2, 0, 4, 0, 2, 1);
+		if (!st.isEmpty()) new CropJST("rice", "glitchfiend", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Rice", "Crop", "Edible"}, 2, 0, 4, 0, 2, 1);
 		st = JSTUtils.getModItemStack("biomesoplenty:bamboo");
 		if (!st.isEmpty()) new CropJST("bamboo", "glitchfiend", 3, 1, -200, st, null, new ItemStack[] {st}, new String[] {"Bamboo", "Stick"}, 3, 0, 1, 1, 1, 2);
 
@@ -293,7 +293,7 @@ public class CompatIC2 extends Loadable {
 	    for (ItemStack st : (ItemStack[]) obj)
 	    	for (EnumHazard hz : EnumHazard.values())
 	    		JSTDamageSource.addHazmat(hz, st);
-		
+
 		addScrapDrop("dustPlatinum", 0.075F);
 		addScrapDrop("dustLithium", 0.4F);
 		addScrapDrop("dustTitanium", 0.075F);
@@ -328,7 +328,7 @@ public class CompatIC2 extends Loadable {
 		addScrapDrop(new ItemStack(JSTItems.item1, 1, 9002), 0.15F);
 		addScrapDrop(new ItemStack(JSTItems.item1, 1, 9003), 0.15F);
 		addScrapDrop(new ItemStack(JSTItems.item1, 1, 9019), 0.15F);
-		
+
 		addAmplifier("dustRedstone", 15000);
 		addAmplifier("dustNikolite", 30000);
 		addAmplifier("dustRuby", 400000);
@@ -340,15 +340,15 @@ public class CompatIC2 extends Loadable {
 		addAmplifier(new ItemStack(JSTItems.item1, 1, 49), 50000000);
 		addAmplifier(new ItemStack(JSTItems.item1, 1, 50), 450000000);
 		addAmplifier(new ItemStack(JSTItems.item1, 1, 100), 1750000);
-		
+
 		MRecipes.addSteam("ic2steam", 1);
 		MRecipes.addSteam("ic2superheated_steam", 2);
 		MRecipes.addHeatFuel("ic2pahoehoe_lava", 5);
 		MRecipes.addGasFuel("ic2hydrogen", 24);
 		MRecipes.addGasFuel("ic2biogas", 60);
-		
+
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("ic2:crop_res", 1, 2));
-		
+
 		ItemStack st = JSTUtils.getModItemStack("ic2:nuclear", 1, 6), st2 = JSTUtils.getModItemStack("ic2:crafting", 1, 9);
 		if (!st.isEmpty()) {
 			Item i = st.getItem();
@@ -382,10 +382,9 @@ public class CompatIC2 extends Loadable {
 				addCannerRecipe(JSTUtils.getModItemStack("ic2:crafting", 1, 9), new ItemStack(i, 3, 2), st);
 				addCentrifugeRecipe(4000, new ItemStack(i, 1, 18), new ItemStack(i, 2, 7), JSTUtils.getFirstItem("dustIron"));
 			}
-
 			RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 12030), "LCL", "TRT", "LRL", 'C', ItemList.circuits[3], 'L', "ingotLead", 'R', new ItemStack(i, 1, 10), 'T', new ItemStack(JSTBlocks.blockTile, 1, 5020));
 		}
-		
+
 		MRecipes.addAssemblerRecipe(new Object[] {new ItemStack(jstn, 1, 30), new ItemStack(JSTItems.item1, 1, 9000)}, null, new ItemStack(JSTItems.item1, 1, 9011), st2, 8, 20);
 		RecipeLoader.addShapelessRecipe(new ItemStack(jstn, 1, 29), st2, new ItemStack(JSTItems.item1, 1, 9010));
 		RecipeLoader.addShapelessRecipe(new ItemStack(jstn, 1, 31), st2, "dustLithium");
@@ -396,7 +395,7 @@ public class CompatIC2 extends Loadable {
 		fs = FluidRegistry.getFluidStack("ic2air", 5000);
 		if (fs != null)
 			MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 5, 9000), null, fs, new ItemStack[] {new ItemStack(JSTItems.item1, 4, 9016), new ItemStack(JSTItems.item1, 1, 9017)}, null, 30, 800);
-		
+
 		fs = FluidRegistry.getFluidStack("cryotheum", 1000);
 		OreDictStack os = new OreDictStack("plateTin");
 		if (fs != null && JSTUtils.oreValid(os)) {
@@ -475,24 +474,23 @@ public class CompatIC2 extends Loadable {
 			GameRegistry.addSmelting(st, st2, 0.0F);
 			addMacRec(st2, st);
 		}
-		
 		addMacRec(new ItemStack(JSTItems.item1, 1, 20), new ItemStack(JSTItems.item1, 1, 21));
-		
+
 		RecipeLoader.addShapedRecipe(getIC2Cable(1, 0, 8), "III", "CDC", "III", 'I', Blocks.GLASS, 'C', JSTUtils.getModItemStack("ic2:dust", 1, 6), 'D', "dustNiobium");
-	
+
 		st = getIC2Cable(3, 0, 5);
 		if (JSTUtils.oreValid("ingotAluminum"))
 			addFormerRecipe(new OreDictStack("ingotAluminum"), st, 1);
-		
+
 		if (JSTUtils.oreValid("plateAluminum"))
 			addFormerRecipe(new OreDictStack("plateAluminum"), st, 0);
-		
+
 		if (JSTUtils.oreValid("ingotSteel"))
 			addFormerRecipe(new OreDictStack("ingotSteel"), st, 1);
-		
+
 		if (JSTUtils.oreValid("plateSteel"))
 			addFormerRecipe(new OreDictStack("plateSteel"), st, 0);
-		
+
 		st = JSTUtils.getModItemStack("ic2:crafting", 1, 4);
 		if (!st.isEmpty()) {
 			RecipeLoader.addShapedRecipe(st, 
@@ -502,7 +500,7 @@ public class CompatIC2 extends Loadable {
 					'D', "gemDiamond"
 					);
 		}
-		
+
 		RecipeLoader.addShapedRecipe(JSTUtils.getModItemStack("ic2:dust", 9, 6), 
 				"rRr", "RrR", "rRr",
 				'r', "dustRedstone",
@@ -518,53 +516,53 @@ public class CompatIC2 extends Loadable {
 					'E', st
 					);
 		}
-		
+
 		st = JSTUtils.getModItemStack("ic2:te", 1, 8);
 		if (!st.isEmpty()) {
 			OreDictionary.registerOre("craftingSolarPanel", st);
 			RecipeLoader.addShapelessRecipe(new ItemStack(JSTBlocks.blockTile, 1, 40), st);
 			RecipeLoader.addShapelessRecipe(st, new ItemStack(JSTBlocks.blockTile, 1, 40));
 		}
-		
+
 		if (JSTUtils.oreValid("dustPlatinum")) {
 			if (JSTUtils.oreValid("dustNickel") && JSTUtils.oreValid("dustGold") && JSTUtils.oreValid("dustIron")) {
 				addCentrifugeRecipe(4500, new OreDictStack("dustNickel", 16), JSTUtils.getFirstItem("dustPlatinum"), JSTUtils.getFirstItem("dustGold"), JSTUtils.getFirstItem("dustIron"));
 			}
 			addCentrifugeRecipe(4500, new OreDictStack("dustPlatinum", 8), new ItemStack(JSTItems.item1, 1, 30));
 		}
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 23), 
 				" P ", "PHP", " P ",
 				'P', "plateTin",
 				'H', new ItemStack(JSTItems.item1, 1, 9013)
 				);
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 24), 
 				"PPP", "CCC", "PPP",
 				'P', "plateTin",
 				'C', new ItemStack(jstn, 1, 23)
 				);
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 25), 
 				"PCP", "PcP", "PCP",
 				'P', "plateTin",
 				'C', new ItemStack(jstn, 1, 24),
 				'c', "plateCopper"
 				);
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 27), 
 				"PPP", "CCC", "PPP",
 				'P', "plateTin",
 				'C', new ItemStack(jstn, 1, 26)
 				);
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 28), 
 				"PCP", "PcP", "PCP",
 				'P', "plateTin",
 				'C', new ItemStack(jstn, 1, 27),
 				'c', "plateCopper"
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:overclocked_heat_vent", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 19), 
 				" I ", "PVP", " I ",
@@ -572,7 +570,7 @@ public class CompatIC2 extends Loadable {
 				'V', st,
 				'I', ItemList.circuits[3]
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:advanced_heat_vent", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 20), 
 				" I ", "PVP", " I ",
@@ -580,7 +578,7 @@ public class CompatIC2 extends Loadable {
 				'V', st,
 				'I', ItemList.circuits[3]
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:component_heat_vent", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 21), 
 				" I ", "PVP", " I ",
@@ -588,7 +586,7 @@ public class CompatIC2 extends Loadable {
 				'V', st,
 				'I', ItemList.circuits[3]
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:reactor_heat_vent", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 22), 
 				" I ", "PVP", " I ",
@@ -596,7 +594,7 @@ public class CompatIC2 extends Loadable {
 				'V', st,
 				'I', ItemList.circuits[3]
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:advanced_heat_exchanger", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 38), 
 				" C ", "PEP",
@@ -604,7 +602,7 @@ public class CompatIC2 extends Loadable {
 				'P', "plateTitanium",
 				'E', st
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:component_heat_exchanger", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 39), 
 				" C ", "PEP",
@@ -612,7 +610,7 @@ public class CompatIC2 extends Loadable {
 				'P', "plateChrome",
 				'E', st
 				);
-		
+
 		st = JSTUtils.getModItemStack("ic2:reactor_heat_exchanger", 1, Short.MAX_VALUE);
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 40), 
 				" C ", "PEP",
@@ -629,47 +627,47 @@ public class CompatIC2 extends Loadable {
 				'a', "dustAluminum",
 				's', st
 				);
-		
+
 		obj = "dustCarbon";
 		RecipeLoader.addShapelessRecipe(JSTUtils.getModItemStack("ic2:crafting", 1, 13), obj, obj, obj, obj, obj, obj, obj, obj);
-		
+
 		if (JSTCfg.ExpensiveMassFab) {
 			st = JSTUtils.getModItemStack("ic2:te", 1, 61);
 			RecipeLoader.removeRecipeByOutput(st, true, true);
 			RecipeLoader.addShapedRecipe(st, "ICI", "MLM", "ICI", 'I', "plateChrome", 'C', "circuitPowerControl", 'M', JSTUtils.getModItemStack("ic2:resource", 1, 13), 'L', JSTUtils.getModItemStack("ic2:crafting", 1, 4));
 		}
-		
+
 		if (JSTCfg.CheaperIC2) {
 			RecipeLoader.addShapedRecipe(getIC2Cable(0, 0, 6), "CCC", 'C', "ingotCopper");
 			RecipeLoader.addShapedRecipe(getIC2Cable(0, 1, 6), "III", "CCC", "III", 'C', "ingotCopper", 'I', "itemRubber");
 			RecipeLoader.addShapedRecipe(getIC2Cable(2, 0, 12), "CCC", 'C', "ingotGold");
 			RecipeLoader.addShapedRecipe(getIC2Cable(3, 0, 12), "CCC", 'C', "ingotIron");
 			RecipeLoader.addShapedRecipe(getIC2Cable(4, 0, 9), "CCC", 'C', "ingotTin");
-			
+
 			st = JSTUtils.getModItemStack("ic2:crafting", 1, 1);
 			RecipeLoader.addShapedRecipe((ItemStack)st, "CCC", "RIR", "CCC", 'C', getIC2Cable(0, 1), 'R', "dustRedstone", 'I', "ingotIron");
 			RecipeLoader.addShapedRecipe((ItemStack)st, "CRC", "CIC", "CRC", 'C', getIC2Cable(0, 1), 'R', "dustRedstone", 'I', "ingotIron");
-			
+
 			st = JSTUtils.getModItemStack("ic2:re_battery");
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
 			RecipeLoader.addShapedRecipe((ItemStack)st, " C ", "TRT", " R ", 'C', getIC2Cable(4, 1), 'T', "ingotTin", 'R', "dustRedstone");
-			
+
 			st = JSTUtils.getModItemStack("ic2:advanced_re_battery");
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
 			RecipeLoader.addShapedRecipe((ItemStack)st, "CSC", "BLB", 'C', getIC2Cable(0, 1), 'S', "dustSulfur", 'B', "ingotBronze", 'L', "dustLead");
-			
+
 			st = JSTUtils.getModItemStack("ic2:resource", 1, 12);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
 			RecipeLoader.addShapedRecipe((ItemStack)st, "III", "I I", "III", 'I', "ingotIron");
-			
+
 			st = JSTUtils.getModItemStack("ic2:ingot", 2);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
 			RecipeLoader.addShapedRecipe((ItemStack)st, "III", "BBB", "TTT", 'I', "ingotIron", 'B', "ingotBronze", 'T', "ingotTin");
-			
+
 			st = JSTUtils.getModItemStack("ic2:te", 1, 46);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
 			RecipeLoader.addShapedRecipe((ItemStack)st, " I ", "I I", "IFI", 'I', "ingotIron", 'F', Blocks.FURNACE);
-			
+
 			st = JSTUtils.getModItemStack("ic2:mining_pipe", 16);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
 			RecipeLoader.addShapedRecipe((ItemStack)st, "I I", "I I", "ITI", 'I', "ingotIron", 'T', JSTUtils.getModItemStack("ic2:treetap"));
@@ -698,7 +696,7 @@ public class CompatIC2 extends Loadable {
 			}
 		} catch (Throwable t) {}
 	}
-	
+
 	/**addMaceratorRecipe
 	 * @param in input 
 	 * @param out output
@@ -712,7 +710,7 @@ public class CompatIC2 extends Loadable {
 		} catch (Throwable t) {
 		}
 	}
-	
+
 	/**addExtractorRecipe
 	 * @param in input 
 	 * @param out output
@@ -726,7 +724,7 @@ public class CompatIC2 extends Loadable {
 		} catch (Throwable t) {
 		}
 	}
-	
+
 	/**addCompressorRecipe
 	 * @param in input 
 	 * @param out output
@@ -740,7 +738,7 @@ public class CompatIC2 extends Loadable {
 		} catch (Throwable t) {
 		}
 	}
-	
+
 	/** Metal Former Recipe Adder
 	 * @param mode 0 = Cutting, 1 = Extruding, 2 = Rolling
 	 * */
@@ -763,7 +761,7 @@ public class CompatIC2 extends Loadable {
 		} catch (Throwable t) {
 		}
 	}
-	
+
 	public static void addCentrifugeRecipe(int temp, Object in, ItemStack... out) {
 		try {
 			NBTTagCompound tag = new NBTTagCompound();
@@ -775,13 +773,13 @@ public class CompatIC2 extends Loadable {
 		} catch (Throwable a_1) {
 		}
 	}
-	
+
 	public static void addCannerRecipe(ItemStack can, ItemStack in, ItemStack out) {
 		try {
 			Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(can), Recipes.inputFactory.forStack(in), out, false);
 		} catch (Throwable t) {}
 	}
-	
+
 	public static void addUURecipe(Object obj, int uB) {
 		try {
 			if (obj instanceof ItemStack) {
@@ -793,7 +791,7 @@ public class CompatIC2 extends Loadable {
 			}
 		} catch (Throwable t) {}
 	}
-	
+
 	public static void addAmplifier(Object in, int amp) {
 		try {
 			IRecipeInput ir = null;
@@ -808,7 +806,7 @@ public class CompatIC2 extends Loadable {
 		} catch (Throwable t) {
 		}
 	}
-	
+
 	public static void addScrapDrop(Object obj, float cnc) {
 		try {
 			ItemStack st = ItemStack.EMPTY;
@@ -834,7 +832,7 @@ public class CompatIC2 extends Loadable {
 		st.setTagCompound(nbt);
 		return st;
 	}
-	
+
 	/** @param t 0 = Copper, 1 = GFC, 2 = Gold, 3 = HV, 4 = Tin, 5 = Detector, 6 = Switch */
 	@Nonnull
 	public static ItemStack getIC2Cable(int t, int i) {
@@ -882,7 +880,7 @@ public class CompatIC2 extends Loadable {
 			}
 		} catch (Throwable t) {}
 	}
-	
+
 	public static void removeIC2RecipeByOutput(Collection<ItemStack> out, IBasicMachineRecipeManager ic) {
 		try {
 			if (!ic.isIterable()) return;
@@ -909,26 +907,25 @@ public class CompatIC2 extends Loadable {
 		if (n == null || b == null || n.isEmpty() || b == Blocks.AIR) return;
 		try { EnumHelper.addEnum(CropSoilType.class, n.toUpperCase(), new Class[] {Block.class}, b); } catch (Throwable t) {}
 	}
-	
+
 	private static void addFuelRecipe(ItemStack mat, ItemStack er, int sID, ItemStack... cen) {
 		if (mat.isEmpty() || er.isEmpty()) return;
-		
 		ItemStack rod = new ItemStack(jstn, 1, sID);
 		addCannerRecipe(er, mat, rod);
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, sID + 1), 
 				"RIR",
 				'R', rod,
 				'I', "plateIron"
 				);
-		
+
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, sID + 2), 
 				"RIR", "CIC", "RIR",
 				'R', rod,
 				'I', "plateIron",
 				'C', "plateCopper"
 				);
-		
+
 		er = JSTUtils.getFirstItem("dustIron");
 		if (!er.isEmpty() && cen.length > 0 && cen.length <= 3) {
 			for (int n = 0; n < 3; n++) {
@@ -943,7 +940,7 @@ public class CompatIC2 extends Loadable {
 			}
 		}
 	}
-	
+
 	private static ItemStack[] getNuggetOrDust(String name) {
 		ItemStack res = JSTUtils.getFirstItem("nugget" + name);
 		if (res.isEmpty()) {
@@ -955,7 +952,7 @@ public class CompatIC2 extends Loadable {
 		}
 		return null;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static void registerItemModel(ItemReactorComponent b) {
 		ResourceLocation l = b.getRegistryName();

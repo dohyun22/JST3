@@ -142,7 +142,7 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 
 	@Override
 	public int getMxPrg() {
-		return this.mxprogress;
+		return mxprogress;
 	}
 
 	@Override

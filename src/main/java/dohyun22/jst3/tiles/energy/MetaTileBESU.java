@@ -16,7 +16,7 @@ import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
-import dohyun22.jst3.tiles.interfaces.IScanSupport;
+import dohyun22.jst3.api.IScanSupport;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
@@ -142,16 +142,6 @@ public class MetaTileBESU extends MetaTileEnergyInput implements IGenericGUIMTE,
 		return true;
 	}
 
-	@Override
-	public int getPrg() {
-		return -1;
-	}
-
-	@Override
-	public int getMxPrg() {
-		return -1;
-	}
-	
 	@Override
 	public int getComparatorInput() {
 		BigInteger[] bi = getCapacity();

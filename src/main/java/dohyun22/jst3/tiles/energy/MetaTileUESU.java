@@ -152,16 +152,6 @@ public class MetaTileUESU extends MetaTileEnergyInput implements IGenericGUIMTE 
 	}
 	
 	@Override
-	public int getPrg() {
-		return -1;
-	}
-
-	@Override
-	public int getMxPrg() {
-		return -1;
-	}
-	
-	@Override
 	public boolean setFacing(EnumFacing f, EntityPlayer pl) {
 		return doSetFacing(f, false);
 	}

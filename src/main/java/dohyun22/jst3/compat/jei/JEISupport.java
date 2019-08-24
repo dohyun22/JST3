@@ -12,7 +12,6 @@ import dohyun22.jst3.api.recipe.RecipeList;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.client.gui.GUIAlloyFurnace;
 import dohyun22.jst3.client.gui.GUIAssembler;
-import dohyun22.jst3.client.gui.GUIFurnaceGen;
 import dohyun22.jst3.client.gui.GUIFusion;
 import dohyun22.jst3.client.gui.GUIMagicGen;
 import dohyun22.jst3.client.gui.GUISolarFurnace;
@@ -166,7 +165,6 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6044), JustServerTweak.MODID + ".refinery");
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6062), JustServerTweak.MODID + ".bioprocess");
 
-		rg.addRecipeClickArea(GUIFurnaceGen.class, 40, 36, 13, 13, JustServerTweak.MODID + ".fgenfuel");
 		rg.addRecipeClickArea(GUISolarFurnace.class, 78, 32, 28, 23, "minecraft.smelting");
 	    rg.addRecipeClickArea(GUIAlloyFurnace.class, 78, 32, 28, 23, JustServerTweak.MODID + ".alloyfurnace", "minecraft.fuel");
 	    rg.addRecipeClickArea(GUIAssembler.class, 101, 25, 24, 17, JustServerTweak.MODID + ".assembler");

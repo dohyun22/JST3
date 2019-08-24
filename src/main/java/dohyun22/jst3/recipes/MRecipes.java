@@ -15,6 +15,7 @@ import dohyun22.jst3.api.recipe.RecipeList;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -221,6 +222,8 @@ public class MRecipes {
     
     public static void addMagicFuel(Object obj, int e) {
     	if (obj instanceof String) obj = new OreDictStack((String)obj);
+    	else if (obj instanceof Item) obj = new ItemStack((Item)obj, 1, 32767);
+    	else if (obj instanceof Block) obj = new ItemStack((Block)obj, 1, 32767);
     	if (!(obj instanceof FluidStack) && isValid(obj)) MagicGenFuel.put(obj, e);
     }
     

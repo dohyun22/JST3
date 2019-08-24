@@ -172,11 +172,14 @@ public class JSTItems {
 		item1.registerMetaItem(12051, "chgs2", new IB_Charger(600000, 2, true));
 		item1.registerMetaItem(12052, "chgs3", new IB_Charger(2400000, 3, true));
 		item1.registerMetaItem(12053, "chgs4", new IB_Charger(25000000, 4, true));
-		
+
+		//Upgrades #13000
+		item1.registerMetaItem(13000, "upg_boiler", new IB_Upgrade("jst_boiler", "boiler"));
+
 		item1.addFuelValue(98, 25600);
 		item1.addFuelValue(99, 102400);
 		item1.addFuelValue(101, 409600);
-		
+
 		if (JSTUtils.isClient()) {
 			registerItemModel(item1, "metaitems/");
 			registerItemModel(mask, "");
