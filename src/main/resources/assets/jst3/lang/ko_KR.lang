@@ -289,6 +289,9 @@ tile.blockte.334.name=특고압 냉난방 에어컨
 tile.blockte.341.name=기본 회로 연구 테이블
 tile.blockte.342.name=고급 회로 연구 테이블
 tile.blockte.343.name=첨단 회로 연구 테이블
+tile.blockte.351.name=기본 회로 생산 기계
+tile.blockte.352.name=고급 회로 생산 기계
+tile.blockte.353.name=첨단 회로 생산 기계
 
 tile.blockte.4001.name=주석 전선
 tile.blockte.4002.name=비절연 주석 전선
@@ -787,7 +790,7 @@ jst.tooltip.screwdriver.ie=이머시브 엔지니어링 기계에도 사용 가�
 jst.tooltip.flamethrower=%s블록 범위 내의 몹을 태울 수 있습니다.<n>액체 연료를 사용합니다.<n>겉날개 비행 중 사용하면 가속됩니다.
 jst.tooltip.cardesl=연소 발전기 연료로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>액체 용기로 우클릭하여 연료를 보충하세요.
 jst.tooltip.carelec=EU/RF 배터리로 작동합니다.<n>아스팔트/콘크리트 위에서는 더 빠릅니다.<n>shift+우클릭으로 GUI를 열 수 있습니다.
-jst.tooltip.blueprint=회로 제작에 필요합니다.<n>이 청사진은 %s의 티어로, %s의 땜납을 사용합니다.<n>배선 제거 횟수: %s
+jst.tooltip.blueprint=회로 제작에 필요합니다.<n>이 청사진은 %s의 티어로, %s의 땜납을 사용합니다.
 jst.tooltip.solderingiron=납땜을 위한 도구입니다.
 
 jst.tooltip.upg.boiler=스털링 발전기를 보일러로 변환합니다.<n>증기 터빈과 같이 이용하여 400%%의 효율로 발전이 가능합니다.<n>물 또한 필요합니다.

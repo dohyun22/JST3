@@ -40,6 +40,9 @@ public abstract class MT_MachineGeneric extends MT_Machine {
 	protected final RecipeList recipe;
 	protected ItemStack[] result;
 	protected FluidStack[] fResult;
+	public final int NORMAL_PRG_SIZE_X = 24;
+	public final int NORMAL_PRG_SIZE_Y = 17;
+	public final int NORMAL_SLOT_SIZE = 18;
 
 	public MT_MachineGeneric(int tier, int in, int out, int FIn, int FOut, int cap, RecipeList recipe, boolean sl, boolean fsl) {
 		super(tier);

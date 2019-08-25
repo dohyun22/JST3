@@ -8,6 +8,7 @@ import dohyun22.jst3.tiles.earlytech.*;
 import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
+import dohyun22.jst3.tiles.test.MT_CircuitProduce;
 import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -140,8 +141,10 @@ public class MTELoader {
 		if (Loader.isModLoaded("toughasnails")) for (int n = 1; n <= 4; n++)
 			MetaTileBase.registerTE(330 + n, new MT_AirConditioner(n));
 
-		for (int n = 1; n <= 3; n++)
+		for (int n = 1; n <= 3; n++) {
 			MetaTileBase.registerTE(340 + n, new MT_CircuitResearchMachine(n));
+			MetaTileBase.registerTE(350 + n, new MT_CircuitProduce(n));
+		}
 
 		/* #4000: Cables */
 		//IC2 compatible cables
