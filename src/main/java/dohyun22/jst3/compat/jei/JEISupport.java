@@ -75,6 +75,7 @@ public class JEISupport implements IModPlugin {
 		addGenericRecipe(rg, gh, MRecipes.CrystalRecipes);
 		addGenericRecipe(rg, gh, MRecipes.HeatExcFakeRecipes);
 		addGenericRecipe(rg, gh, MRecipes.BioRecipes);
+	    addGenericRecipe(rg, gh, MRecipes.CircuitProduceRecipes);
 
 		rg.addRecipeCategories(new FusionCategory());
 		rg.addRecipes(FusionRecipeWrapper.make(), JustServerTweak.MODID + "." + MRecipes.FusionRecipes.name);

@@ -31,7 +31,7 @@ public class ContainerCircuitResearch extends ContainerMTE {
 		addSlotToContainer(new JSTSlot(te, 1, 185, 44).setPredicate(new ItemMatcher("paper")));
 		addSlotToContainer(new JSTSlot(te, 2, 185, 62).setPredicate(new ItemMatcher("wireSolder")));
 		addSlotToContainer(new JSTSlot(te, 3, 185, 80).setPredicate(new ItemMatcher(new ItemStack(JSTItems.item1, 1, 10050))));
-		addSlotToContainer(new JSTSlot(te, 4, 185, 98, false, true, 64, false));
+		addSlotToContainer(new JSTSlot(te, 4, 185, 98, false, true, 64, true));
 		
 		addPlayerInventorySlots(inv, 29, 143);
 	}

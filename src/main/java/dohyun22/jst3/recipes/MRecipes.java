@@ -50,6 +50,7 @@ public class MRecipes {
 	public static final RecipeList FusionBreederRecipes = new RecipeList("fusionbreeder");
 	public static final RecipeList HeatExcFakeRecipes = new RecipeList("heatexc");
 	public static final RecipeList BioRecipes = new RecipeList("bioprocess");
+	public static final RecipeList CircuitProduceRecipes = new RecipeList("circuitproduce");
 	public static final HashMap<Object, Integer> CompressorValue = new HashMap();
 	public static final HashMap<Object, Integer> MagicGenFuel = new HashMap();
 	public static final ArrayList<ItemStack> NuclearItems = new ArrayList();
@@ -204,6 +205,11 @@ public class MRecipes {
     		MRecipes.BioRecipes.add(RecipeContainer.newContainer(new Object[] {in}, new FluidStack[] {fin}, new ItemStack[] {out}, new FluidStack[] {fout}, energy, tick));
     }
 
+    public static void addCircuitProduceRecipe(Object in1, Object in2, ItemStack out, int energy, int tick) {
+    	if ((isValid(in1) || isValid(in2)) && isValid(out))
+    		MRecipes.CircuitProduceRecipes.add(RecipeContainer.newContainer(new Object[] {in1, in2}, null, new ItemStack[] {out}, null, energy, tick));
+    }
+    
     public static void addDieselFuel(String name, int e) {
     	addFluidFuel(DieselGenFuel, name, e);
     }

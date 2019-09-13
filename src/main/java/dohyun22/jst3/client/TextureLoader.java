@@ -151,6 +151,7 @@ public class TextureLoader {
 		ls.add("recycler_off");
 		//ls.add("fl_recycler");
 		ls.add("circuit_research");
+		ls.add("circuit_produce");
 		ls.add("bioprocess");
 		
 		ls.add("gen");
