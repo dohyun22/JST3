@@ -9,7 +9,7 @@ import dohyun22.jst3.items.behaviours.IB_BluePrint;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.machine.MT_MachineGeneric;
+import dohyun22.jst3.tiles.machine.MT_MachineProcess;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,12 +19,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_CircuitProduce extends MT_MachineGeneric{	
+public class MT_CircuitProduce extends MT_MachineProcess {	
 	public MT_CircuitProduce(int tier) {
-		//in-0:blueprint, 1:circuit board 2:metal 
+		//in-0:blueprint, 1:circuit board 2:solder 
 		//out-0:circuit
-		super(tier, 3, 1, 0, 0, 0, null, false, false);
+		super(tier, 3, 1, 0, 0, 0, null, false, false, "circuit_produce", null);
 	}
+
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MT_CircuitProduce(tier);
@@ -36,28 +37,20 @@ public class MT_CircuitProduce extends MT_MachineGeneric{
 			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite t = getTieredTex((tier - 1) * 2);
-		return new TextureAtlasSprite[] {t, getTETex("circuit_produce"), t, t, t, t};
-	}
-	
 
 	public int getAmountOfUse(ItemStack itemStack) {
 		return IB_BluePrint.getSizeOfComsumedLead(itemStack);
 	}
-	
+
 	public int getTier(ItemStack itemStack) {
 		return IB_BluePrint.getSizeOfTier(itemStack);
 	}
-	
+
 	@Override
 	protected boolean checkCanWork() {
 		return super.checkCanWork();
 	}
-	
+
 	@Override
 	protected void addSlot(ContainerGeneric cg, InventoryPlayer inv, TileEntityMeta te) {
 		cg.addSlot(new JSTSlot(te, 0, 8 + NORMAL_SLOT_SIZE, 31, true, true, 1, true));

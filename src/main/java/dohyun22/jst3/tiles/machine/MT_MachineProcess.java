@@ -51,6 +51,9 @@ public class MT_MachineProcess extends MT_Machine {
 	protected ItemStack[] result;
 	protected FluidStack[] fResult;
 	protected EnumFaceIO[] IOs = new EnumFaceIO[5];
+	public final int NORMAL_PRG_SIZE_X = 24;
+	public final int NORMAL_PRG_SIZE_Y = 17;
+	public final int NORMAL_SLOT_SIZE = 18;
 
 	public MT_MachineProcess(int tier, int in, int out, int fIn, int fOut, int cap, RecipeList rec, boolean sl, boolean fs, String texf, String texu) {
 		super(tier);
