@@ -30,7 +30,6 @@ import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.Loadable;
 import dohyun22.jst3.loader.RecipeLoader;
-import dohyun22.jst3.api.recipe.AdvRecipeItem;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.recipes.ItemList;
@@ -453,13 +452,17 @@ public class CompatIC2 extends Loadable {
 		MRecipes.addPressRecipe(new OreDictStack("dustCoal", 8), new ItemStack(Items.FLINT), new ItemStack(it, 1, 17), null, 4, 100);
 		MRecipes.addPressRecipe(new ItemStack(it, 8, 17), null, new ItemStack(it, 1, 18), null, 4, 100);
 		MRecipes.addPressRecipe(new ItemStack(it, 1, 18), null, new ItemStack(Items.DIAMOND), null, 4, 200);
-		MRecipes.addPressRecipe(new OreDictStack("blockIron"), new AdvRecipeItem(JSTItems.item1, 0, 162), new ItemStack(it, 1, 29), null, 30, 200);
-		MRecipes.addPressRecipe(new OreDictStack("blockSteel"), new AdvRecipeItem(JSTItems.item1, 0, 162), new ItemStack(it, 1, 30), null, 30, 200);
+		MRecipes.addPressRecipe(new OreDictStack("blockIron"), ItemList.molds[2], new ItemStack(it, 1, 29), null, 30, 200);
+		MRecipes.addPressRecipe(new OreDictStack("blockSteel"), ItemList.molds[2], new ItemStack(it, 1, 30), null, 30, 200);
+		st = new ItemStack(it, 1, 13);
+		MRecipes.addPressRecipe(new OreDictStack("dustCoal", 2), ItemList.molds[0], st, null, 4, 50);
+		MRecipes.addPressRecipe(new OreDictStack("dustCarbon", 4), ItemList.molds[0], st, null, 4, 50);
+		MRecipes.addPressRecipe(new ItemStack(it, 2, 13), null, new ItemStack(it, 1, 15), null, 8, 100);
 		it = JSTUtils.getModItem("ic2:casing");
 		String[] sf = new String[] {"Bronze", "Copper", "Gold", "Iron", "Lead", "Steel", "Tin"};
 		for (int n = 0; n < sf.length; n++)
-			MRecipes.addPressRecipe(new OreDictStack("plate" + sf[n]), new AdvRecipeItem(JSTItems.item1, 0, 161), new ItemStack(it, 2, n), null, 4, 64);
-		obj = new AdvRecipeItem(JSTItems.item1, 0, 160);
+			MRecipes.addPressRecipe(new OreDictStack("plate" + sf[n]), ItemList.molds[1], new ItemStack(it, 2, n), null, 4, 64);
+		obj = ItemList.molds[0];
 		MRecipes.addPressRecipe(new OreDictStack("ingotTin"), obj, getIC2Cable(4, 0, 3), null, 16, 64);
 		MRecipes.addPressRecipe(new OreDictStack("ingotCopper"), obj, getIC2Cable(0, 0, 3), null, 16, 64);
 		MRecipes.addPressRecipe(new OreDictStack("ingotGold"), obj, getIC2Cable(2, 0, 4), null, 16, 64);
@@ -472,9 +475,8 @@ public class CompatIC2 extends Loadable {
 		if (!st.isEmpty()) {
 			st2 = new ItemStack(JSTBlocks.block2, 1, 2);
 			GameRegistry.addSmelting(st, st2, 0.0F);
-			addMacRec(st2, st);
+			addGrindRec(st2, st);
 		}
-		addMacRec(new ItemStack(JSTItems.item1, 1, 20), new ItemStack(JSTItems.item1, 1, 21));
 
 		RecipeLoader.addShapedRecipe(getIC2Cable(1, 0, 8), "III", "CDC", "III", 'I', Blocks.GLASS, 'C', JSTUtils.getModItemStack("ic2:dust", 1, 6), 'D', "dustNiobium");
 
@@ -522,13 +524,6 @@ public class CompatIC2 extends Loadable {
 			OreDictionary.registerOre("craftingSolarPanel", st);
 			RecipeLoader.addShapelessRecipe(new ItemStack(JSTBlocks.blockTile, 1, 40), st);
 			RecipeLoader.addShapelessRecipe(st, new ItemStack(JSTBlocks.blockTile, 1, 40));
-		}
-
-		if (JSTUtils.oreValid("dustPlatinum")) {
-			if (JSTUtils.oreValid("dustNickel") && JSTUtils.oreValid("dustGold") && JSTUtils.oreValid("dustIron")) {
-				addCentrifugeRecipe(4500, new OreDictStack("dustNickel", 16), JSTUtils.getFirstItem("dustPlatinum"), JSTUtils.getFirstItem("dustGold"), JSTUtils.getFirstItem("dustIron"));
-			}
-			addCentrifugeRecipe(4500, new OreDictStack("dustPlatinum", 8), new ItemStack(JSTItems.item1, 1, 30));
 		}
 
 		RecipeLoader.addShapedRecipe(new ItemStack(jstn, 1, 23), 
@@ -701,14 +696,11 @@ public class CompatIC2 extends Loadable {
 	 * @param in input 
 	 * @param out output
 	 * */
-	public static void addMacRec(Object in, ItemStack out) {
+	public static void addGrindRec(Object in, ItemStack out) {
 		try {
-			if (in instanceof ItemStack)
-				Recipes.macerator.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
-			else if (in instanceof OreDictStack)
-				Recipes.macerator.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
-		} catch (Throwable t) {
-		}
+			in = convToIC2(in);
+			Recipes.macerator.addRecipe((IRecipeInput)in, null, false, new ItemStack[] { out });
+		} catch (Throwable t) {}
 	}
 
 	/**addExtractorRecipe
@@ -717,12 +709,9 @@ public class CompatIC2 extends Loadable {
 	 * */
 	public static void addExtRec(Object in, ItemStack out) {
 		try {
-			if (in instanceof ItemStack)
-				Recipes.extractor.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
-			else if (in instanceof OreDictStack)
-				Recipes.extractor.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
-		} catch (Throwable t) {
-		}
+			in = convToIC2(in);
+			Recipes.extractor.addRecipe((IRecipeInput)in, null, false, new ItemStack[] { out });
+		} catch (Throwable t) {}
 	}
 
 	/**addCompressorRecipe
@@ -731,12 +720,9 @@ public class CompatIC2 extends Loadable {
 	 * */
 	public static void addCompRec(Object in, ItemStack out) {
 		try {
-			if (in instanceof ItemStack)
-				Recipes.compressor.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
-			else if (in instanceof OreDictStack)
-				Recipes.compressor.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
-		} catch (Throwable t) {
-		}
+			in = convToIC2(in);
+			Recipes.compressor.addRecipe((IRecipeInput)in, null, false, new ItemStack[] { out });
+		} catch (Throwable t) {}
 	}
 
 	/** Metal Former Recipe Adder
@@ -751,33 +737,38 @@ public class CompatIC2 extends Loadable {
 				rm = Recipes.metalformerExtruding;
 			else if (mode == 2)
 				rm = Recipes.metalformerRolling;
-			
 			if (rm != null) {
-				if (in instanceof ItemStack)
-					rm.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), null, false, new ItemStack[] { out });
-				else if (in instanceof OreDictStack)
-					rm.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), null, false, new ItemStack[] { out });
+				in = convToIC2(in);
+				rm.addRecipe((IRecipeInput)in, null, false, new ItemStack[] { out });
 			}
-		} catch (Throwable t) {
-		}
+		} catch (Throwable t) {}
 	}
 
 	public static void addCentrifugeRecipe(int temp, Object in, ItemStack... out) {
 		try {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setShort("minHeat", (short) Math.max(1, temp));
-			if (in instanceof ItemStack)
-				Recipes.centrifuge.addRecipe(Recipes.inputFactory.forStack((ItemStack)in), tag, false, out);
-			else if (in instanceof OreDictStack)
-				Recipes.centrifuge.addRecipe(Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count), tag, false, out);
-		} catch (Throwable a_1) {
-		}
+			in = convToIC2(in);
+			Recipes.centrifuge.addRecipe((IRecipeInput)in, tag, false, out);
+		} catch (Throwable t) {}
 	}
 
-	public static void addCannerRecipe(ItemStack can, ItemStack in, ItemStack out) {
+	public static void addCannerRecipe(Object can, Object in, ItemStack out) {
 		try {
-			Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(can), Recipes.inputFactory.forStack(in), out, false);
+			Recipes.cannerBottle.addRecipe((IRecipeInput)convToIC2(can), (IRecipeInput)convToIC2(in), out, false);
 		} catch (Throwable t) {}
+	}
+
+	private static Object convToIC2(Object in) {
+		try {
+			if (in instanceof ItemStack) 
+				return Recipes.inputFactory.forStack((ItemStack)in);
+			else if (in instanceof OreDictStack)
+				return Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count);
+			else if (in instanceof String)
+				return Recipes.inputFactory.forOreDict((String)in, 1);
+		} catch (Throwable t) {}
+		return null;
 	}
 
 	public static void addUURecipe(Object obj, int uB) {
@@ -794,17 +785,9 @@ public class CompatIC2 extends Loadable {
 
 	public static void addAmplifier(Object in, int amp) {
 		try {
-			IRecipeInput ir = null;
-			if (in instanceof ItemStack)
-				ir = Recipes.inputFactory.forStack((ItemStack)in);
-			else if (in instanceof String)
-				ir = Recipes.inputFactory.forOreDict((String) in, 1);
-			else if (in instanceof OreDictStack)
-				ir = Recipes.inputFactory.forOreDict(((OreDictStack)in).name, ((OreDictStack)in).count);
-			if (ir != null)
-				Recipes.matterAmplifier.addRecipe(ir, Integer.valueOf(amp), null, false);
-		} catch (Throwable t) {
-		}
+			in = convToIC2(in);
+			Recipes.matterAmplifier.addRecipe((IRecipeInput)in, Integer.valueOf(amp), null, false);
+		} catch (Throwable t) {}
 	}
 
 	public static void addScrapDrop(Object obj, float cnc) {
@@ -839,10 +822,10 @@ public class CompatIC2 extends Loadable {
 		return getIC2Cable(t, i, 1);
 	}
 
-	public static void banFromRecycle(ItemStack toBan) {
-		if (!toBan.isEmpty())
+	public static void banFromRecycle(Object toBan) {
+		if (toBan != null)
 			try {
-				Recipes.recyclerBlacklist.add(Recipes.inputFactory.forStack(toBan));
+				Recipes.recyclerBlacklist.add((IRecipeInput)convToIC2(toBan));
 			} catch (Throwable t) {}
 	}
 

@@ -11,10 +11,18 @@
 			"translate": "jst3.adv.prospect.desc"
 		}
 	},
-	"parent": "jst3:main/mvmachine",
+	"parent": "jst3:main/simplemachine",
 	"criteria": {
-		"jst3_ruler": {
-			"trigger": "minecraft:impossible"
+		"jst3_prospector": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "jst3:blockte",
+						"data": 6022
+					}
+				]
+			}
 		}
 	}
 }

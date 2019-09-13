@@ -81,8 +81,8 @@ public class MT_AirPurifier extends MetaTileEnergyInput {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite ws = getTETex("fan");
-		return new TextureAtlasSprite[] {getTETex("basic_water"), getTETex("basic_water"), ws, ws, ws, ws};
+		TextureAtlasSprite t = getTETex("filter"), u = getTETex("fan");
+		return new TextureAtlasSprite[] {u, u, t, t, t, t};
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public class MT_AirPurifier extends MetaTileEnergyInput {
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = getDefaultTexture();
 		if (!baseTile.isActive()) 
-			ret[2] = ret[3] = ret[4] = ret[5] = getTETex("fan_off");
+			ret[0] = ret[1] = getTETex("fan_off");
 		return ret;
 	}
 

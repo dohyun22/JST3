@@ -123,17 +123,17 @@ public class MT_ItemPort extends MetaTileBase implements IMultiBlockIO {
 	
 	@Override
 	public boolean canInsertItem(int sl, ItemStack st, EnumFacing dir) {
-		return !super.canInsertItem(sl, st, dir) || (this.isOutput && dir == this.getFacing()) ? false : true;
+		return !super.canInsertItem(sl, st, dir) || (isOutput && dir == getFacing()) ? false : true;
 	}
 	
 	@Override
 	public boolean canExtractItem(int sl, ItemStack st, EnumFacing dir) {
-		return !super.canExtractItem(sl, st, dir) || (!this.isOutput && dir == this.getFacing()) ? false : true;
+		return !super.canExtractItem(sl, st, dir) || (!isOutput && dir == getFacing()) ? false : true;
 	}
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override
@@ -144,12 +144,12 @@ public class MT_ItemPort extends MetaTileBase implements IMultiBlockIO {
 	@Override
 	public void readSyncableDataFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey("dt"))
-			this.displayTexture = tag.getString("dt");
+			displayTexture = tag.getString("dt");
 	}
 
 	@Override
 	public void writeSyncableDataToNBT(NBTTagCompound tag) {
-		if (this.displayTexture != null)
-			tag.setString("dt", this.displayTexture);
+		if (displayTexture != null)
+			tag.setString("dt", displayTexture);
 	}
 }

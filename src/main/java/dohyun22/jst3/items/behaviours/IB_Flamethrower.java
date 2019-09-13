@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import dohyun22.jst3.network.JSTPacketHandler;
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTSounds;
@@ -37,7 +38,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -71,9 +71,7 @@ public class IB_Flamethrower extends ItemBehaviour {
             e.motionX += d.x * 0.05D + (d.x - e.motionX) * 0.25D;
             e.motionY += d.y * 0.05D + (d.y - e.motionY) * 0.25D;
             e.motionZ += d.z * 0.05D + (d.z - e.motionZ) * 0.25D;
-            if (w instanceof WorldServer)
-				for (int n = 0; n < 4; n++)
-					((WorldServer)w).spawnParticle(EnumParticleTypes.FLAME, false, e.posX, e.posY, e.posZ, 0, -d.x + w.rand.nextFloat() * 0.2F - 0.1F, -d.y + w.rand.nextFloat() * 0.3F - 0.15F, -d.z + w.rand.nextFloat() * 0.2F - 0.1F, 1.0D);
+            JSTPacketHandler.addParticle(w, -1, 8, 6, e.posX, e.posY, e.posZ, -d.x + w.rand.nextFloat() * 0.2F - 0.1F, -d.y + w.rand.nextFloat() * 0.3F - 0.15F, -d.z + w.rand.nextFloat() * 0.2F - 0.1F);
 		}
 		if (w == null || w.isRemote || !st.hasTagCompound()) return;
 		int du = getMaxItemUseDuration(st) - cnt;
@@ -83,7 +81,7 @@ public class IB_Flamethrower extends ItemBehaviour {
 			e.stopActiveHand();
 			return;
 		}
-		if (!e.isElytraFlying()) throwFlame(w, e, null, 3, u ? 20 : 13);
+		if (!e.isElytraFlying()) throwFlame(w, e, null, u ? 5 : 3, u ? 20 : 13);
 	}
 
 	@Override
@@ -180,16 +178,9 @@ public class IB_Flamethrower extends ItemBehaviour {
 
 		if (sp != null && ag != null && pwr > 0 && rng > 0) {
 			if (w.getTotalWorldTime() % 5 == 0)
-				w.playSound(null, sp.x, sp.y, sp.z, JSTSounds.FLAME, SoundCategory.PLAYERS, 1.0F, 1.0F);
-			if (w instanceof WorldServer) {
-				double ps = Math.max(0.0075D * rng, 0.12D);
-				for (int n = 0; n < 4; n++) {
-					double vx = ag.x + w.rand.nextFloat() * ps - 0.075F;
-					double vy = ag.y + w.rand.nextFloat() * ps - 0.075F;
-					double vz = ag.z + w.rand.nextFloat() * ps - 0.075F;
-					((WorldServer)w).spawnParticle(EnumParticleTypes.FLAME, true, sp.x + ag.x, sp.y + ag.y, sp.z + ag.z, 0, vx, vy, vz, 1.0D);
-				}
-			}
+				w.playSound(null, sp.x, sp.y, sp.z, JSTSounds.FLAME, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			double ps = Math.max(0.06D * rng, 0.5D);
+			JSTPacketHandler.addParticle(w, -1, 8, 6, sp.x + ag.x, sp.y + ag.y, sp.z + ag.z, ag.x * ps, ag.y * ps, ag.z * ps);
 			double sz = 1.2D;
 			MutableBlockPos p = new MutableBlockPos();
 			for (int n = 1; n < rng; n++) {
@@ -205,7 +196,7 @@ public class IB_Flamethrower extends ItemBehaviour {
 					DamageSource ds = e == null ? JSTDamageSource.FLAME : JSTDamageSource.causeEntityDamage("flame", e).setFireDamage();
 					if (elb.attackEntityFrom(ds, pwr)) {
 						elb.setFire(2 * pwr);
-						if (w.rand.nextInt(30) == 0) elb.hurtResistantTime = 0;
+						if (w.rand.nextInt(20) == 0) elb.hurtResistantTime = 0;
 					}
 				}
 			}

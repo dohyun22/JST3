@@ -29,7 +29,13 @@ public class EntityCarDiesel extends EntityCar {
 
 	@Override
 	protected ItemStack getDrop() {
-		return new ItemStack(JSTItems.item1, 1, 10042);
+		ItemStack ret = new ItemStack(JSTItems.item1, 1, 10042);
+		if (tank.getFluid() != null) {
+			NBTTagCompound t = tank.writeToNBT(new NBTTagCompound());
+			t.setBoolean("watr", canWorkOnWater());
+			JSTUtils.getOrCreateNBT(ret).setTag("EntityNBT", t);
+		}
+		return ret;
 	}
 
 	@Override

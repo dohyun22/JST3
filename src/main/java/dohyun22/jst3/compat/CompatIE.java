@@ -12,9 +12,9 @@ import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.Loadable;
 import dohyun22.jst3.loader.RecipeLoader;
-import dohyun22.jst3.api.recipe.AdvRecipeItem;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.compat.ic2.CompatIC2;
+import dohyun22.jst3.recipes.ItemList;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
@@ -180,21 +180,24 @@ public class CompatIE extends Loadable {
 	public void postInit() {
 		Item i = JSTUtils.getModItem("immersiveengineering:material");
 		ItemStack st;
-		if (JSTCfg.ic2Loaded && i != null) {
-			CompatIC2.addFormerRecipe(new OreDictStack("plateCopper"), new ItemStack (i, 3, 20), 1);
-			CompatIC2.addFormerRecipe(new OreDictStack("plateElectrum"), new ItemStack (i, 3, 21), 1);
-			st = new ItemStack (i, 3, 22);
-			CompatIC2.addFormerRecipe(new OreDictStack("plateAluminum"), st, 1);
-			CompatIC2.addFormerRecipe(new OreDictStack("plateAluminium"), st, 1);
-			CompatIC2.addFormerRecipe(new OreDictStack("plateSteel"), new ItemStack (i, 3, 23), 1);
+		Object obj = ItemList.molds[0];
+		if (i != null) {
+			OreDictionary.registerOre("circuitBasic", new ItemStack(i, 1, 27));
+			if (JSTCfg.ic2Loaded) {
+				CompatIC2.addFormerRecipe(new OreDictStack("plateCopper"), new ItemStack(i, 3, 20), 1);
+				CompatIC2.addFormerRecipe(new OreDictStack("plateElectrum"), new ItemStack(i, 3, 21), 1);
+				st = new ItemStack(i, 3, 22);
+				CompatIC2.addFormerRecipe(new OreDictStack("plateAluminum"), st, 1);
+				CompatIC2.addFormerRecipe(new OreDictStack("plateAluminium"), st, 1);
+				CompatIC2.addFormerRecipe(new OreDictStack("plateSteel"), new ItemStack(i, 3, 23), 1);
+			}
+			MRecipes.addPressRecipe(new OreDictStack("plateCopper"), obj, new ItemStack(i, 3, 20), null, 4, 50);
+			MRecipes.addPressRecipe(new OreDictStack("plateElectrum"), obj, new ItemStack(i, 3, 21), null, 4, 50);
+			st = new ItemStack(i, 3, 22);
+			MRecipes.addPressRecipe(new OreDictStack("plateAluminum"), obj, st, null, 4, 50);
+			MRecipes.addPressRecipe(new OreDictStack("plateAluminium"), obj, st, null, 4, 50);
+			MRecipes.addPressRecipe(new OreDictStack("plateSteel"), obj, new ItemStack(i, 3, 23), null, 4, 50);
 		}
-		Object obj = new AdvRecipeItem(JSTItems.item1, 0, 160);
-		MRecipes.addPressRecipe(new OreDictStack("plateCopper"), obj, new ItemStack (i, 3, 20), null, 4, 50);
-		MRecipes.addPressRecipe(new OreDictStack("plateElectrum"), obj, new ItemStack (i, 3, 21), null, 4, 50);
-		st = new ItemStack (i, 3, 22);
-		MRecipes.addPressRecipe(new OreDictStack("plateAluminum"), obj, st, null, 4, 50);
-		MRecipes.addPressRecipe(new OreDictStack("plateAluminium"), obj, st, null, 4, 50);
-		MRecipes.addPressRecipe(new OreDictStack("plateSteel"), obj, new ItemStack (i, 3, 23), null, 4, 50);
 		MRecipes.addPressRecipe(new OreDictStack("plateConstantan"), obj, JSTUtils.getFirstItem("wireConstantan", 3), null, 4, 50);
 		MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustAluminum")}, new FluidStack(JSTFluids.nitrofuel, 2000), null, null, FluidRegistry.getFluidStack("napalm", 2000), 8, 200);
 

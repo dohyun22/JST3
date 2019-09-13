@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerAdvChest extends ContainerMTE {
-	private final IInventory dummy;
 	public boolean secured;
 
 	public ContainerAdvChest(IInventory inv, TileEntityMeta te) {
@@ -31,9 +30,8 @@ public class ContainerAdvChest extends ContainerMTE {
 	    }
 		
 		addPlayerInventorySlots(inv, 8, 120);
-		
-		this.dummy = new InventoryDummy();
-		addSlotToContainer(new JSTSlot(this.dummy, 0, 8, 200, false, false, 1, false));
+
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 8, 200, false, false, 1, false));
 	}
 	
 	@Override
@@ -133,7 +131,7 @@ public class ContainerAdvChest extends ContainerMTE {
 	    
 	    //if (ct == ClickType.QUICK_MOVE) {return ItemStack.EMPTY;}
 	    
-	    if (!pl.world.isRemote && sl.inventory == this.dummy) {
+	    if (!pl.world.isRemote && sl.inventory == InventoryDummy.INSTANCE) {
 	    	int n = sl.getSlotIndex();
 	    	if (n == 0 && ((MT_AdvChest)te.mte).haveAccess(pl, true, false)) {
 	    		((MT_AdvChest)te.mte).secured = !((MT_AdvChest)te.mte).secured;

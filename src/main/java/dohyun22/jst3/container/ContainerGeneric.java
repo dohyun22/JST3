@@ -3,9 +3,12 @@ package dohyun22.jst3.container;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
 import dohyun22.jst3.utils.JSTUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -80,5 +83,15 @@ public class ContainerGeneric extends ContainerMTE {
 
 	public void addPlayerSlots(IInventory inv) {
 		addPlayerInventorySlots(inv, 8, 84);
+	}
+
+	@Override
+	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
+		if (!(te.mte instanceof IGenericGUIMTE)) return ItemStack.EMPTY;
+		if (si / 1000 == 1) {
+			((IGenericGUIMTE)te.mte).handleBtn(si % 1000);
+			return pl.inventory.getItemStack();
+		}
+		return super.slotClick(si, mc, ct, pl);
 	}
 }

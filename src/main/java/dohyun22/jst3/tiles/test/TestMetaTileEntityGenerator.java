@@ -15,7 +15,6 @@ import dohyun22.jst3.tiles.energy.MetaTileCable;
 import dohyun22.jst3.tiles.energy.MetaTileGenerator;
 import dohyun22.jst3.tiles.energy.MetaTileSolarGen;
 import dohyun22.jst3.tiles.interfaces.IScrewDriver;
-import dohyun22.jst3.tiles.machine.MT_MachineGeneric;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -40,8 +39,6 @@ public class TestMetaTileEntityGenerator extends MetaTileGenerator implements IS
 			if (connectedMachine == null)
 				return;
 			for (BlockPos pos : connectedMachine) {
-				// 일단은 개념적인 구현시 속도 측정위함
-				//전압강하는 d* 알고리즘으로 최소거리 구한 후 전압.전류 강하된 만큼 줄일 예정
 				baseTile.energy -= JSTUtils.sendEnergy(getWorld(), pos, opp, Math.min(transfer, baseTile.energy),
 						false);
 			}
@@ -59,8 +56,6 @@ public class TestMetaTileEntityGenerator extends MetaTileGenerator implements IS
 	}
 
 	/** posList is cableList **/
-	//재귀함수로 일단 연결된 케이블 다 넣기
-	//같은 시스템, 즉 전선으로 연결되있으면 재계산 안하도록 따로 리스트 저장이 필요할 듯
 	protected void addCable(List<BlockPos> posList, BlockPos p, World world) {
 		for (EnumFacing f : EnumFacing.values()) {
 			BlockPos padd = p.offset(f);

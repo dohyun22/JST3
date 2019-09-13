@@ -1,6 +1,7 @@
 package dohyun22.jst3.evhandler;
 
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTChunkData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -13,12 +14,15 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 
-public class FireEvListener implements IWorldEventListener {
-	public static final FireEvListener INSTANCE = new FireEvListener();
+public class WorldEvListener implements IWorldEventListener {
+	public static final WorldEvListener INSTANCE = new WorldEvListener();
 
 	@Override
 	public void notifyBlockUpdate(World w, BlockPos p, IBlockState os, IBlockState ns, int flag) {
-		if (JSTCfg.fireFineDust && !w.isRemote && ns != null && ns.getBlock() == Blocks.FIRE) JSTChunkData.addFineDust(w, new ChunkPos(p), 100, true);
+		if (JSTCfg.fireFineDust && !w.isRemote) {
+			int d = EffectBlocks.getDust(ns);
+			if (d != 0) JSTChunkData.addFineDust(w, new ChunkPos(p), d, true);
+		}
 	}
 
 	@Override public void notifyLightSet(BlockPos p) { }

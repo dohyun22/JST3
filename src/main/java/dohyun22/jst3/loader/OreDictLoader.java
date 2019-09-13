@@ -90,6 +90,8 @@ public class OreDictLoader extends Loadable {
 		regOre("gemRuby", 16);
 		regOre("gemPeridot", 17);
 		regOre("gemSapphire", 18);
+		regOre("gemBedrock", 20);
+		regOre("dustBedrock", 21);
 		regOre("ingotNeutronium", 24);
 		regOre("ingotRedAlloy", 25);
 		regOre("ingotBlueAlloy", 26);
@@ -136,6 +138,7 @@ public class OreDictLoader extends Loadable {
 		regOre("ingotNiobium", 95);
 		regOre("dustNiobium", 96);
 		regOre("plateNiobium", 97);
+		regOre("gemThorium", 100);
 		regOre("dustBauxite", 104);
 		regOre("dustSalt", 107);
 		regOre("dustSodium", 108);

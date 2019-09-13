@@ -165,7 +165,7 @@ public class MT_WaterMaker extends MetaTileEnergyInput {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override

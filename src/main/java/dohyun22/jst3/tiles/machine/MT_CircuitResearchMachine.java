@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.recipe.RecipeList;
-import dohyun22.jst3.client.gui.GUIAssembler;
 import dohyun22.jst3.client.gui.GUICircuitResearch;
 import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.ContainerCircuitResearch;

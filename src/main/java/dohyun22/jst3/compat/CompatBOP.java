@@ -23,6 +23,6 @@ public class CompatBOP extends Loadable {
 		MRecipes.addLEDCrop(JSTUtils.getModBlock("biomesoplenty:bamboo"));
 		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("biomesoplenty:bamboo", 20, 0), new ItemStack(Items.COAL, 32, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 400);
 		RecipeLoader.addShapedRecipe(new ItemStack(Items.BREAD), "BBB", 'B', "plantBarley");
-		if (JSTCfg.ic2Loaded) CompatIC2.addMacRec(new OreDictStack("plantBarley"), JSTUtils.getValidOne("foodFlour", "dustFlour"));
+		if (JSTCfg.ic2Loaded) CompatIC2.addGrindRec(new OreDictStack("plantBarley"), JSTUtils.getValidOne("foodFlour", "dustFlour"));
 	}
 }

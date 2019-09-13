@@ -111,7 +111,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 		int use = Math.min(burningFuel, OUTPUT);
 		burningFuel -= use;
 		MT_EnergyPort p = getEnergyPort(0, true);
-		if (p.baseTile.energy + use <= p.getMaxEnergy())
+		if (p != null && p.baseTile.energy + use <= p.getMaxEnergy())
 			p.baseTile.energy += use;
 		if (burningFuel <= 0) {
 			if (type == 2 && fluidOutput.size() > 0 && waterAmount >= 10000) {
@@ -137,25 +137,25 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		this.burningFuel = tag.getInteger("fuel");
-		if (this.type == 2) {
-			this.waterAmount = tag.getInteger("dwatr");
-			this.returnFluid = FluidRegistry.getFluid(tag.getString("ftype"));
+		burningFuel = tag.getInteger("fuel");
+		if (type == 2) {
+			waterAmount = tag.getInteger("dwatr");
+			returnFluid = FluidRegistry.getFluid(tag.getString("ftype"));
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setInteger("fuel", this.burningFuel);
-		if (this.type == 2) {
-			tag.setInteger("dwatr", this.waterAmount);
+		tag.setInteger("fuel", burningFuel);
+		if (type == 2) {
+			tag.setInteger("dwatr", waterAmount);
 			if (returnFluid != null) {
 				String s = FluidRegistry.getFluidName(returnFluid);
 				if (s != null)

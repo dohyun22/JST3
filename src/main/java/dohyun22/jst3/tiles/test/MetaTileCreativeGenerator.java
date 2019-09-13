@@ -62,7 +62,7 @@ public class MetaTileCreativeGenerator extends TestMetaTileEntityGenerator{
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override

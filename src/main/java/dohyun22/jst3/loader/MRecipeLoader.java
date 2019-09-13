@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.items.JSTItems;
-import dohyun22.jst3.api.recipe.AdvRecipeItem;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.recipes.ItemList;
@@ -94,6 +93,7 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addHeatFuel("uranium", 3200);
 
 		MRecipes.addSteam("steam", 1);
+		MRecipes.addSteam("hotsteam", 4);
 		
 		MRecipes.allowedFuelerFuels.addAll(Arrays.asList("fuel", "biofuel", "nitrofuel", "gasoline", "ethanol", "bio.ethanol", "ic2biogas", "fuel_light", "fuel_light_heat_1", "fuel_light_heat_2", "diesel", "biodiesel", "rocketfuel"));
 
@@ -117,11 +117,44 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addMagicFuel("dustMithril", 320000);
 		MRecipes.addMagicFuel("ingotMithril", 320000);
 		MRecipes.addMagicFuel("ingotThaumium", 120000);
-		MRecipes.addMagicFuel("gemAmber", 50000);
+		MRecipes.addMagicFuel("gemAmber", 75000);
 		MRecipes.addMagicFuel("ingotVoid", 2000000);
 		
 		MRecipes.addFertilizer(new ItemStack(Items.DYE, 1, 15));
-		
+
+		MRecipes.addCompressorValue(new ItemStack(JSTItems.item1, 1, 49), 2000000);
+		addMatToComp("Naquadah", 800000);
+		addMatToComp("Rhenium", 262144);
+		addMatToComp("Iridium", 65536);
+		MRecipes.addCompressorValue(Blocks.BEDROCK, 32768);
+		addMatToComp("Bedrock", 32768);
+		addMatToComp("Diamond", 8192);
+		addMatToComp("Uranium", 8192);
+		addMatToComp("Thorium", 6144);
+		addMatToComp("Tungsten", 4096);
+		addMatToComp("Osmium", 4096);
+		addMatToComp("Gold", 3072);
+		addMatToComp("Lead", 2048);
+		addMatToComp("Silver", 1000);
+		addMatToComp("Nickel", 1000);
+		addMatToComp("Tin", 400);
+		addMatToComp("Zinc", 400);
+		addMatToComp("Copper", 384);
+		addMatToComp("Steel", 384);
+		addMatToComp("Iron", 256);
+		addMatToComp("Lapis", 256);
+		addMatToComp("Nikolite", 256);
+		addMatToComp("Electrotine", 256);
+		addMatToComp("Redstone", 128);
+		addMatToComp("Coal", 128);
+		MRecipes.addCompressorValue(Blocks.SOUL_SAND, 64);
+		addMatToComp("Charcoal", 32);
+		MRecipes.addCompressorValue("logWood", 32);
+		MRecipes.addCompressorValue(Blocks.NETHER_BRICK, 4);
+		MRecipes.addCompressorValue("stoneMarble", 4);
+		MRecipes.addCompressorValue("stoneBasalt", 4);
+		addMatToComp("Neutronium", -1);
+
 		FluidStack[] fa = new FluidStack[] {new FluidStack(JSTFluids.deuterium, 125), null};
 		MRecipes.addFusionRecipe(fa[0], new FluidStack(JSTFluids.tritium, 125), new FluidStack(JSTFluids.helium, 125), 2048, 100, 40000000, 24000, true);
 		MRecipes.addFusionRecipe(fa[0], fa[0], new FluidStack(JSTFluids.helium, 125), 2048, 100, 60000000, 8000, true);
@@ -166,12 +199,12 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("dustSodium"), new ItemStack(JSTItems.item1, 1, 9000), new ItemStack(JSTItems.item1, 1, 9018), 5, 100);
 		ItemStack st = JSTUtils.getFirstItem("ingotSolder", 10);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotTin", 6), new OreDictStack("ingotLead", 4), st, 5, 200);
-		obj = new OreDictStack("ingotBismuth", 6);
-		if (JSTUtils.oreValid((OreDictStack)obj)) MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotTin", 4), obj, st, 5, 200);
+		obj = new OreDictStack("ingotBismuth", 5);
+		if (JSTUtils.oreValid((OreDictStack)obj)) MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotTin", 5), obj, st, 5, 200);
 
 		//Press
-		obj = new Object[] {new AdvRecipeItem(JSTItems.item1, 0, 160)};
-		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ((Object[])obj)[0], new ItemStack(JSTItems.item1, 2, 185), null, 10, 64);
+		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ItemList.molds[0], new ItemStack(JSTItems.item1, 2, 185), null, 10, 64);
+		MRecipes.addPressRecipe(new ItemStack(Items.BLAZE_POWDER, 5), ItemList.molds[2], new ItemStack(Items.BLAZE_ROD), null, 10, 64);
 
 		//Assembler
 		obj = new OreDictStack(JSTCfg.ic2Loaded && JSTUtils.oreValid("platePlatinum") ? "platePlatinum" : JSTUtils.oreValid("ingotPlatinum") ? "ingotPlatinum" : "gemDiamond");
@@ -365,8 +398,8 @@ public class MRecipeLoader extends Loadable {
 		addGrind("Tin", 4, null, false, "Iron", false, fa);
 		addGrind("Copper", 4, null, false, "Gold", true, fa);
 		addGrind("Lead", 4, null, false, "Silver", true, fa);
-		if (!JSTCfg.ic2Loaded)
-			addGrind("Uranium", 4, null, false, "Lead", false, fa);
+		addGrind("Bismuth", 4, null, false, "Lead", false, fa);
+		if (!JSTCfg.ic2Loaded) addGrind("Uranium", 4, null, false, "Lead", false, fa);
 		addGrind("Aluminum", 4, null, false, "Bauxite", false, fa);
 		addGrind("Bauxite", 4, null, false, "Titanium", false, fa);
 		addGrind("Tungsten", 4, null, false, "Lithium", false, fa);
@@ -391,7 +424,7 @@ public class MRecipeLoader extends Loadable {
 		addGrind("Unobtainium", 4, null, false, "Naquadah", false, fa);
 		addGrind("Lapis", 24, "gem", false, "Lapis", false, fa);
 		addGrind("Amber", 4, "gem", false, null, false, fa);
-		addGrind("Sulfur", 6, null, false, null, false, fa);
+		addGrind("Sulfur", 12, null, false, null, false, fa);
 		addGrind("Saltpeter", 8, null, false, null, false, fa);
 		addGrind("Salt", 4, null, false, null, false, fa);
 		addGrind("Natron", 8, null, false, null, false, fa);
@@ -464,6 +497,16 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addOreProcessRecipe(in, pr[1], new ItemStack[] {JSTUtils.getFirstItem(pf + ore, Math.min(mu * 3, 64)), JSTUtils.modStack(out, 2, -1)}, 64, 400);
 		if (m || m1)
 			MRecipes.addOreProcessRecipe(in, pr[2], new ItemStack[] {JSTUtils.getFirstItem(pf + ore, Math.min(mu * (m ? 4 : 2), 64)), JSTUtils.modStack(out, m1 ? 4 : 1, -1)}, 64, 400);
+	}
+
+	private static void addMatToComp(String o, int v) {
+		MRecipes.addCompressorValue("item" + o, v);
+		MRecipes.addCompressorValue("ingot" + o, v);
+		MRecipes.addCompressorValue("dust" + o, v);
+		MRecipes.addCompressorValue("gem" + o, v);
+		MRecipes.addCompressorValue("ore" + o, v * 2);
+		MRecipes.addCompressorValue("nugget" + o, v / 9);
+		MRecipes.addCompressorValue("block" + o, v * 9);
 	}
 }
 

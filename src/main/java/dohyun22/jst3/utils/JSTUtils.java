@@ -23,6 +23,7 @@ import dohyun22.jst3.compat.CompatBWM;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.network.JSTPacketHandler;
 import dohyun22.jst3.api.IItemJEU;
+import dohyun22.jst3.api.JSTConstants;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -63,6 +64,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -110,14 +112,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class JSTUtils {
-	/** Speed of light */
-	public static final double c = 299792458.0D;
-	private static final int[] V = {8, 32, 128, 512, 2048, 8192, 32768, 131072, 524288, Integer.MAX_VALUE};
 	public static final Logger LOG = LogManager.getLogger("JST3");
 	private JSTUtils() {}
 	
 	/**
-	 * checks player can break block at x,y,z coordinate. 
+	 * checks player can break block at BlockPos. 
 	 * @return true if player can destroy that block.
 	 * */
 	public static boolean canPlayerBreakThatBlock (@Nullable EntityPlayer ep, @Nullable BlockPos p) {
@@ -127,9 +126,8 @@ public class JSTUtils {
 	public static int canPlayerBreakThatBlockInt (@Nullable EntityPlayer ep, @Nullable BlockPos p) {
 		if (ep == null || p == null || !ep.world.canMineBlockBody(ep, p))
 			return -1;
-		if (ep instanceof EntityPlayerMP) {
+		if (ep instanceof EntityPlayerMP)
 			return ForgeHooks.onBlockBreakEvent(ep.world, GameType.SURVIVAL, (EntityPlayerMP) ep, p);
-		}
 		return 0;
 	}
 	
@@ -226,7 +224,7 @@ public class JSTUtils {
 		l = Math.abs(l);
 		String unit = "";
 		
-		double[] values = US ? new double[] {31557600 * c, c, 1609.344D, 0.3048D, 0.0254D, 0.0000254D} : new double[] {31557600 * c, c, 1000000.0D, 1000.0D, 1.0D, 0.01D, 0.001D, 0.000001D, 0.000000001D};
+		double[] values = US ? new double[] {31557600 * JSTConstants.c, JSTConstants.c, 1609.344D, 0.3048D, 0.0254D, 0.0000254D} : new double[] {31557600 * JSTConstants.c, JSTConstants.c, 1000000.0D, 1000.0D, 1.0D, 0.01D, 0.001D, 0.000001D, 0.000000001D};
 		String[] units = US ? new String[] {"Ly", "Ls", "mi", "ft", "in", "mil"} : new String[] {"Ly", "Ls", "Mm", "km", "m", "cm", "mm", "\u03bcm", "nm"};
 		
 		try {
@@ -294,7 +292,7 @@ public class JSTUtils {
 	
 	public static int getVoltFromTier(int tier, boolean isIC2) {
 		if (tier <= 0 && isIC2) return 5;
-		return V[Math.max(Math.min(tier, V.length - 1), 0)];
+		return JSTConstants.V[Math.max(Math.min(tier, JSTConstants.V.length - 1), 0)];
 	}
 	
 	public static int getTierFromVolt(int volt, boolean isIC2) {
@@ -304,8 +302,8 @@ public class JSTUtils {
 			else if (volt < 32)
 				return 1;
 		}
-		for (int n = 0; n < V.length; n++) {
-			if (volt <= V[n]) {
+		for (int n = 0; n < JSTConstants.V.length; n++) {
+			if (volt <= JSTConstants.V[n]) {
 				return n;
 			}
 		}
@@ -313,9 +311,9 @@ public class JSTUtils {
 	}
 	
 	public static int getNearestVolt(int volt) {
-		for (int n = 0; n < V.length; n++)
-			if (volt <= V[n])
-				return V[n];
+		for (int n = 0; n < JSTConstants.V.length; n++)
+			if (volt <= JSTConstants.V[n])
+				return JSTConstants.V[n];
 		return 0;
 	}
 
@@ -451,7 +449,7 @@ public class JSTUtils {
 		return (byte)(facing.ordinal());
 	}
 
-	public static EnumFacing getClosestSide(BlockPos p, EntityLivingBase elb, ItemStack st, boolean nswe) {
+	public static EnumFacing getClosestSide(BlockPos p, EntityLivingBase elb, boolean nswe) {
 		if (elb != null) {
 			int n = MathHelper.floor(elb.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 	        int n2 = Math.round(elb.rotationPitch);
@@ -934,12 +932,12 @@ public class JSTUtils {
 		return JSTUtils.getVoltFromTier(tier) / JSTUtils.getNearestVolt(Math.max(32, use));
 	}
 
-    public static RayTraceResult rayTracePlayer(World w, EntityPlayer pl, boolean liq) {
-        float rp = pl.rotationPitch;
-        float ry = pl.rotationYaw;
-        double px = pl.posX;
-        double py = pl.posY + (double)pl.getEyeHeight();
-        double pz = pl.posZ;
+    public static RayTraceResult rayTraceEntity(@Nonnull Entity e, boolean liq, boolean ibwbb, boolean rlucb, double dist) {
+        float rp = e.rotationPitch;
+        float ry = e.rotationYaw;
+        double px = e.posX;
+        double py = e.posY + (double)e.getEyeHeight();
+        double pz = e.posZ;
         Vec3d v3d = new Vec3d(px, py, pz);
         float f2 = MathHelper.cos(-ry * 0.017453292F - (float)Math.PI);
         float f3 = MathHelper.sin(-ry * 0.017453292F - (float)Math.PI);
@@ -947,10 +945,12 @@ public class JSTUtils {
         float f5 = MathHelper.sin(-rp * 0.017453292F);
         float f6 = f3 * f4;
         float f7 = f2 * f4;
-        double d3 = 5.0D;
-        if (pl instanceof EntityPlayerMP) d3 = ((EntityPlayerMP)pl).interactionManager.getBlockReachDistance();
-        Vec3d v3d2 = v3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
-        return w.rayTraceBlocks(v3d, v3d2, liq, !liq, false);
+        if (dist <= 0.0D) {
+        	dist = 5.0D;
+        	if (e instanceof EntityPlayerMP) dist = ((EntityPlayerMP)e).interactionManager.getBlockReachDistance();
+        }
+        Vec3d v3d2 = v3d.addVector((double)f6 * dist, (double)f5 * dist, (double)f7 * dist);
+        return e.world.rayTraceBlocks(v3d, v3d2, liq, ibwbb, rlucb);
     }
 
     /*public static Vec3d getDiffRatio(Vec3d a, Vec3d b) {
@@ -1052,7 +1052,8 @@ public class JSTUtils {
 		return fs;
 	}
 
-	public static void giveItem(@Nonnull EntityPlayer pl, ItemStack st) {
+	public static void giveItem(@Nonnull EntityPlayer pl, @Nonnull ItemStack st) {
+		st = st.copy();
 		if (!st.isEmpty() && !pl.inventory.addItemStackToInventory(st))
 			JSTUtils.dropEntityItemInCoord(pl.world, pl.posX, pl.posY, pl.posZ, st, true);
 	}
@@ -1096,5 +1097,19 @@ public class JSTUtils {
 
 	public static void sendStatTrsl(@Nonnull EntityPlayer pl, boolean ab, String ul, Object... obj) {
 		pl.sendStatusMessage(new TextComponentTranslation(ul, obj), ab);
+	}
+
+	@Nullable
+	public static NBTBase getTag(@Nonnull NBTTagCompound tag, @Nonnull String loc) {
+		String[] l = loc.split("/");
+		for (int n = 0; n < l.length; n++) {
+			if (tag.hasNoTags()) return null;
+			String s = l[n];
+			if (n >= l.length - 1)
+				return tag.getTag(l[n]);
+			else
+				tag = tag.getCompoundTag(l[n]);
+		}
+		return null;
 	}
 }

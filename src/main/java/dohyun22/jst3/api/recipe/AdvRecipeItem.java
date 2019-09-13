@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
 
-import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;

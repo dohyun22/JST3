@@ -22,6 +22,7 @@ import dohyun22.jst3.loader.RecipeLoader;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
@@ -95,17 +96,14 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.ForgeRegistry;
 
 public class EvHandler {
-	public static final Set<Block> NetherOreList = new HashSet();
-	public static final Set<Block> EndOreList = new HashSet();
 	private static final String TAG_NAME = "JST3_CD";
 	private static boolean err;
 	
 	public static void init() {
-		NetherOreList.add(JSTBlocks.blockNO);
-		NetherOreList.add(Blocks.QUARTZ_ORE);
-		EndOreList.add(JSTBlocks.blockEO);
-		if (JSTCfg.fineDust)
-			MinecraftForge.EVENT_BUS.register(new DustHandler());
+		EffectBlocks.netherOres.add(JSTBlocks.blockNO);
+		EffectBlocks.netherOres.add(Blocks.QUARTZ_ORE);
+		EffectBlocks.endOres.add(JSTBlocks.blockEO);
+		if (JSTCfg.fineDust) MinecraftForge.EVENT_BUS.register(new DustHandler());
 	}
 	
 	@SubscribeEvent
@@ -129,7 +127,7 @@ public class EvHandler {
 			}
 			
 			if (!(pl instanceof FakePlayer) && !pl.capabilities.isCreativeMode) {
-				if (JSTCfg.ECnc > 0 && NetherOreList.contains(w.getBlockState(ev.getPos()).getBlock())) {
+				if (JSTCfg.ECnc > 0 && EffectBlocks.netherOres.contains(w.getBlockState(ev.getPos()).getBlock())) {
 					int en = 0;
 					for (int dx = -1; dx <= 1; dx++) {
 						for (int dy = -1; dy <= 1; dy++) {
@@ -154,7 +152,7 @@ public class EvHandler {
 									}
 								}
 
-								if (!NetherOreList.contains(lb) || occ)
+								if (!EffectBlocks.netherOres.contains(lb) || occ)
 									continue;
 
 								int exc = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, pl.getHeldItemMainhand()) > 0 ? JSTCfg.ECncST : JSTCfg.ECnc;
@@ -170,7 +168,7 @@ public class EvHandler {
 				}
 			}
 		} else if (w.provider.getDimension() == 1) {
-			if (!(pl instanceof FakePlayer) && !pl.capabilities.isCreativeMode && EndOreList.contains(w.getBlockState(ev.getPos()).getBlock())) {
+			if (!(pl instanceof FakePlayer) && !pl.capabilities.isCreativeMode && EffectBlocks.endOres.contains(w.getBlockState(ev.getPos()).getBlock())) {
 				int exc = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, pl.getHeldItemMainhand()) > 0 ? 800 : 10;
 				if (exc > 0 && w.rand.nextInt(exc) == 0) {
 					EntityEndermite em = new EntityEndermite(w);
@@ -180,8 +178,12 @@ public class EvHandler {
 				}
 			}
 		}
+		/*if (w.getBlockState(ev.getPos().down()).getBlock() == Blocks.SPONGE) {
+			ev.setCanceled(true);
+			pl.sendMessage(new TextComponentString("Test"));
+		}*/
 	}
-	
+
 	@SubscribeEvent
 	public void onPlace(PlaceEvent ev) {
 		World w = ev.getWorld();
@@ -193,21 +195,25 @@ public class EvHandler {
 			pl.sendMessage(new TextComponentString("\u00A7cYou can't edit blocks on the top of the nether!"));
 			return;
 		}
+		/*if (w.getBlockState(p.down()).getBlock() == Blocks.SPONGE) {
+			ev.setCanceled(true);
+			pl.sendMessage(new TextComponentString("Test"));
+		}*/
 	}
-	
+
 	@SubscribeEvent
 	public void onRightClick(PlayerInteractEvent.RightClickBlock ev) {
 		World w = ev.getWorld();
 		ItemStack st = ev.getItemStack();
 		String name = JSTUtils.getRegName(st);
-		
+
 		if (!st.isEmpty()) {
 			if (!w.isRemote && JSTCfg.DVEP && st.getItem() == Items.ENDER_EYE && w.getBlockState(ev.getPos()).getBlock() == Blocks.END_PORTAL_FRAME) {
 				ev.setCanceled(true);
 				return;
 			}
 		}
-			
+
 		if (JSTCfg.RIC2C) {
 			if (ev.getHand() == EnumHand.OFF_HAND) {
 				ItemStack st2 = ev.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
@@ -302,7 +308,7 @@ public class EvHandler {
 				ev.setCanceled(true);
 		} catch (Exception e) {}
 	}
-	
+
 	public static int getJSTMeta(byte t, boolean ins) {
 		int m = 0;
 		switch (t) {
@@ -332,7 +338,7 @@ public class EvHandler {
 		}
 		return m;
 	}
-	
+
 	public static byte getMaxIns(byte t) {
 		switch (t) {
 		// copper, glass, gold, iron, tin, detector, switch
@@ -349,14 +355,6 @@ public class EvHandler {
 		}
 	}
 	
-	public static void addOre(Block b, boolean end) {
-		if (b == null || b == Blocks.AIR) return;
-		if (end)
-			EndOreList.add(b);
-		else
-			NetherOreList.add(b);
-	}
-	
 	@SubscribeEvent
 	public void onChunkDataLoad(ChunkDataEvent.Load ev) {
 		if (ev.getWorld().isRemote) return;
@@ -369,7 +367,7 @@ public class EvHandler {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onChunkDataSave(ChunkDataEvent.Save ev) {
 	    if (ev.getWorld().isRemote) return;
@@ -495,7 +493,7 @@ public class EvHandler {
 
     @SubscribeEvent
     public void onLoad(final WorldEvent.Load ev) {
-        if (JSTCfg.fireFineDust) ev.getWorld().addEventListener(FireEvListener.INSTANCE);
+        if (JSTCfg.fireFineDust) ev.getWorld().addEventListener(WorldEvListener.INSTANCE);
     }
 
 	@SubscribeEvent

@@ -118,17 +118,17 @@ public class MT_BlockBreaker extends MetaTileBase {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		if (this.baseTile == null) return;
-		this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		this.baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 		this.onBlockUpdate();
 		this.silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, st) > 0;
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getDrops() {
-		if (this.baseTile == null) return new ArrayList();
-	    ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, this.baseTile.getID());
-	    if (this.silkTouch) JSTUtils.setEnchant(Enchantments.SILK_TOUCH, 1, st);
-	    return new ArrayList(Arrays.asList(new ItemStack[] {st}));
+	public void getDrops(ArrayList ls) {
+		if (baseTile == null) return;
+	    ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, baseTile.getID());
+	    if (silkTouch) JSTUtils.setEnchant(Enchantments.SILK_TOUCH, 1, st);
+	    ls.add(st);
 	}
 	
 	@Override

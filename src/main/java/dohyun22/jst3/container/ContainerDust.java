@@ -44,7 +44,8 @@ public class ContainerDust extends Container {
 			dust = JSTChunkData.getFineDust(playerinv.player.world, start);
 			for (int x = 0; x < mapSz; x++) {
 				for (int z = 0; z < mapSz; z++) {
-					byte b = (byte) MathHelper.clamp(JSTChunkData.getFineDust(playerinv.player.world, new ChunkPos(start.x + x - mapSz / 2, start.z + z - mapSz / 2)) / 16000, 0, 15);
+					int d = JSTChunkData.getFineDust(playerinv.player.world, new ChunkPos(start.x + x - mapSz / 2, start.z + z - mapSz / 2));
+					byte b = (byte) MathHelper.clamp(d > 0 && d < 16000 ? 1 : d / 16000, 0, 15);
 					try {
 						dustmap[x + z * mapSz] = b;
 					} catch (Exception e) {}

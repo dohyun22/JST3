@@ -158,22 +158,22 @@ public class MetaTileUESU extends MetaTileEnergyInput implements IGenericGUIMTE 
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (this.baseTile == null) return;
+		if (baseTile == null) return;
 		super.onPlaced(p, bs, elb, st);
-		this.baseTile.energy = st.hasTagCompound() ? st.getTagCompound().getLong("Energy") : 0L;
-		this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		baseTile.energy = st.hasTagCompound() ? st.getTagCompound().getLong("Energy") : 0L;
+		baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getDrops() {
-		if (this.baseTile == null) return new ArrayList();
-	    ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, this.baseTile.getID());
-	    if (!this.isClient() && this.baseTile.energy > 0) {
-	    	NBTTagCompound nbt = new NBTTagCompound();
-	    	nbt.setLong("Energy", this.baseTile.energy);
-	    	st.setTagCompound(nbt);
+	public void getDrops(ArrayList<ItemStack> ls) {
+		if (baseTile == null) return;
+	    ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, baseTile.getID());
+	    if (!isClient() && baseTile.energy > 0) {
+	    	NBTTagCompound t = new NBTTagCompound();
+	    	t.setLong("Energy", baseTile.energy);
+	    	st.setTagCompound(t);
 	    }
-	    return new ArrayList(Arrays.asList(new ItemStack[] {st}));
+	    ls.add(st);
 	}
 	
 	@Override
@@ -190,9 +190,9 @@ public class MetaTileUESU extends MetaTileEnergyInput implements IGenericGUIMTE 
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
 		long e = st.hasTagCompound() ? st.getTagCompound().getLong("Energy") : 0;
-		ls.add(I18n.format("jst.tooltip.energy.eu", e, this.maxenergy));
+		ls.add(I18n.format("jst.tooltip.energy.eu", e, maxenergy));
 		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
-		ls.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(this.maxenergy).multiply(bi)));
+		ls.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(maxenergy).multiply(bi)));
 		e = JSTUtils.getVoltFromTier(this.tier);
 		ls.add(I18n.format("jst.msg.com.out") + " " + e + " EU/t, " + (e * JSTCfg.RFPerEU) + " RF/t");
 	}

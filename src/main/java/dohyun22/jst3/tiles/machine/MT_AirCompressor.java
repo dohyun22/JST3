@@ -138,16 +138,9 @@ public class MT_AirCompressor extends MT_Machine {
 	public void onPostTick() {
 		super.onPostTick();
 		if (getWorld().isRemote) return;
-		ItemStack st = this.inv.get(0);
-		if (!st.isEmpty()) {
-			IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
-			if (fh != null) {
-				if (FluidUtil.getFluidContained(st) == null)
-					JSTUtils.fillFluidItemInv(tank, 1000, this.baseTile, 0, 1);
-				else
-					JSTUtils.drainFluidItemInv(tank, 1000, this.baseTile, 0, 1);
-			}
-		}
+		ItemStack st = inv.get(0);
+		if (!st.isEmpty() && FluidUtil.getFluidHandler(st) != null)
+			JSTUtils.fillFluidItemInv(tank, 1000, baseTile, 0, 1);
 	}
 	
 	@Override

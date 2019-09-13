@@ -45,10 +45,13 @@ public class MTETank extends FluidTank {
 				mte.setInventorySlotContents(slot, ItemStack.EMPTY);
 				return;
 			}
-			ItemStack st = new ItemStack(JSTItems.item1, 1, 9999);
+			ItemStack st = mte.getStackInSlot(slot);
+			if (st.isEmpty()) {
+				st = new ItemStack(JSTItems.item1, 1, 9999);
+				mte.setInventorySlotContents(slot, st);
+			}
 			st.setCount(MathHelper.clamp(getFluidAmount() / 1000, 1, 64));
 			st.setTagCompound(writeToNBT(new NBTTagCompound()));
-			mte.setInventorySlotContents(slot, st);
 		}
     }
 

@@ -3,6 +3,7 @@ package dohyun22.jst3.recipes;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import dohyun22.jst3.api.recipe.AdvRecipeItem;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.ic2.CompatIC2;
@@ -23,6 +24,7 @@ public class ItemList {
 	public static final ItemStack[] motors = new ItemStack[10];
 	public static final ItemStack[] sensors = new ItemStack[10];
 	public static final ItemStack[] raygens = new ItemStack[10];
+	public static final AdvRecipeItem[] molds = new AdvRecipeItem[3];
 	
 	
 	public static void init() {
@@ -126,7 +128,11 @@ public class ItemList {
 		if (uninsCables[4] == null)
 			uninsCables[4] = new ItemStack(JSTBlocks.blockTile, 1, 4008); 
 		if (uninsCables[5] == null)
-			uninsCables[5] = new ItemStack(JSTBlocks.blockTile, 1, 4010); 
+			uninsCables[5] = new ItemStack(JSTBlocks.blockTile, 1, 4010);
+
+		molds[0] = new AdvRecipeItem(JSTItems.item1, 0, 160);
+		molds[1] = new AdvRecipeItem(JSTItems.item1, 0, 161);
+		molds[2] = new AdvRecipeItem(JSTItems.item1, 0, 162);
 	}
 	
 	@Nullable

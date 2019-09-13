@@ -102,7 +102,7 @@ public class MT_EnergyPort extends MetaTileEnergyInput implements IGenericGUIMTE
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (this.baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		if (this.baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override

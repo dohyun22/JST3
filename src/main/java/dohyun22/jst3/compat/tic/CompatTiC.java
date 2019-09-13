@@ -18,12 +18,14 @@ import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.Loadable;
 import dohyun22.jst3.loader.RecipeLoader;
 import dohyun22.jst3.recipes.MRecipes;
+import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IBackupElectricItemManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -42,8 +44,10 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.book.TinkerBook;
 import slimeknights.tconstruct.library.client.model.ModifierModelLoader;
+import slimeknights.tconstruct.library.events.TinkerRegisterEvent.EntityMeltingRegisterEvent;
 import slimeknights.tconstruct.library.modifiers.IModifier;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.tools.ToolCore;
@@ -68,35 +72,35 @@ public class CompatTiC extends Loadable {
 		Modifier mod = new ModExtraMod(1);
 		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(Items.BOOK), new ItemStack(Blocks.GOLD_BLOCK)));
 		mod = new ModExtraMod(2);
-		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(Items.GOLDEN_APPLE, 1, 1), new ItemStack(Blocks.DIAMOND_BLOCK)));
+		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(Items.ENCHANTED_BOOK), new ItemStack(Items.GOLDEN_APPLE, 1, 1)));
 		mod = new ModExtraMod(3);
 		mod.addItem(new ItemStack(JSTItems.item1, 1, 11), 1, 1);
 
-		if (JSTCfg.ic2Loaded) {
-			String str = "jst3:models/item/compat/tcon/elec";
-			mod = new ModElec(15000, 1, "rs1");
-			mods.put(mod, str);
-			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12000), new ItemStack(JSTItems.item1, 1, 111)));
-			mod = new ModElec(100000, 2, "nk2");
-			mods.put(mod, str);
-			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12003), new ItemStack(JSTItems.item1, 1, 112)));
-			mod = new ModElec(2400000, 3, "li3");
-			mods.put(mod, str);
-			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 113)));
-			mod = new ModElec(25000000, 4, "n4");
-			mods.put(mod, str);
-			mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 114)));
-			mod = new ModSolar();
-			mods.put(mod, "jst3:models/item/compat/tcon/solar");
-			ItemStack st = JSTUtils.getModItemStack("ic2:te", 1, 8);
-			if (!st.isEmpty()) mod.addItem(st, 1, 1);
-			mod.addItem(new ItemStack(JSTBlocks.blockTile, 1, 5005), 1, 1);
-			mod.addItem(new ItemStack(JSTBlocks.blockTile, 1, 5006), 1, 8);
-			mod.addItem(new ItemStack(JSTBlocks.blockTile, 1, 5007), 1, 32);
-			mod = new ModNanoRepair();
-			st = new ItemStack(JSTItems.item1, 2, 103);
-			mod.addRecipeMatch(new CustomCombination(1, st, st));
+		String str = "jst3:models/item/compat/tcon/elec";
+		mod = new ModElec(15000, 1, "rs1");
+		mods.put(mod, str);
+		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12000), new ItemStack(JSTItems.item1, 1, 111)));
+		mod = new ModElec(100000, 2, "nk2");
+		mods.put(mod, str);
+		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12003), new ItemStack(JSTItems.item1, 1, 112)));
+		mod = new ModElec(2400000, 3, "li3");
+		mods.put(mod, str);
+		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 113)));
+		mod = new ModElec(25000000, 4, "n4");
+		mods.put(mod, str);
+		mod.addRecipeMatch(new CustomCombination(1, new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 114)));
+		mod = new ModSolar();
+		mods.put(mod, "jst3:models/item/compat/tcon/solar");
+		ItemStack st = JSTUtils.getModItemStack("ic2:te", 1, 8);
+		if (!st.isEmpty()) mod.addItem(st, 1, 1);
+		mod.addItem(new ItemStack(JSTBlocks.blockTile, 1, 5005), 1, 1);
+		mod.addItem(new ItemStack(JSTBlocks.blockTile, 1, 5006), 1, 8);
+		mod.addItem(new ItemStack(JSTBlocks.blockTile, 1, 5007), 1, 32);
+		mod = new ModNanoRepair();
+		st = new ItemStack(JSTItems.item1, 2, 103);
+		mod.addRecipeMatch(new CustomCombination(1, st, st));
 
+		if (JSTCfg.ic2Loaded) {
 			try {
 				addChargeManager();
 			} catch (Throwable t) {}
@@ -131,7 +135,7 @@ public class CompatTiC extends Loadable {
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotArdite"), new OreDictStack("ingotCobalt"), JSTUtils.getFirstItem("ingotManyullyn"), 5, 100);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotCopper", 1), new OreDictStack("ingotAluminum", 3), JSTUtils.getFirstItem("ingotAlubrass", 4), 5, 100);
 	
-		EvHandler.addOre(JSTUtils.getModBlock("tconstruct:ore"), false);
+		EffectBlocks.addOre(JSTUtils.getModBlock("tconstruct:ore"), false);
 	}
 	
 	public static boolean isTiCTool(ItemStack st) {
@@ -144,6 +148,12 @@ public class CompatTiC extends Loadable {
 	public void initCapabilities(AttachCapabilitiesEvent<ItemStack> ev) {
 		ItemStack st = ev.getObject();
 		if (isTiCTool(st)) ev.addCapability(RL, new EnergyCapTiC(st));
+	}
+
+	@Method(modid = "tconstruct")
+	@SubscribeEvent
+	public void onRegisterEntityMelting(EntityMeltingRegisterEvent ev) {
+		if (JSTCfg.removeGolemMelting && ev.getRecipe() == EntityIronGolem.class) ev.setCanceled(true);
 	}
 
 	public static class EnergyCapTiC implements IEnergyStorage, ICapabilityProvider {
@@ -167,7 +177,7 @@ public class CompatTiC extends Loadable {
 		@Override
 		public int receiveEnergy(int a, boolean s) {
 			NBTTagCompound tags = st.getTagCompound();
-			if (tags == null) return 0;
+			if (tags == null || !tags.hasKey("JST_EU_MAX")) return 0;
 		    long eu2 = tags.getLong("JST_EU");
 		    long ret = JSTUtils.getVoltFromTier(tags.getInteger("JST_EU_LVL"));
 		    long max = tags.getLong("JST_EU_MAX");
@@ -182,7 +192,7 @@ public class CompatTiC extends Loadable {
 		@Override
 		public int extractEnergy(int a, boolean s) {
 			NBTTagCompound tags = st.getTagCompound();
-			if (tags == null) return 0;
+			if (tags == null || !tags.hasKey("JST_EU_MAX")) return 0;
 			long eu2 = tags.getLong("JST_EU");
 			long ret = JSTUtils.getVoltFromTier(tags.getInteger("JST_EU_LVL"));
 			ret = Math.min(eu2, Math.min(ret, a / JSTCfg.RFPerEU));

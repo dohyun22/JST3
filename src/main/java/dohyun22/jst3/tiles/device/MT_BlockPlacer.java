@@ -11,6 +11,7 @@ import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.container.JSTSlot;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +36,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_BlockPlacer extends MetaTileBase {
+public class MT_BlockPlacer extends MetaTileBase implements IGenericGUIMTE {
 	private static final GameProfile PLACER = new GameProfile(UUID.fromString("88092c88-13ed-11e9-ab14-d663bd873d93"), "[JSTPlacer]");
 
 	@Override
@@ -111,7 +112,7 @@ public class MT_BlockPlacer extends MetaTileBase {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		if (baseTile == null) return;
-		baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 		onBlockUpdate();
 	}
 	
@@ -150,7 +151,7 @@ public class MT_BlockPlacer extends MetaTileBase {
 		ContainerGeneric ret = new ContainerGeneric(inv, te);
 		for (int y = 0; y < 3; ++y)
 			for (int x = 0; x < 3; ++x)
-				ret.addSlot(new JSTSlot(te, x + y * 3, 62 + x * 18, 17 + y * 18)/*.setPredicate(p)*/);
+				ret.addSlot(new JSTSlot(te, x + y * 3, 62 + x * 18, 17 + y * 18));
 		ret.addPlayerSlots(inv);
 		return ret;
 	}

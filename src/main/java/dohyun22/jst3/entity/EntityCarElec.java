@@ -38,9 +38,10 @@ public class EntityCarElec extends EntityCar implements IInventory, IGUIEntity, 
 	protected ItemStack getDrop() {
 		ItemStack ret = new ItemStack(JSTItems.item1, 1, 10043);
 		if (getEnergy() > 0) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setInteger("engy", getEnergy());
-			JSTUtils.getOrCreateNBT(ret).setTag("EntityNBT", nbt);
+			NBTTagCompound t = new NBTTagCompound();
+			t.setInteger("engy", getEnergy());
+			t.setBoolean("watr", canWorkOnWater());
+			JSTUtils.getOrCreateNBT(ret).setTag("EntityNBT", t);
 		}
 		return ret;
 	}

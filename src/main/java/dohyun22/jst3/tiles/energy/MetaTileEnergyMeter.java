@@ -122,7 +122,7 @@ public class MetaTileEnergyMeter extends MetaTileCable {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override

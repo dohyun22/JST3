@@ -58,8 +58,8 @@ public class ItemFuelCategory implements IRecipeCategory<IRecipeWrapper> {
         gis.init(0, true, 0, 4);
         
         if (rw instanceof ICustomCraftingRecipeWrapper) {
-        	ICustomCraftingRecipeWrapper customWrapper = (ICustomCraftingRecipeWrapper)rw;
-        	customWrapper.setRecipe(rl, in);
+        	ICustomCraftingRecipeWrapper cw = (ICustomCraftingRecipeWrapper)rw;
+        	cw.setRecipe(rl, in);
         	return;
         }
         

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -49,7 +50,6 @@ public class MRecipes {
 	public static final RecipeList FusionBreederRecipes = new RecipeList("fusionbreeder");
 	public static final RecipeList HeatExcFakeRecipes = new RecipeList("heatexc");
 	public static final RecipeList BioRecipes = new RecipeList("bioprocess");
-	/** Key: ItemStack, OreDictStack, or String name of the Material. Value: Mass value per Item. Denser Item (i.e gold, osmium) will have higher value. */
 	public static final HashMap<Object, Integer> CompressorValue = new HashMap();
 	public static final HashMap<Object, Integer> MagicGenFuel = new HashMap();
 	public static final ArrayList<ItemStack> NuclearItems = new ArrayList();
@@ -226,6 +226,16 @@ public class MRecipes {
     	else if (obj instanceof Block) obj = new ItemStack((Block)obj, 1, 32767);
     	if (!(obj instanceof FluidStack) && isValid(obj)) MagicGenFuel.put(obj, e);
     }
+
+    /** @param e Set negative value to blacklist item. */
+    public static void addCompressorValue(Object obj, int e) {
+    	if (e == 0) return;
+    	if (e < 0) e = -1;
+    	if (obj instanceof String) obj = new OreDictStack((String)obj);
+    	else if (obj instanceof Item) obj = new ItemStack((Item)obj, 1, 32767);
+    	else if (obj instanceof Block) obj = new ItemStack((Block)obj, 1, 32767);
+    	if (!(obj instanceof FluidStack) && isValid(obj)) CompressorValue.put(obj, e);
+    }
     
     public static void addFertilizer(ItemStack in) {
     	if (in != null && !in.isEmpty())
@@ -262,16 +272,17 @@ public class MRecipes {
     	return false;
     }
 
-	public static int getMagicFuelValue(ItemStack in) {
+	public static int getValueInMap(ItemStack in, HashMap<Object, Integer> map) {
 		if (in == null || in.isEmpty()) return 0;
-		for (Object o : MRecipes.MagicGenFuel.keySet()) {
-			Integer ret = MRecipes.MagicGenFuel.get(o);
-			if (ret == null) return 0;
-			if (o instanceof ItemStack && ((ItemStack)o).getCount() <= in.getCount() && OreDictionary.itemMatches((ItemStack)o, in, false)) return ret;
+		for (Entry<Object,Integer> e : map.entrySet()) {
+			Object o = e.getKey();
+			Integer r = e.getValue();
+			if (e.getValue() == null) return 0;
+			if (o instanceof ItemStack && ((ItemStack)o).getCount() <= in.getCount() && OreDictionary.itemMatches((ItemStack)o, in, false)) return r;
 			if (o instanceof OreDictStack)
 				for (int id : OreDictionary.getOreIDs(in))
 					if (id == OreDictionary.getOreID(((OreDictStack)o).name))
-						return ret;
+						return r;
 		}
 		return 0;
 	}

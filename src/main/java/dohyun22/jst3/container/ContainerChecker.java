@@ -18,7 +18,6 @@ public class ContainerChecker extends Container {
 	public int maxPage;
 	public InventoryChecker inv;
 	private IInventory playerinv;
-	private IInventory dummy;
 	public int pg;
 	public int sz;
 	private int pg2;
@@ -27,24 +26,18 @@ public class ContainerChecker extends Container {
 	public ContainerChecker(IInventory pi, IInventory te) {
 		this.inv = new InventoryChecker(te);
 		this.playerinv = pi;
-		this.dummy = new InventoryDummy();
 
-		addSlotToContainer(new JSTSlot(this.dummy, 0, 8, 200, false, false, 1, false));
-		addSlotToContainer(new JSTSlot(this.dummy, 0, 152, 200, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 8, 200, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 152, 200, false, false, 1, false));
 
-		for (int n = 0; n < 54; n++) {
+		for (int n = 0; n < 54; n++)
 			addSlotToContainer(new CustomSlot(this.inv, n, 8 + 18 * (n % 9), 8 + 18 * (n / 9)));
-		}
 
-		// inv
-		for (int r = 0; r < 3; r++) {
-			for (int c = 0; c < 9; c++) {
+		for (int r = 0; r < 3; r++)
+			for (int c = 0; c < 9; c++)
 				addSlotToContainer(new Slot(playerinv, c + r * 9 + 9, 8 + c * 18, 120 + r * 18));
-			}
-		}
-		for (int h = 0; h < 9; h++) {
+		for (int h = 0; h < 9; h++)
 			addSlotToContainer(new Slot(playerinv, h, 8 + h * 18, 178));
-		}
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.ContainerGeneric;
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.api.IItemJEU;
 import dohyun22.jst3.tiles.MetaTileBase;
@@ -40,28 +41,29 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileBESU extends MetaTileEnergyInput implements IGenericGUIMTE, IScanSupport {
+public class MetaTileBatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, IScanSupport {
 	private final byte tier;
+	private boolean boost;
 
-	public MetaTileBESU(int t) {
+	public MetaTileBatBuff(int t) {
 		tier = (byte) t;
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileBESU(tier);
+		return new MetaTileBatBuff(tier);
 	}
-	
+
 	@Override
 	public long getMaxEnergy() {
 		return JSTUtils.getVoltFromTier(tier) * 50L;
 	}
-	
+
 	@Override
 	public boolean canProvideEnergy() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isEnergyInput(EnumFacing side) {
 		if (side == null) return true;
@@ -73,52 +75,65 @@ public class MetaTileBESU extends MetaTileEnergyInput implements IGenericGUIMTE,
 		if (side == null) return true;
 		return side == baseTile.facing;
 	}
-	
+
 	@Override
 	public int maxEUTransfer() {
-		return JSTUtils.getVoltFromTier(tier);
+		int r = JSTUtils.getVoltFromTier(tier);
+		if (boost) r *= 4;
+		return r;
 	}
-	
+
 	@Override
 	public int getInvSize() {
 		return 16;
 	}
-	
+
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
-		if (getWorld().isRemote)
+		if (isClient())
 			return;
 
+		int a = JSTUtils.getVoltFromTier(tier);
+		if (boost) a *= 4;
 		if (baseTile.energy >= JSTUtils.getVoltFromTier(tier) * 40L) {
 			for (int n = 0; n < getInvSize(); n++)
-				baseTile.energy -= JSTUtils.chargeItem(inv.get(n), maxEUTransfer(), tier, false, false);
+				baseTile.energy -= JSTUtils.chargeItem(inv.get(n), a, tier, false, false);
 		} else if (baseTile.energy < JSTUtils.getVoltFromTier(tier) * 10L) {
 			for (int n = 0; n < getInvSize(); n++)
-				baseTile.energy += JSTUtils.dischargeItem(inv.get(n), maxEUTransfer(), tier, false, false);
+				baseTile.energy += JSTUtils.dischargeItem(inv.get(n), a, tier, false, false);
 		}
 
 		if (baseTile.energy > 0)
 			injectEnergyToSide(baseTile.facing);
 	}
-	
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		boost = tag.getBoolean("Boost");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		tag.setBoolean("Boost", boost);
+	}
+
 	@Override
 	public boolean setFacing(EnumFacing f, EntityPlayer pl) {
 		return doSetFacing(f, false);
 	}
-	
+
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote) return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient()) pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
-	
+
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		if (baseTile == null) return;
 		super.onPlaced(p, bs, elb, st);
-		baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 
 	@Override
@@ -155,6 +170,22 @@ public class MetaTileBESU extends MetaTileEnergyInput implements IGenericGUIMTE,
 		for (int y = 0; y < 4; ++y) for (int x = 0; x < 4; ++x) ret.addSlot(new Slot(te, x + y * 4, 53 + x * 18, 8 + y * 18));
 		ret.addPlayerSlots(inv);
 		return ret;
+	}
+
+	@Override
+	public boolean tryUpgrade(String id) {
+		if (!boost && tier < 9 && id.equals("jst_bat")) {
+			boost = true;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	@Nonnull
+	public void getDrops(ArrayList<ItemStack> ls) {
+		super.getDrops(ls);
+		if (boost) ls.add(new ItemStack(JSTItems.item1, 1, 13001));
 	}
 	
 	@Override
@@ -193,7 +224,7 @@ public class MetaTileBESU extends MetaTileEnergyInput implements IGenericGUIMTE,
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++)
-			ret[n] = this.baseTile.facing == JSTUtils.getFacingFromNum(n) ? getTETex("besu") : this.getTieredTex(tier);
+			ret[n] = baseTile.facing == JSTUtils.getFacingFromNum(n) ? getTETex("besu") : getTieredTex(tier);
 		return ret;
 	}
 	

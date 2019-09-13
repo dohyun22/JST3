@@ -96,7 +96,7 @@ public class MT_Fusion extends MT_Multiblock {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override

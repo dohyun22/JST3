@@ -235,6 +235,38 @@ public class CTSupport {
 	}
 
 	@ZenMethod
+	public static void addOreProcessRecipe(IIngredient[] ii, ILiquidStack fi, IItemStack[] io, int v, int t) {
+		addLateAction(new IAction() {
+			@Override public void apply() {MRecipes.addOreProcessRecipe(toOBs(ii), toFS(fi), toSTs(io), v, t);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void removeOreProcessRecipe(IItemStack ii, ILiquidStack fi) {
+		addLateAction(new IAction() {
+			@Override public void apply() {remove(MRecipes.OreProcessRecipes, new ItemStack[] {toST(ii)}, new FluidStack[] {toFS(fi)}, true, true);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void addBioRecipe(IIngredient ii, ILiquidStack fi, IItemStack io, ILiquidStack fo, int v, int t) {
+		addLateAction(new IAction() {
+			@Override public void apply() {MRecipes.addBioRecipe(toOB(ii), toFS(fi), toST(io), toFS(fo), v, t);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void removeBioRecipe(IItemStack ii, ILiquidStack fi) {
+		addLateAction(new IAction() {
+			@Override public void apply() {remove(MRecipes.BioRecipes, new ItemStack[] {toST(ii)}, new FluidStack[] {toFS(fi)}, true, true);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
 	public static void addFertilizer(IItemStack i) {
 		addLateAction(new IAction() {
 			@Override public void apply() {MRecipes.addFertilizer(toST(i));}

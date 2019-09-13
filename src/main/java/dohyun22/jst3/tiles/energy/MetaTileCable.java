@@ -2,7 +2,6 @@ package dohyun22.jst3.tiles.energy;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -489,19 +488,21 @@ public class MetaTileCable extends MetaTileEnergyInput {
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getDrops() {
+	public void getDrops(ArrayList<ItemStack> ls) {
 		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C && ic2rep >= 0) {
 			ItemStack st = CompatIC2.getIC2Cable(ic2rep & 0xF, ic2rep >> 4);
-			if (!st.isEmpty()) return new ArrayList(Arrays.asList(new ItemStack[] {st}));
+			if (!st.isEmpty()) ls.add(st);
 		}
-		return super.getDrops();
+		super.getDrops(ls);
 	}
 	
 	@Override
 	public void getSubBlocks(int id, NonNullList<ItemStack> list) {
-		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C && ic2rep >= 0)
-			list.addAll(getDrops());
-		else
+		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C && ic2rep >= 0) {
+			ArrayList ls = new ArrayList();
+			getDrops(ls);
+			list.addAll(ls);
+		} else
 			super.getSubBlocks(id, list);
 	}
 	

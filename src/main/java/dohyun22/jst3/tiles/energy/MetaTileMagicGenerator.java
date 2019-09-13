@@ -165,7 +165,7 @@ public class MetaTileMagicGenerator extends MetaTileGenerator {
 		if (getWorld().isRemote) return;
 		ItemStack in = inv.get(0);
 		if (fuelLeft <= 0 && !in.isEmpty()) {
-			int fv = MRecipes.getMagicFuelValue(in);
+			int fv = MRecipes.getValueInMap(in, MRecipes.MagicGenFuel);
 			if (fv > 0) {
 				fuelLeft = fv;
 				fuelValue = fv;
@@ -278,7 +278,7 @@ public class MetaTileMagicGenerator extends MetaTileGenerator {
 	public boolean isItemValidForSlot(int sl, ItemStack st) {
 		if (sl == 0) {
 			Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(st);
-			return MRecipes.getMagicFuelValue(st) > 0 || (map != null && !map.isEmpty());
+			return MRecipes.getValueInMap(st, MRecipes.MagicGenFuel) > 0 || (map != null && !map.isEmpty());
 		}
 		return false;
 	}
@@ -295,15 +295,11 @@ public class MetaTileMagicGenerator extends MetaTileGenerator {
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new ContainerMagicGen(inv, te);
-		return null;
+		return new ContainerMagicGen(inv, te);
 	}
 	
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new GUIMagicGen(new ContainerMagicGen(inv, te));
-		return null;
+		return new GUIMagicGen(new ContainerMagicGen(inv, te));
 	}
 }

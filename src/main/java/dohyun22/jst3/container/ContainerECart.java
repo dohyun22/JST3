@@ -13,18 +13,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
 public class ContainerECart extends Container {
-	private final IInventory dummy;
 	private final EntityPlayer player;
 	private final EntityMinecart cart;
 	
 	public ContainerECart(EntityPlayer pl, EntityMinecart ec) {
 		player = pl;
 		cart = ec;
-		dummy = new InventoryDummy();
 		for (int n = 0; n < 5; n++)
-			addSlotToContainer(new JSTSlot(dummy, n, 8 + 18 * n, 8, false, false, 1, false));
-		addSlotToContainer(new JSTSlot(dummy, 5, 102, 8, false, false, 1, false));
-		addSlotToContainer(new JSTSlot(dummy, 6, 124, 8, false, false, 1, false));
+			addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, n, 8 + 18 * n, 8, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 5, 102, 8, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 6, 124, 8, false, false, 1, false));
 	}
 
 	@Override

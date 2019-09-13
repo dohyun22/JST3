@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ import toughasnails.api.stat.capability.IThirst;
 import toughasnails.api.thirst.ThirstHelper;
 
 public class MT_WaterPurifier extends MetaTileEnergyInput {
-	public static final String[] supported = {"water", "ic2distilled_water", "distilled_water", "saltwater", "ice", "dirtywater", "sludge", "sewage"};
+	public static final String[] supported = {"water", "ic2distilled_water", "distilled_water", "saltwater", "ice", "dirtywater", "sludge", "sewage", "mud"};
 	private MTETank tank;
 	private int watr;
 
@@ -104,12 +105,14 @@ public class MT_WaterPurifier extends MetaTileEnergyInput {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
 		if (!isClient()) {
+			if (!st.isEmpty() && pl.getHeldItem(EnumHand.MAIN_HAND) == st && FluidUtil.interactWithFluidHandler(pl, EnumHand.MAIN_HAND, tank))
+				return true;
 			if (watr >= 250) {
 				if (st.isEmpty()) {
 					if (Loader.isModLoaded("toughasnails"))

@@ -7,7 +7,8 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.client.gui.GUIRPlanner;
 import dohyun22.jst3.container.ContainerRPlanner;
-import dohyun22.jst3.items.behaviours.IB_DSD;
+import dohyun22.jst3.items.JSTItems;
+import dohyun22.jst3.items.behaviours.IB_Memory;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
@@ -133,7 +134,7 @@ public class MT_ReactorPlanner extends MetaTileBase implements IReactor {
 		}
 		this.maxOut = Math.max(prev, this.output) * 5.0F;
 		powerGenerated += (long)getReactorEUEnergyOutput() * 20;
-		if (changed) this.markDirty();
+		if (changed) markDirty();
 		
 		if (heat >= maxHeat) {
 			explode();
@@ -166,7 +167,7 @@ public class MT_ReactorPlanner extends MetaTileBase implements IReactor {
 	
 	@Override
 	public boolean canSlotDrop(int sl) {
-		return false;
+		return sl == 55;
 	}
 	
 	@Override
@@ -174,7 +175,7 @@ public class MT_ReactorPlanner extends MetaTileBase implements IReactor {
 		if (sl == 0) {
 			if (sItem > 0) {
 				try {
-					return MRecipes.NuclearItems.get(this.sItem - 1);
+					return MRecipes.NuclearItems.get(sItem - 1);
 				} catch (Exception e) {}
 			}
 			return ItemStack.EMPTY;
@@ -278,30 +279,40 @@ public class MT_ReactorPlanner extends MetaTileBase implements IReactor {
 		simspeed = (byte) MathHelper.clamp(simspeed + amt, 1, 100);
 	}
 	
-	public void saveToDSD(ItemStack st) {
-		NonNullList<ItemStack> list;
-		if (this.prevData == null) {
-			list = NonNullList.withSize(54, ItemStack.EMPTY);
+	public void saveToDSD() {
+		ItemStack s = inv.get(55);
+		if (s.getItem() != JSTItems.item1 || !(JSTItems.item1.getBehaviour(s) instanceof IB_Memory)) return;
+		boolean empty = true;
+		NonNullList<ItemStack> l;
+		if (prevData == null) {
+			l = NonNullList.withSize(54, ItemStack.EMPTY);
 			for (int n = 1; n < 55; n++)
-				list.set(n - 1, this.inv.get(n));
+				if (!inv.get(n).isEmpty()) {
+					empty = false;
+					l.set(n - 1, inv.get(n));
+				}
 		} else {
-			list = this.prevData;
+			l = prevData;
 		}
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger("h", this.prevHeat);
-		ItemStackHelper.saveAllItems(tag, list);
-		IB_DSD.setData(st, tag, "<T>jst.data.nuclear", this.prevHeat + " Heat", maxOut + " EU/t");
+		tag.setInteger("h", prevHeat);
+		ItemStackHelper.saveAllItems(tag, l);
+		IB_Memory.setData(s, tag, "<T>jst.data.nuclear", prevHeat + " Heat", maxOut + " EU/t");
+		markDirty();
 	}
 	
-	public void readFromDSD(ItemStack st) {
-		reset(true);
-		NBTTagCompound tag = IB_DSD.getData(st);
-		if (tag != null) {
-			this.heat = tag.getInteger("h");
-			NonNullList<ItemStack> list = NonNullList.withSize(54, ItemStack.EMPTY);
-			ItemStackHelper.loadAllItems(tag, list);
+	public void readFromDSD() {
+		ItemStack s = inv.get(55);
+		if (s.getItem() != JSTItems.item1 || !(JSTItems.item1.getBehaviour(s) instanceof IB_Memory)) return;
+		NBTTagCompound t = IB_Memory.getData(s);
+		if (t != null && t.hasKey("h")) {
+			heat = t.getInteger("h");
+			reset(true);
+			NonNullList<ItemStack> l = NonNullList.withSize(54, ItemStack.EMPTY);
+			ItemStackHelper.loadAllItems(t, l);
 			for (int n = 0; n < 54; n++)
-				this.inv.set(n, list.get(n));
+				inv.set(n + 1, l.get(n));
+			markDirty();
 		}
 	}
 
@@ -400,8 +411,8 @@ public class MT_ReactorPlanner extends MetaTileBase implements IReactor {
 	@Method(modid = "ic2")
 	public void setItemAt(int x, int y, ItemStack st) {
 		if (st == null) st = ItemStack.EMPTY;
-		this.inv.set(1 + x + y * 9, st);
-		this.changed = true;
+		inv.set(1 + x + y * 9, st);
+		changed = true;
 	}
 
 	@Override

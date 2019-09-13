@@ -8,16 +8,18 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.api.recipe.RecipeList;
-import dohyun22.jst3.client.gui.GUIAssembler;
-import dohyun22.jst3.container.ContainerAssembler;
+import dohyun22.jst3.client.gui.GUIGeneric;
+import dohyun22.jst3.container.BatterySlot;
+import dohyun22.jst3.container.ContainerGeneric;
+import dohyun22.jst3.container.JSTSlot;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -26,12 +28,13 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_Assembler extends MT_MachineGeneric {
+public class MT_Assembler extends MT_MachineProcess {
 
 	private boolean forced;
 
 	public MT_Assembler(int tier) {
-		super(tier, 9, 2, 1, 0, 16000, MRecipes.AssemblerRecipes, false, false);
+		super(tier, 9, 2, 1, 0, 16000, MRecipes.AssemblerRecipes, false, false, "assembler", null);
+		setSfx(JSTSounds.SWITCH2, 0.6F, 1.0F);
 	}
 
 	@Override
@@ -40,42 +43,31 @@ public class MT_Assembler extends MT_MachineGeneric {
 	}
 
 	@Override
-	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		return new ContainerAssembler(inv, te);
-	}
-
-	@Override
-	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		return new GUIAssembler(new ContainerAssembler(inv, te));
-	}
-
-	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote)
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-		return true;
+	protected void addSlot(ContainerGeneric cg, InventoryPlayer inv, TileEntityMeta te) {
+		for (int x = 0; x < 3; x++)
+			for (int y = 0; y < 3; y++)
+				cg.addSlot(new Slot(te, y + x * 3, 44 + y * 18, 7 + x * 18));
+		cg.addSlot(new JSTSlot(te, 9, 130, 25, false, true, 64, true));
+		cg.addSlot(new JSTSlot(te, 10, 148, 25, false, true, 64, true));
+		cg.addSlot(new JSTSlot(te, 11, 62, 63, false, true, 64, false));
+		cg.addSlot(new BatterySlot(te, 12, 8, 53, false, true));
+		cg.addPlayerSlots(inv);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite t = getTieredTex(tier);
-		return new TextureAtlasSprite[] { t, t, t, t, t, getTETex("assembler") };
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getTexture() {
-		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
-		for (byte n = 0; n < ret.length; n++)
-			ret[n] = this.baseTile.facing == JSTUtils.getFacingFromNum(n) ? getTETex("assembler" + (this.baseTile.isActive() ? "" : "_off")) : getTieredTex(tier);
-		return ret;
-	}
-	
-	@Override
-	protected void onStartWork() {
-		getWorld().playSound(null, getPos(), JSTSounds.SWITCH2, SoundCategory.BLOCKS, 0.6F, 0.8F + getWorld().rand.nextFloat() * 0.6F);
+	protected void addComp(GUIGeneric gg) {
+		for (int x = 0; x < 3; x++)
+			for (int y = 0; y < 3; y++)
+				gg.addSlot(44 + y * 18, 7 + x * 18, 0);
+		gg.addSlot(130, 25, 0);
+		gg.addSlot(148, 25, 0);
+		gg.addSlot(62, 63, 3);
+		gg.addPrg(101, 25, JustServerTweak.MODID + ".assembler");
+		gg.addSlot(8, 53, 2);
+		gg.addPwr(12, 31);
+		gg.addButton(128, 50, 20, 20, 1, "->", false);
+		gg.addHoverText(128, 50, 20, 20, "jst.msg.com.build");
 	}
 	
 	@Override
@@ -108,11 +100,6 @@ public class MT_Assembler extends MT_MachineGeneric {
 	protected boolean isInputSlot(int sl) {
 		if (!super.isInputSlot(sl)) return false;
 		return !inv.get(sl).isEmpty();
-	}
-	
-	public void forceWork() {
-		if (!forced && baseTile != null && !baseTile.isActive())
-			forced = true;
 	}
 	
 	private static boolean isEnough(ItemStack in, Object rec) {
@@ -158,5 +145,11 @@ public class MT_Assembler extends MT_MachineGeneric {
                 }
             }
         }
+	}
+
+	@Override
+	public void handleBtn(int id) {
+		if (!forced && baseTile != null && !baseTile.isActive())
+			forced = true;
 	}
 }

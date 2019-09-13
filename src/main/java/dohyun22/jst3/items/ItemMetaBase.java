@@ -92,5 +92,13 @@ public class ItemMetaBase extends Item {
     
     public void addFuelValue(int m, int v) {
     	fuelValues.put(m, v);
-    } 
+    }
+
+    public ItemStack get(int m) {
+    	return get(m, 1);
+    }
+
+    public ItemStack get(int q, int m) {
+    	return new ItemStack(this, q, m);
+    }
 }

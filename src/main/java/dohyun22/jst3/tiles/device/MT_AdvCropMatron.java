@@ -233,12 +233,12 @@ public class MT_AdvCropMatron extends MetaTileEnergyInput implements IGenericGUI
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
 		ContainerGeneric ret = new ContainerGeneric(inv, te);
-		ret.addSlot(new JSTSlot(te, 0, 128, 35, false, false, 64, false));
-		ret.addSlot(new JSTSlot(te, 1, 152, 35, false, false, 64, false));
+		ret.addSlot(JSTSlot.fl(te, 0, 128, 35));
+		ret.addSlot(JSTSlot.fl(te, 1, 152, 35));
 		ret.addSlot(new JSTSlot(te, 2, 128, 11).setPredicate(new FluidItemPredicate("water")));
-		ret.addSlot(new JSTSlot(te, 3, 128, 59, false, true, 64, true));
+		ret.addSlot(JSTSlot.out(te, 3, 128, 59));
 		ret.addSlot(new JSTSlot(te, 4, 152, 11).setPredicate(new FluidItemPredicate("ic2weed_ex")));
-		ret.addSlot(new JSTSlot(te, 5, 152, 59, false, true, 64, true));
+		ret.addSlot(JSTSlot.out(te, 5, 152, 59));
 		ret.addSlot(new BatterySlot(te, 6, 8, 53, false, true));
 		Predicate p = new Predicate<ItemStack>() {
 			@Override

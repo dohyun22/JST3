@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 public abstract class EntityCar extends Entity {
 	private static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityCar.class, DataSerializers.FLOAT);
 	private static final DataParameter<Integer> ENERGY = EntityDataManager.createKey(EntityCar.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> WATER = EntityDataManager.createKey(EntityCar.class, DataSerializers.BOOLEAN);
 
 	public EntityCar(World w) {
 		super(w);
@@ -67,6 +68,7 @@ public abstract class EntityCar extends Entity {
 	protected void entityInit() {
 		dataManager.register(DAMAGE, 0.0F);
 		dataManager.register(ENERGY, 0);
+		dataManager.register(WATER, false);
 	}
 
 	@Override
@@ -99,14 +101,23 @@ public abstract class EntityCar extends Entity {
 		}
 		setPositionNonDirty();
 		super.onUpdate();
-		if (!hasNoGravity()) motionY -= 0.25D;
+		if (!hasNoGravity()) {
+			if (canWorkOnWater() && inWater) {
+				Material m = world.getBlockState(getPosition()).getMaterial();
+				if (m != Material.AIR || collidedHorizontally) {
+					motionY += 0.22D;
+				} else
+					motionY = Math.copySign(Math.max(0, Math.abs(motionY) - 0.025D), motionY);
+			} else
+				motionY -= 0.2D;
+		}
 		update();
 	    move(MoverType.SELF, motionX, motionY, motionZ);
 	}
 
 	@Override
     public boolean shouldDismountInWater(Entity e) {
-    	return true;
+    	return !canWorkOnWater();
     }
 
 	@Override
@@ -123,7 +134,7 @@ public abstract class EntityCar extends Entity {
     	motionX *= 0.8D;
     	motionZ *= 0.8D;
     	if (eu >= u * 2) {
-    		if (!inWater && e instanceof EntityLivingBase && ((EntityLivingBase)e).moveForward > 0) {
+    		if ((canWorkOnWater() || !inWater) && e instanceof EntityLivingBase && ((EntityLivingBase)e).moveForward > 0) {
     			onRunning();
     			double s = getSpeed();
     			motionX = MathHelper.sin(-e.rotationYaw * 0.017453292F) * s;
@@ -157,11 +168,13 @@ public abstract class EntityCar extends Entity {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		setEnergy(nbt.getInteger("engy"));
+		setWorkOnWater(nbt.getBoolean("watr"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("engy", getEnergy());
+		nbt.setBoolean("watr", canWorkOnWater());
 	}
 
 	public float getDamage() {
@@ -180,6 +193,14 @@ public abstract class EntityCar extends Entity {
 		dataManager.set(ENERGY, f);
 	}
 
+	public boolean canWorkOnWater() {
+		return dataManager.get(WATER);
+	}
+
+	public void setWorkOnWater(boolean f) {
+		dataManager.set(WATER, f);
+	}
+
 	protected double getSpeed() {
 		IBlockState bs = world.getBlockState(getPosition().down());
 		String n = JSTUtils.getRegName(bs);
@@ -187,7 +208,7 @@ public abstract class EntityCar extends Entity {
 		if ((sa.length == 2 && (sa[1].contains("asphalt") || sa[1].contains("concrete"))) || n.equals("immersivepetroleum:stone_decoration"))
 			return 0.7D;
 		Material m = bs.getMaterial();
-		if (m == Material.ROCK || m == Material.IRON) return 0.5D;
+		if (m == Material.ROCK || m == Material.IRON || m == Material.WATER) return 0.5D;
 		return 0.45D;
 	}
 }

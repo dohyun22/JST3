@@ -11,8 +11,8 @@ public class ContainerFluidPort extends ContainerMTE {
 		super(te);
 		
 		addSlotToContainer(new Slot(te, 0, 107, 22));
-		addSlotToContainer(new JSTSlot(te, 1, 107, 48, false, true, 64, true));
-		addSlotToContainer(new JSTSlot(te, 2, 53, 35, false, false, 64, false));
+		addSlotToContainer(JSTSlot.out(te, 1, 107, 48));
+		addSlotToContainer(JSTSlot.fl(te, 2, 53, 35));
 		addPlayerInventorySlots(inv, 8, 84);
 	}
 }

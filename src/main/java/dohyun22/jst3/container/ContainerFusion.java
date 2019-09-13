@@ -28,7 +28,7 @@ public class ContainerFusion extends ContainerMTE {
 		addSlotToContainer(new Slot(te, 4, 44, 94));
 		addSlotToContainer(new Slot(te, 5, 62, 94));
 		
-		addSlotToContainer(new JSTSlot(new InventoryDummy(), 0, 152, 26, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 152, 26, false, false, 1, false));
 		
 		addPlayerInventorySlots(inv, 8, 116);
 	}
@@ -36,36 +36,35 @@ public class ContainerFusion extends ContainerMTE {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		if (this.te.getWorld().isRemote || !(te.mte instanceof MT_Fusion)) {
+		if (te.getWorld().isRemote || !(te.mte instanceof MT_Fusion))
 			return;
-		}
 
 		MT_Fusion r = (MT_Fusion) te.mte;
 
-		for (int i = 0; i < this.listeners.size(); ++i) {
-			IContainerListener icl = (IContainerListener) this.listeners.get(i);
+		for (int i = 0; i < listeners.size(); ++i) {
+			IContainerListener icl = (IContainerListener) listeners.get(i);
 			
-			if (this.energy != r.baseTile.energy)
-				splitLongAndSend(icl, this, 50, r.baseTile.energy);
+			if (energy != r.baseTile.energy)
+				splitLongAndSend(icl, this, 1, r.baseTile.energy);
 			
-			if (this.mxenergy != r.getMaxEnergy())
-				splitLongAndSend(icl, this, 54, r.getMaxEnergy());
+			if (mxenergy != r.getMaxEnergy())
+				splitLongAndSend(icl, this, 2, r.getMaxEnergy());
 			
-			if (this.complete != r.isComplete())
+			if (complete != r.isComplete())
 				icl.sendWindowProperty(this, 58, r.isComplete() ? 1 : 0);
 			
-			if (this.rfDisp != r.displayRF)
+			if (rfDisp != r.displayRF)
 				icl.sendWindowProperty(this, 59, r.displayRF ? 1 : 0);
 			
-			if (this.state != r.getState())
+			if (state != r.getState())
 				icl.sendWindowProperty(this, 60, r.getState());
 		}
 
-		this.energy = r.baseTile.energy;
-		this.mxenergy = r.getMaxEnergy();
-		this.complete = r.isComplete();
-		this.rfDisp = r.displayRF;
-		this.state = r.getState();
+		energy = r.baseTile.energy;
+		mxenergy = r.getMaxEnergy();
+		complete = r.isComplete();
+		rfDisp = r.displayRF;
+		state = r.getState();
 	}
 	
 	@Override
@@ -80,10 +79,10 @@ public class ContainerFusion extends ContainerMTE {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		super.updateProgressBar(id, data);
-		this.energy = getLongFromData(this.energy, 50, id, data);
-		this.mxenergy = getLongFromData(this.mxenergy, 54, id, data);
-		if (id == 58) this.complete = data != 0;
-		if (id == 59) this.rfDisp = data == 1;
-		if (id == 60) this.state = (byte)data;
+		energy = getLongFromData(energy, 50, id, data);
+		mxenergy = getLongFromData(mxenergy, 54, id, data);
+		if (id == 58) complete = data != 0;
+		if (id == 59) rfDisp = data == 1;
+		if (id == 60) state = (byte)data;
 	}
 }

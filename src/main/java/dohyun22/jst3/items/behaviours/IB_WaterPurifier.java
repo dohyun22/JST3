@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -74,13 +75,13 @@ public class IB_WaterPurifier extends ItemBehaviour {
 					IThirst td = ThirstHelper.getThirstData((EntityPlayer)e);
 					int ct = td.getThirst();
 					if (ct < 20) {
-						int r = 20 - ct;
-						if (fs.amount >= r * 30) {
+						int r = 20 - ct, amt = r * 50 + 250;
+						if (fs.amount >= amt) {
 							td.setThirst(20);
 							td.setHydration(10.0f);
 							td.setExhaustion(0.0f);
-							setEnergy(st, getEnergy(st) - r * 5);
-							st.getTagCompound().getCompoundTag("Fluid").setInteger("Amount", Math.max(0, fs.amount - r * 30));
+							useEnergy(st, r * 5, false);
+							FluidUtil.getFluidHandler(st).drain(fs.amount - amt, true);
 						}
 					}
 				} catch (Throwable t) {}
@@ -116,7 +117,7 @@ public class IB_WaterPurifier extends ItemBehaviour {
 	@Override
 	public void getSubItems(ItemStack st, List<ItemStack> sub) {
 		sub.add(st.copy());
-		setEnergy(st, this.maxEnergy);
+		setEnergy(st, maxEnergy);
 		JSTUtils.getOrCreateNBT(st).setInteger("watr", 16000);
 		sub.add(st);
 	}

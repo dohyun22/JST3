@@ -2,7 +2,7 @@ package dohyun22.jst3.entity;
 
 import java.util.Random;
 
-import dohyun22.jst3.evhandler.EvHandler;
+import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
@@ -56,7 +56,7 @@ public class EntityPrimedOre extends Entity {
 	
 	@Override
 	public void onUpdate() {
-		if(!EvHandler.NetherOreList.contains(world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock())) {
+		if(!EffectBlocks.netherOres.contains(world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock())) {
 			setDead();
 			return;
 		}
@@ -84,7 +84,7 @@ public class EntityPrimedOre extends Entity {
 					int bz = z + zd;
 					BlockPos pos = new BlockPos(bx, by, bz);
 					Block bl = this.world.getBlockState(pos).getBlock();
-					if ((bl != null && EvHandler.NetherOreList.contains(bl)) || (this.world.getTileEntity(pos) == null && bl.getExplosionResistance(this) <= 0.5F)) {
+					if ((bl != null && EffectBlocks.netherOres.contains(bl)) || (this.world.getTileEntity(pos) == null && bl.getExplosionResistance(this) <= 0.5F)) {
 						int a_8 = this.world.rand.nextInt(3);
 						switch (a_8) {
 						case 0: {

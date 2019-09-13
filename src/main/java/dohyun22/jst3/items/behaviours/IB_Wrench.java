@@ -171,9 +171,9 @@ public class IB_Wrench extends IB_Damageable {
 	@Override
 	public boolean onBlockDestroyed(ItemStack st, World w, IBlockState bs, BlockPos p, EntityLivingBase el) {
 		if ((double) bs.getBlockHardness(w, p) != 0.0D) {
-			this.doDamage(st, el);
+			doDamage(st, el);
 			String tool = bs.getBlock().getHarvestTool(bs);
-			if (this.canHarvestBlock(bs, st))
+			if (canHarvestBlock(bs, st))
 				playWrenchSound(el);
 		}
 		return true;
@@ -239,7 +239,7 @@ public class IB_Wrench extends IB_Damageable {
 	}
 	
 	@Override
-	public boolean isWrench() {
+	public boolean isWrench(ItemStack st) {
 		return true;
 	}
 	

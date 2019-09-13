@@ -4,6 +4,7 @@ import dohyun22.jst3.compat.ic2.CompatIC2;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.api.recipe.AdvRecipeItem;
 import dohyun22.jst3.api.recipe.OreDictStack;
+import dohyun22.jst3.recipes.ItemList;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.item.ItemStack;
@@ -73,7 +74,7 @@ public class OreDictRecipeAdder extends Loadable {
 			if (!JSTUtils.oreValid(ods))
 				ods = new OreDictStack("gem" + name);
 			if (JSTUtils.oreValid(ods))
-				MRecipes.addPressRecipe(ods, new AdvRecipeItem(JSTItems.item1, 0, 162), JSTUtils.getFirstItem("stick" + name, 2), null, 10, 64);
+				MRecipes.addPressRecipe(ods, ItemList.molds[2], JSTUtils.getFirstItem("stick" + name, 2), null, 10, 64);
 			return;
 		default:
 			return;
@@ -87,12 +88,12 @@ public class OreDictRecipeAdder extends Loadable {
 		    ItemStack ret = mode == 0 ? crushed.isEmpty() ? gem.isEmpty() ? dust : gem : crushed : dust;
 	    	ret = ret.copy();
 	    	ret.setCount(mult);
-	    	if (JSTCfg.ic2Loaded) CompatIC2.addMacRec(new OreDictStack(str), ret);
+	    	if (JSTCfg.ic2Loaded) CompatIC2.addGrindRec(new OreDictStack(str), ret);
 	    	if (mode == 1) {
 	    		ItemStack pl = JSTUtils.getFirstItem("plate" + name);
 	    		if (!pl.isEmpty()) {
 	    			OreDictStack ods = new OreDictStack(str);
-	    			MRecipes.addPressRecipe(ods, new AdvRecipeItem(JSTItems.item1, 0, 161), pl, null, 10, 64);
+	    			MRecipes.addPressRecipe(ods, ItemList.molds[1], pl, null, 10, 64);
 	    			if (JSTCfg.ic2Loaded) CompatIC2.addFormerRecipe(ods, pl, 2);
 	    		}
 	    	}

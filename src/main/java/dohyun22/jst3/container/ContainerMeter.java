@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerMeter extends ContainerMTE {
-	private final IInventory dummy;
 	public long sum;
 	public double avg;
 	private long avgL;
@@ -23,11 +22,8 @@ public class ContainerMeter extends ContainerMTE {
 
 	public ContainerMeter(IInventory inv, TileEntityMeta te) {
 		super(te);
-		
-		this.dummy = new InventoryDummy();
-		addSlotToContainer(new JSTSlot(this.dummy, 0, 152, 10, false, false, 1, false));
-		addSlotToContainer(new JSTSlot(this.dummy, 1, 152, 32, false, false, 1, false));
-		
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 152, 10, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 1, 152, 32, false, false, 1, false));
 		addPlayerInventorySlots(inv, 8, 84);
 	}
 

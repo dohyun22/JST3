@@ -8,6 +8,10 @@ import net.minecraft.util.text.TextComponentString;
 
 /** Dummy Inventory. can be used for deleting Items.*/
 public class InventoryDummy implements IInventory {
+	public static final InventoryDummy INSTANCE = new InventoryDummy();
+	
+	private InventoryDummy() {}
+	
 	@Override
 	public int getSizeInventory() {
 		return 1;

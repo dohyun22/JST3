@@ -200,8 +200,10 @@ public class IB_Scanner extends ItemBehaviour {
 			t.printStackTrace();
 		}
 		
-		if (err) addTranslation(list, "jst.msg.scan.error");
-		
+		if (err) {
+			addTranslation(list, "jst.msg.com.error");
+			return 0;
+		}
 		return eu;
 	}
 

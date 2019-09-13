@@ -3,7 +3,9 @@ package dohyun22.jst3.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
 
@@ -12,8 +14,11 @@ import dohyun22.jst3.compat.jei.JEISupport;
 import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTUtils;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional.Method;
@@ -24,27 +29,32 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GUIGeneric extends GUIBase {
 	protected static final ResourceLocation gui = new ResourceLocation(JustServerTweak.MODID, "textures/gui/modular.png");
 	protected final List<GUIComponent> components = new ArrayList();
-	
+	protected HashMap<GuiButton, int[]> btn = new HashMap();
+
 	public GUIGeneric(ContainerGeneric c) {
 		super(c);
 	}
-	
+
 	public void addComp(GUIComponent gc) {
 		components.add(gc);
 	}
-	
+
 	public void addSlot(int x, int y, int type) {
 		components.add(new ComponentSlot(x, y, type));
 	}
-	
+
+	public void addSlot(Slot s, int type) {
+		addSlot(s.xPos, s.yPos, type);
+	}
+
 	public void addPrg(int x, int y, String... jei) {
 		components.add(new ComponentPrgBar(x, y, jei));
 	}
-	
+
 	public void addPwr(int x, int y) {
 		components.add(new ComponentPwrBar(x, y));
 	}
-	
+
 	public void addPwr2(int x, int y) {
 		components.add(new ComponentPwrBar2(x, y));
 	}
@@ -55,6 +65,24 @@ public class GUIGeneric extends GUIBase {
 
 	public void addJEI(int x, int y, String... jei) {
 		if (Loader.isModLoaded("jei")) components.add(new ComponentJEIButton(x, y, jei));
+	}
+
+	public void addButton(int x, int y, int w, int h, int id, String t, boolean f) {
+		btn.put(new GuiButton(id, x, y, w, h, f ? I18n.format(t) : t), new int[] {x, y});
+	}
+
+	public void addHoverText(int x, int y, int w, int h, String t) {
+		components.add(new ComponentHoverText(x, y, w, h, t));
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+		for (Entry<GuiButton, int[]> e : btn.entrySet()) {
+			GuiButton b = e.getKey();
+			b.x = e.getValue()[0] + (width - xSize) / 2; b.y = e.getValue()[1] + (height - ySize) / 2;
+			buttonList.add(b);
+		}
 	}
 
 	@Override
@@ -85,6 +113,11 @@ public class GUIGeneric extends GUIBase {
 	protected void mouseClicked(int mX, int mY, int b) throws IOException {
 		for (GUIComponent c : components) if (c.onClick(this, mX, mY, b)) return;
 		super.mouseClicked(mX, mY, b);
+	}
+
+	@Override
+	protected void actionPerformed(GuiButton gb) throws IOException {
+		handleMouseClick(null, 1000 + gb.id, 0, ClickType.QUICK_CRAFT);
 	}
 	
 	public static class GUIComponent {
@@ -239,11 +272,29 @@ public class GUIGeneric extends GUIBase {
 
 		@Override
 		public boolean onClick(GUIGeneric g, int mX, int mY, int b) {
-			if (b == 0 && g.isPointInRegion(_X, _Y, 24, 17, mX, mY) && jei != null && jei.length > 0) {
+			if (b == 0 && g.isPointInRegion(_X, _Y, 17, 17, mX, mY) && jei != null && jei.length > 0) {
 				JEISupport.loadJEI(Arrays.asList(jei));
 				return true;
 			}
 			return false;
+		}
+	}
+
+	public static class ComponentHoverText extends GUIComponent {
+		private final int w, h;
+		private final String s;
+
+		public ComponentHoverText(int x, int y, int w, int h, String s) {
+			super(x, y);
+			this.w = w;
+			this.h = h;
+			this.s = I18n.format(s);
+		}
+
+		@Override
+		public void onHover(GUIGeneric g, int mX, int mY) {
+			if (g.isPointInRegion(_X + 1, _Y + 1, w - 1, h - 1, mX, mY))
+				g.drawHoveringText(s, mX, mY);
 		}
 	}
 }

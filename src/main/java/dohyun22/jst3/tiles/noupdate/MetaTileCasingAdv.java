@@ -33,16 +33,15 @@ public class MetaTileCasingAdv extends MetaTileCasing {
 	}
 	
 	@Nonnull
-	public ArrayList<ItemStack> getDrops() {
-		if (this.drop != null) {
-			ArrayList<ItemStack> ret = new ArrayList();
+	public void getDrops(ArrayList<ItemStack> ls) {
+		if (drop != null) {
 			for (ItemStack st : drop) {
 				if (st == null || st.isEmpty()) continue;
-				ret.add(st);
+				ls.add(st);
 			}
-			return ret;
+			return;
 		}
-		return super.getDrops();
+		super.getDrops(ls);
 	}
 	
 	@Override

@@ -47,11 +47,18 @@ public class JSTSlot extends Slot {
 		this.predicate = p;
 		return this;
 	}
-	
+
+	public static JSTSlot out(IInventory inv, int i, int x, int y) {
+		return new JSTSlot(inv, i, x, y, false, false, 64, true, true);
+	}
+
+	public static JSTSlot fl(IInventory inv, int i, int x, int y) {
+		return new JSTSlot(inv, i, x, y, false, false, 64, false, true);
+	}
 	
 	@Override
 	public boolean isItemValid(ItemStack st) {
-		if (!this.cii) return false;
+		if (!cii) return false;
 		if (predicate != null) return predicate.apply(st);
 		return true;
 	}
@@ -63,9 +70,8 @@ public class JSTSlot extends Slot {
 	  
 	@Override
 	public ItemStack decrStackSize(int par1) {
-		if (!this.csi) {
+		if (!csi)
 			return ItemStack.EMPTY;
-		}
 		return super.decrStackSize(par1);
 	}
 	  

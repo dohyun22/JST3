@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLaser extends Container {
-	private final IInventory dummy;
 	private final InventoryPlayer playerinv;
 	
 	public byte range;
@@ -25,12 +24,11 @@ public class ContainerLaser extends Container {
 	
 	public ContainerLaser(InventoryPlayer pi) {
 		this.playerinv = pi;
-		this.dummy = new InventoryDummy();
 		for (int n = 0; n < 6; n++)
-			addSlotToContainer(new JSTSlot(this.dummy, n, 35 + 18 * n, 14, false, false, 1, false));
+			addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, n, 35 + 18 * n, 14, false, false, 1, false));
 		
-		addSlotToContainer(new JSTSlot(this.dummy, 6, 71, 34, false, false, 1, false));
-		addSlotToContainer(new JSTSlot(this.dummy, 7, 89, 34, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 6, 71, 34, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 7, 89, 34, false, false, 1, false));
 	}
 
 	@Override

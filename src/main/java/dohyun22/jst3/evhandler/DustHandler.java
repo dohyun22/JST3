@@ -13,6 +13,7 @@ import dohyun22.jst3.api.FineDustCapability;
 import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTPotions;
 import dohyun22.jst3.utils.JSTUtils;
@@ -64,8 +65,7 @@ public class DustHandler {
 		}
 		
 		for (String s : JSTCfg.fineDustTEs) {
-			if (s.startsWith("#") || s.equals(""))
-				continue;
+			if (s.startsWith("#") || s.isEmpty()) continue;
 			String[] arr = s.split(";");
 			if (arr.length != 3) {
 				JSTUtils.LOG.error("Invalid arguments: " + s);
@@ -89,6 +89,27 @@ public class DustHandler {
 			TEs.put(c, new Object[] {Integer.valueOf(p), tags});
 		}
 		JSTCfg.fineDustTEs = null;
+
+		if (JSTCfg.fineDustBlocks == null) return;
+		for (String s : JSTCfg.fineDustBlocks) {
+			if (s.startsWith("#") || s.isEmpty()) continue;
+			String[] arr = s.split(";");
+			if (arr.length != 3) {
+				JSTUtils.LOG.error("Invalid arguments: " + s);
+				continue;
+			}
+			try {
+				Block b = JSTUtils.getModBlock(arr[0]);
+				int bm = Integer.parseInt(arr[1]);
+				int ng = Integer.parseInt(arr[2]);
+				EffectBlocks.addDustBlock(b, bm, ng);
+			} catch (NumberFormatException e) {
+				JSTUtils.LOG.error("Invalid arguments: " + s);
+				continue;
+			}
+			JSTUtils.LOG.info("Added: " + s);
+		}
+		JSTCfg.fineDustBlocks = null;
 	}
 
 	public static void update(World w, long t) {

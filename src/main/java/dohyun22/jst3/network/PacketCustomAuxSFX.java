@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -28,17 +29,17 @@ public class PacketCustomAuxSFX implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf bb) {
-		bb.writeLong(xyz);
-		bb.writeByte(id);
-		bb.writeLong(data);
+	public void toBytes(ByteBuf b) {
+		b.writeLong(xyz);
+		b.writeByte(id);
+		b.writeLong(data);
 	}
 
 	@Override
-	public void fromBytes(ByteBuf bb) {
-		xyz = bb.readLong();
-		id = bb.readByte();
-		data = bb.readLong();
+	public void fromBytes(ByteBuf b) {
+		xyz = b.readLong();
+		id = b.readByte();
+		data = b.readLong();
 	}
 
 	public static class Handler implements IMessageHandler<PacketCustomAuxSFX, IMessage> {
@@ -79,7 +80,15 @@ public class PacketCustomAuxSFX implements IMessage {
 					break;
 				}
 				case 3:
-					w.spawnParticle(EnumParticleTypes.REDSTONE, true, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 0.0D, 0.0D, 0.0D); break;
+					int cx = (p.getX() >> 4) * 16, cz = (p.getZ() >> 4) * 16;
+					MutableBlockPos p2 = new MutableBlockPos();
+					for (int x = 0; x < 16; x++)
+						for (int z = 0; z < 16; z++)
+							if (x == 0 || x == 15 || z == 0 || z == 15) {
+								p2.setPos(cx + x, p.getY(), cz + z);
+								w.spawnParticle(EnumParticleTypes.REDSTONE, true, p2.getX() + 0.5, p2.getY() + 0.5, p2.getZ() + 0.5, 0.0D, 0.0D, 0.0D);
+							}
+					break;
 				}
 			} catch (Throwable t) {}
 		}

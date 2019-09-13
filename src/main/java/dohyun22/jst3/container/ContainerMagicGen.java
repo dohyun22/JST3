@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerMagicGen extends ContainerMTE {
-	private final IInventory dummy;
 	public long energy;
 	public long mxenergy;
 	public int fuelpower;
@@ -21,13 +20,12 @@ public class ContainerMagicGen extends ContainerMTE {
 
 	public ContainerMagicGen(IInventory inv, TileEntityMeta te) {
 		super(te);
-		
-		this.dummy = new InventoryDummy();
+
 		addSlotToContainer(new Slot(te, 0, 15, 11));
 		addSlotToContainer(new JSTSlot(te, 1, 15, 54, false, true, 64, true));
 		addSlotToContainer(new BatterySlot(te, 2, 63, 11, true, false));
 		
-		addSlotToContainer(new JSTSlot(this.dummy, 0, 152, 8, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 152, 8, false, false, 1, false));
 		
 		addPlayerInventorySlots(inv, 8, 84);
 	}

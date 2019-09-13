@@ -42,9 +42,9 @@ public class MT_Pump extends MT_Machine {
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		MT_Pump ret = new MT_Pump(tier);
-		tank = new MTETank(32000, true, false, ret, 2);
-		return ret;
+		MT_Pump r = new MT_Pump(tier);
+		r.tank = new MTETank(12000 + tier * 4000, true, false, r, 2);
+		return r;
 	}
 	
 	@Override

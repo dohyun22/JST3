@@ -103,7 +103,7 @@ public class MetaTileTransformer extends MetaTileEnergyInput implements IScrewDr
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
 		if (this.baseTile == null) return;
-		baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override

@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import dohyun22.jst3.api.recipe.IRecipeItem;
-import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -36,7 +34,7 @@ public class OreDictStack implements IRecipeItem {
 	@Override
 	public boolean equals(Object in) {
 		if (!(in instanceof OreDictStack)) return false;
-		return this.count == ((OreDictStack)in).count && this.name.equals(in);
+		return count == ((OreDictStack)in).count && name.equals(in);
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class OreDictStack implements IRecipeItem {
 	
 	@Override
 	public boolean isValid() {
-		return count > 0 && JSTUtils.oreValid(this);
+		return count > 0 && !OreDictionary.getOres(name).isEmpty();
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -189,7 +190,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	}
 	
 	protected int getEnergyUse() {
-		return this.energyUse;
+		return energyUse;
 	}
 	
 	protected int getSpeed() {
@@ -296,11 +297,10 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 
 	@Override
 	@Nonnull
-	public ArrayList<ItemStack> getDrops() {
-		ArrayList<ItemStack> ret = super.getDrops();
+	public void getDrops(ArrayList<ItemStack> ls) {
+		super.getDrops(ls);
 		if (upgradeCircuit != null && !upgradeCircuit.isEmpty())
-			ret.add(upgradeCircuit);
-	    return ret;
+			ls.add(upgradeCircuit);
 	}
 
 	protected boolean tryUpg(EntityPlayer pl, ItemStack st) {
@@ -353,13 +353,13 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 		return false;
 	}
 
-	protected void sendItem() {
-		if (itemOut != null)
+	protected void sendItem(ItemStack... out) {
+		if (out != null)
 			for (MT_ItemPort iop : getItemPorts(true)) {
 				if (!JSTUtils.checkInventoryFull(iop.baseTile, null)) {
-					for (int n = 0; n < itemOut.length; n++) {
-						if (itemOut[n] != null && !itemOut[n].isEmpty()) {
-							ItemStack st = JSTUtils.sendStackToInv(iop.baseTile, itemOut[n].copy(), null);
+					for (int n = 0; n < out.length; n++) {
+						if (out[n] != null && !out[n].isEmpty()) {
+							ItemStack st = JSTUtils.sendStackToInv(iop.baseTile, out[n].copy(), null);
 							if (st.isEmpty())
 								iop.markDirty();
 						}
@@ -368,17 +368,25 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 				}
 			}
 	}
+	
+	protected void sendItem() {
+		sendItem(itemOut);
+	}
 
-	protected void sendFluid() {
-		if (fluidOut != null) {
-			boolean[] arr = new boolean[fluidOut.length];
+	protected void sendFluid(FluidStack... out) {
+		if (out != null) {
+			boolean[] arr = new boolean[out.length];
 			for (MT_FluidPort fop : getFluidPorts(true))
-				for (int n = 0; n < fluidOut.length; n++)
-					if (!arr[n] && fop.tank.fill(fluidOut[n], true) > 0) {
+				for (int n = 0; n < out.length; n++)
+					if (!arr[n] && fop.tank.fill(out[n], true) > 0) {
 						arr[n] = true;
 						break;
 					}
 		}
+	}
+
+	protected void sendFluid() {
+		sendFluid(fluidOut);
 	}
 	
 	@Override
@@ -496,6 +504,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	/** @param p Location of the Port
 	 * @param mode 1=EnergyIN, 2=EnergyOUT, 4=ItemIN, 8=ItemOUT, 16=FluidIN, 32=FluidOUT flags can be added together (i.e using 12 to allow Item Input and Output) */
 	protected boolean getAndAddPort(BlockPos p, int mode, String tex) {
+		if (p instanceof MutableBlockPos) p = ((MutableBlockPos)p).toImmutable();
 		MetaTileBase mte = MetaTileBase.getMTE(getWorld(), p);
 		if (mte instanceof IMultiBlockPart && tex != null)
 			((IMultiBlockPart)mte).setTexture(tex);

@@ -7,11 +7,13 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.recipe.RecipeContainer;
-import dohyun22.jst3.client.gui.GUIAlloyFurnace;
-import dohyun22.jst3.container.ContainerAlloyFurnace;
+import dohyun22.jst3.client.gui.GUIGeneric;
+import dohyun22.jst3.container.ContainerGeneric;
+import dohyun22.jst3.container.JSTSlot;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -25,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,15 +43,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileAlloyFurnace extends MetaTileBase {
+public class MetaTileAlloyFurnace extends MetaTileBase implements IGenericGUIMTE {
     private static final int[] SLOTS_TOP = new int[] {0, 1};
     private static final int[] SLOTS_BOTTOM = new int[] {3};
     private static final int[] SLOTS_SIDES = new int[] {3, 2};
-	
-    public int burnTime;
-    public int currentBurnTime;
-    public int cookTime;
-    public int totalCookTime;
+    private int burnTime, currentBurnTime, cookTime, totalCookTime;
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
@@ -57,13 +56,14 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
-		return new TextureAtlasSprite[] {getTex("minecraft:blocks/furnace_top"), getTex("minecraft:blocks/furnace_top"), getTex("minecraft:blocks/furnace_side"), getTex("minecraft:blocks/furnace_side"), getTex("minecraft:blocks/furnace_side"), getTETex("alloy")};
+		TextureAtlasSprite t = getTex("minecraft:blocks/furnace_top"), s = getTex("minecraft:blocks/furnace_side");
+		return new TextureAtlasSprite[] {t, t, s, s, s, getTETex("alloy")};
 	}
 	
 	@Override
@@ -212,16 +212,25 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
     
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new ContainerAlloyFurnace(inv, te);
-		return null;
+		ContainerGeneric r = new ContainerGeneric(inv, te);
+		r.addSlot(new Slot(te, 0, 43, 17));
+		r.addSlot(new Slot(te, 1, 61, 17));
+		r.addSlot(new JSTSlot(te, 2, 116, 35, false, true, 64, true));
+		r.addSlot(new SlotFurnaceFuel(te, 3, 52, 53));
+		r.addPlayerSlots(inv);
+		return r;
 	}
 	
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new GUIAlloyFurnace(new ContainerAlloyFurnace(inv, te));
-		return null;
+		GUIGeneric r = new GUIGeneric((ContainerGeneric) getServerGUI(id, inv, te));
+		r.addSlot(43, 17, 0);
+		r.addSlot(61, 17, 0);
+		r.addSlot(116, 35, 0);
+		r.addSlot(52, 53, 9);
+		r.addFuel(53, 36);
+		r.addPrg(80, 35, JustServerTweak.MODID + ".alloyfurnace", "minecraft.fuel");
+		return r;
 	}
 	
 	@Override
@@ -315,5 +324,25 @@ public class MetaTileAlloyFurnace extends MetaTileBase {
 		if (cookTime > 0 && totalCookTime > 0)
 			return cookTime * 15 / totalCookTime;
 		return 0;
+	}
+
+	@Override
+	public int getPrg() {
+		return cookTime;
+	}
+
+	@Override
+	public int getMxPrg() {
+		return totalCookTime;
+	}
+
+	@Override
+	public int getFuel() {
+		return burnTime;
+	}
+
+	@Override
+	public int getMxFuel() {
+		return currentBurnTime;
 	}
 }

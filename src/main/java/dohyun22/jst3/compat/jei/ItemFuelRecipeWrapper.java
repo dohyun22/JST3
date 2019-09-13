@@ -28,10 +28,12 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 	@Nonnull
 	protected final List<List<ItemStack>> stack;
 	protected final int energy;
+	protected final boolean isComp;
 
-	private ItemFuelRecipeWrapper(@Nonnull List<List<ItemStack>> in, int energy) {
-		this.stack = in;
-		this.energy = energy;
+	private ItemFuelRecipeWrapper(@Nonnull List<List<ItemStack>> in, int ev, boolean cv) {
+		stack = in;
+		energy = ev;
+		isComp = cv;
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 		ing.setInputLists(ItemStack.class, stack);
 	}
 
-	public static List<ItemFuelRecipeWrapper> make(HashMap<Object, Integer> recipe) {
+	public static List<ItemFuelRecipeWrapper> make(HashMap<Object, Integer> recipe, boolean cv) {
 	    List<ItemFuelRecipeWrapper> ret = new LinkedList();
 	    for (Entry<Object, Integer> e : recipe.entrySet()) {
 	    	Object k = e.getKey();
@@ -58,7 +60,7 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 			List<List<ItemStack>> ls2 = new ArrayList();
 			ls2.add(stl);
 	    	if (stl != null)
-	    		ret.add(new ItemFuelRecipeWrapper(ls2, v.intValue()));
+	    		ret.add(new ItemFuelRecipeWrapper(ls2, v.intValue(), cv));
 	    }
 	    return ret;
 	}
@@ -73,14 +75,15 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 				List<ItemStack> ls3 = new ArrayList();
 				ls3.add(st);
 				ls2.add(ls3);
-				ret.add(new ItemFuelRecipeWrapper(ls2, (int)(bt * 2.5)));
+				ret.add(new ItemFuelRecipeWrapper(ls2, (int)(bt * 2.5), false));
 			}
 		}
 		return ret;
 	}
 	
 	@Override
-	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-		minecraft.fontRenderer.drawString(energy + " EU / " +  (energy * JSTCfg.RFPerEU) + " RF", 36, 9, 0);
+	public void drawInfo(Minecraft mc, int w, int h, int mx, int my) {
+		String s = energy < 0 ? I18n.format("jst.msg.com.blacklist") : isComp ? Integer.toString(energy) : energy + " EU / " +  (energy * JSTCfg.RFPerEU) + " RF";
+		mc.fontRenderer.drawString(s, 36, 9, 0);
 	}
 }

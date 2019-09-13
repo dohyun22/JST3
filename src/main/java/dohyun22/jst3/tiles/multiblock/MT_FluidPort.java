@@ -175,7 +175,7 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override

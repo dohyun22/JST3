@@ -303,10 +303,10 @@ public abstract class MetaTileBase {
 	}
 	
 	public void addCollisionBoxesToList(AxisAlignedBB ab, List<AxisAlignedBB> ls, Entity e) {
-	    AxisAlignedBB p1 = ab.offset(-this.getPos().getX(), -this.getPos().getY(), -this.getPos().getZ());
+	    AxisAlignedBB p1 = ab.offset(-getPos().getX(), -getPos().getY(), -getPos().getZ());
 	    for (AxisAlignedBB p2 : getBox()) {
 	    	if (p2.intersects(p1)) {
-	    		ls.add(p2.offset(this.getPos()));
+	    		ls.add(p2.offset(getPos()));
 	    	}
 	    }
 	}
@@ -326,21 +326,18 @@ public abstract class MetaTileBase {
 		return false;
 	}
 
-	@Nonnull
-	public ArrayList<ItemStack> getDrops() {
-		ArrayList<ItemStack> ret = new ArrayList();
-		if (this.baseTile == null) return ret;
-	    ret.add(new ItemStack(JSTBlocks.blockTile, 1, this.baseTile.getID()));
-	    return ret;
+	public void getDrops(ArrayList<ItemStack> ls) {
+		if (baseTile == null) return;
+	    ls.add(new ItemStack(JSTBlocks.blockTile, 1, baseTile.getID()));
 	}
 	
 	/** Utility method for wrench set facing */
 	protected boolean doSetFacing(EnumFacing f, boolean side) {
-		if (this.baseTile == null || f == null || this.baseTile.facing == f || (side && (f == EnumFacing.UP || f == EnumFacing.DOWN))) return false;
-		this.baseTile.facing = f;
-		World w = this.getWorld();
-		BlockPos p = this.getPos();
-		w.notifyNeighborsOfStateChange(p , this.baseTile.getBlockType(), true);
+		if (baseTile == null || f == null || baseTile.facing == f || (side && (f == EnumFacing.UP || f == EnumFacing.DOWN))) return false;
+		baseTile.facing = f;
+		World w = getWorld();
+		BlockPos p = getPos();
+		w.notifyNeighborsOfStateChange(p , baseTile.getBlockType(), true);
 		w.notifyBlockUpdate(p, w.getBlockState(p), w.getBlockState(p), 3);
 		markDirty();
 		return true;
@@ -351,8 +348,8 @@ public abstract class MetaTileBase {
 			return false;
 		}
 		d = d.getOpposite();
-		BlockPos p = this.getPos().offset(d);
-		World w = this.getWorld();
+		BlockPos p = getPos().offset(d);
+		World w = getWorld();
 		IBlockState bs = w.getBlockState(p);
 		return  w.getRedstonePower(p, d) > 0 || (bs.getBlock() == Blocks.REDSTONE_WIRE && ((Integer) bs.getValue(BlockRedstoneWire.POWER)).intValue() > 0);
 	}
@@ -391,7 +388,7 @@ public abstract class MetaTileBase {
 	}
 	
 	public final boolean isClient() {
-		return this.baseTile.getWorld().isRemote;
+		return baseTile.getWorld().isRemote;
 	}
 	
 	/** return false for virtual or secured item slots (which is useful for display) */
@@ -445,12 +442,12 @@ public abstract class MetaTileBase {
 	 * */
 	@SideOnly(value=Side.CLIENT)
 	public String getModelKey() {
-		return getKeyFromTex(this.getTexture());
+		return getKeyFromTex(getTexture());
 	}
 
 	@SideOnly(value=Side.CLIENT)
 	public List<BakedQuad> getModel(boolean isItem) {
-		return JSTUtils.makeFullCube(checkTextures(isItem ? this.getDefaultTexture() : this.getTexture()));
+		return JSTUtils.makeFullCube(checkTextures(isItem ? getDefaultTexture() : getTexture()));
 	}
 	
 	@SideOnly(value=Side.CLIENT)
@@ -518,11 +515,11 @@ public abstract class MetaTileBase {
 		return true;
 	}
 
-	/** if true, the block will be destroyed by Explosion */
+	/** if true, the block can be destroyed by Explosion */
 	public boolean onBlockExploded(Explosion ex) {
 		return true;
 	}
-	
+
 	@Nonnull
 	public static final TextureAtlasSprite[] checkTextures(TextureAtlasSprite[] tx) {
 		if (tx == null || tx.length != 6) {
@@ -573,10 +570,10 @@ public abstract class MetaTileBase {
 
 	// ** Energy Related Stuff **
 	public long injectEnergy(@Nullable EnumFacing dir, long v, boolean sim) {
-		if (this.baseTile == null || !canAcceptEnergy() || !isEnergyInput(dir))
+		if (baseTile == null || !canAcceptEnergy() || !isEnergyInput(dir))
 			return 0L;
 		long eu = Math.min(getMaxEnergy() - baseTile.energy, Math.min(maxEUTransfer(), v));
-		if (!sim) this.baseTile.energy += eu;
+		if (!sim) baseTile.energy += eu;
 		return eu;
 	}
 	

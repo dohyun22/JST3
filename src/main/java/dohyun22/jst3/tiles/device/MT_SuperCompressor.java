@@ -1,13 +1,13 @@
 package dohyun22.jst3.tiles.device;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.client.gui.GUISuperCompressor;
 import dohyun22.jst3.container.ContainerSuperCompressor;
 import dohyun22.jst3.items.JSTItems;
+import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -32,7 +32,7 @@ public class MT_SuperCompressor extends MetaTileEnergyInput {
 	public int comp;
 	private byte counter;
 	private static final int energyUse = 4;
-	public static final int itemNeededPerNeutronium = 48000000;
+	public static final int itemNeededPerNeutronium = 20000000;
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
@@ -57,56 +57,38 @@ public class MT_SuperCompressor extends MetaTileEnergyInput {
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
-		if (this.isClient()) return;
+		if (isClient()) return;
 		
 		if (counter > 0) counter--;
 		
 		boolean worked = false;
 		for (int n = 0; n < 10; n++) {
-			ItemStack st = this.inv.get(n);
+			ItemStack st = inv.get(n);
 			if (st.isEmpty())
 				continue;
+			int v = MRecipes.getValueInMap(st, MRecipes.CompressorValue);
+			if (v == 0) v = 1;
 			int e = st.getCount() * energyUse;
-			if (this.baseTile.energy < e)
-				continue;
-			this.baseTile.energy -= e;
-			this.comp += st.getCount();
-			this.inv.set(n, ItemStack.EMPTY);
+			if (v < 0 || baseTile.energy < e) continue;
+			baseTile.energy -= e;
+			comp += st.getCount() * v;
+			inv.set(n, ItemStack.EMPTY);
 			worked = true;
 		}
 		
-		if (worked && this.counter <= 0) {
+		if (worked && counter <= 0) {
 			getWorld().playSound(null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 2.5F);
 			counter = 20;
 		}
 		
-		if (this.comp >= itemNeededPerNeutronium) {
-			if (this.inv.get(10).isEmpty())
-				this.inv.set(10, new ItemStack(JSTItems.item1, 1, 24));
+		if (comp >= itemNeededPerNeutronium) {
+			if (inv.get(10).isEmpty())
+				inv.set(10, new ItemStack(JSTItems.item1, 1, 24));
 			else
-				this.inv.get(10).grow(1);
-			this.comp -= itemNeededPerNeutronium;
-			getWorld().playSound((EntityPlayer)null, getPos(), JSTSounds.SWITCH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				inv.get(10).grow(1);
+			comp -= itemNeededPerNeutronium;
+			getWorld().playSound(null, getPos(), JSTSounds.SWITCH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
-		
-		/*ItemStack st = this.inv.get(0);
-		if (!st.isEmpty() && this.inv.get(1).getCount() < this.inv.get(1).getMaxStackSize() && this.baseTile.energy > energyUse) {
-			this.baseTile.energy -= energyUse;
-			this.items += st.getCount();
-			st.setCount(0);
-			if (this.counter <= 0) {
-				getWorld().playSound((EntityPlayer)null, getPos(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.5F, 2.0F);
-				counter = 40;
-			}
-			if (this.items >= itemNeededPerNeutronium) {
-				if (this.inv.get(1).isEmpty())
-					this.inv.set(1, new ItemStack(JSTItems.item1, 1, 24));
-				else
-					this.inv.get(1).grow(1);
-				this.items -= itemNeededPerNeutronium;
-				getWorld().playSound((EntityPlayer)null, getPos(), JSTSounds.SWITCH, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			}
-		}*/
 	}
 	
 	@Override
@@ -129,13 +111,13 @@ public class MT_SuperCompressor extends MetaTileEnergyInput {
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		this.comp = tag.getInteger("comp");
+		comp = tag.getInteger("comp");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setInteger("comp", this.comp);
+		tag.setInteger("comp", comp);
 	}
 	
 	@Override
@@ -149,19 +131,19 @@ public class MT_SuperCompressor extends MetaTileEnergyInput {
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		if (this.baseTile == null) return;
 		super.onPlaced(p, bs, elb, st);
-		this.comp = st.hasTagCompound() ? st.getTagCompound().getInteger("comp") : 0;
+		comp = st.hasTagCompound() ? st.getTagCompound().getInteger("comp") : 0;
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getDrops() {
-		if (this.baseTile == null) return new ArrayList();
-	    ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, this.baseTile.getID());
-	    if (!this.isClient() && this.comp > 0) {
+	public void getDrops(ArrayList<ItemStack> ls) {
+		if (baseTile == null) return;
+	    ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, baseTile.getID());
+	    if (!isClient() && comp > 0) {
 	    	NBTTagCompound nbt = new NBTTagCompound();
-	    	nbt.setInteger("comp", this.comp);
+	    	nbt.setInteger("comp", comp);
 	    	st.setTagCompound(nbt);
 	    }
-	    return new ArrayList(Arrays.asList(new ItemStack[] {st}));
+	    ls.add(st);
 	}
 	
 	@Override

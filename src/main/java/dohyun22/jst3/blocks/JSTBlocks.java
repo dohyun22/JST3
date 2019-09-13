@@ -28,7 +28,7 @@ public class JSTBlocks {
 	public static Block blockOHW;
 	public static Item tileItem;
 
-	public static void preinit() {
+	public static void init() {
 		GameRegistry.registerTileEntity(TileEntityMeta.class, new ResourceLocation(JustServerTweak.MODID, "mte"));
 		
 		block1 = (BlockBase) registerBlock(new BlockJST1(), ItemBlockBase.class, false, "metablocks/");

@@ -5,44 +5,52 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.world.gen.structure.StructureMineshaftPieces.Cross;
 
 public class ReflectionUtils {
 	private ReflectionUtils() {}
 	
+	@Nullable
 	public static Field getPublicField(Object obj, String name) {
-		Field rField = null;
+		Field r = null;
 		try {
-			rField = obj.getClass().getDeclaredField(name);
-		} catch (Throwable localThrowable) {
+			r = obj.getClass().getDeclaredField(name);
+		} catch (Throwable t) {
 		}
-		return rField;
+		return r;
 	}
 
+	@Nullable
 	public static Field getField(Object obj, String name) {
-		Field ret = null;
+		Field r = null;
 		try {
-			ret = getClassObj(obj).getDeclaredField(name);
-			ret.setAccessible(true);
+			r = getClassObj(obj).getDeclaredField(name);
+			r.setAccessible(true);
 		} catch (Throwable t) {}
-		return ret;
+		return r;
 	}
 
+	@Nullable
 	public static Field getFieldAndRemoveFinal(Object obj, String name) {
-		Field ret = getField(obj, name);
-		removeFinal(ret);
-		return ret;
+		Field r = getField(obj, name);
+		removeFinal(r);
+		return r;
 	}
 
+	@Nullable
 	public static Method getMethod(Object obj, String method, Class<?>... param) {
-		Method ret = null;
+		Method r = null;
 		try {
-			ret = getClassObj(obj).getDeclaredMethod(method, param);
-			ret.setAccessible(true);
+			r = getClassObj(obj).getDeclaredMethod(method, param);
+			r.setAccessible(true);
 		} catch (Throwable t) {}
-		return ret;
+		return r;
 	}
 
+	@Nullable
 	public static Object getFieldValue(Object obj, String field, Object tgt) {
 		try {
 			return getField(obj, field).get(tgt);
@@ -56,10 +64,12 @@ public class ReflectionUtils {
 		} catch (Throwable t) {}
 	}
 
+	@Nullable
 	public static Object callMethod(Object obj, String method, Object... param) {
 		return callMethod(obj, obj, method, param);
 	}
 
+	@Nullable
 	public static Object callMethod(Object obj, Object tgt, String name, Object... param) {
 		try {
 			Class<?>[] pt = new Class[param.length];
@@ -93,6 +103,7 @@ public class ReflectionUtils {
 		return null;
 	}
 
+	@Nullable
 	public static Constructor getConstructor(Object obj, Class<?>... param) {
 		Constructor ret = null;
 		try {
@@ -103,6 +114,7 @@ public class ReflectionUtils {
 		return ret;
 	}
 
+	@Nullable
 	public static Object callConstructor(Object obj, Object... param) {
 		Object ret = null;
 		try {
@@ -114,11 +126,11 @@ public class ReflectionUtils {
 		return ret;
 	}
 
-	public static String getClassName(Object aObject) {
-		if (aObject == null) {
+	@Nonnull
+	public static String getClassName(Object o) {
+		if (o == null)
 			return "null";
-		}
-		return aObject.getClass().getName().substring(aObject.getClass().getName().lastIndexOf(".") + 1);
+		return o.getClass().getName().substring(o.getClass().getName().lastIndexOf(".") + 1);
 	}
 	
 	public static boolean checkClassExists(String str) {
@@ -156,7 +168,8 @@ public class ReflectionUtils {
 		}
 		return true;
 	}
-	
+
+	@Nullable
 	public static Class getClassObj(Object obj) {
 		try {
 			return obj instanceof Class ? ((Class)obj) : obj instanceof String ? Class.forName((String) obj) : obj.getClass();
@@ -164,12 +177,27 @@ public class ReflectionUtils {
 		return null;
 	}
 
+	@Nullable
 	public static Field getFieldObf(Object c, String... names) {
 		Class cl = getClassObj(c);
 		if (cl != null)
 			for (String n : names) {
 				try {
 					Field r = cl.getDeclaredField(n);
+					r.setAccessible(true);
+					return r;
+				} catch (Throwable t) {}
+			}
+		return null;
+	}
+
+	@Nullable
+	public static Method getMethodObf(Object c, String[] names, Class... par) {
+		Class cl = getClassObj(c);
+		if (cl != null)
+			for (String n : names) {
+				try {
+					Method r = cl.getDeclaredMethod(n, par);
 					r.setAccessible(true);
 					return r;
 				} catch (Throwable t) {}

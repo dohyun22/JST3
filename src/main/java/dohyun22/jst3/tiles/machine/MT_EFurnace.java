@@ -5,16 +5,13 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.api.recipe.RecipeList;
-import dohyun22.jst3.client.gui.GUIAssembler;
 import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.BatterySlot;
-import dohyun22.jst3.container.ContainerAssembler;
 import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.container.JSTSlot;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTUtils;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
@@ -27,10 +24,11 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_EFurnace extends MT_MachineGeneric {
+public class MT_EFurnace extends MT_MachineProcess {
 
 	public MT_EFurnace(int tier) {
-		super(tier, 1, 1, 0, 0, 0, null, false, false);
+		super(tier, 1, 1, 0, 0, 0, null, false, false, "efurnace", null);
+		setSfx(SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, 1.0F, 1.2F).setLux(10);
 	}
 
 	@Override
@@ -49,51 +47,6 @@ public class MT_EFurnace extends MT_MachineGeneric {
 			return RecipeContainer.newContainer(new Object[] {st2}, null, new ItemStack[] {st}, null, 5, 50);
 		}
 		return null;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite t = getTieredTex(tier);
-		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("efurnace")};
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getTexture() {
-		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
-		for (byte n = 0; n < ret.length; n++) {
-			if (this.baseTile.facing == JSTUtils.getFacingFromNum(n)) {
-				ret[n] = getTETex("efurnace" + (this.baseTile.isActive() ? "" : "_off"));
-			} else {
-				ret[n] = getTieredTex(tier);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile != null && !isClient())
-			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-		return true;
-	}
-	
-	@Override
-	public int getLightValue() {
-		return baseTile.isActive() ? 8 : 0;
-	}
-	
-	@Override
-	protected void onStartWork() {
-		getWorld().playSound(null, getPos(), SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.2F);
-	}
-	
-	@Override
-	protected boolean toggleMachine(boolean on) {
-		boolean ret = super.toggleMachine(on);
-		if (ret) updateLight();
-		return ret;
 	}
 	
 	@Override

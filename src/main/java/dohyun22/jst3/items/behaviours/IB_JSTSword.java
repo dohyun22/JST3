@@ -27,10 +27,10 @@ public class IB_JSTSword extends ItemBehaviour {
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot sl, ItemStack st) {
 		if (sl != EntityEquipmentSlot.MAINHAND) return null;
-		Multimap<String, AttributeModifier> ret = HashMultimap.create();
-        ret.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(DamageUUID, "Weapon modifier", 2018.0D, 0));
-        ret.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(SpeedUUID, "Weapon modifier", -2.4D, 0));
-	    return ret;
+		Multimap<String, AttributeModifier> r = HashMultimap.create();
+        r.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(DamageUUID, "Weapon modifier", 2018.0D, 0));
+        r.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(SpeedUUID, "Weapon modifier", -2.4D, 0));
+	    return r;
 	}
 	
 	@Override

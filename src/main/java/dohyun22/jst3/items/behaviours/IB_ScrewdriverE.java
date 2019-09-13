@@ -69,7 +69,7 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 		else if (te instanceof IScrewDriver)
 			flag = ((IScrewDriver)te).onScrewDriver(ep, s, hx, hy, hz);
 		if (flag) {
-			doWork(st, ep, w, p);
+			doWork(st, w, p);
 			return EnumActionResult.SUCCESS;
 		}
 		if (JSTCfg.ieLoaded) {
@@ -77,7 +77,7 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 				if (te instanceof IEBlockInterfaces.IConfigurableSides) {
 					int n = ep.isSneaking() ? s.getOpposite().ordinal() : s.ordinal();
 					if (((IEBlockInterfaces.IConfigurableSides)te).toggleSide(n, ep)) {
-						doWork(st, ep, w, p);
+						doWork(st, w, p);
 						return EnumActionResult.SUCCESS;
 					}
 				}
@@ -97,11 +97,11 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 					IBlockState bs = w.getBlockState(p);
 					w.notifyBlockUpdate(p, bs, bs, 3);
 					w.addBlockEvent(te.getPos(), te.getBlockType(), 255, 0);
-					doWork(st, ep, w, p);
+					doWork(st, w, p);
 					return EnumActionResult.SUCCESS;
 				}
 				if (te instanceof IEBlockInterfaces.IHammerInteraction && ((IEBlockInterfaces.IHammerInteraction)te).hammerUseSide(s, ep, hx, hy, hz)) {
-					doWork(st, ep, w, p);
+					doWork(st, w, p);
 					return EnumActionResult.SUCCESS;
 				}
 			} catch (Throwable t) {}
@@ -109,9 +109,8 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 		return EnumActionResult.PASS;
 	}
 	
-	private void doWork(ItemStack st, EntityPlayer ep, World w, BlockPos p) {
-		if (!ep.isCreative())
-			setEnergy(st, getEnergy(st) - 100);
+	private void doWork(ItemStack st, World w, BlockPos p) {
+		useEnergy(st, 100, false);
 		w.playSound(null, p, JSTSounds.WRENCH, SoundCategory.BLOCKS, 1.0F, 1.5F);
 	}
 
@@ -138,5 +137,17 @@ public class IB_ScrewdriverE extends ItemBehaviour {
 		ls.add(I18n.format("jst.tooltip.screwdriver"));
 		if (Loader.isModLoaded("immersiveengineering"))
 			ls.add(I18n.format("jst.tooltip.screwdriver.ie"));
+		if (Loader.isModLoaded("projectred-core"))
+			ls.add(I18n.format("jst.tooltip.screwdriver.pr"));
+	}
+
+	@Override
+	public boolean isScrewdriver(ItemStack st) {
+		return getEnergy(st) >= 100;
+	}
+
+	@Override
+	public void onScrewdriverUsed(ItemStack st, EntityLivingBase el) {
+		doWork(st, el.world, el.getPosition());
 	}
 }

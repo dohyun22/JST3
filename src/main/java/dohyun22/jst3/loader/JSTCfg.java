@@ -25,6 +25,7 @@ public class JSTCfg {
 	public static byte NerfZombies;
 	public static boolean fineDust;
 	public static String[] fineDustTEs;
+	public static String[] fineDustBlocks;
 	public static boolean hardEG;
 	public static boolean customMat;
 	public static byte researchTier;
@@ -39,6 +40,7 @@ public class JSTCfg {
 	public static boolean NoElecEngine;
 	public static boolean BuffIEDieselGen;
 	public static boolean gtOverlaps;
+	public static boolean removeGolemMelting;
 
 	public static void loadCfg(Configuration cfg) {
 		try {
@@ -95,8 +97,18 @@ public class JSTCfg {
 				        "industrialforegoing:sewage_composter_solidifier_tile;50;tick_lastWork",
 				        "industrialforegoing:animal_byproduct_recolector_tile;25;tick_lastWork"
 				});
-				pr.setComment("Syntax: TE Class;ng/s;NBT tag names to trigger");
+				pr.setComment("Syntax: TE class;ng/s;NBT tag names to trigger");
 				fineDustTEs = pr.getStringList();
+
+				pr = cfg.get(c, "FineDustBlocks", new String[] {
+				        "minecraft:fire;0;100",
+				        "minecraft:leaves;0;-50",
+				        "minecraft:leaves2;0;-50",
+				        "forestry:wood_pile;65280;500",
+				        "forestry:leaves;0;-50"
+				});
+				pr.setComment("Syntax: TE class;Meta bit mask(set 0 to allow any meta);ng/update");
+				fineDustBlocks = pr.getStringList();
 			}
 
 			pr = cfg.get(c, "OreExplosionChance", 20);
@@ -206,6 +218,11 @@ public class JSTCfg {
 				pr = cfg.get(c, "BuffIEDieselGen", true);
 				pr.setComment("If true, Immersive Engineering's Diesel Generator will be more efficient.");
 				BuffIEDieselGen = pr.getBoolean();
+			}
+
+			if (ticLoaded) {
+				pr = cfg.get(c, "RemoveIronGolemMelting", false);
+				removeGolemMelting = pr.getBoolean();
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Error loading config! Please report this log to JustServer developer team!", e);

@@ -188,4 +188,10 @@ public class MT_Rectenna extends MT_Multiblock {
 	public String getModelKey() {
 		return "jst_micro";
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected void addInfo(ItemStack st, List<String> ls) {
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.microwave"));
+	}
 }

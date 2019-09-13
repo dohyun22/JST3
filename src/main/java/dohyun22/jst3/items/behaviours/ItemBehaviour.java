@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 
 import dohyun22.jst3.items.ItemJST1;
+import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTSounds;
@@ -264,10 +265,10 @@ public class ItemBehaviour {
 				continue;
 			ItemStack src = e.getItemStackFromSlot(sl);
 			if (src != null && !src.isEmpty()) {
-				long eu = JSTUtils.dischargeItem(src, Math.max(0, this.maxEnergy - getEnergy(st)), getTier(st), true, false);
+				long eu = JSTUtils.dischargeItem(src, Math.max(0, maxEnergy - getEnergy(st)), getTier(st), true, false);
 				if (eu > 0) {
 					flag = true;
-					setEnergy(st, Math.min(this.maxEnergy, getEnergy(st) + eu));
+					setEnergy(st, Math.min(maxEnergy, getEnergy(st) + eu));
 				}
 			}
 		}
@@ -276,11 +277,17 @@ public class ItemBehaviour {
 		}
 	}
 
-	public boolean isWrench() {
+	public boolean isWrench(ItemStack st) {
 		return false;
 	}
 
 	public void onWrenchUsed(ItemStack st, EntityLivingBase el) {}
+
+	public boolean isScrewdriver(ItemStack st) {
+		return false;
+	}
+
+	public void onScrewdriverUsed(ItemStack st, EntityLivingBase el) {}
 
 	public void onHitBlock(ItemStack st, BlockPos p, EntityPlayer ep) {
 	}
@@ -335,7 +342,7 @@ public class ItemBehaviour {
 	}
 	
 	public long getEnergy(ItemStack st) {
-		if (this.getMaxEnergy(st) <= 0) return 0;
+		if (getMaxEnergy(st) <= 0) return 0;
 		return st.hasTagCompound() ? st.getTagCompound().getLong("energy") : 0L;
 	}
 	

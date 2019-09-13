@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerRPlanner extends ContainerMTE {
-	private final IInventory dummy;
 	public int timer;
 	public int heat;
 	public int mxheat;
@@ -30,24 +29,24 @@ public class ContainerRPlanner extends ContainerMTE {
 
 	public ContainerRPlanner(IInventory inv, TileEntityMeta te) {
 		super(te);
-		
-		this.dummy = new InventoryDummy();
 		addSlotToContainer(new JSTSlot(te, 0, 6, 52, false, false, 64, false));
 	    for (int r = 0; r < 6; r++) for (int c = 0; c < 9; c++) addSlotToContainer(new JSTSlot(te, 1 + c + r * 9, 26 + c * 18, 52 + r * 18, false, false, 64, false));
-	    for (int n = 0; n < 6; n++) addSlotToContainer(new JSTSlot(this.dummy, n, 190, 52 + n * 18, false, false, 1, false));
-	    addSlotToContainer(new JSTSlot(this.dummy, 6, 6, 74, false, false, 1, false));
+	    for (int n = 0; n < 6; n++) addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, n, 190, 52 + n * 18, false, false, 1, false));
+	    addSlotToContainer(new Slot(te, 55, 6, 74));
+	    addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 6, 6, 96, false, false, 1, false));
+	    addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 7, 6, 114, false, false, 1, false));
 	    addPlayerInventorySlots(inv, 26, 164);
 	}
 
 	@Override
 	public ItemStack slotClick(int si, int dt, ClickType ct, EntityPlayer pl) {
 	    if (!(te.mte instanceof MT_ReactorPlanner)) return ItemStack.EMPTY;
-	    if (si >= 0 && si < this.inventorySlots.size()) {
-	    	Slot s = this.getSlot(si);
+	    if (si >= 0 && si < inventorySlots.size()) {
+	    	Slot s = getSlot(si);
 	    	if (s != null) {
 	    		MT_ReactorPlanner mte = ((MT_ReactorPlanner)te.mte);
     			ItemStack st = pl.inventory.getItemStack();
-	    		if (s.inventory == te) {
+	    		if (s.inventory == te && si != 61) {
 	    			if (s.getSlotIndex() == 0) {
 	    				int mode = -1;
 	    				if (ct == ClickType.CLONE)
@@ -70,31 +69,33 @@ public class ContainerRPlanner extends ContainerMTE {
 	    			}
 	    			return st;
 	    		}
-	    		if (s.inventory == dummy && ct == ClickType.PICKUP) {
-	    			int n = s.getSlotIndex();
-    				if (n == 1) {
-	    				mte.reset(dt == 1);
-	    				this.detectAndSendChanges();
-    				}
-    				if (mte.boomPowerX10 <= 0) {
-    					if (n == 0) {
-    						mte.toggleActive();
-    					} else if (n == 2 || n == 3) {
-    						int v = dt == 1 ? 1 : 10;
-    						if (n == 3) v *= -1;
-    						mte.changeSpeed(v);
-    					} else if (n == 4 || n == 5) {
-    						int v = dt == 1 ? 100 : 1000;
-    						if (n == 5) v *= -1;
-    						v += mte.heat;
-    						mte.heat = Math.max(0, v);
-    					} if (n == 6) {
-    						if (dt == 1) {
-    							mte.readFromDSD(st);
-    						} else {
-    							mte.saveToDSD(st);
-    						}
-    					}
+	    		if (s.inventory == InventoryDummy.INSTANCE && ct == ClickType.PICKUP) {
+	    			if (!JSTUtils.isClient()) {
+		    			int n = s.getSlotIndex();
+	    				if (n == 1) {
+		    				mte.reset(dt == 1);
+		    				detectAndSendChanges();
+	    				}
+	    				if (mte.boomPowerX10 <= 0) {
+	    					if (n == 0) {
+	    						mte.toggleActive();
+	    					} else if (n == 2 || n == 3) {
+	    						int v = dt == 1 ? 1 : 10;
+	    						if (n == 3) v *= -1;
+	    						mte.changeSpeed(v);
+	    					} else if (n == 4 || n == 5) {
+	    						int v = dt == 1 ? 100 : 1000;
+	    						if (n == 5) v *= -1;
+	    						v += mte.heat;
+	    						mte.heat = Math.max(0, v);
+	    					} else if (n == 6) {
+	    						mte.saveToDSD();
+	    						super.detectAndSendChanges();
+	    					} else if (n == 7) {
+	    						mte.readFromDSD();
+	    						super.detectAndSendChanges();
+	    					} 
+		    			}
 	    			}
 	    			return st;
 	    		}
@@ -111,35 +112,33 @@ public class ContainerRPlanner extends ContainerMTE {
 		
 		MT_ReactorPlanner r = (MT_ReactorPlanner)te.mte;
 		
-        for (int i = 0; i < this.listeners.size(); ++i) {
-            IContainerListener icl = (IContainerListener)this.listeners.get(i);
-
-            if (this.timer != r.timer)
+        for (IContainerListener icl : listeners) {
+            if (timer != r.timer)
             	splitIntAndSend(icl, this, 100, r.timer);
-            if (this.heat != r.heat)
+            if (heat != r.heat)
             	splitIntAndSend(icl, this, 102, r.heat);
-            if (this.mxheat != r.maxHeat)
+            if (mxheat != r.maxHeat)
             	splitIntAndSend(icl, this, 104, r.maxHeat);
-            if (this.boom != r.boomPowerX10)
+            if (boom != r.boomPowerX10)
             	splitIntAndSend(icl, this, 106, r.boomPowerX10);
-            if (this.output != ((int)(r.output * 50)))
+            if (output != ((int)(r.output * 50)))
             	splitIntAndSend(icl, this, 108, (int)(r.output * 50));
-            if (this.eu != r.powerGenerated)
+            if (eu != r.powerGenerated)
             	splitLongAndSend(icl, this, 110, r.powerGenerated);
-            if (this.speed != r.getSimSpeed())
+            if (speed != r.getSimSpeed())
             	icl.sendWindowProperty(this, 114, r.getSimSpeed());
-            if (this.active != r.baseTile.isActive())
+            if (active != r.baseTile.isActive())
             	icl.sendWindowProperty(this, 115, r.baseTile.isActive() ? 1 : 0);
         }
         
-	    this.timer = r.timer;
-	    this.heat = r.heat;
-	    this.mxheat = r.maxHeat;
-	    this.boom = r.boomPowerX10;
-	    this.output = (int)(r.output * 50);
-	    this.eu = r.powerGenerated;
-	    this.speed = r.getSimSpeed();
-	    this.active = r.baseTile.isActive();
+	    timer = r.timer;
+	    heat = r.heat;
+	    mxheat = r.maxHeat;
+	    boom = r.boomPowerX10;
+	    output = (int)(r.output * 50);
+	    eu = r.powerGenerated;
+	    speed = r.getSimSpeed();
+	    active = r.baseTile.isActive();
 	}
 	
 	@Override

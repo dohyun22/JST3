@@ -88,7 +88,7 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override

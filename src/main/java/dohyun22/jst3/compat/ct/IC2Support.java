@@ -16,7 +16,7 @@ public class IC2Support {
 	@ZenMethod
 	public static void addMaceration(IIngredient in, IItemStack out) {
 		CTSupport.addLateAction(new IAction() {
-			@Override public void apply() {CompatIC2.addMacRec(CTSupport.toOB(in), CTSupport.toST(out));}
+			@Override public void apply() {CompatIC2.addGrindRec(CTSupport.toOB(in), CTSupport.toST(out));}
 			@Override public String describe() {return null;}
 		});
 	}

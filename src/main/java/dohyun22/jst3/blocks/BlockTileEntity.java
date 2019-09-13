@@ -147,15 +147,17 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess w, BlockPos p, IBlockState s, int f) {
+		ArrayList<ItemStack> ret = new ArrayList();
 		TileEntity te = w.getTileEntity(p);
-		if (te instanceof TileEntityMeta && ((TileEntityMeta)te).hasValidMTE())
-			return ((TileEntityMeta)te).mte.getDrops();
-
+		if (te instanceof TileEntityMeta && ((TileEntityMeta)te).hasValidMTE()) {
+			((TileEntityMeta)te).mte.getDrops(ret);
+			return ret;
+		}
 		TileEntityMeta tem = ((TileEntityMeta)temp.get());
-		if (tem != null && tem.hasValidMTE())
-			return tem.mte.getDrops();
-		
-		List<ItemStack> ret = new ArrayList();
+		if (tem != null && tem.hasValidMTE()) {
+			tem.mte.getDrops(ret);
+			return ret;
+		}
 		ret.add(new ItemStack(JSTBlocks.blockTile));
 		return ret;
 	}
@@ -187,9 +189,10 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	public ItemStack getPickBlock(IBlockState bs, RayTraceResult target, World w, BlockPos p, EntityPlayer pl) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) {
-			List<ItemStack> drops = mte.getDrops();
-			if (!drops.isEmpty())
-				return (ItemStack) drops.get(0);
+			ArrayList<ItemStack> ls = new ArrayList();
+			mte.getDrops(ls);
+			if (!ls.isEmpty())
+				return (ItemStack) ls.get(0);
 		}
 		return new ItemStack(this, 1, 0);
 	}
@@ -460,7 +463,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 		ArrayList<ItemStack> ret = new ArrayList();
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 		if (!drop && mte != null && mte.wrenchCanRemove(pl)) {
-			ret = mte.getDrops();
+			mte.getDrops(ret);
 			for (ItemStack st : ret)
 				JSTUtils.dropEntityItemInPos(w, p, st);
 		}

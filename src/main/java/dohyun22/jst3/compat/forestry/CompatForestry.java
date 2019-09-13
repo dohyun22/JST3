@@ -59,7 +59,7 @@ public class CompatForestry extends Loadable {
 		ItemStack st = new ItemStack(JSTItems.item1, 1, 9017);
 		if (fs != null) {
 			MRecipes.addChemMixerRecipe(new Object[] {st}, fs, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 1, 9000), null, 30, 500);
-			MRecipes.addChemMixerRecipe(new Object[] {st, new ItemStack(JSTItems.item1, 4, 9028)}, fs, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 5, 9000), null, 30, 500);
+			MRecipes.addChemMixerRecipe(new Object[] {st, new ItemStack(JSTItems.item1, 4, 9028)}, null, new ItemStack(JSTItems.item1, 8, 105), new ItemStack(JSTItems.item1, 5, 9000), null, 30, 500);
 		}
 		
 		fs = FluidRegistry.getFluidStack("ic2distilled_water", 10);

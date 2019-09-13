@@ -89,10 +89,12 @@ public class JustServerTweak {
 
 		JSTCfg.loadCfg(new Configuration(event.getSuggestedConfigurationFile()));
 
-		MTELoader.preinit();
-		JSTBlocks.preinit();
-		JSTItems.preinit();
-		JSTFluids.preInit();
+		JSTBlocks.init();
+		JSTItems.init();
+		JSTFluids.init();
+		JSTSounds.init();
+		JSTPotions.init();
+		MTELoader.init();
 
 		LoadableLoader.preInit();
 		JSTPacketHandler.preInit();
@@ -123,12 +125,10 @@ public class JustServerTweak {
 	public void postinit(FMLPostInitializationEvent event) {
 		EvHandler.init();
 		ItemList.init();
-		JSTSounds.init();
-		JSTPotions.init();
 		JSTChunkData.init();
-		
+
 		LoadableLoader.postInit();
-		
+
 		JSTWorldgenHandler.addGen(JSTBlocks.blockOre.getStateFromMeta(1), 4, Blocks.BEDROCK, 0, 5, 1, 500, new int[] {0, -1});
 		JSTWorldgenHandler.addGen(JSTBlocks.blockOre.getStateFromMeta(2), 3, Blocks.BEDROCK, 0, 5, 1, 100, new int[] {0, -1});
 		JSTWorldgenHandler.addGen(JSTBlocks.blockOre.getStateFromMeta(4), 8, Blocks.STONE, 5, 20, 3, 10000, new int[] {1, -1}, true);

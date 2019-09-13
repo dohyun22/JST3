@@ -5,11 +5,11 @@ import java.util.List;
 import cofh.api.util.ThermalExpansionHelper;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.blocks.JSTBlocks;
-import dohyun22.jst3.evhandler.EvHandler;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.Loadable;
 import dohyun22.jst3.recipes.MRecipes;
+import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
@@ -90,7 +90,7 @@ public class CompatThEx extends Loadable {
 		MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack(str), new ItemStack(JSTItems.item1, 1, 9022)}, null, st, new ItemStack(JSTItems.item1, 1, 9000), null, 24, 300);
 
 		Block b = JSTUtils.getModBlock("thermalfoundation:ore_fluid");
-		EvHandler.addOre(b, false);
-		EvHandler.addOre(b, true);
+		EffectBlocks.addOre(b, false);
+		EffectBlocks.addOre(b, true);
 	}
 }

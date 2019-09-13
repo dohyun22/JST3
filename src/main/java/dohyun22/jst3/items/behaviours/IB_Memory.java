@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 
-public class IB_DSD extends ItemBehaviour {
+public class IB_Memory extends ItemBehaviour {
 	
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
@@ -27,7 +27,7 @@ public class IB_DSD extends ItemBehaviour {
 	}
 	
 	public static void setData(ItemStack st, @Nullable NBTTagCompound data, String... desc) {
-		if (st.getItem() != JSTItems.item1 || !(JSTItems.item1.getBehaviour(st) instanceof IB_DSD))
+		if (st.getItem() != JSTItems.item1 || !(JSTItems.item1.getBehaviour(st) instanceof IB_Memory))
 			return;
 		if (st.hasTagCompound())
 			st.getTagCompound().removeTag("DSD_D");
@@ -45,7 +45,7 @@ public class IB_DSD extends ItemBehaviour {
 	
 	@Nullable
 	public static NBTTagCompound getData(ItemStack st) {
-		if (st.getItem() != JSTItems.item1 || !(JSTItems.item1.getBehaviour(st) instanceof IB_DSD))
+		if (st.getItem() != JSTItems.item1 || !(JSTItems.item1.getBehaviour(st) instanceof IB_Memory))
 			return null;
 		NBTTagCompound tag = st.getTagCompound();
 		if (tag != null) {

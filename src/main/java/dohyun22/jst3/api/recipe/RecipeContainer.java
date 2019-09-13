@@ -6,8 +6,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import dohyun22.jst3.api.recipe.IRecipeItem;
-import dohyun22.jst3.utils.JSTUtils;
+import dohyun22.jst3.api.JSTConstants;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
@@ -43,7 +42,7 @@ public class RecipeContainer {
 	}
 	
 	public boolean process(ItemStack[] input, FluidTank[] finput, int tier, boolean shapeless, boolean fshapeless, boolean consume) {
-		if (energy > 0 && tier < JSTUtils.getTierFromVolt(energy) || (in == null) != (input == null) || (fin == null) != (finput == null)) return false;
+		if (energy > 0 && tier < getTier(energy) || (in == null) != (input == null) || (fin == null) != (finput == null)) return false;
 		
 		if (in != null && input != null) {
 			if (shapeless) {
@@ -153,5 +152,12 @@ public class RecipeContainer {
 		if (rec == null) return true;
 		if (in == null) return false;
 		return rec.isFluidEqual(in) && rec.amount <= in.amount;
+	}
+
+	public static int getTier(int volt) {
+		for (int n = 0; n < JSTConstants.V.length; n++)
+			if (volt <= JSTConstants.V[n])
+				return n;
+		return 0;
 	}
 }

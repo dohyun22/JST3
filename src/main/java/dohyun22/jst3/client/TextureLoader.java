@@ -124,6 +124,7 @@ public class TextureLoader {
 		ls.add("inductor");
 		ls.add("hr_door");
 		ls.add("waterpurifier");
+		ls.add("filter");
 		
 		ls.add("bgbox");
 		ls.add("sgbox");
@@ -147,6 +148,7 @@ public class TextureLoader {
 		ls.add("crystal");
 		ls.add("crystal_off");
 		ls.add("recycler");
+		ls.add("recycler_off");
 		//ls.add("fl_recycler");
 		ls.add("circuit_research");
 		ls.add("bioprocess");

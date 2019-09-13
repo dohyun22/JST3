@@ -79,7 +79,7 @@ public class MT_FlameTrap extends MetaTileBase {
 	}
 
 	private boolean canAttack(EntityLivingBase e) {
-		return e instanceof IMob && !e.isDead && e.getDistanceSqToCenter(getPos()) <= 100 && !e.isImmuneToFire() && getArea().intersects(e.getEntityBoundingBox());
+		return e instanceof IMob && !e.isDead && e.getDistanceSqToCenter(getPos()) <= 100 && getArea().intersects(e.getEntityBoundingBox());
 	}
 
 	private AxisAlignedBB getArea() {
@@ -119,7 +119,7 @@ public class MT_FlameTrap extends MetaTileBase {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		if (baseTile == null) return;
-		baseTile.facing = JSTUtils.getClosestSide(p, elb, st, false);
+		baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 		onBlockUpdate();
 	}
 
@@ -134,9 +134,9 @@ public class MT_FlameTrap extends MetaTileBase {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hitX, float hitY, float hitZ) {
 		if (!isClient()) {
-			if (!heldItem.isEmpty() && pl.getHeldItem(EnumHand.MAIN_HAND) == heldItem && FluidUtil.interactWithFluidHandler(pl, EnumHand.MAIN_HAND, tank))
+			if (!st.isEmpty() && pl.getHeldItem(EnumHand.MAIN_HAND) == st && FluidUtil.interactWithFluidHandler(pl, EnumHand.MAIN_HAND, tank))
 				return true;
 			JSTUtils.sendChatTrsl(pl, "jst.msg.com.tanksimple", tank.getFluidAmount(), tank.getCapacity());
 		}

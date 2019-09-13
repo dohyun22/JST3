@@ -23,7 +23,7 @@ public class JSTItems {
 	public static ItemMetaBase item1;
 	public static Item mask;
 
-	public static void preinit() {
+	public static void init() {
 		item1 = new ItemJST1();
 		mask = new ItemMask();
 		ForgeRegistries.ITEMS.register(item1);
@@ -84,7 +84,7 @@ public class JSTItems {
 		item1.registerMetaItem(10007, "tool_laser", new IB_Laser());
 		item1.registerMetaItem(10008, "tool_dscanner", new IB_Scanner());
 		item1.registerMetaItem(10009, "tool_fueler", new IB_Fueler());
-		item1.registerMetaItem(10010, "tool_dsd", new IB_DSD());
+		item1.registerMetaItem(10010, "tool_dsd", new IB_Memory());
 		item1.registerMetaItem(10011, "tool_trowel", new IB_Trowel());
 		item1.registerMetaItem(10012, "tool_mfg", new IB_CropTool());
 		item1.registerMetaItem(10013, "tool_sd", new IB_Screwdriver());
@@ -105,9 +105,16 @@ public class JSTItems {
 		item1.registerMetaItem(10042, "car_f", new IB_EntityEgg(JustServerTweak.MODID + ":cardesl", "jst.tooltip.cardesl"));
 		item1.registerMetaItem(10043, "car_e", new IB_EntityEgg(JustServerTweak.MODID + ":carelec", "jst.tooltip.carelec"));
 		item1.registerMetaItem(10044, "tool_minigame", new IB_Minetris());
+		item1.registerMetaItem(10045, "tool_mover", new IB_Mover());
+		item1.registerMetaItem(10046, "tool_fireex", new IB_FireExtinguisher());
 
 		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingIron());
 		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
+
+		item1.registerMetaItem(10060, "ucell", new IB_UniversalCell(8000));
+		item1.registerMetaItem(10061, "ucell2", new IB_UniversalCell(32000));
+		item1.registerMetaItem(10062, "ucell3", new IB_UniversalCell(128000));
+		item1.registerMetaItem(10063, "ucell4", new IB_UniversalCell(512000));
 
 		item1.registerMetaItem(10100, "tool_rby_sw", new IB_GenericTool(500, EnumToolType.SWORD, 7.0F, 2, 8.0F, 10));
 		item1.registerMetaItem(10101, "tool_rby_sh", new IB_GenericTool(500, EnumToolType.SHOVEL, 5.5F, 2, 8.0F, 10));
@@ -175,6 +182,8 @@ public class JSTItems {
 
 		//Upgrades #13000
 		item1.registerMetaItem(13000, "upg_boiler", new IB_Upgrade("jst_boiler", "boiler"));
+		item1.registerMetaItem(13001, "upg_batbuff", new IB_Upgrade("jst_bat", "batbuff"));
+		item1.registerMetaItem(13002, "upg_water", new IB_Upgrade("jst_water", "water"));
 
 		item1.addFuelValue(98, 25600);
 		item1.addFuelValue(99, 102400);

@@ -25,8 +25,6 @@ import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.MachineRecipeResult;
 import ic2.api.recipe.Recipes;
-import ic2.core.ref.TeBlock;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,13 +43,14 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
+public class MT_UPulverizer extends MT_MachineProcess implements IScrewDriver {
 	private static Method PMngCache;
 	private static boolean error;
 	private byte mode;
 
 	public MT_UPulverizer(int tier) {
-		super(tier, 1, 2, 0, 0, 0, null, false, false);
+		super(tier, 1, 2, 0, 0, 0, null, false, false, "upulv", "vent");
+		setSfx(SoundEvents.BLOCK_METAL_BREAK, 1.0F, 0.5F);
 	}
 
 	@Override
@@ -68,40 +67,10 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 		if (JSTCfg.ic2Loaded || JSTCfg.teLoaded) return getPulvRecipe(in[0], getWorld().rand, mode);
 		return null;
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite t = getTieredTex(tier);
-		return new TextureAtlasSprite[] {t, getTETex("vent"), t, t, t, getTETex("upulv")};
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getTexture() {
-		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
-		for (byte n = 0; n < ret.length; n++) {
-			if (n == 1) ret[n] = getTETex("vent");
-			else if (this.baseTile.facing == JSTUtils.getFacingFromNum(n)) {
-				ret[n] = getTETex("upulv" + (this.baseTile.isActive() ? "" : "_off"));
-			} else {
-				ret[n] = getTieredTex(tier);
-			}
-		}
-		return ret;
-	}
 
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
 		if (JSTCfg.ic2Loaded && JSTCfg.teLoaded) ls.add(I18n.format("jst.tooltip.tile.com.sd.rs"));
-	}
-
-	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote)
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-		return true;
 	}
 	
 	@Override
@@ -140,11 +109,6 @@ public class MT_UPulverizer extends MT_MachineGeneric implements IScrewDriver {
 				}
 			}
 		}
-	}
-	
-	@Override
-	protected void onStartWork() {
-		getWorld().playSound(null, getPos(), SoundEvents.BLOCK_METAL_BREAK, SoundCategory.BLOCKS, 1.0F, 0.5F);
 	}
 
 	@Override

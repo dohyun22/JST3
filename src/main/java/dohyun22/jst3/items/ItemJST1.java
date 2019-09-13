@@ -14,6 +14,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Multimap;
 
 import cofh.api.item.IToolHammer;
+
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.IItemJEU;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
@@ -56,13 +57,16 @@ import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
 
+import mrtjp.projectred.api.IScrewdriver;
+
 @Optional.InterfaceList({
 	@Optional.Interface(iface="ic2.api.item.ISpecialElectricItem", modid="ic2"),
 	@Optional.Interface(iface="ic2.api.item.IElectricItemManager", modid="ic2"),
 	@Optional.Interface(iface="ic2.api.item.IBoxable", modid="ic2"),
-	@Optional.Interface(iface="cofh.api.item.IToolHammer", modid="cofhapi")
+	@Optional.Interface(iface="cofh.api.item.IToolHammer", modid="cofhapi"),
+	@Optional.Interface(iface="mrtjp.projectred.api.IScrewdriver", modid="projectred|api")
 })
-public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectricItem, IElectricItemManager, IBoxable, IToolHammer {
+public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectricItem, IElectricItemManager, IBoxable, IToolHammer, IScrewdriver {
 
 	public ItemJST1() {
 		setRegistryName(JustServerTweak.MODID, "itemjst1");
@@ -384,13 +388,13 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 	@Override
 	@Method(modid = "cofhapi")
 	public boolean isUsable(ItemStack st, EntityLivingBase el, BlockPos p) {
-		return getBehaviour(st).isWrench();
+		return getBehaviour(st).isWrench(st);
 	}
 
 	@Override
 	@Method(modid = "cofhapi")
 	public boolean isUsable(ItemStack st, EntityLivingBase el, Entity e) {
-		return getBehaviour(st).isWrench();
+		return getBehaviour(st).isWrench(st);
 	}
 
 	@Override
@@ -403,6 +407,18 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 	@Method(modid = "cofhapi")
 	public void toolUsed(ItemStack st, EntityLivingBase el, Entity e) {
 		getBehaviour(st).onWrenchUsed(st, el);
+	}
+
+	@Override
+	@Method(modid = "projectred|api")
+	public boolean canUse(EntityPlayer pl, ItemStack st) {
+		return getBehaviour(st).isScrewdriver(st);
+	}
+
+	@Override
+	@Method(modid = "projectred|api")
+	public void damageScrewdriver(EntityPlayer pl, ItemStack st) {
+		getBehaviour(st).onScrewdriverUsed(st, pl);
 	}
 
 	@Override

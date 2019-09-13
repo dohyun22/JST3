@@ -1,5 +1,6 @@
 package dohyun22.jst3.loader;
 
+import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.device.*;
 import dohyun22.jst3.tiles.device.MT_AdvChest.AdvChestType;
@@ -9,13 +10,15 @@ import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
 import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
+import dohyun22.jst3.utils.JSTSounds;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MTELoader {
-	public static void preinit() {
+	public static void init() {
 		//#0 represents broken MetaTileEntity and should not be used.
 		/* #1~10: Machine Casings */
 		MetaTileBase.registerTE(1, new MetaTileCasing("t0_side"));
@@ -91,7 +94,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
 		
 		for (int n = 1; n <= 9; n++)
-			MetaTileBase.registerTE(180 + n, new MetaTileBESU(n));
+			MetaTileBase.registerTE(180 + n, new MetaTileBatBuff(n));
 		
 		for (int n = 0; n <= 8; n++)
 			MetaTileBase.registerTE(190 + n, new MetaTileTransformer(n));
@@ -105,22 +108,22 @@ public class MTELoader {
 		MetaTileBase.registerTE(214, new MT_AdvChest(AdvChestType.ADVANCED));
 		
 		for (int n = 1; n <= 8; n++)
-			MetaTileBase.registerTE(220 + n, new MT_EAlloyFurnace(n));
+			MetaTileBase.registerTE(220 + n, new MT_MachineProcess(n, 2, 1, 0, 0, 0, MRecipes.AlloyFurnaceRecipes, true, false, "ealloy", null).setSfx(SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, 1.0F, 1.2F).setLux(10));
 		
 		for (int n = 1; n <= 8; n++)
 			MetaTileBase.registerTE(230 + n, new MT_Assembler(n));
 
 		for (int n = 1; n <= 8; n++)
-			MetaTileBase.registerTE(240 + n, new MT_Separator(n));
+			MetaTileBase.registerTE(240 + n, new MT_MachineProcess(n, 2, 6, 1, 1, 16000, MRecipes.SeparatorRecipes, true, false, "separator", null).setSfx(JSTSounds.SHOCK, 0.6F, 2.0F));
 		
 		for (int n = 1; n <= 8; n++)
-			MetaTileBase.registerTE(250 + n, new MT_ChemMixer(n));
+			MetaTileBase.registerTE(250 + n, new MT_MachineProcess(n, 6, 2, 1, 1, 16000, MRecipes.ChemMixerRecipes, true, false, "chemmixer", null).setSfx(SoundEvents.BLOCK_BREWING_STAND_BREW, 1.0F, 1.2F));
 		
 		for (int n = 1; n <= 8; n++)
 			MetaTileBase.registerTE(260 + n, new MT_Disassembler(n));
 		
 		for (int n = 1; n <= 8; n++)
-			MetaTileBase.registerTE(270 + n, new MT_Press(n));
+			MetaTileBase.registerTE(270 + n, new MT_MachineProcess(n, 2, 2, 0, 0, 0, MRecipes.PressRecipes, true, false, "press", null).setSfx(SoundEvents.BLOCK_PISTON_EXTEND, 0.5F, 0.75F));
 		
 		for (int n = 1; n <= 8; n++)
 			MetaTileBase.registerTE(280 + n, new MT_EFurnace(n));
@@ -129,7 +132,7 @@ public class MTELoader {
 			MetaTileBase.registerTE(290 + n, new MT_UPulverizer(n));
 
 		for (int n = 1; n <= 8; n++)
-			MetaTileBase.registerTE(300 + n, new MT_Crystalizer(n));
+			MetaTileBase.registerTE(300 + n, new MT_MachineProcess(n, 2, 1, 1, 0, 16000, MRecipes.CrystalRecipes, true, false, "crystal", null).setSfx(SoundEvents.BLOCK_BREWING_STAND_BREW, 1.0F, 1.5F));
 		
 		for (int n = 1; n <= 8; n++)
 			MetaTileBase.registerTE(310 + n, new MT_Recycler(n));
@@ -216,6 +219,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(5080, new MetaTileCasingAdv("frame", null, 1.0F, 5.0F, false));
 		MetaTileBase.registerTE(5082, new MetaTileEFenceWire());
 		MetaTileBase.registerTE(5083, new MetaTileCasing("csg_a"));
+		MetaTileBase.registerTE(5084, new MetaTileCasing("filter"));
 		
 		/* #6000: Non-tiered TEs*/
 		//MetaTileBase.registerTE(6000, new MetaTileMESU());
@@ -238,6 +242,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(6022, new MT_Prospector());
 		MetaTileBase.registerTE(6024, new MT_EFenceChgr());
 		MetaTileBase.registerTE(6025, new MT_HeatBoiler());
+		//6026=boiler
 		if (JSTCfg.ticLoaded)
 		MetaTileBase.registerTE(6026, new MT_Heater());
 		MetaTileBase.registerTE(6027, new MT_SaltExtractor());
@@ -257,12 +262,14 @@ public class MTELoader {
 		if (Loader.isModLoaded("advancedrocketry")) {
 		MetaTileBase.registerTE(6045, new MT_WarpEnergyProvider());
 		MetaTileBase.registerTE(6046, new MT_Rectenna());}
+		MetaTileBase.registerTE(6047, new MT_BioProcessor());
+		MetaTileBase.registerTE(6048, new MT_LargePurifier());
+		//6049=dam
 		if (Loader.isModLoaded("toughasnails"))
 		MetaTileBase.registerTE(6050, new MT_WaterPurifier());
 		MetaTileBase.registerTE(6060, new MT_Fueler());
 		MetaTileBase.registerTE(6061, new MetaTileCreativeGenerator(1));
-		MetaTileBase.registerTE(6062, new MT_BioProcessor());
-		MetaTileBase.registerTE(6063, new MT_FlameTrap());
+		MetaTileBase.registerTE(6062, new MT_FlameTrap());
 
 		/* #7000: EarlyTech Kinetic energy based machines */
 		MetaTileBase.registerTE(7000, new MetaTileGearBox(true));

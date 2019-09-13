@@ -61,7 +61,7 @@ public class MetaTileFluidGen extends MetaTileGenerator {
 	
 	@Override
 	protected void checkCanGenerate() {
-		this.baseTile.setActive(burningFuel > 0);
+		baseTile.setActive(burningFuel > 0);
 	}
 	
 	@Override

@@ -8,31 +8,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class JSTFluids {
-	public static Fluid oil;
-	public static Fluid fuel;
-	public static Fluid nitrofuel;
-	public static Fluid naturalGas;
-	public static Fluid lng;
-	public static Fluid lpg;
-	public static Fluid hydrogen;
-	public static Fluid deuterium;
-	public static Fluid tritium;
-	public static Fluid helium3;
-	public static Fluid helium;
-	public static Fluid lithium;
-	public static Fluid carbon;
-	public static Fluid nitrogen;
-	public static Fluid oxygen;
-	public static Fluid sodium;
-	public static Fluid silicon;
-	public static Fluid chlorine;
-	public static Fluid mercury;
-	public static Fluid steam;
-	public static Fluid acid;
-	public static Fluid air;
-	public static Fluid heavyfuel;
+	public static Fluid oil, fuel, nitrofuel, naturalGas, lng, lpg, hydrogen, deuterium, tritium, helium3, helium, lithium,
+	carbon, nitrogen, oxygen, sodium, silicon, chlorine, mercury, steam, acid, air, heavyfuel, hotsteam;
 	
-	public static void preInit() {
+	public static void init() {
 		oil = createFluid("oil", 0, 500, 300, 5000, false);
 		fuel = createFluid("fuel", 0, 300, 300, 1000, false);
 		nitrofuel = createFluid("nitrofuel", 0, 400, 300, 1000, false, EnumRarity.UNCOMMON);
@@ -43,7 +22,7 @@ public class JSTFluids {
 		deuterium = createFluid("deuterium", 0, -200, 300, 0, true);
 		tritium = createFluid("tritium", 0, -180, 300, 0, true, EnumRarity.RARE);
 		helium3 = createFluid("helium3", 0, -180, 300, 0, true, EnumRarity.RARE);
-		helium = createFluid("helium", 0, -100, 300, 0, true);
+		helium = createFluid("helium", 0, -100, 300, 0, true, EnumRarity.UNCOMMON);
 		lithium = createFluid("lithium", 0, 534, 454, 2000, false);
 		carbon = createFluid("carbon", 4, 2260, 3823, 4000, false);
 		nitrogen = createFluid("nitrogen", 0, 0, 300, 0, true);
@@ -56,6 +35,7 @@ public class JSTFluids {
 		acid = createFluid("acid", 0, 1200, 300, 1000, false);
 		air = createFluid("air", 0, 0, 300, 0, true);
 		heavyfuel = createFluid("heavyfuel", 0, 1000, 300, 2000, false);
+		hotsteam = createFluid("hotsteam", 0, 50, 1000, 0, true);
 
 		FluidRegistry.addBucketForFluid(oil);
 		FluidRegistry.addBucketForFluid(fuel);

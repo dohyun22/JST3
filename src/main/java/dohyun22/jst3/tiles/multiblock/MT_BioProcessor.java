@@ -56,7 +56,7 @@ public class MT_BioProcessor extends MT_Multiblock {
 				}
 			}
 		}
-		if (itemInput.size() < 1 || itemInput.size() > 2 || fluidInput.size() != 1 || itemOutput.size() != 1 || fluidOutput.size() != 1) return false;
+		if (energyInput.size() != 1 || itemInput.size() < 1 || itemInput.size() > 2 || fluidInput.size() != 1 || itemOutput.size() != 1 || fluidOutput.size() != 1) return false;
 		int v = JSTUtils.getVoltFromTier(circuitTier);
 		updateEnergyPort(v, v * 8, false);
 		return true;
@@ -111,7 +111,7 @@ public class MT_BioProcessor extends MT_Multiblock {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, st, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 
 	@Override
@@ -179,5 +179,6 @@ public class MT_BioProcessor extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.bioprocess"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg"));
 	}
 }

@@ -1,5 +1,6 @@
 package dohyun22.jst3.tiles.machine;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -18,7 +19,6 @@ import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.interfaces.IScrewDriver;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.recipe.Recipes;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,13 +34,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.actors.threadpool.Arrays;
 
-public class MT_Recycler extends MT_MachineGeneric implements IScrewDriver {
+public class MT_Recycler extends MT_MachineProcess implements IScrewDriver {
 	private byte mode;
 
 	public MT_Recycler(int tier) {
-		super(tier, 1, 1, 0, 0, 0, null, false, false);
+		super(tier, 1, 1, 0, 0, 0, null, false, false, "recycler", null);
+		setSfx(SoundEvents.BLOCK_PISTON_EXTEND, 0.5F, 1.6F);
 	}
 	
 	@Override
@@ -69,38 +69,12 @@ public class MT_Recycler extends MT_MachineGeneric implements IScrewDriver {
 		ItemStack st = flag ? JSTCfg.ic2Loaded ? JSTUtils.getModItemStack("ic2:crafting", 1, 23) : new ItemStack(Blocks.DIRT) : ItemStack.EMPTY;
 		return RecipeContainer.newContainer(new Object[] {new AnyInput(isAdv ? 8 : 1)}, null, new ItemStack[] {st}, null, 1, isAdv ? 360 : 45);
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite t = getTieredTex(tier);
-		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("recycler")};
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getTexture() {
-		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
-		for (byte n = 0; n < ret.length; n++) {
-			if (this.baseTile.facing == JSTUtils.getFacingFromNum(n)) {
-				ret[n] = getTETex("recycler");
-			} else {
-				ret[n] = getTieredTex(tier);
-			}
-		}
-		return ret;
-	}
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile != null && !isClient())
-			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
-	}
-
-	@Override
-	protected void onStartWork() {
-		getWorld().playSound(null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, 1.6F);
 	}
 
 	@Override
@@ -115,25 +89,6 @@ public class MT_Recycler extends MT_MachineGeneric implements IScrewDriver {
 		tag.setByte("Mode", mode);
 	}
 
-	@Override
-	protected void addSlot(ContainerGeneric cg, InventoryPlayer inv, TileEntityMeta te) {
-		cg.addSlot(new Slot(te, 0, 53, 35));
-		cg.addSlot(new JSTSlot(te, 1, 107, 35, false, true, 64, true));
-		cg.addSlot(new BatterySlot(te, 2, 8, 53, false, true));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	protected void addComp(GUIGeneric gg) {
-		gg.addSlot(53, 35, 0);
-		gg.addSlot(107, 35, 0);
-		
-		gg.addPrg(76, 35);
-		
-		gg.addSlot(8, 53, 2);
-		gg.addPwr(12, 31);
-	}
-	
 	@Override
 	public boolean onScrewDriver(EntityPlayer pl, EnumFacing f, double px, double py, double pz) {
 		if (tier < 3) return false;

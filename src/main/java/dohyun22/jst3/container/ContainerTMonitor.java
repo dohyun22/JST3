@@ -13,18 +13,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerTMonitor extends ContainerMTE {
-	private final IInventory dummy;
 	public int temp;
 	public boolean invert;
 	
 	public ContainerTMonitor(IInventory inv, TileEntityMeta te) {
 		super(te);
-		
-		this.dummy = new InventoryDummy();
-		addSlotToContainer(new JSTSlot(this.dummy, 0, 152, 8, false, false, 1, false));
+		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 152, 8, false, false, 1, false));
 		for (int y = 0; y < 2; y++) {
 			for (int x = 0; x < 4; x++) {
-				addSlotToContainer(new JSTSlot(this.dummy, x + y * 4 + 1, x * 18 + 53, y * 18 + 44, false, false, 1, false));
+				addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, x + y * 4 + 1, x * 18 + 53, y * 18 + 44, false, false, 1, false));
 			}
 		}
 		
