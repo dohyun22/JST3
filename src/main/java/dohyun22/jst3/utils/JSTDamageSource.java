@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import dohyun22.jst3.loader.JSTCfg;
-import ic2.api.info.Info;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -18,23 +16,14 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class JSTDamageSource {
-	public static final DamageSource ELECTRIC = new DamageSource("electric");
-	public static final DamageSource DELETE = new DamageSource("delete").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
-	public static final DamageSource DUST = new DamageSource("finedust").setDamageIsAbsolute().setDamageBypassesArmor();
-	public static final DamageSource FLAME = new DamageSource("flametrap").setFireDamage();
+	public static DamageSource ELECTRIC = new DamageSource("electric");
+	public static DamageSource DELETE = new DamageSource("delete").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
+	public static DamageSource DUST = new DamageSource("finedust").setDamageIsAbsolute().setDamageBypassesArmor();
+	public static DamageSource FLAME = new DamageSource("flametrap").setFireDamage();
 	public static final HashMap<EnumHazard, List<ItemStack>> HAZMATS = new HashMap();
 
 	public static DamageSource causeEntityDamage(String s, @Nullable Entity e) {
 		return new EntityDamageSource("jst_" + s, e);
-	}
-	
-	public static DamageSource getElectricDamage() {
-		if (JSTCfg.ic2Loaded) {
-			try {
-				return Info.DMG_ELECTRIC;
-			} catch (Throwable t) {}
-		}
-		return JSTDamageSource.ELECTRIC;
 	}
 	
 	public static enum EnumHazard {

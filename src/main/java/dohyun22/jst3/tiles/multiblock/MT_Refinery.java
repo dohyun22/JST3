@@ -41,24 +41,24 @@ public class MT_Refinery extends MT_Multiblock {
 		EnumFacing f = getFacing();
 		if (f == null || f.getAxis() == EnumFacing.Axis.Y)
 			return false;
-		int coilType = -1;
+		World w = getWorld();
 		for (int x = -1; x <= 1; x++) {
 			for (int z = 0; z <= 2; z++) {
-				BlockPos p = getPosFromCoord(x, 0, z);
+				BlockPos p = getRelativePos(x, 0, z);
 				if (p.equals(getPos())) continue;
-				if (MetaTileBase.getMTEId(getWorld(), p) != 5001 && !getAndAddPort(p, 57, "heatres"))
+				if (MetaTileBase.getMTEId(w, p) != 5001 && !getAndAddPort(p, 57, "heatres"))
 					return false;
 			}
 		}
-		World w = this.getWorld();
 		for (int y = 1; y <= 7; y++) {
 			int cnt = 0;
+			BlockPos p;
 			for (int x = -1; x <= 1; x++) {
 				for (int z = 0; z <= 2; z++) {
 					if (x == 0 && z == 1)
 						continue;
-					BlockPos p = getPosFromCoord(x, y, z);
-					if (MetaTileBase.getMTEId(getWorld(), p) == 5003)
+					p = getRelativePos(x, y, z);
+					if (MetaTileBase.getMTEId(w, p) == 5003)
 						continue;
 					if (getAndAddPort(p, 32, "csg_r")) {
 						cnt++;
@@ -66,14 +66,14 @@ public class MT_Refinery extends MT_Multiblock {
 						return false;
 				}
 			}
-			BlockPos p = getPosFromCoord(0, y, 1);
+			p = getRelativePos(0, y, 1);
 			if (w.isAirBlock(p))
 				if (y < 7) {
 					if (cnt != 1) return false; 
 					continue;
 				} else
 					return false;
-			if (MetaTileBase.getMTEId(getWorld(), p) == 5003)
+			if (MetaTileBase.getMTEId(w, p) == 5003)
 				break;
 			if (getAndAddPort(p, 32, "csg_r")) {
 				if (cnt == 0)
@@ -131,10 +131,9 @@ public class MT_Refinery extends MT_Multiblock {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient() || tryUpg(pl, heldItem))
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 
@@ -209,6 +208,6 @@ public class MT_Refinery extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.refinery"));
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg", 4));
 	}
 }

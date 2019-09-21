@@ -18,16 +18,14 @@ public class IB_BluePrint extends ItemBehaviour {
 
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
-		int size = getSizeOfComsumedLead(st);
-		int tier = getSizeOfTier(st);
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", tier, size));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", getCircuitTier(st), getSolder(st)));
 	}	
 	
-	public static int getSizeOfComsumedLead(ItemStack st) {
+	public static int getSolder(ItemStack st) {
 		return st.hasTagCompound() ? st.getTagCompound().getInteger("consumeSize") : 0;
 	}
 	
-	public static int getSizeOfTier(ItemStack st) {
+	public static int getCircuitTier(ItemStack st) {
 		return st.hasTagCompound() ? st.getTagCompound().getInteger("tier") : 0;
 	}
 	
@@ -40,15 +38,5 @@ public class IB_BluePrint extends ItemBehaviour {
 	@Override
 	public int getItemStackLimit(ItemStack st) {
 		return 1;
-	}
-	
-	@Override
-	public boolean showDurability(ItemStack st) {
-		return false;
-	}
-	
-	@Override
-	public double getDisplayDamage(ItemStack st) {
-		return 1.0D;
 	}
 }

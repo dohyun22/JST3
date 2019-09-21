@@ -31,9 +31,16 @@ public class MT_ItemPort extends MetaTileBase implements IMultiBlockIO {
 	}
 
 	@Override
-	public void setTexture(String texName) {
-		if (!texName.equals(this.displayTexture)) {
-			displayTexture = texName;
+	public void setTexture(String tex) {
+		if (tex == null) {
+			if (displayTexture != null) {
+				displayTexture = null;
+				baseTile.issueUpdate();
+			}
+			return;
+		}
+		if (!tex.equals(displayTexture)) {
+			displayTexture = tex;
 			baseTile.issueUpdate();
 		}
 	}
@@ -75,24 +82,18 @@ public class MT_ItemPort extends MetaTileBase implements IMultiBlockIO {
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new ContainerItemPort(inv, te);
-		return null;
+		return new ContainerItemPort(inv, te);
 	}
 
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new GUIItemPort(new ContainerItemPort(inv, te));
-		return null;
+		return new GUIItemPort(new ContainerItemPort(inv, te));
 	}
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote) {
-			return true;
-		}
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	

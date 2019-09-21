@@ -28,12 +28,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ic2.api.info.Info;
-import ic2.core.item.armor.ItemArmorHazmat;
 
 public class JSTPotions extends Potion {
 	private static final String[] validNames = new String[] {"golem", "sentry", "robot", "vehicle", "turret", "machine", "android", "cyborg", "heli", "aircraft"};
@@ -160,6 +160,7 @@ public class JSTPotions extends Potion {
 
 	public static boolean canEMP(EntityLivingBase e) {
 		if (e == null) return false;
+		if (e.hasCapability(CapabilityEnergy.ENERGY, null) && e.getCapability(CapabilityEnergy.ENERGY, null).getEnergyStored() > 0) return true;
 		ResourceLocation cn = new ResourceLocation(JSTUtils.getRegName(e, true));
 		for (String str : validNames)
 			if (cn.getResourcePath().contains(str))

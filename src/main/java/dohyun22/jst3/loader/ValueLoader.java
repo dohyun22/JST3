@@ -19,13 +19,13 @@ public class ValueLoader extends Loadable {
 
 	@Override
 	public void preInit() {
-	    CapabilityManager.INSTANCE.register(IDust.class, new FineDustCapability.Impl(), FineDustCapability.Default.class);
+		CapabilityManager.INSTANCE.register(IDust.class, new FineDustCapability.Impl(), FineDustCapability.Default.class);
 	}
 
 	@Override
 	public void postInit() {
 		if (JSTCfg.fineDust)
-			DustHandler.initTEs();
+			DustHandler.init();
 
 	    JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_HELMET, 1, 32767));
 	    JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1, 32767));

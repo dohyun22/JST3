@@ -73,6 +73,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -315,6 +316,10 @@ public class JSTUtils {
 			if (volt <= JSTConstants.V[n])
 				return JSTConstants.V[n];
 		return 0;
+	}
+
+	public static int getMultiplier(int tier, int use) {
+		return JSTUtils.getVoltFromTier(tier) / JSTUtils.getNearestVolt(Math.max(32, use));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -928,10 +933,6 @@ public class JSTUtils {
 		return oreMatches(new ItemStack(bl.getBlock(), 1, bl.getBlock().getMetaFromState(bl)), id);
 	}
 
-	public static int getMultiplier(int tier, int use) {
-		return JSTUtils.getVoltFromTier(tier) / JSTUtils.getNearestVolt(Math.max(32, use));
-	}
-
     public static RayTraceResult rayTraceEntity(@Nonnull Entity e, boolean liq, boolean ibwbb, boolean rlucb, double dist) {
         float rp = e.rotationPitch;
         float ry = e.rotationYaw;
@@ -1111,5 +1112,28 @@ public class JSTUtils {
 				tag = tag.getCompoundTag(l[n]);
 		}
 		return null;
+	}
+
+	public static void makeMachineGoHaywire(World w, BlockPos p) {
+		TileEntity te = w.getTileEntity(p);
+		if (te == null) return;
+		boolean flag = false;
+		for (EnumFacing f : EnumFacing.VALUES)
+			if (te.hasCapability(CapabilityEnergy.ENERGY, f)) {
+				w.tickableTileEntities.remove(te);
+				flag = true;
+				break;
+			}
+		try {
+			if (!flag && JSTCfg.ic2Loaded && EnergyNet.instance.getSubTile(w, p) == te) {
+				w.tickableTileEntities.remove(te);
+				EnergyNet.instance.removeTile((IEnergyTile)te);
+				flag = true;
+			}
+		} catch (Throwable t) {}
+		if (flag) {
+			JSTPacketHandler.playCustomEffect(w, p.up(), 1, 0);
+			w.playSound(null, p, JSTSounds.SHOCK2, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		}
 	}
 }

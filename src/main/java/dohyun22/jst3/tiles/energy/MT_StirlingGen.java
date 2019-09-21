@@ -51,19 +51,19 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileFurnaceGen extends MetaTileGenerator implements IGenericGUIMTE {
+public class MT_StirlingGen extends MetaTileGenerator implements IGenericGUIMTE {
 	private double fuelLeft;
 	private int fuelValue, /* 20•ÏB */water;
 	private MultiTankHandler tank;
 	private boolean steam, watergen;
 	
-	public MetaTileFurnaceGen(int tier) {
+	public MT_StirlingGen(int tier) {
 		super(tier, true);
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileFurnaceGen(tier);
+		return new MT_StirlingGen(tier);
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.loader.JSTCfg;
-import dohyun22.jst3.tiles.energy.MetaTileFurnaceGen;
+import dohyun22.jst3.tiles.energy.MT_StirlingGen;
 import dohyun22.jst3.utils.JSTUtils;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -69,7 +69,7 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 		List<ItemStack> ls = rg.getIngredientRegistry().getFuels();
 		List<ItemFuelRecipeWrapper> ret = new LinkedList();
 		for (ItemStack st : ls) {
-			int bt = MetaTileFurnaceGen.getFuelValue(st);
+			int bt = MT_StirlingGen.getFuelValue(st);
 			if (bt > 0) {
 				List<List<ItemStack>> ls2 = new ArrayList();
 				List<ItemStack> ls3 = new ArrayList();

@@ -450,12 +450,7 @@ public class RecipeLoader extends Loadable {
 		}
 
 		//#5000 multi-block structure parts
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5000), 
-				" C ", "TMT",
-				'C', ItemList.circuits[2],
-				'T', pf + "Titanium",
-				'M', ItemList.machineBlock[3]
-				);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 2, 5000), " C ", "TMT", " C ", 'C', ItemList.circuits[2], 'T', pf + "Titanium", 'M', ItemList.machineBlock[3]);
 		
 		obj = pf + "Invar";
 		if(!JSTUtils.oreValid((String)obj))

@@ -59,7 +59,7 @@ public class MT_FluidDrill extends MT_Multiblock {
 		World w = getWorld();
 		for (int x = -1; x <= 1; x++) {
 			for (int z = 0; z <= 2; z++) {
-				BlockPos p = getPosFromCoord(x, 0, z);
+				BlockPos p = getRelativePos(x, 0, z);
 				if (p.equals(pos)) continue;
 				if (getAndAddPort(p, 33, null))
 					continue;
@@ -71,7 +71,7 @@ public class MT_FluidDrill extends MT_Multiblock {
 		}
 		
 		for (int n = 1; n < 4; n++) {
-			BlockPos center = getPosFromCoord(0, n, 1);
+			BlockPos center = getRelativePos(0, n, 1);
 			int id = MetaTileBase.getMTEId(w, center);
 			if ((pid != -1 && pid != id) || id < 3 || id > 9)
 				return false;
@@ -154,7 +154,7 @@ public class MT_FluidDrill extends MT_Multiblock {
 		if (baseTile.isActive()) {
 			World w = getWorld();
 			if (w.rand.nextInt(8) == 0) {
-				BlockPos p = getPosFromCoord(0, 3, 1);
+				BlockPos p = getRelativePos(0, 3, 1);
 				for (int i = 0; i < 8; i++) {
 					double x = p.getX() + 0.5D + w.rand.nextFloat() * 0.6D - 0.3D;
 					double y = p.getY() + 1 + w.rand.nextFloat() * 0.2D;
@@ -166,10 +166,9 @@ public class MT_FluidDrill extends MT_Multiblock {
 	}
 	
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient() || tryUpg(pl, heldItem))
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	

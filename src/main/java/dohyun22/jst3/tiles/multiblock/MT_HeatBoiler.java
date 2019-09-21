@@ -46,7 +46,7 @@ public class MT_HeatBoiler extends MT_Multiblock {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
 				for (int z = 0; z <= 2; z++) {
-					BlockPos p = getPosFromCoord(x, y, z);
+					BlockPos p = getRelativePos(x, y, z);
 					if (y == -1 || y == 1) {
 						if (MetaTileBase.getMTEId(w, p) == 5001) continue;
 						MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -135,7 +135,7 @@ public class MT_HeatBoiler extends MT_Multiblock {
 			water += use;
 			Fluid ref = flag == 1 ? JSTFluids.steam : FluidRegistry.getFluid("ic2steam");
 			MT_FluidPort fp2 = getFluidPort(0, true);
-			if (ref != null)
+			if (fp2 != null && ref != null)
 				fp2.tank.fillInternal(new FluidStack(ref, use), true);
 			int amt = water / 10000;
 			if (amt > 0) {
@@ -158,36 +158,29 @@ public class MT_HeatBoiler extends MT_Multiblock {
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote)
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new ContainerMulti(inv, te);
-		return null;
+		return new ContainerMulti(inv, te);
 	}
 
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1) {
-			byte[][][] data = {
-					{{4,4,4},
-					{4,4,4},
-					{4,4,4}},
-					{{3,3,3},
-					{3,0,3},
-					{3,1,3}},
-					{{4,4,4},
-					{4,4,4},
-					{4,4,4}}
-			};
-			return new GUIMulti(new ContainerMulti(inv, te), data);
-		}
-		return null;
+		return new GUIMulti(new ContainerMulti(inv, te), new byte[][][] {
+			{{4,4,4},
+			{4,4,4},
+			{4,4,4}},
+			{{3,3,3},
+			{3,0,3},
+			{3,1,3}},
+			{{4,4,4},
+			{4,4,4},
+			{4,4,4}}
+		});
 	}
 	
 	@Override
@@ -199,11 +192,16 @@ public class MT_HeatBoiler extends MT_Multiblock {
 	public boolean isEnergyInput(EnumFacing side) {
 		return false;
 	}
+
+	@Override
+	protected boolean needEnergy() {
+		return false;
+	}
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (this.baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override
@@ -211,11 +209,6 @@ public class MT_HeatBoiler extends MT_Multiblock {
 		super.clearPorts();
 		hotIN = null;
 		coldOUT = null;
-	}
-	
-	@Override
-	protected boolean needEnergy() {
-		return false;
 	}
 	
 	@Override

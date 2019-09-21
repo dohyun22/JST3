@@ -9,8 +9,7 @@ import dohyun22.jst3.tiles.earlytech.*;
 import dohyun22.jst3.tiles.energy.*;
 import dohyun22.jst3.tiles.multiblock.*;
 import dohyun22.jst3.tiles.noupdate.*;
-import dohyun22.jst3.tiles.test.MT_CircuitProduce;
-import dohyun22.jst3.tiles.test.MetaTileCreativeGenerator;
+import dohyun22.jst3.tiles.test.*;
 import dohyun22.jst3.utils.JSTSounds;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
@@ -42,17 +41,17 @@ public class MTELoader {
 		MetaTileBase.registerTE(16, new MT_FluidPort(true));
 
 		/* #21~3999: Tiered Machines */
-		MetaTileBase.registerTE(21, new MetaTileUESU(1, 50000L));
-		MetaTileBase.registerTE(22, new MetaTileUESU(2, 400000L));
-		MetaTileBase.registerTE(23, new MetaTileUESU(3, 3000000L));
-		MetaTileBase.registerTE(24, new MetaTileUESU(4, 25000000L));
-		MetaTileBase.registerTE(25, new MetaTileUESU(5, 160000000L));
-		MetaTileBase.registerTE(26, new MetaTileUESU(6, 1000000000L));
-		MetaTileBase.registerTE(27, new MetaTileUESU(7, 2000000000000L));
+		MetaTileBase.registerTE(21, new MT_UESU(1, 50000L));
+		MetaTileBase.registerTE(22, new MT_UESU(2, 400000L));
+		MetaTileBase.registerTE(23, new MT_UESU(3, 3000000L));
+		MetaTileBase.registerTE(24, new MT_UESU(4, 25000000L));
+		MetaTileBase.registerTE(25, new MT_UESU(5, 160000000L));
+		MetaTileBase.registerTE(26, new MT_UESU(6, 1000000000L));
+		MetaTileBase.registerTE(27, new MT_UESU(7, 2000000000000L));
 		
-		MetaTileBase.registerTE(31, new MetaTileFurnaceGen(1));
-		MetaTileBase.registerTE(32, new MetaTileFurnaceGen(2));
-		MetaTileBase.registerTE(33, new MetaTileFurnaceGen(3));
+		MetaTileBase.registerTE(31, new MT_StirlingGen(1));
+		MetaTileBase.registerTE(32, new MT_StirlingGen(2));
+		MetaTileBase.registerTE(33, new MT_StirlingGen(3));
 		
 		MetaTileBase.registerTE(40, new MetaTileSolarGen(-1));
 		MetaTileBase.registerTE(41, new MetaTileSolarGen(0));
@@ -95,7 +94,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
 		
 		for (int n = 1; n <= 9; n++)
-			MetaTileBase.registerTE(180 + n, new MetaTileBatBuff(n));
+			MetaTileBase.registerTE(180 + n, new MT_BatBuff(n));
 		
 		for (int n = 0; n <= 8; n++)
 			MetaTileBase.registerTE(190 + n, new MetaTileTransformer(n));
@@ -144,10 +143,11 @@ public class MTELoader {
 		if (Loader.isModLoaded("toughasnails")) for (int n = 1; n <= 4; n++)
 			MetaTileBase.registerTE(330 + n, new MT_AirConditioner(n));
 
-		for (int n = 1; n <= 3; n++) {
+		for (int n = 1; n <= 3; n++)
 			MetaTileBase.registerTE(340 + n, new MT_CircuitResearchMachine(n));
-			MetaTileBase.registerTE(350 + n, new MT_CircuitProduce(n));
-		}
+
+		for (int n = 1; n <= 8; n++)
+			MetaTileBase.registerTE(350 + n, new MT_CircuitBuilder(n));
 
 		/* #4000: Cables */
 		//IC2 compatible cables
@@ -273,6 +273,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(6060, new MT_Fueler());
 		MetaTileBase.registerTE(6061, new MetaTileCreativeGenerator(1));
 		MetaTileBase.registerTE(6062, new MT_FlameTrap());
+		MetaTileBase.registerTE(6063, new MT_LargeBoiler());
 
 		/* #7000: EarlyTech Kinetic energy based machines */
 		MetaTileBase.registerTE(7000, new MetaTileGearBox(true));

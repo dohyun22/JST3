@@ -49,7 +49,7 @@ public class JSTSlot extends Slot {
 	}
 
 	public static JSTSlot out(IInventory inv, int i, int x, int y) {
-		return new JSTSlot(inv, i, x, y, false, false, 64, true, true);
+		return new JSTSlot(inv, i, x, y, false, true, 64, true, true);
 	}
 
 	public static JSTSlot fl(IInventory inv, int i, int x, int y) {

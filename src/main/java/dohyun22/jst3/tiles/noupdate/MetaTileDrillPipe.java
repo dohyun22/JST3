@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MetaTileDrillPipe extends MetaTileBase {
+	public boolean noDrop;
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {

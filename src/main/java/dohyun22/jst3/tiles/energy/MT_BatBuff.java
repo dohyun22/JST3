@@ -41,17 +41,17 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileBatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, IScanSupport {
+public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, IScanSupport {
 	private final byte tier;
 	private boolean boost;
 
-	public MetaTileBatBuff(int t) {
+	public MT_BatBuff(int t) {
 		tier = (byte) t;
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileBatBuff(tier);
+		return new MT_BatBuff(tier);
 	}
 
 	@Override

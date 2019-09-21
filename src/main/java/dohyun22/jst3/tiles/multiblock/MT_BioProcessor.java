@@ -44,7 +44,7 @@ public class MT_BioProcessor extends MT_Multiblock {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
 				for (int z = 0; z <= 2; z++) {
-					BlockPos p = getPosFromCoord(x, y, z);
+					BlockPos p = getRelativePos(x, y, z);
 					if (y == -1 || y == 1) {
 						if (MetaTileBase.getMTEId(getWorld(), p) != 5003 && !getAndAddPort(p, 61, "csg_r")) return false;
 					} else {
@@ -101,10 +101,9 @@ public class MT_BioProcessor extends MT_Multiblock {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient() || tryUpg(pl, heldItem))
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 
@@ -179,6 +178,6 @@ public class MT_BioProcessor extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.bioprocess"));
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg", 4));
 	}
 }

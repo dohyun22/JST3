@@ -30,7 +30,6 @@ public class JSTCfg {
 	public static boolean customMat;
 	public static byte researchTier;
 	public static boolean onlyUseJSTCircuit;
-	public static boolean fireFineDust;
 	//InterMod
 	public static boolean RIC2C;
 	public static boolean CheaperIC2;
@@ -118,10 +117,6 @@ public class JSTCfg {
 			pr = cfg.get(c, "ExplosionChanceWithSilktouch", 100);
 			pr.setComment("Chance of Nether Ore Explosion with Silk Touch enchanted tools.\n(Default: 1 in 100, will not explode if zero)");
 			ECncST = pr.getInt();
-
-			pr = cfg.get(c, "FireCauseFineDust", true);
-			pr.setComment("If true, spreading fire will cause fine dust.");
-			fireFineDust = pr.getBoolean();
 
 			c = "General";
 			pr = cfg.get(c, "RFPerEU", 4);

@@ -85,7 +85,7 @@ public class MT_LargeTesla extends MT_Multiblock {
 					ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(e.posX - r, e.posY - r, e.posZ - r, e.posX + r, e.posY + r, e.posZ + r));
 					for (EntityLivingBase e2 : ls) {
 						if (e2 instanceof EntityPlayer) continue;
-						if (e2.attackEntityFrom(JSTDamageSource.getElectricDamage(), JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, e2) ? 0 : 20)) {
+						if (e2.attackEntityFrom(JSTDamageSource.ELECTRIC, JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, e2) ? 0 : 20)) {
 							baseTile.energy -= ENERGY_PER_SHOT;
 							JSTPacketHandler.playCustomEffect(w, p, 1, 0);
 							flag = false;
@@ -154,7 +154,8 @@ public class MT_LargeTesla extends MT_Multiblock {
 		TextureAtlasSprite t = getTETex("hvsign");
 		return new TextureAtlasSprite[] {getTieredTex(2), getTETex("e1d"), t, t, t, t};
 	}
-	
+
+	@Override
 	@SideOnly(value=Side.CLIENT)
 	public String getModelKey() {
 		return "jst_ltesla";

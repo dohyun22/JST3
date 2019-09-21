@@ -52,7 +52,7 @@ public class DustHandler {
 	private static final ResourceLocation RL = new ResourceLocation(JustServerTweak.MODID, "dust");
 	public static HashMap<Class, Object[]> TEs = new HashMap();
 
-	public static void initTEs() {
+	public static void init() {
 		if (JSTCfg.fineDustTEs == null) return;
 		RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>> reg = null;
 		try {
@@ -125,12 +125,12 @@ public class DustHandler {
 			for (ChunkPos p : ls) {
 				int ng = JSTChunkData.getFineDust(w, p);
 				if (ng > 0) {
-					if (ng <= 10000) {
-						if (w.rand.nextInt(ng < 5000 ? 4 : 12) == 0) {
-							JSTChunkData.setFineDust(w, p, 0, false);
-							ls3.add(p);
-						}
-					} else if (w.isBlockLoaded(mp.setPos(p.x << 4, 0, p.z << 4))) {
+                    if (ng <= 10000) {
+                        if (w.rand.nextInt((ng < 5000) ? 4 : 12) != 0)
+                            continue;
+                        JSTChunkData.setFineDust(w, p, 0, false);
+                        ls3.add(p);
+                    } else if (w.isBlockLoaded(mp.setPos(p.x << 4, 0, p.z << 4))) {
 						if (ng >= 80000) {
 							AxisAlignedBB ab = new AxisAlignedBB(p.x * 16, 0.0D, p.z * 16, (p.x * 16) + 16, 256.0D, (p.z * 16) + 16);
 							int str = getEffectLvl(ng);

@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.ic2.CompatIC2;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.network.JSTPacketHandler;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -515,8 +516,8 @@ public class MetaTileCable extends MetaTileEnergyInput {
 	
 	@Override
 	public void onEntityCollided(Entity e) {
-		if (insMode == 1 && volt > 0 && e instanceof EntityLivingBase && e.attackEntityFrom(JSTDamageSource.getElectricDamage(), JSTDamageSource.hasFullHazmat(JSTDamageSource.EnumHazard.ELECTRIC, (EntityLivingBase)e) ? 0.0F : Math.min(volt, maxv) / 64.0F))
-			getWorld().playSound(null, getPos(), JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		if (insMode == 1 && volt > 0 && e instanceof EntityLivingBase && e.attackEntityFrom(JSTDamageSource.ELECTRIC, JSTDamageSource.hasFullHazmat(JSTDamageSource.EnumHazard.ELECTRIC, (EntityLivingBase)e) ? 0.0F : Math.min(volt, maxv) / 64.0F))
+			JSTPacketHandler.playCustomEffect(getWorld(), getPos(), 1, -10);
 	}
 	
 	protected static String getCFColor(byte meta) {

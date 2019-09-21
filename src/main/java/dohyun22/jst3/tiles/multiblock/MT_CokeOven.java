@@ -48,7 +48,7 @@ public class MT_CokeOven extends MT_Multiblock {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = 0; y < 3; y += 2) {
 				for (int z = 0; z <= 2; z++) {
-					BlockPos p = getPosFromCoord(x, y, z);
+					BlockPos p = getRelativePos(x, y, z);
 					if (p.equals(getPos())) continue;
 					if (MetaTileBase.getMTEId(getWorld(), p) != 5001 && !getAndAddPort(p, 45, "heatres"))
 						return false;
@@ -58,7 +58,7 @@ public class MT_CokeOven extends MT_Multiblock {
 		int coilType = -1;
 		for (int x = -1; x <= 1; x++) {
 			for (int z = 0; z <= 2; z++) {
-				BlockPos p = getPosFromCoord(x, 1, z);
+				BlockPos p = getRelativePos(x, 1, z);
 				if (x == 0 && z == 1) {
 					if (!this.getWorld().isAirBlock(p))
 						return false;
@@ -110,7 +110,7 @@ public class MT_CokeOven extends MT_Multiblock {
 		if (baseTile.isActive()) {
 			World w = getWorld();
 			if (w.rand.nextInt(8) == 0) {
-				BlockPos p = getPosFromCoord(0, 2, 1);
+				BlockPos p = getRelativePos(0, 2, 1);
 				for (int i = 0; i < 8; i++) {
 					double x = p.getX() + 0.5D + w.rand.nextFloat() * 0.6D - 0.3D;
 					double y = p.getY() + 1 + w.rand.nextFloat() * 0.2D;
@@ -148,10 +148,9 @@ public class MT_CokeOven extends MT_Multiblock {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient() || tryUpg(pl, heldItem))
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 
@@ -248,6 +247,6 @@ public class MT_CokeOven extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.coke"));
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg2"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg2", 4));
 	}
 }

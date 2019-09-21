@@ -1,6 +1,5 @@
 package dohyun22.jst3.evhandler;
 
-import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTChunkData;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +18,7 @@ public class WorldEvListener implements IWorldEventListener {
 
 	@Override
 	public void notifyBlockUpdate(World w, BlockPos p, IBlockState os, IBlockState ns, int flag) {
-		if (JSTCfg.fireFineDust && !w.isRemote) {
+		if (!w.isRemote) {
 			int d = EffectBlocks.getDust(ns);
 			if (d != 0) JSTChunkData.addFineDust(w, new ChunkPos(p), d, true);
 		}

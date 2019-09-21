@@ -34,6 +34,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -88,7 +89,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 			updateClient();
 			return;
 		}
-		if (isInCooldown()) this.cooldown--;
+		if (isInCooldown()) cooldown--;
 		if (timer >= 0) timer--; if (timer2 >= 0) timer2--;
 		if (timer == 0 ||timer2 == 0) {
 			if (timer <= 0) {
@@ -99,7 +100,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 		if (timer2 < 0) {
 			if (structureValid)
 				update();
-			else if (this.baseTile.isActive())
+			else if (baseTile.isActive())
 				stopWorking(true);
 		}
 	}
@@ -134,27 +135,27 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	protected void onStartWork() {}
 	
 	protected void doWork() {
-		if (this.mxprogress > 0) {
-			if (this.cooldown > 0)
+		if (mxprogress > 0) {
+			if (cooldown > 0)
 				return;
 			int u = getEnergyUse();
 			if (getUsableEnergy() >= u) {
 				consumeEnergy(u);
 				if (getUsableEnergy() < u) {
-					if (this.canIEL)
+					if (canIEL)
 						stopWorking(true);
 					else
 						interrupt(80);
 					return;
 				}
-				this.progress += Math.max(1, getSpeed());
-				if (this.progress >= this.mxprogress) {
+				progress += Math.max(1, getSpeed());
+				if (progress >= mxprogress) {
 					finishWork();
-					this.energyUse = 0;
-					this.progress = 0;
-					this.mxprogress = 0;
+					energyUse = 0;
+					progress = 0;
+					mxprogress = 0;
 					if (!checkCanWork()) {
-						this.baseTile.setActive(false);
+						baseTile.setActive(false);
 					} else {
 						markDirty();
 						onStartWork();
@@ -200,7 +201,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	protected void stopWorking(boolean interrupt) {
 		if (interrupt)
 			interrupt(80);
-		this.baseTile.setActive(false);
+		baseTile.setActive(false);
 	    energyUse = 0;
 	    progress = 0;
 	    mxprogress = 0;
@@ -262,25 +263,25 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setBoolean("sv", structureValid);
-		if (this.itemOut != null && this.itemOut.length > 0) {
+		if (itemOut != null && itemOut.length > 0) {
 			NBTTagList t = new NBTTagList();
-			for (int n = 0; n < this.itemOut.length; n++) {
-				if (this.itemOut[n] != null && !this.itemOut[n].isEmpty()) {
+			for (int n = 0; n < itemOut.length; n++) {
+				if (itemOut[n] != null && !itemOut[n].isEmpty()) {
 					NBTTagCompound t2 = new NBTTagCompound();
 	                t2.setInteger("Slot", n);
-					this.itemOut[n].writeToNBT(t2);
+					itemOut[n].writeToNBT(t2);
 					t.appendTag(t2);
 				}
 			}
 			tag.setTag("itemOut", t);
 		}
-		if (this.fluidOut != null && this.fluidOut.length > 0) {
+		if (fluidOut != null && fluidOut.length > 0) {
 			NBTTagList t = new NBTTagList();
-			for (int n = 0; n < this.fluidOut.length; n++) {
-				if (this.fluidOut[n] != null) {
+			for (int n = 0; n < fluidOut.length; n++) {
+				if (fluidOut[n] != null) {
 					NBTTagCompound t2 = new NBTTagCompound();
 					t2.setInteger("Slot", n);
-					this.fluidOut[n].writeToNBT(t2);
+					fluidOut[n].writeToNBT(t2);
 					t.appendTag(t2);
 				}
 			}
@@ -304,25 +305,32 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	}
 
 	protected boolean tryUpg(EntityPlayer pl, ItemStack st) {
+		return tryUpg(pl, st, 3, 6, 4);
+	}
+
+	protected boolean tryUpg(EntityPlayer pl, ItemStack st, int minT, int maxT, int cnt) {
+		minT = MathHelper.clamp(minT, 0, 9);
+		maxT = MathHelper.clamp(maxT, minT, 9);
+		cnt = MathHelper.clamp(cnt, 1, 64);
 		if (!st.isEmpty()) {
-			for (int n = 3; n <= 6; n++) {
+			for (int n = minT; n <= maxT; n++) {
 				if (n <= circuitTier) continue;
 				Object obj = ItemList.circuits[n];
 				boolean flag = obj instanceof ItemStack ? OreDictionary.itemMatches((ItemStack) obj, st, false) : obj instanceof String ? JSTUtils.oreMatches(st, (String) obj) : false;
 				if (flag) {
-					if (st.getCount() >= 4) {
+					if (st.getCount() >= cnt) {
 						if (upgradeCircuit != null && !upgradeCircuit.isEmpty())
 							pl.addItemStackToInventory(upgradeCircuit.copy());
 						circuitTier = (byte) n;
 						upgradeCircuit = st.copy();
-						upgradeCircuit.setCount(4);
-						st.shrink(4);
+						upgradeCircuit.setCount(cnt);
+						st.shrink(cnt);
 						int v = JSTUtils.getVoltFromTier(getTier());
 						updateEnergyPort(v, v * 8, false);
 						getWorld().playSound(null, getPos(), JSTSounds.SWITCH, SoundCategory.BLOCKS, 0.75F, getWorld().rand.nextFloat() * 0.2F + 0.9F);
 						pl.sendMessage(new TextComponentTranslation("jst.msg.multi.upgrade.suc", n));
 					} else {
-						pl.sendMessage(new TextComponentTranslation("jst.msg.multi.upgrade.err", 4));
+						pl.sendMessage(new TextComponentTranslation("jst.msg.multi.upgrade.err", cnt));
 					}
 					return true;
 				}
@@ -336,7 +344,10 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 		FluidTank[] ft = getAllInputTanks();
 		if (st.length <= 0) st = null;
 		if (ft.length <= 0) ft = null;
-		RecipeContainer rc = MRecipes.getRecipe(rec, st, ft, getTier(), true, true);
+		return startProcess(MRecipes.getRecipe(rec, st, ft, getTier(), true, true), st, ft);
+	}
+
+	protected boolean startProcess(RecipeContainer rc, ItemStack[] st, FluidTank[] ft) {
 		if (rc != null) {
 			if (getUsableEnergy() < rc.getEnergyPerTick()) return false;
 			if (energyUse == 0 || mxprogress == 0) {
@@ -394,7 +405,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 		return true;
 	}
 	
-	public BlockPos getPosFromCoord(int x, int y, int z) {
+	public BlockPos getRelativePos(int x, int y, int z) {
 		return getPosFromCoord(this.getPos(), x, y, z, this.getFacing());
 	}
 	

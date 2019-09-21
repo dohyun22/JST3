@@ -27,6 +27,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_LargePurifier extends MT_Multiblock {
 
+	public MT_LargePurifier() {
+		circuitTier = 2;
+		canIEL = true;
+	}
+
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MT_LargePurifier();
@@ -54,8 +59,14 @@ public class MT_LargePurifier extends MT_Multiblock {
 			}
 		}
 		if (energyInput.size() != 1 || fluidInput.size() > 1 || itemOutput.size() > 1) return false;
-		updateEnergyPort(128, 1024, false);
+		int v = JSTUtils.getVoltFromTier(getTier());
+		updateEnergyPort(v, v * 8, false);
 		return true;
+	}
+
+	@Override
+	protected int getTier() {
+		return circuitTier;
 	}
 
 	@Override
@@ -67,8 +78,8 @@ public class MT_LargePurifier extends MT_Multiblock {
 	protected boolean checkCanWork() {
 		BlockPos p = getPos();
 		int cx = getPos().getX() >> 4, cz = getPos().getZ() >> 4;
-    	for (int x = -1; x <= 1; x++) {
-	    	for (int z = -1; z <= 1; z++) {
+    	for (int x = -2; x <= 2; x++) {
+	    	for (int z = -2; z <= 2; z++) {
 	    		ChunkPos cp = new ChunkPos(cx + x, cz + z);
 	    		if (JSTChunkData.getFineDust(getWorld(), cp) > 0) {
 	    			energyUse = 100;
@@ -89,21 +100,27 @@ public class MT_LargePurifier extends MT_Multiblock {
 			if (fs != null) flag = true;
 		}
 		World w = getWorld();
-		int totalDust = 0, cx = getPos().getX() >> 4, cz = getPos().getZ() >> 4, amt = 7500, d;
+		int totalDust = 0, cx = getPos().getX() >> 4, cz = getPos().getZ() >> 4, d, m = JSTUtils.getMultiplier(getTier(), 128), amt = 2500 * m;
 		if (flag) amt *= 2;
-		for (int x = -2; x <= 2; x++) {
-			for (int z = -2; z <= 2; z++) {
+		for (int x = -3; x <= 3; x++) {
+			for (int z = -3; z <= 3; z++) {
+				double dist = Math.max(1, Math.sqrt(x * x + z * z) / 2);
 				ChunkPos cp = new ChunkPos(cx + x, cz + z);
 				d = JSTChunkData.getFineDust(w, cp);
 				if (d > 0) {
 					totalDust += d;
-					JSTChunkData.addFineDust(w, cp, amt, true);
+					JSTChunkData.addFineDust(w, cp, (int)(-amt / dist), true);
 				}
 			}
 		}
 		if (totalDust > 0 && getWorld().rand.nextInt(Math.max(4, 64 - totalDust / 4000)) == 0)
 			sendItem(new ItemStack(JSTItems.item1, 1, 109));
 		super.finishWork();
+	}
+
+	@Override
+	protected int getEnergyUse() {
+		return energyUse * JSTUtils.getMultiplier(getTier(), energyUse);
 	}
 
 	@Override
@@ -122,8 +139,8 @@ public class MT_LargePurifier extends MT_Multiblock {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile != null && !getWorld().isRemote)
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st, 3, 5, 4))
 			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
@@ -135,18 +152,17 @@ public class MT_LargePurifier extends MT_Multiblock {
 
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		byte[][][] data = {
-				{{4,4,4},
-				{4,4,4},
-				{4,4,4}},
-				{{4,4,4},
-				{4,0,4},
-				{4,4,4}},
-				{{7,7,7},
-				{7,1,7},
-				{7,7,7}}
-		};
-		return new GUIMulti(new ContainerMulti(inv, te), data);
+		return new GUIMulti(new ContainerMulti(inv, te), new byte[][][] {
+			{{4,4,4},
+			{4,4,4},
+			{4,4,4}},
+			{{4,4,4},
+			{4,0,4},
+			{4,4,4}},
+			{{7,7,7},
+			{7,1,7},
+			{7,7,7}}
+		});
 	}
 
 	@Override
@@ -171,7 +187,8 @@ public class MT_LargePurifier extends MT_Multiblock {
 		TextureAtlasSprite t = getTETex("csg_b");
 		return new TextureAtlasSprite[] {t, getTETex("filter"), t, t, t, t};
 	}
-	
+
+	@Override
 	@SideOnly(value=Side.CLIENT)
 	public String getModelKey() {
 		return "jst_lpuri";
@@ -181,5 +198,6 @@ public class MT_LargePurifier extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.largepurifier"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg", 4));
 	}
 }

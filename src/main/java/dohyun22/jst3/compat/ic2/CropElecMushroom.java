@@ -56,7 +56,7 @@ public class CropElecMushroom extends CropJST {
 			cr.getCustomData().setBoolean("pwr", true);
 		} else {
 			for (EntityLivingBase elb : list)
-				if (!JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, elb) && elb.attackEntityFrom(JSTDamageSource.getElectricDamage(), MathHelper.clamp(cr.getCurrentSize(), 1.0F, 3.0F)))
+				if (!JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, elb) && elb.attackEntityFrom(JSTDamageSource.ELECTRIC, MathHelper.clamp(cr.getCurrentSize(), 1.0F, 3.0F)))
 					flag = true;
 		}
 		if (flag) {

@@ -183,28 +183,12 @@ public class MetaTileEFenceWire extends MetaTileBase {
 	public void onEntityCollided(Entity e) {
 		if (!isClient() && e instanceof EntityLivingBase) {
 			int dmg = Math.max(2, (int)(baseTile.energy / 3200));
-			if (baseTile.energy > 50 * dmg && !JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, (EntityLivingBase)e) && e.attackEntityFrom(JSTDamageSource.getElectricDamage(), dmg)) {
-				//sendEvent(50, 0);
+			if (baseTile.energy > 50 * dmg && !JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, (EntityLivingBase)e) && e.attackEntityFrom(JSTDamageSource.ELECTRIC, dmg)) {
 				JSTPacketHandler.playCustomEffect(getWorld(), getPos(), 1, -10);
 				baseTile.energy -= 50 * dmg;
 			}
 		}
 	}
-	
-	/*@Override
-	public boolean receiveClientEvent(int id, int arg) {
-		if (id == 50) {
-			if (isClient()) {
-				BlockPos p = getPos();
-				Random rnd = getWorld().rand;
-				getWorld().playSound(p.getX() + 0.5D, p.getY() + 0.5D, p.getZ() + 0.5D, JSTSounds.SHOCK, SoundCategory.BLOCKS, 0.5F, 1.0F + rnd.nextFloat() * 0.2F, false);
-				for (int i = 0; i < 5; i++)
-					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, p.getX() + rnd.nextFloat(), p.getY() + rnd.nextFloat(), p.getZ() + rnd.nextFloat(), 0.1D, 1.0D, 1.0D);
-			}
-			return true;
-		}
-		return false;
-	}*/
 	
 	@Override
 	@SideOnly(value = Side.CLIENT)

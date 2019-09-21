@@ -2,6 +2,7 @@ package dohyun22.jst3.tiles.machine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -39,8 +40,9 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public byte[] listOfGame = new byte[ROW * COLUMN];
 	private final int tier;
 	public byte solder, gameTier;
-	private boolean lvlLoaded;
-	private static final HashMap<Integer, ArrayList<byte[][]>> levels = new HashMap();
+	public boolean lvlLoaded;
+	private static final HashMap<Integer, ArrayList<byte[][]>> LEVELS = new HashMap();
+	private static final HashMap<Integer, Object> BOARDS = new HashMap();
 
 	static {
 		for (int n = 1; n <= 10; n++)
@@ -51,48 +53,68 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			for (int m = 0; m < c.length; m++)
 				new IC(d + m * 6 + 11, c[m][0], c[m][1], d);
 
-		addLvl(1, new byte[][] { { 14, 16 }, { 20, 24 }, { 53, 17 }, { 56, 71 }, { 62, 11 }, { 90, 60 } });
-		addLvl(1, new byte[][] { { 14, 11 }, { 29, 24 }, { 47, 71 }, { 50, 17 }, { 75, 21 }, { 80, 64 } });
-		addLvl(2, new byte[][] { { 22, 21 }, { 26, 76 }, { 37, 26 }, { 52, 80 }, { 55, 29 }, { 56, 65 }, { 65, 22 },
+		addLvl(1, new byte[][] { { 38, 11 }, { 16, 40 }, { 21, 75 }, { 55, 54 } });
+		addLvl(2, new byte[][] { { 14, 16 }, { 20, 24 }, { 53, 17 }, { 56, 71 }, { 62, 11 }, { 90, 60 } });
+		addLvl(2, new byte[][] { { 14, 11 }, { 29, 24 }, { 47, 71 }, { 50, 17 }, { 75, 21 }, { 80, 64 } });
+		addLvl(3, new byte[][] { { 22, 21 }, { 26, 76 }, { 37, 26 }, { 52, 80 }, { 55, 29 }, { 56, 65 }, { 65, 22 },
 				{ 99, 68 } });
-		addLvl(2, new byte[][] { { 27, 77 }, { 32, 69 }, { 42, 24 }, { 52, 20 }, { 57, 65 }, { 62, 23 }, { 80, 79 },
+		addLvl(3, new byte[][] { { 27, 77 }, { 32, 69 }, { 42, 24 }, { 52, 20 }, { 57, 65 }, { 62, 23 }, { 80, 79 },
 				{ 88, 12 } });
-		addLvl(2, new byte[][] { { 6, 69 }, { 15, 19 }, { 38, 77 }, { 41, 34 }, { 59, 11 }, { 65, 24 }, { 69, 81 },
+		addLvl(3, new byte[][] { { 6, 69 }, { 15, 19 }, { 38, 77 }, { 41, 34 }, { 59, 11 }, { 65, 24 }, { 69, 81 },
 				{ 87, 68 } });
-		addLvl(3, new byte[][] { { 11, 21 }, { 13, 22 }, { 27, 18 }, { 42, 12 }, { 53, 24 }, { 74, 66 }, { 81, 23 },
+		addLvl(4, new byte[][] { { 11, 21 }, { 13, 22 }, { 27, 18 }, { 42, 12 }, { 53, 24 }, { 74, 66 }, { 81, 23 },
 				{ 87, 75 }, { 89, 78 }, { 105, 66 } });
-		addLvl(3, new byte[][] { { 13, 14 }, { 22, 15 }, { 41, 33 }, { 47, 11 }, { 56, 65 }, { 62, 73 }, { 63, 28 },
+		addLvl(4, new byte[][] { { 13, 14 }, { 22, 15 }, { 41, 33 }, { 47, 11 }, { 56, 65 }, { 62, 73 }, { 63, 28 },
 				{ 78, 72 }, { 87, 12 }, { 106, 61 } });
-		addLvl(3, new byte[][] { { 8, 21 }, { 13, 16 }, { 22, 81 }, { 40, 64 }, { 54, 28 }, { 57, 72 }, { 75, 31 },
+		addLvl(4, new byte[][] { { 8, 21 }, { 13, 16 }, { 22, 81 }, { 40, 64 }, { 54, 28 }, { 57, 72 }, { 75, 31 },
 				{ 86, 21 }, { 90, 13 }, { 93, 65 } });
+
+		BOARDS.put(1, new ItemStack(JSTItems.item1, 1, 190));
+		BOARDS.put(2, new ItemStack(JSTItems.item1, 1, 191));
+		BOARDS.put(3, new ItemStack(JSTItems.item1, 1, 192));
+		BOARDS.put(4, new ItemStack(JSTItems.item1, 1, 193));
 	}
 
 	public MT_CircuitResearchMachine(int t) {
-		this.tier = t;
+		tier = t;
 	}
 
 	private static void addLvl(int lvl, byte[][] data) {
-		ArrayList<byte[][]> l = levels.get(Integer.valueOf(lvl));
+		ArrayList<byte[][]> l = LEVELS.get(Integer.valueOf(lvl));
 		if (l == null) {
 			l = new ArrayList();
-			levels.put(Integer.valueOf(lvl), l);
+			LEVELS.put(Integer.valueOf(lvl), l);
 		}
 		l.add(data);
 	}
 
-	private void loadLvl(int l) {
+	private boolean loadLvl(int l) {
+		if (tier < 3 && tier < l) return false;
 		try {
-			ArrayList<byte[][]> lvl = levels.get(l);
+			ArrayList<byte[][]> lvl = LEVELS.get(l);
 			if (lvl != null && !lvl.isEmpty()) {
 				listOfGame = new byte[ROW * COLUMN];
 				byte[][] dat = lvl.get(new Random().nextInt(lvl.size()));
 				for (int n = 0; n < dat.length; n++)
 					listOfGame[dat[n][0]] = dat[n][1];
+				gameTier = (byte)l;
+				return true;
 			}
-		} catch (Exception e) {
-			JSTUtils.LOG.error("Can't load level.");
-			JSTUtils.LOG.catching(e);
+		} catch (Exception e) {}
+		return false;
+	}
+
+	public static int getBoardTier(ItemStack board) {
+		if (!board.isEmpty()) {
+			for (Entry<Integer, Object> e : BOARDS.entrySet()) {
+				Object o = e.getValue();
+				if (o instanceof ItemStack && OreDictionary.itemMatches((ItemStack)o, board, false))
+					return e.getKey();
+				if (o instanceof String && JSTUtils.oreMatches(board, (String)o))
+					return e.getKey();
+			}
 		}
+		return -1;
 	}
 
 	@Override
@@ -106,33 +128,25 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		if (isClient())
 			return;
 		if (tier != 1)
-			baseTile.energy -= JSTUtils.chargeItem(getStackInSlot(3), Math.min(baseTile.energy, maxEUTransfer()), tier,
-					false, false);
-		if (!lvlLoaded && baseTile.getTimer() % 20 == 0)
+			baseTile.energy -= JSTUtils.chargeItem(getStackInSlot(3), Math.min(baseTile.energy, maxEUTransfer()), tier, false, false);
+		if (!lvlLoaded && baseTile.getTimer() % 10 == 0)
 			checkAndLoad();
 	}
 
 	public void checkAndLoad() {
-		if (canRun()) {
-			if (!lvlLoaded) {
+		int bt = getBoardTier(getStackInSlot(0));
+		if (bt >= 0 && canRun()) {
+			if (!lvlLoaded && loadLvl(bt))
 				lvlLoaded = true;
-				loadLvl(1);
-			}
 		} else {
 			clearLvl();
 		}
 	}
 
-	public boolean canRun() {
-		ItemStack st = new ItemStack(JSTItems.item1, 1, 190);
-		if (!OreDictionary.itemMatches(st, getStackInSlot(0), false))
+	private boolean canRun() {
+		if (!JSTUtils.oreMatches(getStackInSlot(1), "paper") || (!lvlLoaded && !JSTUtils.oreMatches(getStackInSlot(2), "wireSolder") && solder <= 0))
 			return false;
-		if (!JSTUtils.oreMatches(getStackInSlot(1), "paper")
-				|| (!lvlLoaded && !JSTUtils.oreMatches(getStackInSlot(2), "wireSolder") && solder <= 0))
-			return false;
-		st = new ItemStack(JSTItems.item1, 1, 10050);
-		if (!OreDictionary.itemMatches(st, getStackInSlot(3), false)
-				|| (!lvlLoaded && JSTUtils.getEUInItem(getStackInSlot(3)) < 100))
+		if (!OreDictionary.itemMatches(new ItemStack(JSTItems.item1, 1, 10050), getStackInSlot(3), false) || (!lvlLoaded && JSTUtils.getEUInItem(getStackInSlot(3)) < 100))
 			return false;
 		return true;
 	}
@@ -201,7 +215,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 
 	@Override
 	public int maxEUTransfer() {
-		return tier == 1 ? 0 : JSTUtils.getTierFromVolt((tier - 1) * 2);
+		return tier == 1 ? 0 : JSTUtils.getVoltFromTier((tier - 1) * 2);
 	}
 
 	@Override
@@ -251,12 +265,11 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			int consume = 0;
 			for (byte b : listOfGame) {
 				MiniGameTile t = MiniGameTile.getTile(b);
-				if (t instanceof Wire) {
+				if (t instanceof Wire)
 					consume++;
-				}
 			}
 			getStackInSlot(0).shrink(1);
-			getStackInSlot(0).shrink(1);
+			getStackInSlot(1).shrink(1);
 			clearLvl();
 			makeBlueprint(consume, gameTier);
 		}

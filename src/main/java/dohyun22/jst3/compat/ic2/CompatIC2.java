@@ -43,6 +43,7 @@ import ic2.api.crops.BaseSeed;
 import ic2.api.crops.CropSoilType;
 import ic2.api.crops.Crops;
 import ic2.api.crops.ICropTile;
+import ic2.api.info.Info;
 import ic2.api.recipe.IBasicMachineRecipeManager;
 import ic2.api.recipe.ICannerBottleRecipeManager;
 import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
@@ -151,7 +152,9 @@ public class CompatIC2 extends Loadable {
 
 		if (JSTUtils.isClient()) registerItemModel(rc);
 		crop_dirty = ReflectionUtils.getField("ic2.core.crop.TileEntityCrop", "dirty");
-		if (JSTCfg.noSuddenHoes) ReflectionUtils.setFieldValue("ic2.core.IC2", "suddenlyHoes", null, false);
+		try {
+			JSTDamageSource.ELECTRIC = Info.DMG_ELECTRIC;
+		} catch (Throwable t) {}
 	}
 
 	@Override
@@ -275,6 +278,7 @@ public class CompatIC2 extends Loadable {
 				JSTUtils.LOG.catching(t);
 			}
 		}
+		if (JSTCfg.noSuddenHoes) ReflectionUtils.setFieldValue("ic2.core.IC2", "suddenlyHoes", null, false);
 	}
 
 	@SideOnly(Side.CLIENT)

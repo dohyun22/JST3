@@ -64,7 +64,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = 0; y < 4; y += 3) {
 				for (int z = 0; z <= 2; z++) {
-					BlockPos p = getPosFromCoord(x, y, z);
+					BlockPos p = getRelativePos(x, y, z);
 					if (p.equals(getPos())) continue;
 					if (MetaTileBase.getMTEId(getWorld(), p) != 5001 && !getAndAddPort(p, 13, "heatres"))
 						return false;
@@ -76,7 +76,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = 1; y < 3; y++) {
 				for (int z = 0; z <= 2; z++) {
-					BlockPos p = getPosFromCoord(x, y, z);
+					BlockPos p = getRelativePos(x, y, z);
 					if (x == 0 && z == 1) {
 						if (!this.getWorld().isAirBlock(p))
 							return false;
@@ -126,7 +126,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 		if (baseTile.isActive()) {
 			World w = getWorld();
 			if (w.rand.nextInt(8) == 0) {
-				BlockPos p = getPosFromCoord(0, 3, 1);
+				BlockPos p = getRelativePos(0, 3, 1);
 				for (int i = 0; i < 8; i++) {
 					double x = p.getX() + 0.5D + w.rand.nextFloat() * 0.6D - 0.3D;
 					double y = p.getY() + 1 + w.rand.nextFloat() * 0.2D;
@@ -167,10 +167,9 @@ public class MT_SHFurnace extends MT_Multiblock {
 	}
 	
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient() || tryUpg(pl, heldItem))
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	
@@ -251,7 +250,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 	@Override
 	public int getData() {
 		if (getMode() != 2) return 0;
-		return this.mxprogress <= 0 ? 0 : this.progress * 100 / this.mxprogress;
+		return mxprogress <= 0 ? 0 : progress * 100 / mxprogress;
 	}
 	
 	@Override
@@ -267,6 +266,6 @@ public class MT_SHFurnace extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.shfurnace"));
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg2"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg2", 4));
 	}
 }

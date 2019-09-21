@@ -35,11 +35,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileUESU extends MetaTileEnergyInput implements IGenericGUIMTE {
+public class MT_UESU extends MetaTileEnergyInput implements IGenericGUIMTE {
 	private final int tier;
 	private final long maxenergy;
 	
-	public MetaTileUESU(int tier, long storage) {
+	public MT_UESU(int tier, long storage) {
 		this.tier = tier;
 		this.maxenergy = storage;
 	}
@@ -61,13 +61,13 @@ public class MetaTileUESU extends MetaTileEnergyInput implements IGenericGUIMTE 
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileUESU(this.tier, this.maxenergy);
+		return new MT_UESU(tier, maxenergy);
 	}
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile != null && !getWorld().isRemote)
-			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	

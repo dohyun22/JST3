@@ -1,5 +1,6 @@
 package dohyun22.jst3.tiles.multiblock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dohyun22.jst3.JustServerTweak;
@@ -9,6 +10,7 @@ import dohyun22.jst3.container.ContainerMulti;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,7 +50,7 @@ public class MT_OreGrinder extends MT_Multiblock {
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
 				for (int z = 0; z <= 2; z++) {
-					BlockPos p = getPosFromCoord(x, y, z);
+					BlockPos p = getRelativePos(x, y, z);
 					if (y == -1 || y == 1) {
 						if (MetaTileBase.getMTEId(getWorld(), p) != 5002 && !getAndAddPort(p, 29, "csg_b"))
 							return false;
@@ -60,7 +65,7 @@ public class MT_OreGrinder extends MT_Multiblock {
 				}
 			}
 		}
-		if (energyInput.size() != 1 || itemInput.size() != 1 || fluidInput.size() != 1 || itemOutput.size() != 1) return false;
+		if (energyInput.size() != 1 || itemOutput.size() != 1 || itemInput.size() <= 0 || itemInput.size() > 3 || fluidInput.size() <= 0 || fluidInput.size() > 3) return false;
 		int v = JSTUtils.getVoltFromTier(circuitTier);
 		updateEnergyPort(v, v * 8, false);
 		return true;
@@ -68,7 +73,28 @@ public class MT_OreGrinder extends MT_Multiblock {
 
 	@Override
 	protected boolean checkCanWork() {
-		return checkRecipe(MRecipes.OreProcessRecipes);
+		RecipeContainer rc = null;
+		ItemStack[] st = getAllInputSlots();
+		if (st.length <= 0) st = null;
+		FluidTank[] ft = getAllInputTanks(), ft2 = getTankWithContent(ft, JSTFluids.mercury);
+		if (ft2 != null)
+			rc = MRecipes.getRecipe(MRecipes.OreProcessRecipes, st, ft2, getTier(), true, true);
+		if (rc == null) {
+			ft2 = getTankWithContent(ft, JSTFluids.acid);
+			if (ft2 != null) rc = MRecipes.getRecipe(MRecipes.OreProcessRecipes, st, ft2, getTier(), true, true);
+		}
+		if (rc == null)
+			rc = MRecipes.getRecipe(MRecipes.OreProcessRecipes, st, ft.length <= 0 ? null : ft, getTier(), true, true);
+		return startProcess(rc, st, ft);
+	}
+
+	private FluidTank[] getTankWithContent(FluidTank[] ft, Fluid fi) {
+		ArrayList<FluidTank> r = new ArrayList();
+		for (FluidTank f : ft) {
+			FluidStack fs = f.getFluid();
+			if (fs != null && fs.getFluid() == fi) r.add(f);
+		}
+		return r.isEmpty() ? null : r.toArray(new FluidTank[0]);
 	}
 
 	@Override
@@ -99,10 +125,9 @@ public class MT_OreGrinder extends MT_Multiblock {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient() || tryUpg(pl, heldItem))
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 
@@ -177,6 +202,6 @@ public class MT_OreGrinder extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.grind"));
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg"));
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.com.upg", 4));
 	}
 }

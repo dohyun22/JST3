@@ -482,6 +482,8 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addBioRecipe(new OreDictStack("cropChestnut", 10), null, null, fa[0], 100, 400);
 			MRecipes.addBioRecipe(new OreDictStack("cropAlmond", 10), null, null, fa[0], 100, 400);
 		}
+
+		MRecipes.addCircuitBuildRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 190), new ItemStack(JSTItems.item1, 4, 85)}, new ItemStack(JSTItems.item1, 2, 86), 16, 400);
 	}
 
 	private static void addGrind(String ore, int mu, String pf, boolean m, Object s1, boolean m1, FluidStack[] pr) {

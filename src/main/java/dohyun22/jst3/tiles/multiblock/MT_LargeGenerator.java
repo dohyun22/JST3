@@ -70,7 +70,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 							} else if (!w.isAirBlock(p2)) {
 								return false;
 							}
-						} else if (MetaTileBase.getMTEId(w, p2) != 5000 && !getAndAddPort(p2, this.type == 2 ? 48 : 16, "gen")) {
+						} else if (MetaTileBase.getMTEId(w, p2) != 5000 && !getAndAddPort(p2, type == 2 ? 48 : 16, "gen")) {
 							return false;
 						}
 					}
@@ -80,9 +80,10 @@ public class MT_LargeGenerator extends MT_Multiblock {
 		
 		if (energyOutput.size() != 1 || fluidInput.size() <= 0 || fluidInput.size() > 2 || (type == 2 && fluidOutput.size() > 1)) return false;
 		updateEnergyPort(OUTPUT, OUTPUT * 8, true);
-		for (MT_FluidPort fp : getFluidPorts(false))
+		for (MT_FluidPort fp : getFluidPorts(false)) {
 			fp.setCapacity(64000);
-		
+			fp.setTransfer(64000);
+		}
 		return true;
 	}
 
@@ -115,7 +116,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 			p.baseTile.energy += use;
 		if (burningFuel <= 0) {
 			if (type == 2 && fluidOutput.size() > 0 && waterAmount >= 10000) {
-				int amt = this.waterAmount / 10000;
+				int amt = waterAmount / 10000;
 				if (returnFluid != null) {
 					MT_FluidPort fout = getFluidPort(0, true);
 					if (fout != null)
@@ -174,9 +175,8 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote)
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		return true;
 	}
 	
@@ -207,7 +207,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	@Override
 	protected void stopWorking(boolean interrupt) {
 		super.stopWorking(interrupt);
-		this.returnFluid = null;
+		returnFluid = null;
 	}
 	
 	@Override
@@ -219,7 +219,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
 		TextureAtlasSprite t = getTETex("gen");
-		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("multigen" + (this.type == 1 || this.type == 2 ? "_turb" : this.type == 3 ? "_lava" : ""))};
+		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("multigen" + (type == 1 || type == 2 ? "_turb" : type == 3 ? "_lava" : ""))};
 	}
 	
 	@Override
@@ -227,17 +227,23 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++) {
-			if (this.baseTile.facing == JSTUtils.getFacingFromNum(n)) {
-				boolean flag = this.type == 1 || this.type == 2;
-				String str = flag ? "_turb" : this.type == 3 ? "_lava" : "";
+			if (baseTile.facing == JSTUtils.getFacingFromNum(n)) {
+				boolean flag = type == 1 || type == 2;
+				String str = flag ? "_turb" : type == 3 ? "_lava" : "";
 				if (!flag)
-					str += this.baseTile.isActive() ? "" : "_off";
+					str += baseTile.isActive() ? "" : "_off";
 				ret[n] = getTETex("multigen" + str);
 			} else {
 				ret[n] = getTETex("gen");
 			}
 		}
 		return ret;
+	}
+
+	@Override
+	@SideOnly(value=Side.CLIENT)
+	public String getModelKey() {
+		return "jst_lgen" + JSTUtils.getNumFromFacing(baseTile.facing);
 	}
 	
 	private static Fluid getReturnFluid(Fluid in) {

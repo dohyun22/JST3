@@ -354,31 +354,6 @@ public class EvHandler {
 			return 0;
 		}
 	}
-	
-	@SubscribeEvent
-	public void onChunkDataLoad(ChunkDataEvent.Load ev) {
-		if (ev.getWorld().isRemote) return;
-		if (ev.getData().hasKey(TAG_NAME, Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound tag = ev.getData().getCompoundTag(TAG_NAME);
-			if (!tag.hasNoTags()) {
-				if (tag.getInteger(JSTChunkData.DUST_TAG_NAME) > 0)
-					DustHandler.addToTracker(ev.getWorld(), ev.getChunk().getPos(), true);
-				JSTChunkData.setChunkData(ev.getWorld(), ev.getChunk().getPos(), tag, false);
-			}
-		}
-	}
-
-	@SubscribeEvent
-	public void onChunkDataSave(ChunkDataEvent.Save ev) {
-	    if (ev.getWorld().isRemote) return;
-		NBTTagCompound tag = JSTChunkData.getChunkData(ev.getWorld(), ev.getChunk().getPos());
-		if (tag == null || tag.hasNoTags()) {
-			if (ev.getData().hasKey(TAG_NAME))
-				ev.getData().removeTag(TAG_NAME);
-		} else {
-			ev.getData().setTag(TAG_NAME, tag);
-		}
-	}
 
 	@SubscribeEvent
 	public void onEntityJoin(EntityJoinWorldEvent ev) {
@@ -492,8 +467,8 @@ public class EvHandler {
 	}
 
     @SubscribeEvent
-    public void onLoad(final WorldEvent.Load ev) {
-        if (JSTCfg.fireFineDust) ev.getWorld().addEventListener(WorldEvListener.INSTANCE);
+    public void onLoad(WorldEvent.Load ev) {
+        ev.getWorld().addEventListener(WorldEvListener.INSTANCE);
     }
 
 	@SubscribeEvent
@@ -501,6 +476,31 @@ public class EvHandler {
 		if (!ev.getWorld().isRemote && ev.getWorld().provider.getDimension() == 0 && !ev.getWorld().getMinecraftServer().isServerRunning()) {
 			DustHandler.resetTracker();
 			err = false;
+		}
+	}
+
+	@SubscribeEvent
+	public void onChunkDataLoad(ChunkDataEvent.Load ev) {
+		if (ev.getWorld().isRemote) return;
+		if (ev.getData().hasKey(TAG_NAME, Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound tag = ev.getData().getCompoundTag(TAG_NAME);
+			if (!tag.hasNoTags()) {
+				if (tag.getInteger(JSTChunkData.DUST_TAG_NAME) > 0)
+					DustHandler.addToTracker(ev.getWorld(), ev.getChunk().getPos(), true);
+				JSTChunkData.setChunkData(ev.getWorld(), ev.getChunk().getPos(), tag, false);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onChunkDataSave(ChunkDataEvent.Save ev) {
+	    if (ev.getWorld().isRemote) return;
+		NBTTagCompound tag = JSTChunkData.getChunkData(ev.getWorld(), ev.getChunk().getPos());
+		if (tag == null || tag.hasNoTags()) {
+			if (ev.getData().hasKey(TAG_NAME))
+				ev.getData().removeTag(TAG_NAME);
+		} else {
+			ev.getData().setTag(TAG_NAME, tag);
 		}
 	}
 }

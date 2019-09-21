@@ -47,10 +47,17 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	}
 
 	@Override
-	public void setTexture(String texName) {
-		if (!texName.equals(this.displayTexture)) {
-			this.displayTexture = texName;
-			this.baseTile.issueUpdate();
+	public void setTexture(String tex) {
+		if (tex == null) {
+			if (displayTexture != null) {
+				displayTexture = null;
+				baseTile.issueUpdate();
+			}
+			return;
+		}
+		if (!tex.equals(displayTexture)) {
+			displayTexture = tex;
+			baseTile.issueUpdate();
 		}
 	}
 
@@ -76,13 +83,13 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	@Override
 	public void readSyncableDataFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey("dt"))
-			this.displayTexture = tag.getString("dt");
+			displayTexture = tag.getString("dt");
 	}
 
 	@Override
 	public void writeSyncableDataToNBT(NBTTagCompound tag) {
-		if (this.displayTexture != null)
-			tag.setString("dt", this.displayTexture);
+		if (displayTexture != null)
+			tag.setString("dt", displayTexture);
 	}
 	
 	@Override
@@ -101,14 +108,14 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
-		for (byte n = 0; n < ret.length; n++) ret[n] = getTETex(this.getFacing() == JSTUtils.getFacingFromNum(n) ? isOutput ? "fl_out" : "fl_in" : displayTexture == null ? "t1_side" : displayTexture);
+		for (byte n = 0; n < ret.length; n++) ret[n] = getTETex(getFacing() == JSTUtils.getFacingFromNum(n) ? isOutput ? "fl_out" : "fl_in" : displayTexture == null ? "t1_side" : displayTexture);
 		return ret;
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> c, @Nullable EnumFacing f) {
-		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && f != null && f == this.getFacing())
-			return (T) this.tank;
+		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && f != null && f == getFacing())
+			return (T) tank;
 		return null;
 	}
 	
@@ -117,20 +124,20 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 		if (getWorld().isRemote)
 			return;
 		
-		ItemStack st = this.inv.get(0);
+		ItemStack st = inv.get(0);
 		if (!st.isEmpty()) {
 			IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
 			if (fh != null) {
 				if (FluidUtil.getFluidContained(st) == null) {
-					JSTUtils.fillFluidItemInv(tank, 1000, this.baseTile, 0, 1);
+					JSTUtils.fillFluidItemInv(tank, 1000, baseTile, 0, 1);
 				} else {
-					JSTUtils.drainFluidItemInv(tank, 1000, this.baseTile, 0, 1);
+					JSTUtils.drainFluidItemInv(tank, 1000, baseTile, 0, 1);
 				}
 			}
 		}
 		
-		if (this.isOutput && this.tank.getFluidAmount() > 0 && this.getFacing() != null) {
-			int amt = JSTUtils.fillTank(this.getWorld(), this.getPos(), this.getFacing(), new FluidStack(this.tank.getFluid(), Math.min(this.tank.getFluidAmount(), transfer)));
+		if (isOutput && tank.getFluidAmount() > 0 && getFacing() != null) {
+			int amt = JSTUtils.fillTank(getWorld(), getPos(), getFacing(), new FluidStack(tank.getFluid(), Math.min(tank.getFluidAmount(), transfer)));
 			if (amt > 0)
 				tank.drain(amt, true);
 		}
@@ -168,14 +175,14 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile == null || isClient()) return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	
 	@Override
@@ -184,10 +191,10 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	}
 	
 	public void setCapacity(int amt) {
-		this.tank.setCapacity(amt);
+		tank.setCapacity(amt);
 	}
 
 	public void setTransfer(int amt) {
-		this.transfer = Math.max(0, amt);
+		transfer = Math.max(0, amt);
 	}
 }

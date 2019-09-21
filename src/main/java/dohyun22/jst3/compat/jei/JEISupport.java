@@ -75,7 +75,7 @@ public class JEISupport implements IModPlugin {
 		addGenericRecipe(rg, gh, MRecipes.CrystalRecipes);
 		addGenericRecipe(rg, gh, MRecipes.HeatExcFakeRecipes);
 		addGenericRecipe(rg, gh, MRecipes.BioRecipes);
-	    addGenericRecipe(rg, gh, MRecipes.CircuitProduceRecipes);
+	    addGenericRecipe(rg, gh, MRecipes.CircuitBuilderRecipes);
 
 		rg.addRecipeCategories(new FusionCategory());
 		rg.addRecipes(FusionRecipeWrapper.make(), JustServerTweak.MODID + "." + MRecipes.FusionRecipes.name);
@@ -174,7 +174,7 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipeClickArea(GUISolarFurnace.class, 78, 32, 28, 23, "minecraft.smelting");
 		rg.addRecipeClickArea(GUIFusion.class, 152, 8, 16, 16, list);
 		rg.addRecipeClickArea(GUIMagicGen.class, 39, 32, 16, 17, JustServerTweak.MODID + ".magicfuel");
-		rg.addRecipeClickArea(GUISuperCompressor.class, 41, 34, 12, 12, JustServerTweak.MODID + ".degcomp");
+		rg.addRecipeClickArea(GUISuperCompressor.class, 118, 23, 12, 12, JustServerTweak.MODID + ".degcomp");
 
 		s = JustServerTweak.MODID + ".alloyfurnace";
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 220 + n), s);
@@ -200,7 +200,7 @@ public class JEISupport implements IModPlugin {
 		addDescription(rg, "neutdrill", new ItemStack(JSTItems.item1, 1, 10006));
 		addDescription(rg, "scanner", new ItemStack(JSTItems.item1, 1, 10008));
 		addDescription(rg, "fusion", new ItemStack(b, 1, 101), new ItemStack(b, 1, 102), new ItemStack(b, 1, 103), new ItemStack(b, 1, 104));
-		addDescription(rg, "dust", new ItemStack(JSTItems.item1, 1, 10016), new ItemStack(JSTItems.item1, 1, 10017), new ItemStack(JSTItems.item1, 1, 10018), new ItemStack(JSTBlocks.blockTile, 1, 6042), new ItemStack(JSTItems.mask));
+		addDescription(rg, "dust", new ItemStack(JSTItems.item1, 1, 10016), new ItemStack(JSTItems.item1, 1, 10017), new ItemStack(JSTItems.item1, 1, 10018), new ItemStack(JSTBlocks.blockTile, 1, 6042), new ItemStack(JSTBlocks.blockTile, 1, 6048), new ItemStack(JSTItems.mask));
 		addDescription(rg, "stirling", new ItemStack(b, 1, 31), new ItemStack(b, 1, 32), new ItemStack(b, 1, 33));
 		addDescription(rg, "degcomp", new ItemStack(b, 1, 6006), new ItemStack(JSTItems.item1, 1, 24));
 	}
