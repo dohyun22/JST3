@@ -31,6 +31,7 @@ public class CompatEIO extends Loadable {
 		addFluidFuel(JSTFluids.nitrofuel, 200, 20480);
 		addFluidFuel(JSTFluids.lng, 64, 20000);
 		addFluidFuel(JSTFluids.lpg, 64, 25000);
+		MRecipes.addWrench(JSTUtils.getModItemStack("enderio:item_yeta_wrench", 1, 32767));
 	}
 
 	public static void addFluidFuel(Fluid f, int rf, int t) {

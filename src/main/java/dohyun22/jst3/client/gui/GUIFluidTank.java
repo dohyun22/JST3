@@ -28,10 +28,10 @@ public class GUIFluidTank extends GUIBase {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(gui);
-	    int x = (this.width - this.xSize) / 2;
-	    int y = (this.height - this.ySize) / 2;
-	    drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
+		mc.getTextureManager().bindTexture(gui);
+	    int x = (width - xSize) / 2;
+	    int y = (height - ySize) / 2;
+	    drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 	}
 	
 	@Override

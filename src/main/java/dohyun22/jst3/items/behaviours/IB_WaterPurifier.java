@@ -16,14 +16,17 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -100,18 +103,24 @@ public class IB_WaterPurifier extends ItemBehaviour {
 					w.playSound(null, p, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.25F, 1.0F);
 				return EnumActionResult.SUCCESS;
 			}
-			Fluid fl = FluidRegistry.lookupFluidForBlock(w.getBlockState(p.offset(f)).getBlock());
-			if (fl != null) {
-				FluidStack fs = new FluidStack(fl, 1000);
-				IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
-				if (fh != null && fh.fill(fs, false) == 1000) {
-					fh.fill(fs, true);
-					w.setBlockState(p, Blocks.AIR.getDefaultState(), 11);
-					w.playSound(null, p, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.25F, 1.0F);
+		}
+		return EnumActionResult.PASS;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onRightClick(ItemStack st, World w, EntityPlayer pl, EnumHand h) {
+		if (!w.isRemote) {
+			RayTraceResult rtr = JSTUtils.rayTraceEntity(pl, true, false, false, 0);
+			if (rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
+				BlockPos p = rtr.getBlockPos();
+				EnumFacing f = rtr.sideHit;
+				if (w.canMineBlockBody(pl, p) && pl.canPlayerEdit(p, rtr.sideHit, pl.getHeldItem(h))) {
+					FluidActionResult far = FluidUtil.tryPickUpFluid(st, pl, w, p, f);
+					if (far.success) pl.setHeldItem(h, far.getResult());
 				}
 			}
 		}
-		return EnumActionResult.PASS;
+		return new ActionResult(EnumActionResult.SUCCESS, st);
 	}
 
 	@Override

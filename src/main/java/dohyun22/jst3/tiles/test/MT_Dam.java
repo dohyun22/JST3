@@ -1,9 +1,10 @@
-package dohyun22.jst3.tiles.multiblock;
+package dohyun22.jst3.tiles.test;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.multiblock.MT_Multiblock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

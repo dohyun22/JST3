@@ -6,7 +6,7 @@ import java.util.List;
 import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IScrewDriver;
+import dohyun22.jst3.api.IScrewDriver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3i;

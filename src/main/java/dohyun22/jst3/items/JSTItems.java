@@ -56,7 +56,7 @@ public class JSTItems {
     			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null, //160~169: Reserved for molds
     			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1]), null,
     			null, null, null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null,
-    			"circ_board", null, null, null, null, null, null, null, null, null
+    			"circ_board", "circ_board2", "circ_board3", "circ_board4", "comp_si", null, null, null, null, null
     	};
 
 		for (int n = 0; n < obj.length; n++) {
@@ -107,6 +107,7 @@ public class JSTItems {
 		item1.registerMetaItem(10044, "tool_minigame", new IB_Minetris());
 		item1.registerMetaItem(10045, "tool_mover", new IB_Mover());
 		item1.registerMetaItem(10046, "tool_fireex", new IB_FireExtinguisher());
+		item1.registerMetaItem(10047, "tool_autobow", new IB_AutoBow());
 
 		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingIron());
 		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
@@ -184,6 +185,7 @@ public class JSTItems {
 		item1.registerMetaItem(13000, "upg_boiler", new IB_Upgrade("jst_boiler", "boiler"));
 		item1.registerMetaItem(13001, "upg_batbuff", new IB_Upgrade("jst_bat", "batbuff"));
 		item1.registerMetaItem(13002, "upg_water", new IB_Upgrade("jst_water", "water"));
+		item1.registerMetaItem(13003, "upg_fusion", new IB_Upgrade("jst_fusion", "fusion"));
 
 		item1.addFuelValue(98, 25600);
 		item1.addFuelValue(99, 102400);

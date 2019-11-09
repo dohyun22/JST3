@@ -54,6 +54,7 @@ public class CompatForestry extends Loadable {
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_compound"));
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_bio"));
 		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("forestry:wood_pile", 4), new ItemStack(Items.COAL, 32, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 300);
+		MRecipes.addWrench(JSTUtils.getModItemStack("forestry:wrench", 1, 32767));
 
 		FluidStack fs = FluidRegistry.getFluidStack("bio.ethanol", 4000), fs2;
 		ItemStack st = new ItemStack(JSTItems.item1, 1, 9017);

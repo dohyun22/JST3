@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MTELoader {
 	public static void init() {
+		//Negative values are not allowed.
 		//#0 represents broken MetaTileEntity and should not be used.
 		/* #1~10: Machine Casings */
 		MetaTileBase.registerTE(1, new MetaTileCasing("t0_side"));
@@ -149,6 +150,12 @@ public class MTELoader {
 		for (int n = 1; n <= 8; n++)
 			MetaTileBase.registerTE(350 + n, new MT_CircuitBuilder(n));
 
+		for (int n = 1; n <= 8; n++)
+			MetaTileBase.registerTE(360 + n, new MT_Liquifier(n));
+
+		for (int n = 1; n <= 5; n++)
+			MetaTileBase.registerTE(370 + n, new MT_Pump(n));
+
 		/* #4000: Cables */
 		//IC2 compatible cables
 	    MetaTileBase.registerTE(4001, new MetaTileCable("cable_sn", 32, 0, 3, 5, 20));
@@ -248,8 +255,8 @@ public class MTELoader {
 		//6026=boiler
 		if (JSTCfg.ticLoaded)
 		MetaTileBase.registerTE(6026, new MT_Heater());
-		MetaTileBase.registerTE(6027, new MT_SaltExtractor());
-		MetaTileBase.registerTE(6028, new MT_AirCompressor());
+		MetaTileBase.registerTE(6027, new MT_SaltExtractor(1));
+		MetaTileBase.registerTE(6028, new MT_AirCompressor(1));
 		MetaTileBase.registerTE(6029, new MT_LargeTesla());
 		MetaTileBase.registerTE(6030, new MT_LEDLight(1));
 		MetaTileBase.registerTE(6031, new MT_AdvCropMatron());
@@ -271,9 +278,11 @@ public class MTELoader {
 		if (Loader.isModLoaded("toughasnails"))
 		MetaTileBase.registerTE(6050, new MT_WaterPurifier());
 		MetaTileBase.registerTE(6060, new MT_Fueler());
-		MetaTileBase.registerTE(6061, new MetaTileCreativeGenerator(1));
+		MetaTileBase.registerTE(6061, new MT_CreativeGenerator());
 		MetaTileBase.registerTE(6062, new MT_FlameTrap());
 		MetaTileBase.registerTE(6063, new MT_LargeBoiler());
+		MetaTileBase.registerTE(6064, new MT_SaltExtractor(3));
+		MetaTileBase.registerTE(6065, new MT_AirCompressor(3));
 
 		/* #7000: EarlyTech Kinetic energy based machines */
 		MetaTileBase.registerTE(7000, new MetaTileGearBox(true));

@@ -107,7 +107,6 @@ public class DustHandler {
 				JSTUtils.LOG.error("Invalid arguments: " + s);
 				continue;
 			}
-			JSTUtils.LOG.info("Added: " + s);
 		}
 		JSTCfg.fineDustBlocks = null;
 	}

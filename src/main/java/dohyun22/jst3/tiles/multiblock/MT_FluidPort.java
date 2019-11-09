@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -121,8 +122,7 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 	
 	@Override
 	public void onPostTick() {
-		if (getWorld().isRemote)
-			return;
+		if (isClient()) return;
 		
 		ItemStack st = inv.get(0);
 		if (!st.isEmpty()) {
@@ -135,11 +135,21 @@ public class MT_FluidPort extends MetaTileBase implements IMultiBlockIO {
 				}
 			}
 		}
-		
-		if (isOutput && tank.getFluidAmount() > 0 && getFacing() != null) {
-			int amt = JSTUtils.fillTank(getWorld(), getPos(), getFacing(), new FluidStack(tank.getFluid(), Math.min(tank.getFluidAmount(), transfer)));
-			if (amt > 0)
-				tank.drain(amt, true);
+
+		EnumFacing f = getFacing();
+		if (f != null) {
+			if (isOutput) {
+				if (tank.getFluidAmount() > 0) {
+					int amt = JSTUtils.fillTank(getWorld(), getPos(), f, new FluidStack(tank.getFluid(), Math.min(tank.getFluidAmount(), transfer)));
+					if (amt > 0) tank.drain(amt, true);
+				}
+			} else if (tank.getFluidAmount() < tank.getCapacity()) {
+				IFluidHandler fh = FluidUtil.getFluidHandler(getWorld(), getPos().offset(f), f.getOpposite());
+				if (fh != null) {
+					FluidStack fs = fh.drain(Math.min(tank.getCapacity() - tank.getFluidAmount(), transfer), false);
+					if (fs != null) fh.drain(tank.fill(fs, true), true);
+				}
+			}
 		}
 	}
 	

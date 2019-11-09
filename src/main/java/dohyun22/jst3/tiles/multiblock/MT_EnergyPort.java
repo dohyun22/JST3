@@ -198,7 +198,7 @@ public class MT_EnergyPort extends MetaTileEnergyInput implements IGenericGUIMTE
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric ret = new ContainerGeneric(inv, te);
+		ContainerGeneric ret = new ContainerGeneric(te);
 		ret.addSlot(new BatterySlot(te, 0, 52, 35, isOutput, !isOutput));
 		ret.addPlayerSlots(inv);
 		return ret;

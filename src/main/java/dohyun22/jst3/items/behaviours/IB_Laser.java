@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 public class IB_Laser extends ItemBehaviour {
 	
 	public IB_Laser() {
-		this.maxEnergy = 1000000;
+		maxEnergy = 1000000;
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class IB_Laser extends ItemBehaviour {
 	@Override
 	public void getSubItems(ItemStack st, List<ItemStack> sub) {
 		sub.add(st.copy());
-		setEnergy(st, this.maxEnergy);
+		setEnergy(st, maxEnergy);
 		sub.add(st);
 	}
 	

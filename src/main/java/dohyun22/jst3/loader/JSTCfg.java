@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Loader;
 
 public class JSTCfg {
 	public static boolean ic2Loaded, gtceLoaded, rongGtLoaded, bcLoaded, teLoaded, tfLoaded, ticLoaded, rcLoaded, ieLoaded;
+	private static Configuration cfgObj;
 	
 	//Config related stuff
 	public static boolean PNT;
@@ -28,8 +29,9 @@ public class JSTCfg {
 	public static String[] fineDustBlocks;
 	public static boolean hardEG;
 	public static boolean customMat;
-	public static byte researchTier;
+	public static boolean harderCircuit;
 	public static boolean onlyUseJSTCircuit;
+	public static boolean ovExplosion;
 	//InterMod
 	public static boolean RIC2C;
 	public static boolean CheaperIC2;
@@ -42,6 +44,7 @@ public class JSTCfg {
 	public static boolean removeGolemMelting;
 
 	public static void loadCfg(Configuration cfg) {
+		cfgObj = cfg;
 		try {
 			cfg.load();
 			
@@ -118,6 +121,18 @@ public class JSTCfg {
 			pr.setComment("Chance of Nether Ore Explosion with Silk Touch enchanted tools.\n(Default: 1 in 100, will not explode if zero)");
 			ECncST = pr.getInt();
 
+			pr = cfg.get(c, "HarderCircuit", true);
+			pr.setComment("If true, MV+ circuits will require Circuit Builder.");
+			harderCircuit = pr.getBoolean();
+
+			pr = cfg.get(c, "OnlyUseJSTCircuit", false);
+			pr.setComment("If true, JST Circuits can only be used in JST Recipes.");
+			onlyUseJSTCircuit = pr.getBoolean();
+
+			pr = cfg.get(c, "OvervoltageExplosion", false);
+			pr.setComment("If true, JST Machines can explode due to overvoltage.");
+			ovExplosion = pr.getBoolean();
+
 			c = "General";
 			pr = cfg.get(c, "RFPerEU", 4);
 			pr.setComment("Conversion Ratio between JST/IC2 EU and RF/Forge Energy\nRange: 1-" + Byte.MAX_VALUE + "\nChange this value if you have energy dupe with other Energy Conversion Mods.");
@@ -158,17 +173,28 @@ public class JSTCfg {
 
 			pr = cfg.get(c, "undergroundFluidSources", new String[] {
 					"3000;none;0;0;0;;;",
-					"100;oil;100000;4900000;0;;;",
-					"100;gas.natural;100000;4900000;0;;;",
-					"50;oil;500000;9500000;0;;SANDY;",
-					"50;gas.natural;500000;9500000;0;;SANDY;",
+					"100;oil;100000;3900000;0;;;",
+					"100;gas.natural;200000;4800000;0;;;",
 					"200;lava;200000;9800000;0;;;",
 					"300;water;500000;9500000;0;;;",
 					"25;helium;50000;150000;0;;;",
+					"25;petrotheum;50000;500000;0;;;",
+					"25;aerotheum;50000;500000;0;;;",
+					"50;oil;100000;9900000;0;;SANDY;",
+					"50;gas.natural;200000;14800000;0;;SANDY;",
+					"50;oil;100000;4900000;0;;OCEAN;",
+					"50;gas.natural;200000;7300000;0;;OCEAN;",
+					"200;ice;100000;500000;0;;SNOWY;",
+					"25;cryotheum;50000;450000;0;;SNOWY;",
 					"1200;none;0;0;-1;;;",
-					"200;lava;500000;19500000;-1;;;"
+					"300;lava;500000;19500000;-1;;;",
+					"100;pyrotheum;50000;450000;-1;;;",
+					"25;glowstone;50000;450000;-1;;;",
+					"950;none;0;0;-1;;;",
+					"50;ender;50000;450000;1;;;",
+					"50;experience;50000;200000;1;;;"
 			});
-			pr.setComment("Syntax: Random Weight;Fluid Name;Min;Range;Dimension Whitelist[1];Dimension Blacklist[1];Biome Whitelist[2];Biome Blacklist[2]\n[NOTE1]: You can only use numeric Dimension ID. comma separated\n[NOTE2]: You can use numeric BiomeID or BiomeDictionary(ex. SANDY, JUNGLE). comma separated\nEmpty whitelist value will allow any biomes/dimensions except the blacklisted one.");
+			pr.setComment("Syntax: Random Weight;Fluid Name;Min;Range;Dimension Whitelist[1];Dimension Blacklist[1];Biome Whitelist[2];Biome Blacklist[2]\n[1]: You can only use numeric Dimension ID. comma separated.\n[2]: You can use numeric BiomeID or BiomeDictionary(ex. SANDY, JUNGLE). comma separated.\nEmpty whitelist value will allow any biomes/dimensions except the blacklisted one.");
 			JSTChunkData.data = pr.getStringList();
 
 			c = "Compat";
@@ -204,13 +230,13 @@ public class JSTCfg {
 				pr.setComment("If true, Forestry Hives will not emit any light.");
 				DFHL = pr.getBoolean();
 				
-				pr = cfg.get(c, "DisableElectricEngineRecipe", true);
+				pr = cfg.get(c, "DisableElectricEngineRecipe", false);
 				pr.setComment("Set true to disable Forestry Electric Engine Recipe.");
 				NoElecEngine = pr.getBoolean();
 			}
 
 			if (ieLoaded) {
-				pr = cfg.get(c, "BuffIEDieselGen", true);
+				pr = cfg.get(c, "BuffIEDieselGen", false);
 				pr.setComment("If true, Immersive Engineering's Diesel Generator will be more efficient.");
 				BuffIEDieselGen = pr.getBoolean();
 			}

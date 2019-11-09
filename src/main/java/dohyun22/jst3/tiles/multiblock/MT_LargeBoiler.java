@@ -1,4 +1,4 @@
-package dohyun22.jst3.tiles.test;
+package dohyun22.jst3.tiles.multiblock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -303,8 +303,8 @@ public class MT_LargeBoiler extends MT_Multiblock {
 	private boolean isValid(BlockPos p, World w) {
 		int n = MetaTileBase.getMTEId(w, p);
 		if (n == 5002) {capacity += 32; return true;}
-		else if (n == 5003) {capacity += 128; return true;}
-		else if (n == 5083) {capacity += 512; return true;}
+		else if (n == 5003) {capacity += 256; return true;}
+		else if (n == 5083) {capacity += 2000; return true;}
 		return getAndAddPort(p, 32, null);
 	}
 }

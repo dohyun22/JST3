@@ -56,8 +56,8 @@ public class JSTPotions extends Potion {
 				radiation = Info.POTION_RADIATION;
 		} catch (Throwable t) {}
 
-		registerPotionType(new PotionType(new PotionEffect(JSTPotions.finedust, 1200, 10)), "finedust");
-		registerPotionType(new PotionType(new PotionEffect(JSTPotions.finedust, 1200, 20)), "finedust2");
+		registerPotionType(new PotionType(new PotionEffect(JSTPotions.finedust, 2400, 10)), "finedust");
+		registerPotionType(new PotionType(new PotionEffect(JSTPotions.finedust, 2400, 20)), "finedust2");
 	}
 	
 	public JSTPotions(String name, boolean bad, int color, int x, int y, double eff) {
@@ -163,7 +163,7 @@ public class JSTPotions extends Potion {
 		if (e.hasCapability(CapabilityEnergy.ENERGY, null) && e.getCapability(CapabilityEnergy.ENERGY, null).getEnergyStored() > 0) return true;
 		ResourceLocation cn = new ResourceLocation(JSTUtils.getRegName(e, true));
 		for (String str : validNames)
-			if (cn.getResourcePath().contains(str))
+			if (cn.getResourcePath().toLowerCase().contains(str))
 				return true;
 		return false;
 	}

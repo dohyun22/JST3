@@ -45,19 +45,19 @@ public class IB_Battery extends ItemBehaviour {
 		if (this.mode == 1 && e <= 0) {
 			ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.energy.depleted"));
 		} else {
-			ls.add(I18n.format("jst.tooltip.energy.eu", e, this.maxEnergy));
+			ls.add(I18n.format("jst.tooltip.energy.eu", JSTUtils.formatNum(e), JSTUtils.formatNum(maxEnergy)));
 			BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
-			ls.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(this.maxEnergy).multiply(bi)));
-			ls.add(I18n.format("jst.tooltip.energy.tier") + " " + this.tier + " (" + JSTUtils.getTierName(this.tier) + ")");
+			ls.add(I18n.format("jst.tooltip.energy.rf", JSTUtils.formatNum(BigInteger.valueOf(e).multiply(bi)), JSTUtils.formatNum(BigInteger.valueOf(maxEnergy).multiply(bi))));
+			ls.add(I18n.format("jst.tooltip.energy.tier") + " " + tier + " (" + JSTUtils.getTierName(tier) + ")");
 			long tl = this.transferLimit(st);
-			ls.add(I18n.format("jst.tooltip.energy.transfer") + " " + tl  + " EU / " + (tl * JSTCfg.RFPerEU) + " RF");
-			if (this.maxEnergy > (Integer.MAX_VALUE / JSTCfg.RFPerEU)) ls.add(I18n.format("jst.tooltip.energy.highcapacity"));
+			ls.add(I18n.format("jst.tooltip.energy.transfer") + " " + JSTUtils.formatNum(tl)  + " EU / " + JSTUtils.formatNum(tl * JSTCfg.RFPerEU) + " RF");
+			if (maxEnergy > (Integer.MAX_VALUE / JSTCfg.RFPerEU)) ls.add(I18n.format("jst.tooltip.energy.highcapacity"));
 		}
 	}
 	
 	@Override
 	public int getTier(ItemStack st) {
-		return this.tier;
+		return tier;
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public class IB_Battery extends ItemBehaviour {
 	@Override
 	public void getSubItems(ItemStack st, List<ItemStack> sub) {
 		if (mode != 1) sub.add(st.copy());
-		setEnergy(st, this.maxEnergy);
+		setEnergy(st, maxEnergy);
 		sub.add(st);
 	}
 }

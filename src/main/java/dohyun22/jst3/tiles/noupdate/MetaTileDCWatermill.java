@@ -4,7 +4,7 @@ import java.util.List;
 
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IDCGenerator;
+import dohyun22.jst3.api.IDCGenerator;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

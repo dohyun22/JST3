@@ -5,7 +5,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
-public class FineDustCapability {
+public final class FineDustCapability {
 	@CapabilityInject(IDust.class)
 	public static Capability<IDust> FINEDUST = null;
 

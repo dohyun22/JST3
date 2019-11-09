@@ -5,7 +5,7 @@ import java.util.Random;
 
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IDCGenerator;
+import dohyun22.jst3.api.IDCGenerator;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;

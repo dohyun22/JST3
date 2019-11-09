@@ -183,7 +183,7 @@ public class IB_FluidCan extends ItemBehaviour {
 		AIR("air"), ACID("acid"), HG("mercury"), UU("ic2uu_matter"), DSTW("ic2distilled_water"),
 		CLNT("ic2coolant"), HCLT("ic2hot_coolant"), BMAS("biomass"), BETH("bio.ethanol"), CREO("creosote"),
 		ETHA("ethanol"), BDSL("biodiesel"), POIL("plantoil"), SOIL("seed.oil"), DESL("diesel"),
-		GASL("gasoline"), LUBR("lubricant"), HVYF("heavyfuel");
+		GASL("gasoline"), LUBR("lubricant"), HVYF("heavyfuel"), BGAS("ic2biogas"), IBMS("ic2biomass");
 		
 		public final String fname;
 		public final boolean is144mb;

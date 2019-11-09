@@ -8,7 +8,7 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IScrewDriver;
+import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;

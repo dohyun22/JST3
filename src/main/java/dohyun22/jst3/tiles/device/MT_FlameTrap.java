@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_FlameTrap extends MetaTileBase {
+	private int burningFuel;
 	private EntityLivingBase target;
 	private FluidTank tank;
 
@@ -49,11 +50,16 @@ public class MT_FlameTrap extends MetaTileBase {
 		if (isClient()) return;
 		boolean flag = baseTile.getTimer() % 20 == 0;
 		FluidStack fs = tank.getFluid();
-		double c = IB_Flamethrower.getFuelVal(fs == null ? null : fs.getFluid());
+		int c = IB_Flamethrower.getFuelVal(fs == null ? null : fs.getFluid());
 		EnumFacing f = baseTile.facing;
-		if (c <= 0.0D || baseTile.isActive() || f == null) {
+		if (c <= 0 || baseTile.isActive() || f == null) {
 			target = null;
 			return;
+		}
+		if (burningFuel <= 0) {
+			int m = Math.max((int) Math.ceil(256 / ((double)c)), 1);
+			fs = tank.drainInternal(m, true);
+			burningFuel = c * (fs == null ? 0 : fs.amount);
 		}
 		if (target == null) {
 			if (flag) {
@@ -67,13 +73,11 @@ public class MT_FlameTrap extends MetaTileBase {
 				}
 			}
 		} else {
-			if (flag) {
-				if (!canAttack(target)) {
-					target = null;
-					return;
-				}
-				tank.drainInternal((int)(c * 2), true);
+			if (flag && !canAttack(target)) {
+				target = null;
+				return;
 			}
+			burningFuel -= Math.min(burningFuel, 256);
 			IB_Flamethrower.throwFlame(getWorld(), baseTile, new Vec3d(f.getFrontOffsetX(), f.getFrontOffsetY(), f.getFrontOffsetZ()), 4, 10);
 		}
 	}
@@ -104,11 +108,13 @@ public class MT_FlameTrap extends MetaTileBase {
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		tank.readFromNBT(tag);
+		burningFuel = tag.getInteger("fuel");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		tank.writeToNBT(tag);
+		tag.setInteger("fuel", burningFuel);
 	}
 
 	@Override

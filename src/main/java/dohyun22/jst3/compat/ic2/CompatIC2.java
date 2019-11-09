@@ -177,12 +177,14 @@ public class CompatIC2 extends Loadable {
 		addUURecipe(new ItemStack(JSTItems.item1, 1, 18), 6025);
 		addUURecipe(new ItemStack(JSTItems.item1, 1, 27), 710);
 		addUURecipe(new ItemStack(JSTItems.item1, 1, 100), 16700);
+		addUURecipe(new ItemStack(JSTItems.item1, 1, 105), 1200);
+		addUURecipe(new ItemStack(JSTItems.item1, 1, 106), 2400);
 		addUURecipe(new ItemStack(Items.QUARTZ), 600);
 		addUURecipe("dustTungsten", 19500);
 		addUURecipe("dustLithium", 3000);
 		addUURecipe("dustSodium", 1000);
 		addUURecipe("dustRhenium", 1500000);
-		addUURecipe("dustUnobtainium", 8000000);
+		addUURecipe("dustUnobtainium", 16000000);
 		addUURecipe("dustTitanium", 22000);
 		addUURecipe("ingotTitanium", 22000);
 		addUURecipe("dustChrome", 62100);
@@ -206,6 +208,7 @@ public class CompatIC2 extends Loadable {
 		addUURecipe("gemSapphire", 8000);
 		addUURecipe("gemPeridot", 8000);
 		addUURecipe("crystalCertusQuartz", 1200);
+		addUURecipe("ingotNeutronium", 100000000);
 
 		if (JSTUtils.isClient()) CropJSTBase.tex = new ArrayList();
 
@@ -358,8 +361,8 @@ public class CompatIC2 extends Loadable {
 			st = JSTUtils.getFirstItem("dustUranium", 8);
 			if (st.isEmpty()) st = new ItemStack(i, 8, 2);
 			obj = new Object[] {new OreDictStack("oreUranium", 4)};
-			MRecipes.addOreProcessRecipe((Object[]) obj, new FluidStack(FluidRegistry.WATER, 4000), new ItemStack[] {st, new ItemStack(i, 2, 1)}, 64, 400);
-			MRecipes.addOreProcessRecipe((Object[]) obj, new FluidStack(JSTFluids.acid, 4000), new ItemStack[] {JSTUtils.modStack(st, 12, -1), new ItemStack(i, 3, 1)}, 64, 400);
+			MRecipes.addOreProcessRecipe((Object[]) obj, new FluidStack(FluidRegistry.WATER, 4000), new ItemStack[] {st, new ItemStack(i, 8, 5)}, 64, 400);
+			MRecipes.addOreProcessRecipe((Object[]) obj, new FluidStack(JSTFluids.acid, 4000), new ItemStack[] {JSTUtils.modStack(st, 12, -1), new ItemStack(i, 12, 5)}, 64, 400);
 			obj = "ingotUranium";
 			if (JSTUtils.oreValid((String)obj)) {
 				removeIC2RecipeByInput(JSTUtils.getModItemStack("ic2:crushed", 1, 6), Recipes.centrifuge);
@@ -370,11 +373,11 @@ public class CompatIC2 extends Loadable {
 				addExtRec(new OreDictStack((String)obj), st);
 				addCompRec(st, JSTUtils.getFirstItem((String)obj));
 			}
-			st = new ItemStack(i, 1, 6);
-			RecipeLoader.addShapelessRecipe(new ItemStack(i, 1, 2), st, st, st, st, st, st, st, st, st);
-			RecipeLoader.addShapelessRecipe(new ItemStack(i, 9, 6), new ItemStack(i, 1, 2));
-			MRecipes.addFusionBreederRecipe(new ItemStack(i, 1, 6), new ItemStack(i, 1, 7));
+			st = new ItemStack(i, 1, 3);
+			MRecipes.addFusionBreederRecipe(new ItemStack(i, 1, 2), st);
+			MRecipes.addFusionBreederRecipe(new OreDictStack("ingotUranium"), st);
 			MRecipes.addFusionBreederRecipe(new ItemStack(JSTItems.item1, 1, 100), new ItemStack(i, 6, 5));
+			MRecipes.addFusionBreederRecipe(new ItemStack(i, 1, 3), new ItemStack(JSTItems.item1, 1, 78));
 			MRecipes.addSeparatorRecipe(new ItemStack(i, 10, 2), null, null, new ItemStack[] {new ItemStack(i, 1, 5)}, null, 100, 1500);
 			addFuelRecipe(new ItemStack(JSTItems.item1, 3, 100), st2, 1, new ItemStack(JSTItems.item1, 1, 100), new ItemStack(i, 1, 5));
 			addFuelRecipe(new ItemStack(i, 3, 1), st2, 7, new ItemStack(i, 2, 1), new ItemStack(i, 2, 7));
@@ -466,6 +469,11 @@ public class CompatIC2 extends Loadable {
 		String[] sf = new String[] {"Bronze", "Copper", "Gold", "Iron", "Lead", "Steel", "Tin"};
 		for (int n = 0; n < sf.length; n++)
 			MRecipes.addPressRecipe(new OreDictStack("plate" + sf[n]), ItemList.molds[1], new ItemStack(it, 2, n), null, 4, 64);
+		sf = new String[] {"Bronze", "Copper", "Gold", "Iron", "Lapis", "Lead", null, "Steel", "Tin"};
+		it = JSTUtils.getModItem("ic2:plate");
+		for (int n = 0; n < sf.length; n++)
+			if (sf[n] != null)
+				MRecipes.addPressRecipe(new OreDictStack("block" + sf[n]), ItemList.molds[1], new ItemStack(it, 1, n + 9), null, 16, 120);
 		obj = ItemList.molds[0];
 		MRecipes.addPressRecipe(new OreDictStack("ingotTin"), obj, getIC2Cable(4, 0, 3), null, 16, 64);
 		MRecipes.addPressRecipe(new OreDictStack("ingotCopper"), obj, getIC2Cable(0, 0, 3), null, 16, 64);

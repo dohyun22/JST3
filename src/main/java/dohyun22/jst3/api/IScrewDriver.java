@@ -1,4 +1,4 @@
-package dohyun22.jst3.tiles.interfaces;
+package dohyun22.jst3.api;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;

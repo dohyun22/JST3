@@ -14,7 +14,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Multimap;
 
 import cofh.api.item.IToolHammer;
-
+import crazypants.enderio.api.tool.ITool;
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.IItemJEU;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
@@ -29,6 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -42,6 +43,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,6 +59,7 @@ import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
 
+import mods.railcraft.api.items.IToolCrowbar;
 import mrtjp.projectred.api.IScrewdriver;
 
 @Optional.InterfaceList({
@@ -64,9 +67,11 @@ import mrtjp.projectred.api.IScrewdriver;
 	@Optional.Interface(iface="ic2.api.item.IElectricItemManager", modid="ic2"),
 	@Optional.Interface(iface="ic2.api.item.IBoxable", modid="ic2"),
 	@Optional.Interface(iface="cofh.api.item.IToolHammer", modid="cofhapi"),
-	@Optional.Interface(iface="mrtjp.projectred.api.IScrewdriver", modid="projectred|api")
+	@Optional.Interface(iface="mrtjp.projectred.api.IScrewdriver", modid="projectred|api"),
+	@Optional.Interface(iface="crazypants.enderio.api.tool.ITool", modid="enderioapi"),
+	@Optional.Interface(iface="mods.railcraft.api.items.IToolCrowbar", modid="railcraft")
 })
-public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectricItem, IElectricItemManager, IBoxable, IToolHammer, IScrewdriver {
+public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectricItem, IElectricItemManager, IBoxable, IToolHammer, IScrewdriver, ITool, IToolCrowbar {
 
 	public ItemJST1() {
 		setRegistryName(JustServerTweak.MODID, "itemjst1");
@@ -288,7 +293,17 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 		if (n == 1) return true;
 		return super.shouldCauseReequipAnimation(os, ns, sc);
 	}
-	
+
+	@Override
+	public boolean canDestroyBlockInCreative(World w, BlockPos p, ItemStack st, EntityPlayer pl) {
+		return getBehaviour(st).canDestroyBlockInCreative(w, p, st, pl);
+	}
+
+	@Override
+	public boolean doesSneakBypassUse(ItemStack st, IBlockAccess w, BlockPos p, EntityPlayer pl) {
+		return getBehaviour(st).doesSneakBypassUse(st, w, p, pl);
+	}
+
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack st, @Nullable NBTTagCompound nbt) {
 		return new ICapabilityProvider() {
@@ -419,6 +434,62 @@ public class ItemJST1 extends ItemMetaBase implements IItemJEU, ISpecialElectric
 	@Method(modid = "projectred|api")
 	public void damageScrewdriver(EntityPlayer pl, ItemStack st) {
 		getBehaviour(st).onScrewdriverUsed(st, pl);
+	}
+
+	@Override
+	@Method(modid = "enderioapi")
+	public boolean shouldHideFacades(ItemStack st, EntityPlayer pl) {
+		return getBehaviour(st).isWrench(st);
+	}
+
+	@Override
+	@Method(modid = "enderioapi")
+	public boolean canUse(EnumHand h, EntityPlayer pl, BlockPos p) {
+		ItemStack st = pl.getHeldItem(h);
+		return getBehaviour(st).isWrench(st);
+	}
+
+	@Override
+	@Method(modid = "enderioapi")
+	public void used(EnumHand h, EntityPlayer pl, BlockPos p) {
+		ItemStack st = pl.getHeldItem(h);
+		getBehaviour(st).onWrenchUsed(st, pl);
+	}
+
+	@Override
+	@Method(modid = "railcraft")
+	public boolean canBoost(EntityPlayer pl, EnumHand h, ItemStack st, EntityMinecart e) {
+		return getBehaviour(st).isCrowbar(st);
+	}
+
+	@Override
+	@Method(modid = "railcraft")
+	public boolean canLink(EntityPlayer pl, EnumHand h, ItemStack st, EntityMinecart e) {
+		return getBehaviour(st).isCrowbar(st);
+	}
+
+	@Override
+	@Method(modid = "railcraft")
+	public boolean canWhack(EntityPlayer pl, EnumHand h, ItemStack st, BlockPos p) {
+		return getBehaviour(st).isCrowbar(st);
+	}
+
+	@Override
+	@Method(modid = "railcraft")
+	public void onBoost(EntityPlayer pl, EnumHand h, ItemStack st, EntityMinecart e) {
+		getBehaviour(st).onCrowbarUsed(st, pl);
+	}
+
+	@Override
+	@Method(modid = "railcraft")
+	public void onLink(EntityPlayer pl, EnumHand h, ItemStack st, EntityMinecart e) {
+		getBehaviour(st).onCrowbarUsed(st, pl);
+	}
+
+	@Override
+	@Method(modid = "railcraft")
+	public void onWhack(EntityPlayer pl, EnumHand h, ItemStack st, BlockPos p) {
+		getBehaviour(st).onCrowbarUsed(st, pl);
 	}
 
 	@Override

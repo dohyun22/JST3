@@ -53,7 +53,7 @@ public class MT_BlockBreaker extends MetaTileBase {
 		if (te instanceof IInventory) {
 			IInventory iinv = ((IInventory) te);
 			if (!JSTUtils.checkInventoryFull(iinv, f)) {
-				for (int n = 0; n < this.inv.size(); n++) {
+				for (int n = 0; n < inv.size(); n++) {
 					if (!this.getStackInSlot(n).isEmpty()) {
 						ItemStack st = JSTUtils.sendStackToInv(iinv, this.decrStackSize(n, 64), f);
 						if (st.isEmpty()) {

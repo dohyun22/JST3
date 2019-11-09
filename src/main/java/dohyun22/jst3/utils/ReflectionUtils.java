@@ -109,8 +109,7 @@ public class ReflectionUtils {
 		try {
 			ret = getClassObj(obj).getDeclaredConstructor(param);
 			ret.setAccessible(true);
-		} catch (Throwable t) {
-		}
+		} catch (Throwable t) {}
 		return ret;
 	}
 

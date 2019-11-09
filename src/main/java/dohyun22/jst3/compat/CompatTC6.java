@@ -3,6 +3,7 @@ package dohyun22.jst3.compat;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.Loadable;
+import dohyun22.jst3.recipes.ItemList;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.item.ItemStack;
@@ -22,5 +23,6 @@ public class CompatTC6 extends Loadable {
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 9022), null, null, new ItemStack[] {st, st2}, null, 5, 100);
 		MRecipes.addMagicFuel(st, 75000);
 		MRecipes.addMagicFuel(JSTUtils.getModItemStack("thaumcraft:crystal_essence"), 50000);
+		MRecipes.addPressRecipe(JSTUtils.getModItemStack("thaumcraft:ingot"), ItemList.molds[1], JSTUtils.getModItemStack("thaumcraft:plate", 1, 2), null, 10, 64);
 	}
 }

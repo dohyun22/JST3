@@ -1,5 +1,6 @@
 package dohyun22.jst3.compat.tic;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -38,8 +39,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Optional.Method;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +53,7 @@ import slimeknights.tconstruct.library.client.model.ModifierModelLoader;
 import slimeknights.tconstruct.library.events.TinkerRegisterEvent.EntityMeltingRegisterEvent;
 import slimeknights.tconstruct.library.modifiers.IModifier;
 import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 import slimeknights.tconstruct.library.tools.ToolCore;
 
 public class CompatTiC extends Loadable {
@@ -66,7 +70,7 @@ public class CompatTiC extends Loadable {
 	}
 	
 	@Override
-	@Method(modid = "tconstruct")
+	@Optional.Method(modid = "tconstruct")
 	public void preInit() {
 		HashMap<IModifier, String> mods = new HashMap();
 		Modifier mod = new ModExtraMod(1);
@@ -128,14 +132,25 @@ public class CompatTiC extends Loadable {
 	}
 
 	@Override
-	@Method(modid = "tconstruct")
+	@Optional.Method(modid = "tconstruct")
 	public void postInit() {
 		RecipeLoader.addShapedRecipe(JSTUtils.getModItemStack("tconstruct:edible", 8, 10), "RRR", "RSR", "RRR", 'R', new ItemStack(Items.ROTTEN_FLESH), 'S', "dustSalt");
 		MRecipes.addChemMixerRecipe(new Object[] {JSTUtils.getModItemStack("tconstruct:clear_stained_glass", 1, 32767)}, new FluidStack(JSTFluids.chlorine, 125), JSTUtils.getModItemStack("tconstruct:clear_glass"), null, null, 10, 200);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotArdite"), new OreDictStack("ingotCobalt"), JSTUtils.getFirstItem("ingotManyullyn"), 5, 100);
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("ingotCopper", 1), new OreDictStack("ingotAluminum", 3), JSTUtils.getFirstItem("ingotAlubrass", 4), 5, 100);
-	
+		MRecipes.addSeparatorRecipe(new OreDictStack("ingotAlubrass", 4), null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotCopper"), JSTUtils.getFirstItem("ingotAluminum", 3)}, null, 16, 200);
+		MRecipes.addSeparatorRecipe(new OreDictStack("ingotManyullyn"), null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotArdite"), JSTUtils.getFirstItem("ingotCobalt")}, null, 16, 200);
 		EffectBlocks.addOre(JSTUtils.getModBlock("tconstruct:ore"), false);
+
+		Method m = ReflectionUtils.getMethod("slimeknights.tconstruct.smeltery.TinkerSmeltery", "registerOredictMeltingCasting", Fluid.class, String.class);
+		if (m != null) {
+			try {
+				m.invoke(null, JSTFluids.silicon, "Silicon");
+				m.invoke(null, JSTFluids.solder, "Solder");
+			} catch (Throwable t) {}
+		}
+		FluidStack fs1 = FluidRegistry.getFluidStack("tin", 3), fs2 = FluidRegistry.getFluidStack("lead", 2);
+		if (fs1 != null && fs2 != null) TinkerRegistry.registerAlloy(new FluidStack(JSTFluids.solder, 5), fs1, fs2);
 	}
 	
 	public static boolean isTiCTool(ItemStack st) {
@@ -150,7 +165,7 @@ public class CompatTiC extends Loadable {
 		if (isTiCTool(st)) ev.addCapability(RL, new EnergyCapTiC(st));
 	}
 
-	@Method(modid = "tconstruct")
+	@Optional.Method(modid = "tconstruct")
 	@SubscribeEvent
 	public void onRegisterEntityMelting(EntityMeltingRegisterEvent ev) {
 		if (JSTCfg.removeGolemMelting && ev.getRecipe() == EntityIronGolem.class) ev.setCanceled(true);
@@ -229,7 +244,7 @@ public class CompatTiC extends Loadable {
 	}
 
 	/** Makes TiC Tools with JST EU modifiers compatible with IC2 EU*/
-	@Method(modid = "ic2")
+	@Optional.Method(modid = "ic2")
 	public void addChargeManager() {
 		ElectricItem.registerBackupManager(new IBackupElectricItemManager() {
 			

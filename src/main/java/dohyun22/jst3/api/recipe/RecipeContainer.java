@@ -1,6 +1,7 @@
 package dohyun22.jst3.api.recipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -135,6 +136,11 @@ public class RecipeContainer {
 	@Nullable
 	public Object[] getObj() {
 		return this.obj;
+	}
+
+	@Override
+	public String toString() {
+		return Arrays.deepToString(in) + "," + Arrays.deepToString(fin) + "," + Arrays.deepToString(out) + "," + Arrays.deepToString(fout) + "," + energy + "EU," + duration + "t," + Arrays.deepToString(obj);
 	}
 	
 	public static boolean matches(@Nullable Object rec, @Nonnull ItemStack in) {

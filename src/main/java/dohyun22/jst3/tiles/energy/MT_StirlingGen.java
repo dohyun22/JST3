@@ -286,7 +286,7 @@ public class MT_StirlingGen extends MetaTileGenerator implements IGenericGUIMTE 
 
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric r = new ContainerGeneric(inv, te);
+		ContainerGeneric r = new ContainerGeneric(te);
 		r.addSlot(new SlotFurnaceFuel(te, 0, 44, 56));
 		r.addSlot(steam ? new JSTSlot(te, 1, 44, 12, false, true, 64, true) : new BatterySlot(te, 1, 44, 12, true, false));
 		if (steam) {

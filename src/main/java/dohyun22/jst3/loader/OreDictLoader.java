@@ -148,13 +148,20 @@ public class OreDictLoader extends Loadable {
 		regOre("ingotElectricalSteel", 157);
 		regOre("dustElectricalSteel", 158);
 		regOre("plateElectricalSteel", 159);
+		regOre("ingotSolder", 183);
+		regOre("dustSolder", 184);
+		regOre("wireSolder", 185);
+
 		if (JSTCfg.customMat) {
 			String[] str = {"ingotCopper","dustCopper", "plateCopper", "ingotTin", "dustTin", "plateTin", "ingotLead", "dustLead", "plateLead"};
 			for (int n = 0; n < str.length; n++) regOre(str[n], 170 + n);
 		}
-		regOre("ingotSolder", 183);
-		regOre("dustSolder", 184);
-		regOre("wireSolder", 185);
+
+		String s = "circuitBoardAny";
+		regOre(s, 190);
+		regOre(s, 191);
+		regOre(s, 192);
+		regOre(s, 193);
 
 		OreDictionary.registerOre("craftingSolarPanel", new ItemStack(JSTBlocks.blockTile, 1, 40));
 		OreDictionary.registerOre("craftingSCWire", new ItemStack(JSTBlocks.blockTile, 1, 4022));

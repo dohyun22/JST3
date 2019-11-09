@@ -52,10 +52,13 @@ public class MRecipes {
 	public static final RecipeList HeatExcFakeRecipes = new RecipeList("heatexc");
 	public static final RecipeList BioRecipes = new RecipeList("bioprocess");
 	public static final RecipeList CircuitBuilderRecipes = new RecipeList("circuitbuilder");
+	public static final RecipeList GrinderRecipes = new RecipeList("grinder");
+	public static final RecipeList LiquifierRecipes = new RecipeList("liquifier");
 	public static final HashMap<Object, Integer> CompressorValue = new HashMap();
 	public static final HashMap<Object, Integer> MagicGenFuel = new HashMap();
 	public static final ArrayList<ItemStack> NuclearItems = new ArrayList();
 	public static final ArrayList<ItemStack> Fertilizers = new ArrayList();
+	public static final ArrayList<ItemStack> Wrenches = new ArrayList();
 	public static final ArrayList<Block> LEDCrops = new ArrayList();
     
     @Nullable
@@ -80,10 +83,37 @@ public class MRecipes {
     	MRecipes.AssemblerRecipes.add(ret);
     	return ret;
     }
+
+    public static void addAssemblerWRecycle(Object[] recipe, @Nullable FluidStack fin, @Nullable ItemStack out1, int energy, int tick) {
+    	if (addAssemblerRecipe(recipe, fin, out1, null, energy, tick) != null) {
+    		ItemStack[] sa = new ItemStack[9];
+        	int tc = 0;
+        	for (int n = 0; n < recipe.length; n++) {
+        		Object o = recipe[n];
+        		if (o instanceof ItemStack) {
+        			sa[n] = (ItemStack)o;
+        			tc += sa[n].getCount();
+        		} else if (o instanceof OreDictStack) {
+        			sa[n] = JSTUtils.getFirstItem(((OreDictStack)o).name, ((OreDictStack)o).count);
+        			tc += sa[n].getCount();
+        		} else if (o instanceof IRecipeItem) {
+        			try {
+        				sa[n] = JSTUtils.modStack(((IRecipeItem)o).getAllMatchingItems().get(0), ((IRecipeItem)o).getcount(), -1);
+        				tc += sa[n].getCount();
+        			} catch (Exception e) {}
+        		}
+        	}
+        	if (tc > 0) MRecipes.addDisassemblerRecipe(out1, sa, 30, tc * 100);
+    	}
+    }
     
     public static void addAlloyFurnaceRecipe(Object in1, Object in2, ItemStack out, int energy, int tick) {
     	if (isValid(in1) && isValid(out))
     		MRecipes.AlloyFurnaceRecipes.add(RecipeContainer.newContainer(isValid(in2) ? new Object[] {in1, in2} : new Object[] {in1}, null, new ItemStack[] {out}, null, energy, tick));
+    }
+
+    public static void addAlloyFurnaceRecipe2(Object in1, Object in2, ItemStack out, int energy, int tick) {
+    	if (isValid(in2)) addAlloyFurnaceRecipe(in1, in2, out, energy, tick);
     }
     
     public static void addSeparatorRecipe(Object in1, Object in2, FluidStack fin, ItemStack[] out, FluidStack fout, int energy, int tick) {
@@ -210,6 +240,16 @@ public class MRecipes {
     	if (isValid(out) && in != null && in.length > 0 && isValid(in[0]))
     		MRecipes.CircuitBuilderRecipes.add(RecipeContainer.newContainer(in, null, new ItemStack[] {out}, null, energy, tick));
     }
+
+    public static void addGrindingRecipe(Object in, ItemStack out, int energy, int tick) {
+    	if (isValid(in) && isValid(out))
+    		MRecipes.GrinderRecipes.add(RecipeContainer.newContainer(new Object[] {in}, null, new ItemStack[] {out}, null, energy, tick));
+    }
+   
+    public static void addLiquifierRecipe(Object in, FluidStack fl, int energy, int tick) {
+    	if (isValid(in) && isValid(fl))
+    		MRecipes.LiquifierRecipes.add(RecipeContainer.newContainer(new Object[] {in}, null, null, new FluidStack[] {fl}, energy, tick));
+    }
     
     public static void addDieselFuel(String name, int e) {
     	addFluidFuel(DieselGenFuel, name, e);
@@ -259,6 +299,11 @@ public class MRecipes {
     public static void addLEDCrop(Block in) {
     	if (in != null && in != Blocks.AIR)
     		LEDCrops.add(in);
+    }
+
+    public static void addWrench(ItemStack in) {
+    	if (in != null && !in.isEmpty())
+    		Wrenches.add(in);
     }
     
     public static void addFluidFuel(Map<String, Integer> map, String name, int e) {

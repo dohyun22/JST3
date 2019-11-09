@@ -1,10 +1,13 @@
 package dohyun22.jst3.proxy;
 
+import dohyun22.jst3.client.gui.GUICfg;
+import dohyun22.jst3.container.ContainerCfg;
 import dohyun22.jst3.entity.IGUIEntity;
 import dohyun22.jst3.items.ItemJST1;
 import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.interfaces.IConfigurable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,9 +43,14 @@ public class CommonProxy implements IGuiHandler {
 		}
 		TileEntity te = w.getTileEntity(new BlockPos(x, y, z));
 		if (te instanceof TileEntityMeta) {
-			MetaTileBase mte = ((TileEntityMeta) te).mte;
-			if (mte != null)
-				return mte.getServerGUI(ID, p.inventory, (TileEntityMeta) te);
+			MetaTileBase mte = ((TileEntityMeta)te).mte;
+			if (mte != null) {
+				if (mte instanceof IConfigurable) {
+					if (ID == 998) return new ContainerCfg((TileEntityMeta)te, true);
+					if (ID == 999) return new ContainerCfg((TileEntityMeta)te, false);
+				}
+				return mte.getServerGUI(ID, p.inventory, (TileEntityMeta)te);
+			}
 		}
 		return null;
 	}
@@ -63,9 +71,14 @@ public class CommonProxy implements IGuiHandler {
 		}
 		TileEntity te = w.getTileEntity(new BlockPos(x, y, z));
 		if (te instanceof TileEntityMeta) {
-			MetaTileBase mte = ((TileEntityMeta) te).mte;
-			if (mte != null)
-				return mte.getClientGUI(ID, p.inventory, (TileEntityMeta) te);
+			MetaTileBase mte = ((TileEntityMeta)te).mte;
+			if (mte != null) {
+				if (mte instanceof IConfigurable) {
+					if (ID == 998) return new GUICfg((TileEntityMeta)te, true);
+					if (ID == 999) return new GUICfg((TileEntityMeta)te, false);
+				}
+				return mte.getClientGUI(ID, p.inventory, (TileEntityMeta)te);
+			}
 		}
 		return null;
 	}

@@ -33,7 +33,7 @@ public class MT_Assembler extends MT_MachineProcess {
 	private boolean forced;
 
 	public MT_Assembler(int tier) {
-		super(tier, 9, 2, 1, 0, 16000, MRecipes.AssemblerRecipes, false, false, "assembler", null);
+		super(tier, 9, 2, 1, 0, 64000, MRecipes.AssemblerRecipes, false, false, "assembler", null);
 		setSfx(JSTSounds.SWITCH2, 0.6F, 1.0F);
 	}
 
@@ -68,6 +68,7 @@ public class MT_Assembler extends MT_MachineProcess {
 		gg.addPwr(12, 31);
 		gg.addButton(128, 50, 20, 20, 1, "->", false);
 		gg.addHoverText(128, 50, 20, 20, "jst.msg.com.build");
+		gg.addCfg(7, 7, true);
 	}
 	
 	@Override

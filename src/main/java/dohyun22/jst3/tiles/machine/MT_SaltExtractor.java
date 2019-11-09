@@ -36,20 +36,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MT_SaltExtractor extends MT_Machine {
 	private boolean isOceanBiome;
 
-	public MT_SaltExtractor() {
-		super(1);
+	public MT_SaltExtractor(int t) {
+		super(t);
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MT_SaltExtractor();
+		return new MT_SaltExtractor(tier);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
 		TextureAtlasSprite ws = getTETex("watergen_side");
-		return new TextureAtlasSprite[] {getTieredTex(1), getTETex("vent"), ws, ws, ws, ws};
+		return new TextureAtlasSprite[] {getTieredTex(tier), getTETex("vent"), ws, ws, ws, ws};
 	}
 
 	@Override
@@ -136,9 +136,9 @@ public class MT_SaltExtractor extends MT_Machine {
 	}
 	
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile != null && !isClient())
-			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	

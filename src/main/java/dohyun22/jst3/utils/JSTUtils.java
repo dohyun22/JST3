@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.text.DecimalFormat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -112,8 +113,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class JSTUtils {
+public final class JSTUtils {
 	public static final Logger LOG = LogManager.getLogger("JST3");
+	private static final DecimalFormat df_cjk = new DecimalFormat("#,####.###"), df_def = new DecimalFormat("#,###.###");
 	private JSTUtils() {}
 	
 	/**
@@ -322,110 +324,9 @@ public class JSTUtils {
 		return JSTUtils.getVoltFromTier(tier) / JSTUtils.getNearestVolt(Math.max(32, use));
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static BakedQuad createBakedQuad(VertexFormat format, Vector3f[] vertices, EnumFacing facing,
-			TextureAtlasSprite sprite, float[] colour, boolean invert, float[] alpha) {
-		return createBakedQuad(format, vertices, facing, sprite, new double[] { 0.0D, 0.0D, 16.0D, 16.0D }, colour,
-				invert, alpha);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static BakedQuad createBakedQuad(VertexFormat format, Vector3f[] vertices, EnumFacing facing,
-			TextureAtlasSprite sprite, double[] uvs, float[] colour, boolean invert) {
-		return createBakedQuad(format, vertices, facing, sprite, uvs, colour, invert,
-				new float[] { 1.0F, 1.0F, 1.0F, 1.0F });
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static BakedQuad createBakedQuad(VertexFormat vf, Vector3f[] v3, EnumFacing f, TextureAtlasSprite tex,
-			double[] uvs, float[] col, boolean inv, float[] alp) {
-		return createBakedQuad(vf, v3, f, tex, uvs, col, inv, alp, null);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static BakedQuad createBakedQuad(VertexFormat vf, Vector3f[] v3, EnumFacing f, TextureAtlasSprite tex,
-			double[] uvs, float[] col, boolean inv, float[] alp, BlockPos pos) {
-		UnpackedBakedQuad.Builder ubq = new UnpackedBakedQuad.Builder(vf);
-		ubq.setQuadOrientation(f);
-		ubq.setTexture(tex);
-		OBJModel.Normal fn = new OBJModel.Normal((float) f.getDirectionVec().getX(), (float) f.getDirectionVec().getY(), (float) f.getDirectionVec().getZ());
-		int vId = inv ? 3 : 0;
-		int u = (vId > 1) ? 2 : 0;
-		putVertexData(vf, ubq, v3[vId], fn, uvs[u], uvs[1], tex, col, alp[inv ? 3 : 0]);
-		vId = (inv ? 2 : 1);
-		u = ((vId > 1) ? 2 : 0);
-		putVertexData(vf, ubq, v3[inv ? 2 : 1], fn, uvs[u], uvs[3], tex, col, alp[inv ? 2 : 1]);
-		vId = (inv ? 1 : 2);
-		u = ((vId > 1) ? 2 : 0);
-		putVertexData(vf, ubq, v3[inv ? 1 : 2], fn, uvs[u], uvs[3], tex, col, alp[inv ? 1 : 2]);
-		vId = (inv ? 1 : 3);
-		u = ((vId > 1) ? 2 : 0);
-		putVertexData(vf, ubq, v3[inv ? 0 : 3], fn, uvs[u], uvs[1], tex, col, alp[inv ? 0 : 3]);
-		BakedQuad tmp = (BakedQuad) ubq.build();
-		return tmp;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static void putVertexData(VertexFormat format, UnpackedBakedQuad.Builder builder, Vector3f pos,
-			OBJModel.Normal faceNormal, double u, double v, TextureAtlasSprite sprite, float[] colour, float alpha) {
-		for (int e = 0; e < format.getElementCount(); e++) {
-			switch (format.getElement(e).getUsage()) {
-			case POSITION:
-				builder.put(e, new float[] { pos.getX(), pos.getY(), pos.getZ(), 0.0F });
-				break;
-			case COLOR:
-				float d = 1.0F;
-				builder.put(e, new float[] { d * colour[0], d * colour[1], d * colour[2], 1.0F * colour[3] * alpha });
-				break;
-			case UV:
-				if (sprite == null) {
-					sprite = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-				}
-				builder.put(e, new float[] { sprite.getInterpolatedU(u), sprite.getInterpolatedV(v), 0.0F, 1.0F });
-
-				break;
-			case NORMAL:
-				builder.put(e, new float[] { faceNormal.x, faceNormal.y, faceNormal.z, 0.0F });
-				break;
-			default:
-				builder.put(e, new float[0]);
-			}
-		}
-	}
-	
-	public static List<BakedQuad> makeCubeAABB(TextureAtlasSprite[] texs, AxisAlignedBB aabb) {
-		return JSTUtils.makeCube(texs, (float)aabb.minX, (float)aabb.minY, (float)aabb.minZ, (float)aabb.maxX, (float)aabb.maxY, (float)aabb.maxZ);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static List<BakedQuad> makeFullCube(TextureAtlasSprite[] texs) {
-		return JSTUtils.makeCube(texs, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static List<BakedQuad> makeCube(TextureAtlasSprite[] texs, float c0, float c1, float c2, float c3, float c4, float c5) {
-		List<BakedQuad> quads = new ArrayList(6);
-		float[] col = { 1.0F, 1.0F, 1.0F, 1.0F };
-	    Vector3f[] vertices = { new Vector3f(c0, c1, c2), new Vector3f(c0, c1, c5), new Vector3f(c3, c1, c5), new Vector3f(c3, c1, c2) };
-	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.DOWN, texs[0], new double[] { c0 * 16, 16 - c2 * 16, c3 * 16, 16 - c5 * 16 }, col, true));
-	    vertices = new Vector3f[] { new Vector3f(c0, c4, c2), new Vector3f(c0, c4, c5), new Vector3f(c3, c4, c5), new Vector3f(c3, c4, c2) };
-	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.UP, texs[1], new double[] { c0 * 16, c2 * 16, c3 * 16, c5 * 16 }, col, false));
-	    
-	    vertices = new Vector3f[] { new Vector3f(c3, c1, c2), new Vector3f(c3, c4, c2), new Vector3f(c0, c4, c2), new Vector3f(c0, c1, c2) };
-	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.NORTH, texs[2], new double[] { 16 - c3 * 16, 16 - c1 * 16, 16 - c0 * 16, 16 - c4 * 16 }, col, true));
-	    vertices = new Vector3f[] { new Vector3f(c3, c1, c5), new Vector3f(c3, c4, c5), new Vector3f(c0, c4, c5), new Vector3f(c0, c1, c5) };
-	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.SOUTH, texs[3], new double[] { c3 * 16, 16 - c1 * 16, c0 * 16, 16 - c4 * 16 }, col, false));
-	    
-	    vertices = new Vector3f[] { new Vector3f(c0, c1, c2), new Vector3f(c0, c4, c2), new Vector3f(c0, c4, c5), new Vector3f(c0, c1, c5) };
-	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.WEST, texs[4], new double[] { c2 * 16, 16 - c1 * 16, c5 * 16, 16 - c4 * 16 }, col, true));
-	    vertices = new Vector3f[] { new Vector3f(c3, c1, c2), new Vector3f(c3, c4, c2), new Vector3f(c3, c4, c5), new Vector3f(c3, c1, c5) };
-	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.EAST, texs[5], new double[] { 16 - c2 * 16, 16 - c1 * 16, 16 - c5 * 16, 16 - c4 * 16 }, col, false));
-		return quads;
-	}
-
 	@Nullable
 	public static EnumFacing getFacingFromNum(byte n) {
-		if (n < 0 || n >= EnumFacing.values().length)
+		if (n < 0 || n >= EnumFacing.VALUES.length)
 			return null;
 		return EnumFacing.values()[n];
 	}
@@ -647,6 +548,7 @@ public class JSTUtils {
 		return getFirstItem(ore, 1);
 	}
 
+	@Nonnull
 	public static ItemStack getValidOne(String... ores) {
 		for (String s : ores) {
 			ItemStack ret;
@@ -913,6 +815,25 @@ public class JSTUtils {
 		return st;
 	}
 
+	public static void sendStackInvToInv(@Nonnull IInventory src, @Nullable IInventory des, @Nonnull EnumFacing f, @Nullable EnumFacing f2, int lim) {
+		if (f2 == null) f2 = f.getOpposite();
+		if (des == null && src instanceof TileEntity) {
+			TileEntity te = ((TileEntity)src).getWorld().getTileEntity(((TileEntity)src).getPos().offset(f));
+			if (te instanceof IInventory) des = (IInventory)te;
+		}
+		if (des == null) return;
+		for (int n = 0; n < src.getSizeInventory(); n++) {
+			ItemStack st = src.getStackInSlot(n);
+			if (!st.isEmpty() && (!(src instanceof ISidedInventory) || ((ISidedInventory)src).canExtractItem(n, st, f))) {
+				ItemStack st2 = sendStackToInv(des, src.decrStackSize(n, lim), f2);
+				if (st2.isEmpty())
+					des.markDirty();
+				else
+					src.setInventorySlotContents(n, st2);
+			}
+		}
+	}
+
 	public static void setEnchant(@Nullable Enchantment en, int lvl, ItemStack st) {
 		HashMap<Enchantment, Integer> enchant = new HashMap();
 		if (en != null && lvl > 0) enchant.put(en, Integer.valueOf(lvl));
@@ -1029,7 +950,7 @@ public class JSTUtils {
 		if (s.isEmpty()) return ItemStack.EMPTY;
 		s = s.copy();
 		if (c > 0) s.setCount(c);
-		if (m > 0) s.setItemDamage(m);
+		if (m >= 0) s.setItemDamage(m);
 		return s.isEmpty() ? ItemStack.EMPTY : s;
 	}
 
@@ -1114,26 +1035,130 @@ public class JSTUtils {
 		return null;
 	}
 
-	public static void makeMachineGoHaywire(World w, BlockPos p) {
-		TileEntity te = w.getTileEntity(p);
-		if (te == null) return;
-		boolean flag = false;
-		for (EnumFacing f : EnumFacing.VALUES)
-			if (te.hasCapability(CapabilityEnergy.ENERGY, f)) {
-				w.tickableTileEntities.remove(te);
-				flag = true;
-				break;
-			}
+	@Nonnull
+	public static String formatNum(Object o) {
+		String s = getLang();
 		try {
-			if (!flag && JSTCfg.ic2Loaded && EnergyNet.instance.getSubTile(w, p) == te) {
-				w.tickableTileEntities.remove(te);
-				EnergyNet.instance.removeTile((IEnergyTile)te);
-				flag = true;
-			}
-		} catch (Throwable t) {}
-		if (flag) {
-			JSTPacketHandler.playCustomEffect(w, p.up(), 1, 0);
-			w.playSound(null, p, JSTSounds.SHOCK2, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			if (s.equals("zh_cn") || s.equals("zh_tw") || s.equals("ko_kr") || s.equals("ja_jp"))
+				return df_cjk.format(o);
+			return df_def.format(o);
+		} catch (Exception e) {}
+		return "NaN";
+	}
+
+	@Nonnull
+	public static String getLang() {
+		if (isClient()) {
+			try { return getLangClient().toLowerCase(); } catch (Throwable t) {}
 		}
+		return "en_us";
+	}
+
+	//Client Stuff
+	@SideOnly(Side.CLIENT)
+	private static String getLangClient() {
+		return Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static BakedQuad createBakedQuad(VertexFormat format, Vector3f[] vertices, EnumFacing facing,
+			TextureAtlasSprite sprite, float[] colour, boolean invert, float[] alpha) {
+		return createBakedQuad(format, vertices, facing, sprite, new double[] { 0.0D, 0.0D, 16.0D, 16.0D }, colour,
+				invert, alpha);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static BakedQuad createBakedQuad(VertexFormat format, Vector3f[] vertices, EnumFacing facing,
+			TextureAtlasSprite sprite, double[] uvs, float[] colour, boolean invert) {
+		return createBakedQuad(format, vertices, facing, sprite, uvs, colour, invert,
+				new float[] { 1.0F, 1.0F, 1.0F, 1.0F });
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static BakedQuad createBakedQuad(VertexFormat vf, Vector3f[] v3, EnumFacing f, TextureAtlasSprite tex,
+			double[] uvs, float[] col, boolean inv, float[] alp) {
+		return createBakedQuad(vf, v3, f, tex, uvs, col, inv, alp, null);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static BakedQuad createBakedQuad(VertexFormat vf, Vector3f[] v3, EnumFacing f, TextureAtlasSprite tex,
+			double[] uvs, float[] col, boolean inv, float[] alp, BlockPos pos) {
+		UnpackedBakedQuad.Builder ubq = new UnpackedBakedQuad.Builder(vf);
+		ubq.setQuadOrientation(f);
+		ubq.setTexture(tex);
+		OBJModel.Normal fn = new OBJModel.Normal((float) f.getDirectionVec().getX(), (float) f.getDirectionVec().getY(), (float) f.getDirectionVec().getZ());
+		int vId = inv ? 3 : 0;
+		int u = (vId > 1) ? 2 : 0;
+		putVertexData(vf, ubq, v3[vId], fn, uvs[u], uvs[1], tex, col, alp[inv ? 3 : 0]);
+		vId = (inv ? 2 : 1);
+		u = ((vId > 1) ? 2 : 0);
+		putVertexData(vf, ubq, v3[inv ? 2 : 1], fn, uvs[u], uvs[3], tex, col, alp[inv ? 2 : 1]);
+		vId = (inv ? 1 : 2);
+		u = ((vId > 1) ? 2 : 0);
+		putVertexData(vf, ubq, v3[inv ? 1 : 2], fn, uvs[u], uvs[3], tex, col, alp[inv ? 1 : 2]);
+		vId = (inv ? 1 : 3);
+		u = ((vId > 1) ? 2 : 0);
+		putVertexData(vf, ubq, v3[inv ? 0 : 3], fn, uvs[u], uvs[1], tex, col, alp[inv ? 0 : 3]);
+		BakedQuad tmp = (BakedQuad) ubq.build();
+		return tmp;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void putVertexData(VertexFormat format, UnpackedBakedQuad.Builder builder, Vector3f pos,
+			OBJModel.Normal faceNormal, double u, double v, TextureAtlasSprite sprite, float[] colour, float alpha) {
+		for (int e = 0; e < format.getElementCount(); e++) {
+			switch (format.getElement(e).getUsage()) {
+			case POSITION:
+				builder.put(e, new float[] { pos.getX(), pos.getY(), pos.getZ(), 0.0F });
+				break;
+			case COLOR:
+				float d = 1.0F;
+				builder.put(e, new float[] { d * colour[0], d * colour[1], d * colour[2], 1.0F * colour[3] * alpha });
+				break;
+			case UV:
+				if (sprite == null) {
+					sprite = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+				}
+				builder.put(e, new float[] { sprite.getInterpolatedU(u), sprite.getInterpolatedV(v), 0.0F, 1.0F });
+
+				break;
+			case NORMAL:
+				builder.put(e, new float[] { faceNormal.x, faceNormal.y, faceNormal.z, 0.0F });
+				break;
+			default:
+				builder.put(e, new float[0]);
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static List<BakedQuad> makeCubeAABB(TextureAtlasSprite[] texs, AxisAlignedBB aabb) {
+		return JSTUtils.makeCube(texs, (float)aabb.minX, (float)aabb.minY, (float)aabb.minZ, (float)aabb.maxX, (float)aabb.maxY, (float)aabb.maxZ);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static List<BakedQuad> makeFullCube(TextureAtlasSprite[] texs) {
+		return JSTUtils.makeCube(texs, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static List<BakedQuad> makeCube(TextureAtlasSprite[] texs, float c0, float c1, float c2, float c3, float c4, float c5) {
+		List<BakedQuad> quads = new ArrayList(6);
+		float[] col = { 1.0F, 1.0F, 1.0F, 1.0F };
+	    Vector3f[] vertices = { new Vector3f(c0, c1, c2), new Vector3f(c0, c1, c5), new Vector3f(c3, c1, c5), new Vector3f(c3, c1, c2) };
+	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.DOWN, texs[0], new double[] { c0 * 16, 16 - c2 * 16, c3 * 16, 16 - c5 * 16 }, col, true));
+	    vertices = new Vector3f[] { new Vector3f(c0, c4, c2), new Vector3f(c0, c4, c5), new Vector3f(c3, c4, c5), new Vector3f(c3, c4, c2) };
+	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.UP, texs[1], new double[] { c0 * 16, c2 * 16, c3 * 16, c5 * 16 }, col, false));
+	    
+	    vertices = new Vector3f[] { new Vector3f(c3, c1, c2), new Vector3f(c3, c4, c2), new Vector3f(c0, c4, c2), new Vector3f(c0, c1, c2) };
+	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.NORTH, texs[2], new double[] { 16 - c3 * 16, 16 - c1 * 16, 16 - c0 * 16, 16 - c4 * 16 }, col, true));
+	    vertices = new Vector3f[] { new Vector3f(c3, c1, c5), new Vector3f(c3, c4, c5), new Vector3f(c0, c4, c5), new Vector3f(c0, c1, c5) };
+	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.SOUTH, texs[3], new double[] { c3 * 16, 16 - c1 * 16, c0 * 16, 16 - c4 * 16 }, col, false));
+	    
+	    vertices = new Vector3f[] { new Vector3f(c0, c1, c2), new Vector3f(c0, c4, c2), new Vector3f(c0, c4, c5), new Vector3f(c0, c1, c5) };
+	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.WEST, texs[4], new double[] { c2 * 16, 16 - c1 * 16, c5 * 16, 16 - c4 * 16 }, col, true));
+	    vertices = new Vector3f[] { new Vector3f(c3, c1, c2), new Vector3f(c3, c4, c2), new Vector3f(c3, c4, c5), new Vector3f(c3, c1, c5) };
+	    quads.add(JSTUtils.createBakedQuad(DefaultVertexFormats.ITEM, vertices, EnumFacing.EAST, texs[5], new double[] { 16 - c2 * 16, 16 - c1 * 16, 16 - c5 * 16, 16 - c4 * 16 }, col, false));
+		return quads;
 	}
 }

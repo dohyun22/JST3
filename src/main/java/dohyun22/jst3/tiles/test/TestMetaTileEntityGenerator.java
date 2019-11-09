@@ -14,7 +14,7 @@ import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.energy.MetaTileCable;
 import dohyun22.jst3.tiles.energy.MetaTileGenerator;
 import dohyun22.jst3.tiles.energy.MetaTileSolarGen;
-import dohyun22.jst3.tiles.interfaces.IScrewDriver;
+import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

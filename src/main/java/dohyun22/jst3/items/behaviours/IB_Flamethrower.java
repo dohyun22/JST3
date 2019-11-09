@@ -8,10 +8,14 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import dohyun22.jst3.network.JSTPacketHandler;
+import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
+import forestry.api.apiculture.IHiveTile;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -47,6 +51,7 @@ import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.fml.common.Loader;
 
 public class IB_Flamethrower extends ItemBehaviour {
 
@@ -77,7 +82,7 @@ public class IB_Flamethrower extends ItemBehaviour {
 		int du = getMaxItemUseDuration(st) - cnt;
 		boolean u = st.getTagCompound().getBoolean("UPG");
 		FluidStack fs = FluidUtil.getFluidContained(st);
-		if (!(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode) && (fs == null || du * getFuelVal(fs.getFluid()) > fs.amount)) {
+		if (!(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode) && (fs == null || du * 256 > fs.amount * getFuelVal(fs.getFluid()))) {
 			e.stopActiveHand();
 			return;
 		}
@@ -90,8 +95,8 @@ public class IB_Flamethrower extends ItemBehaviour {
 		IFluidHandlerItem fh = FluidUtil.getFluidHandler(st);
 		FluidStack fs = FluidUtil.getFluidContained(st);
 		if (fh != null && fs != null) {
-			double fv = getFuelVal(fs.getFluid());
-			fh.drain(Math.max(1, (int)((getMaxItemUseDuration(st) - t) * fv)), true);
+			double eu = (getMaxItemUseDuration(st) - t) * 256, fv = getFuelVal(fs.getFluid());
+			fh.drain(Math.max(1, (int)Math.ceil(eu / fv)), true);
 		}
 	}
 
@@ -189,7 +194,10 @@ public class IB_Flamethrower extends ItemBehaviour {
 				double pz = sp.z + ag.z * n;
 				p.setPos(px, py, pz);
 				IBlockState bs = w.getBlockState(p);
-				if (bs.getMaterial().blocksMovement() || bs.getMaterial().isLiquid()) break;
+				if (bs.getMaterial().blocksMovement() || bs.getMaterial().isLiquid()) {
+					if (e instanceof EntityPlayer) affectBlock((EntityPlayer)e, p, bs);
+					break;
+				}
 				List<EntityLivingBase> el =  w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(px - sz, py - sz, pz - sz, px + sz, py + sz, pz + sz));
 				for (EntityLivingBase elb : el) {
 					if (e != null && (elb == e || elb == e.getRidingEntity())) continue;
@@ -203,30 +211,48 @@ public class IB_Flamethrower extends ItemBehaviour {
 		}
 	}
 
-	public static double getFuelVal(Fluid f) {
+	private static void affectBlock(EntityPlayer pl, BlockPos p, IBlockState bs) {
+		World w = pl.world;
+		Block b = bs.getBlock();
+		IBlockState bs2 = null;
+		if (b == Blocks.PACKED_ICE) {
+			bs2 = Blocks.ICE.getDefaultState();
+		} else if (b == Blocks.ICE) {
+			bs2 = (w.provider.doesWaterVaporize() ? Blocks.AIR : Blocks.FLOWING_WATER).getDefaultState();
+		} else if (b == Blocks.SNOW) {
+			bs2 = Blocks.AIR.getDefaultState();
+		} else {
+			bs = w.getBlockState(p.up());
+			b = bs.getBlock();
+			if (b == Blocks.SNOW_LAYER || bs.getMaterial() == Material.VINE || bs.getMaterial() == Material.PLANTS) {
+				bs2 = Blocks.AIR.getDefaultState();
+				p = p.up();
+			}
+		}
+		if (bs2 != null) {
+			if (JSTUtils.canPlayerBreakThatBlock(pl, p))
+				w.setBlockState(p, bs2);
+			return;
+		}
+		if (Loader.isModLoaded("forestry")) {
+			TileEntity te = w.getTileEntity(p);
+			try {
+				if (te instanceof IHiveTile) ((IHiveTile)te).calmBees();
+			} catch (Throwable t) {}
+		}
+	}
+
+	public static int getFuelVal(Fluid f) {
 		if (f != null) {
 			String s = f.getName();
 			if (s != null) {
+				Integer v = MRecipes.DieselGenFuel.get(s);
+				if (v != null) return v.intValue();
 				switch (s) {
-				case "napalm":
-				case "nitrofuel": return 0.5D;
+				case "napalm": return 1024;
 				case "rocketfuel":
-				case "refined_fuel":
-				case "fuel":
-				case "gasoline":
-				case "liquid_lpg": return 1.0D;
-				case "liquid_lng":
-				case "refined_oil":
-				case "biofuel":
-				case "refined_biofuel":
-				case "ethanol":
-				case "ic2biogas":
-				case "bio.ethanol": return 2.0D;
-				case "heavyfuel": return 4.0D;
-				case "creosote": return 10.0D;
-				case "oil":
-				case "crude_oil":
-				case "coal": return 15.0D;
+				case "rocket_fuel":
+				case "fuel": return 512;
 				}
 			}
 		}

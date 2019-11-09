@@ -44,14 +44,14 @@ public class GUIGTI extends GUIBase {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int p1, int p2) {
-		ContainerGTI con = (ContainerGTI) this.inventorySlots;
+		ContainerGTI con = (ContainerGTI) inventorySlots;
 		if (con.err < 0) {
-			this.fontRenderer.drawString(I18n.format("jst.msg.com.out"), 13, 14, 24576);
+			fontRenderer.drawString(I18n.format("jst.msg.com.out"), 13, 14, 24576);
 			double d = con.output / 100.0D;
-			this.fontRenderer.drawString(d + " EU / " + (d * JSTCfg.RFPerEU) + " RF", 13, 24, 24576);
-			this.fontRenderer.drawString(I18n.format("jst.msg.gti.size", con.size), 13, 34, 24576);
+			fontRenderer.drawString(d + " EU / " + (d * JSTCfg.RFPerEU) + " RF", 13, 24, 24576);
+			fontRenderer.drawString(I18n.format("jst.msg.gti.size", con.size), 13, 34, 24576);
 		} else {
-			this.fontRenderer.drawString(I18n.format(getUnlocalizedErrorMsg(con.err)), 13, 14, 0xFF0000);
+			fontRenderer.drawString(I18n.format(getUnlocalizedErrorMsg(con.err)), 13, 14, 0xFF0000);
 		}
 	}
 }

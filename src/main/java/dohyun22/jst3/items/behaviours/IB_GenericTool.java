@@ -303,6 +303,11 @@ public class IB_GenericTool extends IB_Damageable {
 			return false;
 		}
 	}
+
+	@Override
+	public boolean canDestroyBlockInCreative(World w, BlockPos p, ItemStack st, EntityPlayer pl) {
+		return type != EnumToolType.SWORD;
+	}
 	
 	public static enum EnumToolType {
 		PICK, SHOVEL, AXE, HOE, SWORD, SICKLE;

@@ -244,8 +244,8 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound tag = pkt.getNbtCompound();
 		this.readSyncableDataFromNBT(tag);
-	    IBlockState state = getWorld().getBlockState(this.pos);
-	    getWorld().markAndNotifyBlock(this.pos, null, state, state, 3);
+	    IBlockState state = getWorld().getBlockState(pos);
+	    getWorld().markAndNotifyBlock(pos, null, state, state, 3);
 	}
 
 	@Override
@@ -274,7 +274,7 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 		if (hasValidMTE()) {
 			mte.onLoad();
 			
-			if (!this.mte.canUpdate()) {
+			if (!mte.canUpdate()) {
 				try {
 					this.getWorld().tickableTileEntities.remove(this);
 				} catch (Exception e) {}
@@ -284,54 +284,54 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 
 	@Override
 	public int getSizeInventory() {
-		if (hasValidMTE()) return this.mte.getInvSize();
+		if (hasValidMTE()) return mte.getInvSize();
 		return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int sl) {
 		if (hasValidMTE())
-			return this.mte.getStackInSlot(sl);
+			return mte.getStackInSlot(sl);
         return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int sl, int amt) {
 		if (hasValidMTE())
-			return this.mte.decrStackSize(sl, amt);
+			return mte.decrStackSize(sl, amt);
 		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int sl) {
         if (hasValidMTE())
-        	return this.mte.removeStackFromSlot(sl);
+        	return mte.removeStackFromSlot(sl);
 		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void setInventorySlotContents(int sl, ItemStack st) {
 		if (!hasValidMTE() || sl < 0 || sl >= getSizeInventory()) return;
-		this.mte.setInventorySlotContents(sl, st);
+		mte.setInventorySlotContents(sl, st);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
 		if (!hasValidMTE()) return 64;
-		return this.mte.getStackLimit();
+		return mte.getStackLimit();
 	}
 
 	@Override
 	public boolean isEmpty() {
 		if (!hasValidMTE() || getSizeInventory() <= 0) return false;
-		for (ItemStack st : this.mte.inv)
+		for (ItemStack st : mte.inv)
 			if (!st.isEmpty()) return false;
 		return true;
 	}
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer pl) {
-		return !this.isInvalid() && hasValidMTE() && this.mte.isUsable(pl) && this.getDistanceSq(pl.posX, pl.posY, pl.posZ) <= 64.0D;
+		return !isInvalid() && hasValidMTE() && mte.isUsable(pl) && getDistanceSq(pl.posX, pl.posY, pl.posZ) <= 64.0D;
 	}
 
 	@Override
@@ -349,10 +349,9 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 
 	@Override
 	public void clear() {
-		if (hasValidMTE()) {
-			for (int n = 0; n < this.mte.inv.size(); ++n)
-				this.mte.inv.set(n, ItemStack.EMPTY);
-		}
+		if (hasValidMTE())
+			for (int n = 0; n < mte.inv.size(); ++n)
+				mte.inv.set(n, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -368,21 +367,21 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 	@Override
 	public int[] getSlotsForFace(EnumFacing dir) {
 		if (hasValidMTE())
-			return this.mte.getSlotsForFace(dir);
+			return mte.getSlotsForFace(dir);
 		return new int[0];
 	}
 
 	@Override
 	public boolean canInsertItem(int sl, ItemStack st, EnumFacing dir) {
 		if (hasValidMTE())
-			return this.mte.canInsertItem(sl, st, dir);
+			return mte.canInsertItem(sl, st, dir);
 		return false;
 	}
 
 	@Override
 	public boolean canExtractItem(int sl, ItemStack st, EnumFacing dir) {
 		if (hasValidMTE())
-			return this.mte.canExtractItem(sl, st, dir);
+			return mte.canExtractItem(sl, st, dir);
 		return false;
 	}
 	
@@ -403,55 +402,55 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 	@Override
     @Optional.Method(modid = "ic2")
     public int getStored() {
-        if (this.hasValidMTE())
-            return JSTUtils.convLongToInt(this.energy);
+        if (hasValidMTE())
+            return JSTUtils.convLongToInt(energy);
         return 0;
     }
     
 	@Override
     @Optional.Method(modid = "ic2")
-    public void setStored(final int energy) {
-        if (this.hasValidMTE())
-            this.energy = energy;
+    public void setStored(int e) {
+        if (hasValidMTE())
+           energy = e;
     }
     
 	@Override
     @Optional.Method(modid = "ic2")
-    public int addEnergy(final int amount) {
-        if (!this.hasValidMTE())
+    public int addEnergy(int e) {
+        if (!hasValidMTE())
             return 0;
-        this.energy = Math.max(0L, this.energy + amount);
-        return JSTUtils.convLongToInt(this.energy);
+        energy = Math.max(0L, energy + e);
+        return JSTUtils.convLongToInt(energy);
     }
     
 	@Override
     @Optional.Method(modid = "ic2")
     public int getCapacity() {
-        if (this.hasValidMTE())
-            return JSTUtils.convLongToInt(this.mte.getMaxEnergy());
+        if (hasValidMTE())
+            return JSTUtils.convLongToInt(mte.getMaxEnergy());
         return 0;
     }
     
 	@Override
     @Optional.Method(modid = "ic2")
     public int getOutput() {
-        if (this.hasValidMTE())
-            return this.mte.maxEUTransfer();
+        if (hasValidMTE())
+            return mte.maxEUTransfer();
         return 0;
     }
     
 	@Override
     @Optional.Method(modid = "ic2")
     public double getOutputEnergyUnitsPerTick() {
-        if (this.hasValidMTE())
-            return this.mte.maxEUTransfer();
+        if (hasValidMTE())
+            return mte.maxEUTransfer();
         return 0.0;
     }
     
 	@Override
     @Optional.Method(modid = "ic2")
-    public boolean isTeleporterCompatible(final EnumFacing side) {
-        return this.hasValidMTE() && this.mte.isEnergyStorage();
+    public boolean isTeleporterCompatible(EnumFacing side) {
+        return hasValidMTE() && mte.isEnergyStorage();
     }
 	
 	public boolean createNewMetatileEntity(int id) {
@@ -460,28 +459,28 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 			return false;
 		if (id != 0) {
 			if (hasValidMTE()) {
-				this.mte.invalidate();
-				this.mte.baseTile = null;
+				mte.invalidate();
+				mte.baseTile = null;
 			}
-			this.mte = te.newMetaEntity(this);
-			this.mte.baseTile = this;
-			this.timer = 0L;
-			this.ID = id;
+			mte = te.newMetaEntity(this);
+			mte.baseTile = this;
+			timer = 0L;
+			ID = id;
 			return true;
 		}
 		return false;
 	}
 
 	public final boolean hasValidMTE() {
-		return this.mte != null && this.mte.baseTile == this;
+		return mte != null && mte.baseTile == this;
 	}
 	
 	public void issueUpdate() {
-		this.needsUpdate = true;
+		needsUpdate = true;
 	}
 	
 	public void cancelUpdate() {
-		this.needsUpdate = false;
+		needsUpdate = false;
 	}
 
 	public long getTimer() {
@@ -516,14 +515,14 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> c, @Nullable EnumFacing f) {
-        if (this.hasValidMTE()) {
-        	T ret = this.mte.getCapability(c, f);
+        if (hasValidMTE()) {
+        	T ret = mte.getCapability(c, f);
         	if (ret != null) return ret;
-            if (c == CapabilityEnergy.ENERGY && ((this.mte.canAcceptEnergy() && this.mte.isEnergyInput(f)) || (this.mte.canProvideEnergy() && this.mte.isEnergyOutput(f))))
+            if (c == CapabilityEnergy.ENERGY && ((mte.canAcceptEnergy() && mte.isEnergyInput(f)) || (mte.canProvideEnergy() && mte.isEnergyOutput(f))))
                 return (T)CapabilityEnergy.ENERGY.cast(new EnergyHandler(f));
             if (c == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             	if (f != null) {
-            		int[] arr = this.mte.getSlotsForFace(f);
+            		int[] arr = mte.getSlotsForFace(f);
             		if (arr != null && arr.length > 0)
             			return (T)CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new SidedInvWrapper(this, f));
             	}

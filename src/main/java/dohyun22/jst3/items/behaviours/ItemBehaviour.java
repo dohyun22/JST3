@@ -47,6 +47,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -289,6 +290,12 @@ public class ItemBehaviour {
 
 	public void onScrewdriverUsed(ItemStack st, EntityLivingBase el) {}
 
+	public boolean isCrowbar(ItemStack st) {
+		return false;
+	}
+
+	public void onCrowbarUsed(ItemStack st, EntityLivingBase el) {}
+
 	public void onHitBlock(ItemStack st, BlockPos p, EntityPlayer ep) {
 	}
 
@@ -312,6 +319,14 @@ public class ItemBehaviour {
 	}
 	
 	public boolean onEntityItemUpdate(EntityItem ei) {
+		return false;
+	}
+
+	public boolean canDestroyBlockInCreative(World w, BlockPos p, ItemStack st, EntityPlayer pl) {
+		return true;
+	}
+
+	public boolean doesSneakBypassUse(ItemStack st, IBlockAccess w, BlockPos p, EntityPlayer pl) {
 		return false;
 	}
 
@@ -390,7 +405,7 @@ public class ItemBehaviour {
 			IFluidTankProperties[] tank = fh.getTankProperties();
 			if (tank != null && tank.length > 0) {
 				FluidStack fs = tank[0].getContents();
-				l.add((fs == null ? 0 : fs.amount) + " / " + tank[0].getCapacity() + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
+				l.add(JSTUtils.formatNum(fs == null ? 0 : fs.amount) + " / " + JSTUtils.formatNum(tank[0].getCapacity()) + "mB " + (fs == null ? "" : fs.getFluid().getLocalizedName(fs)));
 			}
 		}
 	}
@@ -399,9 +414,9 @@ public class ItemBehaviour {
 		if (l == null) return;
 		ItemBehaviour b = JSTItems.item1.getBehaviour(s);
 		long e = b.getEnergy(s);
-		l.add(I18n.format("jst.tooltip.energy.eu", e, b.maxEnergy));
+		l.add(I18n.format("jst.tooltip.energy.eu", JSTUtils.formatNum(e), JSTUtils.formatNum(b.maxEnergy)));
 		BigInteger bi = BigInteger.valueOf(JSTCfg.RFPerEU);
-		l.add(I18n.format("jst.tooltip.energy.rf", BigInteger.valueOf(e).multiply(bi), BigInteger.valueOf(b.maxEnergy).multiply(bi)));
+		l.add(I18n.format("jst.tooltip.energy.rf", JSTUtils.formatNum(BigInteger.valueOf(e).multiply(bi)), JSTUtils.formatNum(BigInteger.valueOf(b.maxEnergy).multiply(bi))));
 	}
 
 	protected class InternalStroage implements net.minecraftforge.energy.IEnergyStorage {

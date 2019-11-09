@@ -1,5 +1,8 @@
 package dohyun22.jst3.tiles;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -81,5 +84,9 @@ public class MultiTankHandler implements IFluidHandler {
 	public FluidTank getTank(int idx) {
 		if (idx < 0 || idx > this.tanks.length) return null;
 		return tanks[idx];
+	}
+
+	public int getSize() {
+		return tanks.length;
 	}
 }

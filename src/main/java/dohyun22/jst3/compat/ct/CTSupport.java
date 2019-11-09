@@ -53,7 +53,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeAlloyRecipe(IItemStack i1, IItemStack i2) {
 		 addLateAction(new IAction() {
-			 @Override public void apply() {remove(MRecipes.AlloyFurnaceRecipes, new ItemStack[] {toST(i1), toST(i2)}, null, true, true);}
+			 @Override public void apply() {remove(MRecipes.AlloyFurnaceRecipes, toSTs(i1, i2), null, true, true);}
 			 @Override public String describe() {return null;}
 		 });
 	}
@@ -69,7 +69,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeSeparatorRecipe(IItemStack i1, IItemStack i2, ILiquidStack fi) {
 		addLateAction(new IAction() {
-			 @Override public void apply() {remove(MRecipes.SeparatorRecipes, new ItemStack[] {toST(i1), toST(i2)}, new FluidStack[] {toFS(fi)}, true, true);}
+			 @Override public void apply() {remove(MRecipes.SeparatorRecipes, toSTs(i1, i2), toFSs(fi), true, true);}
 			 @Override public String describe() {return null;}
 		});
 	}
@@ -85,7 +85,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeChemMixerRecipe(IItemStack[] i, ILiquidStack fi) {
 		addLateAction(new IAction() {
-			 @Override public void apply() {remove(MRecipes.ChemMixerRecipes, toSTs(i), new FluidStack[] {toFS(fi)}, true, true);}
+			 @Override public void apply() {remove(MRecipes.ChemMixerRecipes, toSTs(i), toFSs(fi), true, true);}
 			 @Override public String describe() {return null;}
 		 });
 	}
@@ -101,7 +101,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeAssemblerRecipe(IItemStack[] i, ILiquidStack fi) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.AssemblerRecipes, toSTs(i), new FluidStack[] {toFS(fi)}, false, true);}
+			@Override public void apply() {remove(MRecipes.AssemblerRecipes, toSTs(i), toFSs(fi), false, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -117,7 +117,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeCokeOvenRecipe(IItemStack i) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.ChemMixerRecipes, new ItemStack[] {toST(i)}, null, true, true);}
+			@Override public void apply() {remove(MRecipes.ChemMixerRecipes, toSTs(i), null, true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -133,7 +133,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeDisassemblerRecipe(IItemStack i) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.DisassemblerRecipes, new ItemStack[] {toST(i)}, null, true, true);}
+			@Override public void apply() {remove(MRecipes.DisassemblerRecipes, toSTs(i), null, true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -149,7 +149,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeFusionRecipe(ILiquidStack f1, ILiquidStack f2) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.FusionRecipes, null, new FluidStack[] {toFS(f1), toFS(f2)}, true, true);}
+			@Override public void apply() {remove(MRecipes.FusionRecipes, null, toFSs(f1, f2), true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -165,7 +165,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeFusionBreederRecipe(IItemStack i) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.FusionBreederRecipes, new ItemStack[] {toST(i)}, null, true, true);}
+			@Override public void apply() {remove(MRecipes.FusionBreederRecipes, toSTs(i), null, true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -197,7 +197,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removePressRecipe(IItemStack i1, IItemStack i2) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.PressRecipes, new ItemStack[] {toST(i1), toST(i2)}, null, true, true);}
+			@Override public void apply() {remove(MRecipes.PressRecipes, toSTs(i1, i2), null, true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -213,7 +213,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeCrystalRecipe(IItemStack i1, IItemStack i2, ILiquidStack fi) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.CrystalRecipes, new ItemStack[] {toST(i1), toST(i2)}, new FluidStack[] {toFS(fi)}, true, true);}
+			@Override public void apply() {remove(MRecipes.CrystalRecipes, toSTs(i1, i2), toFSs(fi), true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -229,7 +229,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeRefineryRecipe(ILiquidStack fi) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.RefineryRecipes, null, new FluidStack[] {toFS(fi)}, true, true);}
+			@Override public void apply() {remove(MRecipes.RefineryRecipes, null, toFSs(fi), true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -245,7 +245,7 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeOreProcessRecipe(IItemStack ii, ILiquidStack fi) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.OreProcessRecipes, new ItemStack[] {toST(ii)}, new FluidStack[] {toFS(fi)}, true, true);}
+			@Override public void apply() {remove(MRecipes.OreProcessRecipes, toSTs(ii), toFSs(fi), true, true);}
 			@Override public String describe() {return null;}
 		});
 	}
@@ -261,7 +261,55 @@ public class CTSupport {
 	@ZenMethod
 	public static void removeBioRecipe(IItemStack ii, ILiquidStack fi) {
 		addLateAction(new IAction() {
-			@Override public void apply() {remove(MRecipes.BioRecipes, new ItemStack[] {toST(ii)}, new FluidStack[] {toFS(fi)}, true, true);}
+			@Override public void apply() {remove(MRecipes.BioRecipes, toSTs(ii), toFSs(fi), true, true);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void addCircuitRecipe(IIngredient[] ii, IItemStack io, int v, int t) {
+		addLateAction(new IAction() {
+			@Override public void apply() {MRecipes.addCircuitBuildRecipe(toOBs(ii), toST(io), v, t);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void removeCircuitRecipe(IItemStack ii) {
+		addLateAction(new IAction() {
+			@Override public void apply() {remove(MRecipes.CircuitBuilderRecipes, toSTs(ii), null, true, true);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void addMeltingRecipe(IIngredient ii, ILiquidStack fo, int v, int t) {
+		addLateAction(new IAction() {
+			@Override public void apply() {MRecipes.addLiquifierRecipe(toOB(ii), toFS(fo), v, t);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void removeMeltingRecipe(IItemStack ii) {
+		addLateAction(new IAction() {
+			@Override public void apply() {remove(MRecipes.LiquifierRecipes, toSTs(ii), null, true, true);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void addPulverizerRecipe(IIngredient ii, IItemStack io, int v, int t) {
+		addLateAction(new IAction() {
+			@Override public void apply() {MRecipes.addGrindingRecipe(toOB(ii), toST(io), v, t);}
+			@Override public String describe() {return null;}
+		});
+	}
+
+	@ZenMethod
+	public static void removePulverizerRecipe(IItemStack ii) {
+		addLateAction(new IAction() {
+			@Override public void apply() {remove(MRecipes.GrinderRecipes, toSTs(ii), null, true, true);}
 			@Override public String describe() {return null;}
 		});
 	}

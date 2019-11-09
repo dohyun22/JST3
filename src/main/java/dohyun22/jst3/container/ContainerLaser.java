@@ -23,7 +23,7 @@ public class ContainerLaser extends Container {
 	public boolean smelt;
 	
 	public ContainerLaser(InventoryPlayer pi) {
-		this.playerinv = pi;
+		playerinv = pi;
 		for (int n = 0; n < 6; n++)
 			addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, n, 35 + 18 * n, 14, false, false, 1, false));
 		
@@ -40,10 +40,9 @@ public class ContainerLaser extends Container {
 	@Override
 	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
 		ItemStack st = playerinv.getCurrentItem();
-	    if (si < 0 || si >= this.inventorySlots.size() || st.getItem() != JSTItems.item1 || ct != ClickType.PICKUP) {
+	    if (si < 0 || si >= inventorySlots.size() || st.getItem() != JSTItems.item1 || ct != ClickType.PICKUP) {
 	        return ItemStack.EMPTY;
 	    }
-	    
 	    if (!pl.world.isRemote) {
 	    	NBTTagCompound tag = JSTUtils.getOrCreateNBT(st);
 	    	if (si >= 0 && si <= 5) {
@@ -56,7 +55,6 @@ public class ContainerLaser extends Container {
 	    		if (tag.getBoolean("break")) tag.setBoolean("smelt", !tag.getBoolean("smelt"));
 	    	}
 	    }
-		
 	    return ItemStack.EMPTY;
 	}
 
@@ -66,25 +64,14 @@ public class ContainerLaser extends Container {
 		if (JSTUtils.isClient()) return;
 		NBTTagCompound tag = playerinv.getCurrentItem().getTagCompound();
 		if (tag == null) return;
-	    
-        for (IContainerListener icl : listeners) {
-
-            if (this.range != tag.getByte("range")) {
-            	icl.sendWindowProperty(this, 50, tag.getByte("range"));
-            }
-            
-            if (this.breac != tag.getBoolean("break")) {
-            	icl.sendWindowProperty(this, 51, tag.getBoolean("break") ? 1 : 0);
-            }
-
-            if (this.smelt != tag.getBoolean("smelt")) {
-            	icl.sendWindowProperty(this, 52, tag.getBoolean("smelt") ? 1 : 0);
-            }
-        }
-        
-    	this.range = tag.getByte("range");
-    	this.breac = tag.getBoolean("break");
-    	this.smelt = tag.getBoolean("smelt");
+		for (IContainerListener icl : listeners) {
+			if (range != tag.getByte("range")) icl.sendWindowProperty(this, 50, tag.getByte("range"));
+			if (breac != tag.getBoolean("break")) icl.sendWindowProperty(this, 51, tag.getBoolean("break") ? 1 : 0);
+			if (smelt != tag.getBoolean("smelt")) icl.sendWindowProperty(this, 52, tag.getBoolean("smelt") ? 1 : 0);
+		}
+		range = tag.getByte("range");
+		breac = tag.getBoolean("break");
+		smelt = tag.getBoolean("smelt");
 	}
 	
 	@Override
@@ -92,13 +79,13 @@ public class ContainerLaser extends Container {
 	public void updateProgressBar(int id, int data) {
 		switch (id) {
 		case 50:
-			this.range = (byte) data;
+			range = (byte) data;
 			break;
 		case 51:
-			this.breac = data != 0;
+			breac = data != 0;
 			break;
 		case 52:
-			this.smelt = data != 0;
+			smelt = data != 0;
 		default:
 		}
 	}

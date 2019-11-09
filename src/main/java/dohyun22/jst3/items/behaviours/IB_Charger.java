@@ -35,18 +35,31 @@ public class IB_Charger extends IB_Battery {
 		if (e instanceof EntityPlayerMP && w.getTotalWorldTime() % 4L == 0) {
 			EntityPlayer pl = (EntityPlayer) e;
 			if (isSolar && JSTUtils.checkSun(w, pl.getPosition()))
-				this.charge(st, JSTUtils.getVoltFromTier(tier), tier, true, false);
+				charge(st, JSTUtils.getVoltFromTier(tier), tier, true, false);
 			
 			if (st.hasTagCompound() && st.getTagCompound().getBoolean("isON")) {
 				List<ItemStack> inv = pl.inventory.mainInventory;
 				long lim = transferLimit(st);
-				int tier = getTier(st);
-				for (int n = 0; n < inv.size() && lim > 0; n++) {
-					if (n == pl.inventory.currentItem && pl.isHandActive())
-						continue;
-					ItemStack st2 = (ItemStack) inv.get(n);
-					if (!st2.isEmpty() && !OreDictionary.itemMatches(st, st2, false))
-						lim -= discharge(st, JSTUtils.chargeItem(st2, lim, tier, false, false), tier, false, false);
+				for (int n = 0; n < inv.size(); n++) {
+					if (lim <= 0) break;
+					if (n == pl.inventory.currentItem) continue;
+					ItemStack st2 = inv.get(n);
+					if (!st2.isEmpty() && st != st2)
+						lim -= discharge(st, JSTUtils.chargeItem(st2, discharge(st, lim, tier, false, true), tier, false, false), tier, false, false);
+				}
+				inv = pl.inventory.armorInventory;
+				for (int n = 0; n < inv.size(); n++) {
+					if (lim <= 0) break;
+					ItemStack st2 = inv.get(n);
+					if (!st2.isEmpty() && st != st2 && JSTUtils.dischargeItem(st2, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) <= 0)
+						lim -= discharge(st, JSTUtils.chargeItem(st2, discharge(st, lim, tier, false, true), tier, false, false), tier, false, false);
+				}
+				inv = pl.inventory.offHandInventory;
+				for (int n = 0; n < inv.size(); n++) {
+					if (lim <= 0) break;
+					ItemStack st2 = inv.get(n);
+					if (!st2.isEmpty() && st != st2)
+						lim -= discharge(st, JSTUtils.chargeItem(st2, discharge(st, lim, tier, false, true), tier, false, false), tier, false, false);
 				}
 			}
 		}
@@ -75,5 +88,10 @@ public class IB_Charger extends IB_Battery {
 	@Override
 	public int getItemStackLimit(ItemStack st) {
 		return 1;
+	}
+
+	@Override
+	public boolean canBeStoredInToolbox(ItemStack st) {
+		return !st.hasTagCompound() || !st.getTagCompound().getBoolean("isON");
 	}
 }

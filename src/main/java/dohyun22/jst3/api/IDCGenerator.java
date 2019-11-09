@@ -1,4 +1,4 @@
-package dohyun22.jst3.tiles.interfaces;
+package dohyun22.jst3.api;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

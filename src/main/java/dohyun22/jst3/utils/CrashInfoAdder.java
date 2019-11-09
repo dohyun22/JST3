@@ -25,25 +25,11 @@ public class CrashInfoAdder implements ICrashCallable {
 	
 	@Override
 	public String call() throws Exception {
-		return "ko_kr".equals(getLang()) ? KRMessage : ENMessage;
+		return "ko_kr".equals(JSTUtils.getLang()) ? KRMessage : ENMessage;
 	}
 	
 	@Override
 	public String getLabel() {
 		return "JST3";
-	}
-
-	private static String getLang() {
-		try {
-			if (JSTUtils.isClient())
-				return getLangClient().toLowerCase();
-		} catch (Throwable t) {
-		}
-		return "en_us";
-	}
-	
-	@SideOnly(Side.CLIENT)
-	private static String getLangClient() {
-		return Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
 	}
 }

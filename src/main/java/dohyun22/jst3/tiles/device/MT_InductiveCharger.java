@@ -51,7 +51,7 @@ public class MT_InductiveCharger extends MetaTileEnergyInput {
 	
 	@Override
 	public boolean isEnergyInput(EnumFacing side) {
-		return side == EnumFacing.DOWN;
+		return side != EnumFacing.UP;
 	}
 
 	@Override

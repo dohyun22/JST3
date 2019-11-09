@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 import blusunrize.immersiveengineering.common.blocks.IEBlockInterfaces;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.tiles.MetaTileBase;
-import dohyun22.jst3.tiles.interfaces.IScrewDriver;
+import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;

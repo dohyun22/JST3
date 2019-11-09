@@ -29,13 +29,13 @@ public class ContainerMTE extends Container {
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer ep) {
-		return this.te.isUsableByPlayer(ep);
+		return te.isUsableByPlayer(ep);
 	}
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer pl, int fs) {
 	    ItemStack st = ItemStack.EMPTY;
-	    Slot sl = (Slot) this.inventorySlots.get(fs);
+	    Slot sl = (Slot) inventorySlots.get(fs);
 
 	    if (sl != null && sl.getHasStack()) {
 	        ItemStack current = sl.getStack();
@@ -59,6 +59,72 @@ public class ContainerMTE extends Container {
 	        sl.onTake(pl, current);
 	    }
 	    return st;
+	}
+
+	@Override
+	protected boolean mergeItemStack(ItemStack st, int si, int ei, boolean rd) {
+		boolean ret = false;
+		int i = si;
+		if (rd) i = ei - 1;
+		if (st.isStackable()) {
+			while (!st.isEmpty()) {
+				if (rd) {
+					if (i < si) break;
+				} else if (i >= ei) {
+					break;
+				}
+
+				Slot sl = inventorySlots.get(i);
+				ItemStack st1 = sl.getStack();
+				if (sl.isItemValid(st) && !st1.isEmpty() && st1.getItem() == st.getItem() && (!st.getHasSubtypes() || st.getMetadata() == st1.getMetadata()) && ItemStack.areItemStackTagsEqual(st, st1)) {
+					int j = st1.getCount() + st.getCount();
+					int max = Math.min(sl.getSlotStackLimit(), st.getMaxStackSize());
+
+					if (j <= max) {
+						st.setCount(0);
+						st1.setCount(j);
+						sl.onSlotChanged();
+						ret = true;
+					} else if (st1.getCount() < max) {
+						st.shrink(max - st1.getCount());
+						st1.setCount(max);
+						sl.onSlotChanged();
+						ret = true;
+					}
+				}
+
+				if (rd) --i; else ++i;
+			}
+		}
+
+		if (!st.isEmpty()) {
+			if (rd)
+				i = ei - 1;
+			else
+				i = si;
+
+			while (true) {
+				if (rd) {
+					if (i < si) break;
+				} else if (i >= ei) {
+					break;
+				}
+
+				Slot sl = inventorySlots.get(i);
+				if (sl.getStack().isEmpty() && sl.isItemValid(st)) {
+					if (st.getCount() > sl.getSlotStackLimit())
+						sl.putStack(st.splitStack(sl.getSlotStackLimit()));
+					else
+						sl.putStack(st.splitStack(st.getCount()));
+					sl.onSlotChanged();
+					ret = true;
+					break;
+				}
+
+				if (rd) --i; else ++i;
+			}
+		}
+		return ret;
 	}
 
 	protected void addPlayerInventorySlots(IInventory inv, int sx, int sy) {

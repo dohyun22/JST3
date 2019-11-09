@@ -10,9 +10,11 @@ import javax.annotation.Nullable;
 
 import cofh.api.block.IDismantleable;
 import dohyun22.jst3.JustServerTweak;
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
+import dohyun22.jst3.utils.ReflectionUtils;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,12 +25,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModAPIManager;
@@ -47,62 +51,53 @@ public class IB_Wrench extends IB_Damageable {
 	}
 
 	@Override
-	public EnumActionResult onUseFirst(ItemStack st, EntityPlayer ep, World w, BlockPos p, EnumFacing s, float hx, float hy, float hz, EnumHand h) {
+	public EnumActionResult onUseFirst(ItemStack st, EntityPlayer pl, World w, BlockPos p, EnumFacing s, float hx, float hy, float hz, EnumHand h) {
+		return doWrench(st, pl, w, p, s, hx, hy, hz);
+	}
+
+	public static EnumActionResult doWrench(ItemStack st, EntityPlayer pl, World w, BlockPos p, EnumFacing s, float hx, float hy, float hz) {
 		if (!w.isRemote && !w.isAirBlock(p)) {
+			ItemBehaviour ib = JSTItems.item1.getBehaviour(st);
 			s = JSTUtils.determineWrenchingSide(s, hx, hy, hz);
 			IBlockState bs = w.getBlockState(p);
 			Block lb = bs.getBlock();
 			
 			TileEntity te = w.getTileEntity(p);
 			try {
-				if (ep.isSneaking() && ModAPIManager.INSTANCE.hasAPI("cofhapi") && lb instanceof IDismantleable && ((IDismantleable) lb).canDismantle(w, p, bs, ep)) {
-					if (!JSTUtils.canPlayerBreakThatBlock(ep, p))
-						return EnumActionResult.SUCCESS;
-					((IDismantleable) lb).dismantleBlock(w, p, bs, ep, false);
-					this.doDamage(st, ep);
-					playWrenchSound(ep);
+				if (pl.isSneaking() && ModAPIManager.INSTANCE.hasAPI("cofhapi") && lb instanceof IDismantleable && ((IDismantleable) lb).canDismantle(w, p, bs, pl) && JSTUtils.canPlayerBreakThatBlock(pl, p)) {
+					((IDismantleable) lb).dismantleBlock(w, p, bs, pl, false);
+					ib.doDamage(st, pl);
+					playWrenchSound(pl);
 					return EnumActionResult.SUCCESS;
 				}
-			} catch (Throwable t) {
-			}
+			} catch (Throwable t) {}
 
 			try {
 				if (JSTCfg.ic2Loaded && lb instanceof IWrenchable) {
 					IWrenchable iw = (IWrenchable) lb;
-					if (iw.getFacing(w, p) != s && iw.setFacing(w, p, s, ep)) {
-						this.doDamage(st, ep);
-						playWrenchSound(ep);
-						return EnumActionResult.SUCCESS;
-					} else if (ep.isSneaking()) {
-						if (!JSTUtils.canPlayerBreakThatBlock(ep, p))
-							return EnumActionResult.SUCCESS;
-
-						if (iw.wrenchCanRemove(w, p, ep)) {
-							List<ItemStack> wds = iw.getWrenchDrops(w, p, w.getBlockState(p), te, ep, 0);
-							if (wds != null)
-								for (ItemStack wd : wds)
-									Block.spawnAsEntity(w, p, wd);
-							w.setBlockToAir(p);
-							if (w.getTileEntity(p) != null)
-								w.removeTileEntity(p);
-							this.doDamage(st, ep);
-							playWrenchSound(ep);
-							return EnumActionResult.SUCCESS;
-						}
+					if (iw.getFacing(w, p) != s && iw.setFacing(w, p, s, pl)) {
+						ib.doDamage(st, pl);
+						playWrenchSound(pl);
+					} else if (pl.isSneaking() && JSTUtils.canPlayerBreakThatBlock(pl, p) && iw.wrenchCanRemove(w, p, pl)) {
+						List<ItemStack> wds = iw.getWrenchDrops(w, p, w.getBlockState(p), te, pl, 0);
+						if (wds != null)
+							for (ItemStack wd : wds)
+								Block.spawnAsEntity(w, p, wd);
+						w.setBlockToAir(p);
+						if (w.getTileEntity(p) != null)
+							w.removeTileEntity(p);
+						ib.doDamage(st, pl);
+						playWrenchSound(pl);
 					}
 					return EnumActionResult.SUCCESS;
 				}
-			} catch (Throwable t) {
-			}
+			} catch (Throwable t) {}
 
-			if (ep.isSneaking() && bs.getPlayerRelativeBlockHardness(ep, w, p) >= 0 && allowedMachineList.contains(Block.REGISTRY.getNameForObject(lb).toString())) {
-				if (!JSTUtils.canPlayerBreakThatBlock(ep, p))
-					return EnumActionResult.SUCCESS;
-				this.doDamage(st, ep);
-				playWrenchSound(ep);
-				for (ItemStack dr : lb.getDrops(w, p, bs, 1)) {
+			if (pl.isSneaking() && bs.getPlayerRelativeBlockHardness(pl, w, p) >= 0 && allowedMachineList.contains(Block.REGISTRY.getNameForObject(lb).toString()) && JSTUtils.canPlayerBreakThatBlock(pl, p)) {
+				ib.doDamage(st, pl);
+				playWrenchSound(pl);
+				for (ItemStack dr : lb.getDrops(w, p, bs, 1))
 					Block.spawnAsEntity(w, p, dr);
-				}
 				w.setBlockToAir(p);
 				if (te != null)
 					w.removeTileEntity(p);
@@ -114,27 +109,28 @@ public class IB_Wrench extends IB_Damageable {
 					try {
 						if (prop.getAllowedValues().contains(s)) {
 							if (s.equals(bs.getValue(prop))) {
-								tryDismantle(ep, p, bs);
+								tryDismantle(pl, p, bs);
 							} else {
-								//System.out.println("facing");
-								this.doDamage(st, ep);
-								playWrenchSound(ep);
+								ib.doDamage(st, pl);
+								playWrenchSound(pl);
+								NBTTagCompound nbt = te.writeToNBT(new NBTTagCompound());
 								w.setBlockState(p, bs.withProperty(prop, s));
+								te = w.getTileEntity(p);
+								if (te != null) te.readFromNBT(nbt);
 							}
 						}
-					} catch (Throwable t) {
-					}
+					} catch (Throwable t) {}
 					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
 		return EnumActionResult.PASS;
 	}
-	
+
 	@Override
 	public boolean onBlockStartBreak(ItemStack st, BlockPos p, EntityPlayer pl) {
 		World w = pl.getEntityWorld();
-		if (w.isRemote) return false;
+		if (w.isRemote || pl.isCreative()) return false;
 		if (JSTCfg.ic2Loaded) {
 			try {
 				IBlockState bs = w.getBlockState(p);
@@ -182,7 +178,7 @@ public class IB_Wrench extends IB_Damageable {
 	@Override
 	public int harvestLevel(ItemStack st, String tc, @Nullable EntityPlayer pl, @Nullable IBlockState bs) {
 		if (bs == null) return -1;
-		return this.canHarvestBlock(bs, st) ? 4 : -1;
+		return canHarvestBlock(bs, st) ? 4 : -1;
 	}
 
 	@Override
@@ -198,7 +194,7 @@ public class IB_Wrench extends IB_Damageable {
 		return canHarvestBlock(bs, st) ? 10.0F : 1.0F;
 	}
 
-	protected void tryDismantle(EntityPlayer ep, BlockPos p, IBlockState bs) {
+	public static void tryDismantle(EntityPlayer ep, BlockPos p, IBlockState bs) {
 		if (!JSTUtils.canPlayerBreakThatBlock(ep, p) || !ep.isSneaking())
 			return;
 		Block lb = bs.getBlock();
@@ -214,11 +210,16 @@ public class IB_Wrench extends IB_Damageable {
 		}
 	}
 
-	protected static void playWrenchSound(EntityLivingBase el) {
+	private static void playWrenchSound(EntityLivingBase el) {
 		if (el == null) return;
 		el.world.playSound(null, el.posX, el.posY, el.posZ, JSTSounds.WRENCH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	}
-	
+
+	@Override
+	public boolean doesSneakBypassUse(ItemStack st, IBlockAccess w, BlockPos p, EntityPlayer pl) {
+		return true;
+	}
+
 	@Override
 	public boolean canBeStoredInToolbox(ItemStack st) {
 		return true;
@@ -229,7 +230,7 @@ public class IB_Wrench extends IB_Damageable {
 		if (st.isEmpty()) return false;
 		return !getContainerItem(st).isEmpty();
 	}
-	
+
 	@Override
 	public ItemStack getContainerItem(ItemStack st) {
 		if (st.isEmpty()) return ItemStack.EMPTY;
@@ -237,18 +238,18 @@ public class IB_Wrench extends IB_Damageable {
 		this.doDamage(st, null);
 		return st;
 	}
-	
+
 	@Override
 	public boolean isWrench(ItemStack st) {
 		return true;
 	}
-	
+
 	@Override
 	public void onWrenchUsed(ItemStack st, EntityLivingBase el) {
 		playWrenchSound(el);
 		this.doDamage(st, 1, el);
 	}
-	
+
 	@Override
 	public void addToolClasses(ItemStack st, Set<String> list) {
 		list.add("wrench");

@@ -5,10 +5,12 @@ import blusunrize.immersiveengineering.api.tool.ChemthrowerHandler;
 import blusunrize.immersiveengineering.api.tool.ChemthrowerHandler.ChemthrowerEffect;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
+import blusunrize.immersiveengineering.api.tool.ToolboxHandler;
 import blusunrize.immersiveengineering.common.util.IEDamageSources;
 import blusunrize.immersiveengineering.common.util.IEDamageSources.IEDamageSource;
 import blusunrize.immersiveengineering.common.util.IEPotions;
 import dohyun22.jst3.items.JSTItems;
+import dohyun22.jst3.items.behaviours.IB_Food;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.Loadable;
 import dohyun22.jst3.loader.RecipeLoader;
@@ -40,6 +42,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -234,7 +238,10 @@ public class CompatIE extends Loadable {
 			o2 = new FluidStack[] {FluidRegistry.getFluidStack("tree_oil", 4000), FluidRegistry.getFluidStack("seed_oil", 4000), FluidRegistry.getFluidStack("fish_oil", 4000)};
 			for (FluidStack fs : (FluidStack[])o2) if (fs != null) MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9030)}, fs, new ItemStack(JSTItems.item1, 1, 9000), null, (FluidStack) obj, 20, 400);
 		}
-		
+
+		ToolboxHandler.addToolType(new Predicate<ItemStack>() {@Override public boolean test(ItemStack st) {return st != null && !st.isEmpty() && st.getItem() == JSTItems.item1 && JSTItems.item1.getBehaviour(st).canBeStoredInToolbox(st);}});
+		ToolboxHandler.addFoodType(new Predicate<ItemStack>() {@Override public boolean test(ItemStack st) {return st != null && !st.isEmpty() && st.getItem() == JSTItems.item1 && JSTItems.item1.getBehaviour(st) instanceof IB_Food;}});
+
 		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, JSTUtils.getModItemStack("immersiveengineering:faraday_suit_head", 1, 32767));
 		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, JSTUtils.getModItemStack("immersiveengineering:faraday_suit_chest", 1, 32767));
 		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, JSTUtils.getModItemStack("immersiveengineering:faraday_suit_legs", 1, 32767));

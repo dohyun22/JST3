@@ -21,12 +21,8 @@ public class ContainerFusion extends ContainerMTE {
 	public ContainerFusion(IInventory inv, TileEntityMeta te) {
 		super(te);
 		
-		addSlotToContainer(new Slot(te, 0, 88, 94));
-		addSlotToContainer(new JSTSlot(te, 1, 130, 94, false, true, 64, true));
-		addSlotToContainer(new Slot(te, 2, 8, 94));
-		addSlotToContainer(new Slot(te, 3, 26, 94));
-		addSlotToContainer(new Slot(te, 4, 44, 94));
-		addSlotToContainer(new Slot(te, 5, 62, 94));
+		addSlotToContainer(new Slot(te, 0, 59, 94));
+		addSlotToContainer(new JSTSlot(te, 1, 101, 94, false, true, 64, true));
 		
 		addSlotToContainer(new JSTSlot(InventoryDummy.INSTANCE, 0, 152, 26, false, false, 1, false));
 		
@@ -45,10 +41,10 @@ public class ContainerFusion extends ContainerMTE {
 			IContainerListener icl = (IContainerListener) listeners.get(i);
 			
 			if (energy != r.baseTile.energy)
-				splitLongAndSend(icl, this, 1, r.baseTile.energy);
+				splitLongAndSend(icl, this, 50, r.baseTile.energy);
 			
 			if (mxenergy != r.getMaxEnergy())
-				splitLongAndSend(icl, this, 2, r.getMaxEnergy());
+				splitLongAndSend(icl, this, 54, r.getMaxEnergy());
 			
 			if (complete != r.isComplete())
 				icl.sendWindowProperty(this, 58, r.isComplete() ? 1 : 0);
@@ -69,9 +65,8 @@ public class ContainerFusion extends ContainerMTE {
 	
 	@Override
 	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
-		if (!pl.world.isRemote && si == 6 && ct == ClickType.PICKUP) {
+		if (!pl.world.isRemote && si == 2 && ct == ClickType.PICKUP)
 			((MT_Fusion)te.mte).displayRF = !((MT_Fusion)te.mte).displayRF;
-		}
 		return super.slotClick(si, mc, ct, pl);
 	}
 	

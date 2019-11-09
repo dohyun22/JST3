@@ -136,11 +136,10 @@ public class MT_WaterMaker extends MetaTileEnergyInput {
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++) {
-			if (baseTile.facing == JSTUtils.getFacingFromNum(n)) {
+			if (baseTile.facing == JSTUtils.getFacingFromNum(n))
 				ret[n] = getTETex("fl_out");
-			} else {
+			else
 				ret[n] = n > 1 ? getTETex("watergen_side") : getTieredTex(tier);
-			}
 		}
 		return ret;
 	}

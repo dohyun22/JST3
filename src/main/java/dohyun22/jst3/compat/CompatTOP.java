@@ -32,6 +32,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
@@ -59,7 +60,7 @@ public class CompatTOP extends Loadable implements Function<ITheOneProbe, Void> 
 		    in.registerProvider(eu);
 		    in.registerProbeConfigProvider(eu);
 		    in.registerProvider(new GeneralInfoProvider());
-			if (JSTCfg.ic2Loaded) in.registerProvider(new IC2CropInfoProvider());
+			if (JSTCfg.ic2Loaded && !Loader.isModLoaded("topaddons")) in.registerProvider(new IC2CropInfoProvider());
 		}
 		return null;
 	}

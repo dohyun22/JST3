@@ -12,7 +12,7 @@ import dohyun22.jst3.client.gui.GUIGTI;
 import dohyun22.jst3.container.ContainerGTI;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IDCGenerator;
+import dohyun22.jst3.api.IDCGenerator;
 import dohyun22.jst3.tiles.noupdate.MetaTileDCCable;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
@@ -111,48 +111,56 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 		for (EnumFacing f : EnumFacing.VALUES) {
 			BlockPos p = pos.offset(f);
 			boolean flag = false;
-			if (this.error < 0 && !ls.contains(p)) {
-				MetaTileBase mtb = MetaTileBase.getMTE(getWorld(), p);
-				if (mtb instanceof IDCGenerator) {
-					this.output += ((IDCGenerator) mtb).getPower(this.getWorld(), p);
+			if (error < 0 && !ls.contains(p)) {
+				World w = getWorld();
+				TileEntity te = w.getTileEntity(p);
+				MetaTileBase mtb = null;
+				if (te instanceof IDCGenerator) {
+					output += ((IDCGenerator)te).getPower(w, p);
 					flag = true;
-				} else if (mtb instanceof MetaTileDCCable) {
-					flag = true;
+				} else if (te instanceof TileEntityMeta && ((TileEntityMeta)te).hasValidMTE()) {
+					mtb = ((TileEntityMeta)te).mte;
+					if (mtb instanceof IDCGenerator) {
+						output += ((IDCGenerator)mtb).getPower(w, p);
+						flag = true;
+					} else if (mtb instanceof MetaTileDCCable) {
+						flag = true;
+					}
 				}
-				if (this.size > 2048) {
-					this.setErrored((byte) 2);
+				if (size > 2048) {
+					setErrored((byte) 2);
 					return;
 				}
-				if (this.output > this.maxEUTransfer()) {
-					this.setErrored((byte) 3);
+				if (output > maxEUTransfer()) {
+					setErrored((byte) 3);
 					return;
 				}
 				if (!flag && mtb instanceof MetaTileGridTieInverter) {
-					this.setErrored((byte) 1);
+					setErrored((byte) 1);
 					((MetaTileGridTieInverter)mtb).setErrored((byte) 1);
 					return;
 				}
 			}
 			if (flag) {
-				this.size++;
+				size++;
 				checkGens(ls, p);
 			}
 		}
 	}
 	
 	private void setErrored(byte err) {
-		this.error = err;
-		this.size = 0;
-		this.output = 0;
+		error = err;
+		size = 0;
+		output = 0;
 	}
 	
 	public byte getErrorState() {
-		return this.error;
+		return error;
 	}
 	
 	public void setErrorState(byte num) {
 		if (num < 0) {
-			this.error = -1;
+			error = -1;
 			return;
 		}
 		this.error = num;

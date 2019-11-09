@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class JSTFluids {
 	public static Fluid oil, fuel, nitrofuel, naturalGas, lng, lpg, hydrogen, deuterium, tritium, helium3, helium, lithium,
-	carbon, nitrogen, oxygen, sodium, silicon, chlorine, mercury, steam, acid, air, heavyfuel, hotsteam;
+	carbon, nitrogen, oxygen, sodium, silicon, chlorine, mercury, steam, acid, air, heavyfuel, hotsteam, solder;
 	
 	public static void init() {
 		oil = createFluid("oil", 0, 500, 300, 5000, false);
@@ -36,6 +36,7 @@ public class JSTFluids {
 		air = createFluid("air", 0, 0, 300, 0, true);
 		heavyfuel = createFluid("heavyfuel", 0, 1000, 300, 2000, false);
 		hotsteam = createFluid("hotsteam", 0, 50, 1000, 0, true);
+		solder = createFluid("solder", 0, 8000, 500, 5000, false);
 
 		FluidRegistry.addBucketForFluid(oil);
 		FluidRegistry.addBucketForFluid(fuel);

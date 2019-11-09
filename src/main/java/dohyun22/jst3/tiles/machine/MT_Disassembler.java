@@ -48,5 +48,6 @@ public class MT_Disassembler extends MT_MachineProcess {
 		gg.addPrg(67, 35, JustServerTweak.MODID + ".disassembler");
 		gg.addSlot(8, 53, 2);
 		gg.addPwr(12, 31);
+		gg.addCfg(7, 7, true);
 	}
 }

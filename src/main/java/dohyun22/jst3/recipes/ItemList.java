@@ -64,14 +64,24 @@ public class ItemList {
 		raygens[1] = raygens[0];
 		for (int n = 2; n <= 9; n++) 
 			raygens[n] = new ItemStack(JSTItems.item1, 1, 130 + n);
-		
-		circuits[0] = "circuitPrimitive";
-		circuits[1] = "circuitBasic";
-		circuits[2] = "circuitGood";
-		circuits[3] = "circuitAdvanced";
-		circuits[4] = "circuitHighTech";
-		circuits[5] = "circuitPowerElectronic";
-		circuits[6] = "circuitPowerControl";
+
+		if (JSTCfg.onlyUseJSTCircuit) {
+			circuits[0] = new ItemStack(JSTItems.item1, 1, 152);
+			circuits[1] = new ItemStack(JSTItems.item1, 1, 86);
+			circuits[2] = new ItemStack(JSTItems.item1, 1, 87);
+			circuits[3] = new ItemStack(JSTItems.item1, 1, 88);
+			circuits[4] = new ItemStack(JSTItems.item1, 1, 28);
+			circuits[5] = new ItemStack(JSTItems.item1, 1, 4);
+			circuits[6] = new ItemStack(JSTItems.item1, 1, 5);
+		} else {
+			circuits[0] = "circuitPrimitive";
+			circuits[1] = "circuitBasic";
+			circuits[2] = "circuitGood";
+			circuits[3] = "circuitAdvanced";
+			circuits[4] = "circuitHighTech";
+			circuits[5] = "circuitPowerElectronic";
+			circuits[6] = "circuitPowerControl";
+		}
 		circuits[7] = new ItemStack(JSTItems.item1, 1, 51);
 		circuits[8] = new ItemStack(JSTItems.item1, 1, 52);
 		circuits[9] = new ItemStack(JSTItems.item1, 1, 153);

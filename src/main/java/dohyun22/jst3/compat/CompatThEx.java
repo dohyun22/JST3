@@ -3,6 +3,7 @@ package dohyun22.jst3.compat;
 import java.util.List;
 
 import cofh.api.util.ThermalExpansionHelper;
+import dohyun22.jst3.api.recipe.AdvRecipeItem;
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.items.JSTItems;
@@ -13,9 +14,11 @@ import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
@@ -74,11 +77,20 @@ public class CompatThEx extends Loadable {
 		MRecipes.addFertilizer(JSTUtils.getModItemStack(str, 1, 1));
 		MRecipes.addFertilizer(JSTUtils.getModItemStack(str, 1, 2));
 
+		MRecipes.addWrench(JSTUtils.getModItemStack("thermalfoundation:wrench", 1, 32767));
+		MRecipes.addWrench(JSTUtils.getModItemStack("redstonearsenal:tool.wrench_flux", 1, 32767));
+		MRecipes.addWrench(JSTUtils.getModItemStack("redstonearsenal:tool.battlewrench_flux", 1, 32767));
+
 		for (String s : new String[] {"oreFluidCrudeOilSand", "oreFluidCrudeOilShale", "oreClathrateOilSand", "oreClathrateOilShale"})
-			MRecipes.addSeparatorRecipe(new OreDictStack(s), null, null, null, new FluidStack(JSTFluids.oil, 1000), 16, 100);
-		FluidStack fs = FluidRegistry.getFluidStack("crude_oil", 5000);
-		if (fs != null)
-			MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 2, 9000), null, fs, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 9008), JSTUtils.getFirstItem("dustSulfur")}, new FluidStack(JSTFluids.fuel, 4000), 30, 2000);
+			MRecipes.addLiquifierRecipe(new OreDictStack(s), new FluidStack(JSTFluids.oil, 1000), 16, 100);
+		MRecipes.addLiquifierRecipe(new OreDictStack("clathrateOil"), new FluidStack(JSTFluids.oil, 500), 10, 100);
+		Fluid f = FluidRegistry.getFluid("crude_oil");
+		if (f != null) {
+			MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 2, 9000), null, new FluidStack(f, 5000), new ItemStack[] {new ItemStack(JSTItems.item1, 2, 9008), JSTUtils.getFirstItem("dustSulfur")}, new FluidStack(JSTFluids.fuel, 4000), 30, 2000);
+			Object[] o = new Object[] {new AdvRecipeItem(Items.BUCKET, 0, 0)};
+			MRecipes.addChemMixerRecipe(o, new FluidStack(JSTFluids.oil, 1000), null, null, new FluidStack(f, 1000), 8, 10);
+			MRecipes.addChemMixerRecipe(o, new FluidStack(f, 1000), null, null, new FluidStack(JSTFluids.oil, 1000), 8, 10);
+		}
 		MRecipes.addAlloyFurnaceRecipe(new OreDictStack("dustObsidian", 4), new OreDictStack("ingotLead"), JSTUtils.getModItemStack("thermalfoundation:glass", 2, 3), 10, 100);
 		MRecipes.addChemMixerRecipe(new Object[] {JSTUtils.getModItemStack("thermalfoundation:rockwool", 1, 32767)}, new FluidStack(JSTFluids.chlorine, 125), JSTUtils.getModItemStack("thermalfoundation:rockwool", 1, 15), null, null, 10, 200);
 		MRecipes.addRefineryRecipe(FluidRegistry.getFluidStack("biocrude", 4000), new FluidStack[] {FluidRegistry.getFluidStack("refined_biofuel", 2000), FluidRegistry.getFluidStack("ic2biogas", 4000)}, null, 60, 100);

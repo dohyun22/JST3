@@ -1,6 +1,10 @@
 package dohyun22.jst3.tiles.machine;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -16,6 +20,8 @@ import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MultiTankHandler;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.interfaces.IConfigurable;
+import dohyun22.jst3.utils.EnumRelativeFacing;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -23,24 +29,31 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_MachineProcess extends MT_Machine {
+public class MT_MachineProcess extends MT_Machine implements IConfigurable {
 	protected final int inputNum, outputNum, capacity;
 	protected final byte fInputNum, fOutputNum;
 	protected final boolean rsl, fsl;
@@ -50,7 +63,8 @@ public class MT_MachineProcess extends MT_Machine {
 	protected int light;
 	protected ItemStack[] result;
 	protected FluidStack[] fResult;
-	protected EnumFaceIO[] IOs = new EnumFaceIO[5];
+	protected short[] IOs;
+	protected List<Short> modes;
 	public static final int SLOT_SIZE = 18;
 
 	public MT_MachineProcess(int tier, int in, int out, int fIn, int fOut, int cap, RecipeList rec, boolean sl, boolean fs, String texf, String texu) {
@@ -98,6 +112,48 @@ public class MT_MachineProcess extends MT_Machine {
 	}
 
 	@Override
+	public void onPostTick() {
+		super.onPostTick();
+		if (isClient()) return;
+		if (baseTile.getTimer() % 20 == 0)
+			doItemIO();
+	}
+
+	protected void doItemIO() {
+		if (IOs == null || IOs.length != 6) return;
+		World w = getWorld();
+		for (int n = 0; n < 6; n++) {
+			short m = IOs[n];
+			if (m == 0 || m == 5) continue;
+			EnumFacing f = EnumFacing.VALUES[n];
+			BlockPos p = getPos().offset(f);
+			if (outputNum > 0 && (m == 1 || m == 2)) {
+				TileEntity te = w.getTileEntity(p);
+				if (te instanceof IInventory) {
+					if (m == 1) JSTUtils.sendStackInvToInv((IInventory)te, baseTile, f, null, 64);
+					else if (m == 2) JSTUtils.sendStackInvToInv(baseTile, (IInventory)te, f, null, 64);
+				}
+			}
+			if (m == 3 || m == 4) {
+				if (m == 3 && fInputNum > 0) {
+					FluidTank t = tankHandler.getTank(0);
+					IFluidHandler fh = FluidUtil.getFluidHandler(getWorld(), getPos().offset(f), f.getOpposite());
+					if (t != null && fh != null) {
+						FluidStack fs = fh.drain(t.getCapacity() - t.getFluidAmount(), false);
+						if (fs != null) fh.drain(t.fill(fs, true), true);
+					}
+				} else if (m == 4 && fOutputNum > 0) {
+					FluidTank t = tankHandler.getTank(fInputNum);
+					if (t != null && t.getFluid() != null) {
+						int amt = JSTUtils.fillTank(w, getPos(), f, new FluidStack(t.getFluid(), t.getFluidAmount()));
+						if (amt > 0) t.drain(amt, true);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
 	protected boolean checkCanWork() {
 		RecipeContainer rc = getRecipe();
 		if (rc != null) {
@@ -141,8 +197,9 @@ public class MT_MachineProcess extends MT_Machine {
 		}
 		if (tankHandler != null && fResult != null) {
 			FluidTank[] t = tankHandler.getTanks();
-			for (int n = 0; n < Math.min(fResult.length, fOutputNum); n++) t[(n + fOutputNum)].fillInternal(fResult[n], true);
+			for (int n = 0; n < Math.min(fResult.length, fOutputNum); n++) t[(n + fInputNum)].fillInternal(fResult[n], true);
 		}
+		doItemIO();
 	}
 	
 	@Override
@@ -192,9 +249,9 @@ public class MT_MachineProcess extends MT_Machine {
 		boolean flag = false;
 		ItemStack[] outputs = rc.getOutputItems();
 		if (outputs != null) {
-			if (iout == null || outputs.length != iout.length)
+			if (iout == null || outputs.length > iout.length)
 				return null;
-			for (int n = 0; n < outputs.length; n++) {
+			for (int n = 0; n < Math.min(outputs.length, iout.length); n++) {
 				ItemStack ro = outputs[n];
 				if (ro == null || ro.isEmpty()) continue;
 				ItemStack out = (ItemStack) inv.get(iout[n]);
@@ -210,9 +267,9 @@ public class MT_MachineProcess extends MT_Machine {
 		}
 		FluidStack[] foutputs = rc.getOutputFluids();
 		if (foutputs != null) {
-			if (fout == null || foutputs.length != fout.length)
+			if (fout == null || foutputs.length > fout.length)
 				return null;
-			for (int n = 0; n < foutputs.length; n++) {
+			for (int n = 0; n < Math.min(foutputs.length, fout.length); n++) {
 				FluidStack ro = foutputs[n];
 				if (ro == null) continue;
 				int amt = fout[n].fillInternal(ro, false);
@@ -247,15 +304,34 @@ public class MT_MachineProcess extends MT_Machine {
 	public boolean isItemValidForSlot(int sl, ItemStack st) {
 		return isInputSlot(sl);
 	}
-	
+
 	@Override
-	public boolean canExtractItem(int sl, ItemStack st, EnumFacing dir) {
+	public boolean canInsertItem(int sl, ItemStack st, EnumFacing f) {
+		short s = getCfg(f);
+		if (s == 2 || s == 5) return false;
+		return super.canInsertItem(sl, st, f);
+	}
+
+	@Override
+	public boolean canExtractItem(int sl, ItemStack st, EnumFacing f) {
+		short s = getCfg(f);
+		if (s == 1 || s == 5) return false;
 		return sl >= inputNum && sl < inputNum + outputNum;
 	}
 	
 	@Override
 	public boolean canSlotDrop(int num) {
 		return num < inputNum + outputNum || num == batterySlot;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> c, @Nullable EnumFacing f) {
+		super.getCapability(c, f);
+		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tankHandler != null) {
+			if (getCfg(f) == 5) return null;
+			return (T) new FluidRestrictor(tankHandler, f);
+		}
+		return null;
 	}
 
 	@Override
@@ -291,6 +367,24 @@ public class MT_MachineProcess extends MT_Machine {
 					fResult[m] = FluidStack.loadFluidStackFromNBT(tc);
 			}
 		}
+		int[] a = tag.getIntArray("Modes");
+		if (a.length > 0 && modes != null) {
+			LinkedHashMap<Short, Boolean> def = new LinkedHashMap(), nw = new LinkedHashMap();
+			for (short s : modes) def.put(toCfgIndex(s), isCfgEnabled(s));
+			for (int i : a) if (i != 0) nw.put(toCfgIndex((short)i), isCfgEnabled((short)i));
+			Iterator<Entry<Short, Boolean>> it = nw.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<Short, Boolean> e = it.next();
+				if (!def.containsKey(e.getKey()))
+					it.remove();
+			}
+			for (Entry<Short, Boolean> s : def.entrySet())
+				if (!nw.containsKey(s.getKey()))
+					nw.put(s.getKey(), s.getValue());
+			modes.clear();
+			for (Entry<Short, Boolean> s : nw.entrySet())
+				modes.add(packData(s.getKey(), s.getValue()));
+		}
 	}
 
 	@Override
@@ -321,6 +415,32 @@ public class MT_MachineProcess extends MT_Machine {
 				}
 			}
 			tag.setTag("fluidOut", t);
+		}
+		if (modes != null) {
+			int[] a = new int[modes.size()];
+			for (int n = 0; n < a.length; n++)
+				a[n] = modes.get(n);
+			tag.setIntArray("Modes", a);
+		}
+	}
+
+	@Override
+	public void readSyncableDataFromNBT(NBTTagCompound tag) {
+		int[] a = tag.getIntArray("IOs");
+		if (a.length == 6) {
+			if (IOs == null) IOs = new short[6];
+			for (int n = 0; n < a.length; n++)
+				IOs[n] = (short)a[n];
+		}
+	}
+
+	@Override
+	public void writeSyncableDataToNBT(NBTTagCompound tag) {
+		if (IOs != null) {
+			int[] a = new int[IOs.length];
+			for (int n = 0; n < a.length; n++)
+				a[n] = IOs[n];
+			tag.setIntArray("IOs", a);
 		}
 	}
 
@@ -369,6 +489,77 @@ public class MT_MachineProcess extends MT_Machine {
 		boolean ret = super.toggleMachine(on);
 		if (light > 0 && ret) updateLight();
 		return ret;
+	}
+
+	@Override
+	public short[] getCfg() {
+		return IOs == null ? new short[6] : IOs;
+	}
+
+	@Override
+	public void changeCfg(int idx) {
+		if (idx < 0 || idx >= 6 || idx == JSTUtils.getNumFromFacing(getFacing())) return;
+		if (IOs == null) IOs = new short[6];
+		IOs[idx] = getNext(getValidCfg(), IOs[idx]);
+		World w = getWorld();
+		BlockPos p = getPos();
+		w.notifyNeighborsOfStateChange(p , baseTile.getBlockType(), true);
+		w.notifyBlockUpdate(p, w.getBlockState(p), w.getBlockState(p), 3);
+		markDirty();
+	}
+
+	@Override
+	public List<Short> getCfgList() {
+		return modes;
+	}
+
+	@Override
+	public void changeCfgList(int idx, boolean en) {
+		if (modes != null) {
+			if (idx >= 0 && idx < modes.size()) {
+				short s = modes.get(idx);
+				short id = toCfgIndex(s);
+				boolean ce = isCfgEnabled(s);
+				if (en) ce = !ce;
+				modes.remove(idx);
+				modes.add(en ? idx : Math.max(0, idx - 1), packData(id, ce));
+			}
+		}
+	}
+
+	@Override
+	public String getCfgName(int num) {
+		return "";
+	}
+
+	protected ArrayList<Short> getValidCfg() {
+		ArrayList<Short> a = new ArrayList();
+		a.add((short)0);
+		if (inputNum > 0) a.add((short)1);
+		if (outputNum > 0) a.add((short)2);
+		if (fInputNum > 0) a.add((short)3);
+		if (fOutputNum > 0) a.add((short)4);
+		a.add((short)5);
+		return a;
+	}
+
+	protected short getCfg(EnumFacing dir) {
+		if (dir != null && IOs != null)
+			return IOs[dir.ordinal()];
+		return 0;
+	}
+
+	public static short getNext(ArrayList<Short> in, short c) {
+		int x = 0;
+		for (int n = 0; n < in.size(); n++) {
+			short s = in.get(n);
+			if (s == c) {
+				x = n + 1;
+				break;
+			}
+		}
+		if (x >= in.size()) x = 0;
+		return in.get(x);
 	}
 
 	@Override
@@ -443,6 +634,7 @@ public class MT_MachineProcess extends MT_Machine {
 		gg.addPrg(89, 31, recipe == null ? new String[0] : new String[] {JustServerTweak.MODID + "." + recipe.name});
 		gg.addSlot(8, 53, 2);
 		gg.addPwr(12, 31);
+		gg.addCfg(7, 7, true);
 	}
 
 	@Override
@@ -456,7 +648,7 @@ public class MT_MachineProcess extends MT_Machine {
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
-		for (byte n = 0; n < ret.length; n++) {
+		for (byte n = 0; n < 6; n++) {
 			if (n == 1 && texTop != null)
 				ret[n] = getTETex(texTop);
 			else if (baseTile.facing == JSTUtils.getFacingFromNum(n))
@@ -464,15 +656,63 @@ public class MT_MachineProcess extends MT_Machine {
 			else
 				ret[n] = getTieredTex(tier);
 		}
+		if (IOs != null && IOs.length == 6) {
+			for (int n = 0; n < 6; n++) {
+				int m = IOs[n] & 0xFF;
+				if (m == 1) ret[n] = getTETex("st_in");
+				else if (m == 2) ret[n] = getTETex("st_out");
+				else if (m == 3) ret[n] = getTETex("fl_in");
+				else if (m == 4) ret[n] = getTETex("fl_out");
+			}
+		}
 		return ret;
 	}
 
-	public static enum EnumRelativeFacing {
-		DOWN, UP, BACK, FRONT, LEFT, RIGHT;
-		
+	protected static short packData(int idx, boolean en) {
+		short ret = (short)((idx & 0xFF) << 8);
+		if (en) ret += 1;
+		return ret;
 	}
 
-	public static enum EnumFaceIO {
-		ST_IN, ST_OUT, ST_IO, FL_IN, FL_OUT, FL_IO;
+	protected static short toCfgIndex(short in) {
+		return (short)(in >> 8);
+	}
+
+	protected static boolean isCfgEnabled(short in) {
+		return (in & 0xFF) != 0;
+	}
+
+	protected class FluidRestrictor implements IFluidHandler {
+		private final EnumFacing f;
+		private final IFluidHandler fh;
+
+		protected FluidRestrictor(IFluidHandler fh, EnumFacing f) {
+			this.fh = fh;
+			this.f = f;
+		}
+
+		@Override
+		public IFluidTankProperties[] getTankProperties() {
+			if (fh == null) return new IFluidTankProperties[0];
+			return fh.getTankProperties();
+		}
+
+		@Override
+		public int fill(FluidStack fs, boolean d) {
+			if (fh == null || getCfg(f) == 4) return 0;
+			return fh.fill(fs, d);
+		}
+
+		@Override
+		public FluidStack drain(FluidStack fs, boolean d) {
+			if (fh == null || getCfg(f) == 3) return null;
+			return fh.drain(fs, d);
+		}
+
+		@Override
+		public FluidStack drain(int amt, boolean d) {
+			if (fh == null || getCfg(f) == 3) return null;
+			return fh.drain(amt, d);
+		}
 	}
 }

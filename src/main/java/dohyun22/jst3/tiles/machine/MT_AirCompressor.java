@@ -36,13 +36,13 @@ public class MT_AirCompressor extends MT_Machine {
 	private FluidTank tank;
 	private boolean isBlocked;
 
-	public MT_AirCompressor() {
-		super(1);
+	public MT_AirCompressor(int t) {
+		super(t);
 	}
 	
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		MT_AirCompressor ret = new MT_AirCompressor();
+		MT_AirCompressor ret = new MT_AirCompressor(tier);
 		ret.tank = new MTETank(32000, true, true, ret, 2);
 		return ret;
 	}
@@ -85,7 +85,7 @@ public class MT_AirCompressor extends MT_Machine {
 	@Override
 	public <T> T getCapability(Capability<T> c, @Nullable EnumFacing f) {
 		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-			return (T) this.tank;
+			return (T) tank;
 		return null;
 	}
 	
@@ -107,14 +107,14 @@ public class MT_AirCompressor extends MT_Machine {
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
 		TextureAtlasSprite ws = getTETex("vent");
-		return new TextureAtlasSprite[] {getTieredTex(1), getTieredTex(1), ws, ws, ws, ws};
+		return new TextureAtlasSprite[] {getTieredTex(tier), getTieredTex(tier), ws, ws, ws, ws};
 	}
 	
 	@Override
 	protected void addSlot(ContainerGeneric cg, InventoryPlayer inv, TileEntityMeta te) {
 		cg.addSlot(new Slot(te, 0, 128, 17));
-		cg.addSlot(new JSTSlot(te, 1, 128, 52, false, true, 64, true));
-		cg.addSlot(new JSTSlot(te, 2, 100, 35, false, false, 64, false));
+		cg.addSlot(JSTSlot.out(te, 1, 128, 52));
+		cg.addSlot(JSTSlot.fl(te, 2, 100, 35));
 	}
 
 	@Override
@@ -129,8 +129,8 @@ public class MT_AirCompressor extends MT_Machine {
 	
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile != null && !isClient())
-			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	

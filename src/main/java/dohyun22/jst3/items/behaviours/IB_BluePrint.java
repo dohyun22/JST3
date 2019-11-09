@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.tiles.machine.MT_CircuitResearchMachine;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +19,8 @@ public class IB_BluePrint extends ItemBehaviour {
 
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", getCircuitTier(st), getSolder(st)));
+		int s = getSolder(st);
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.blueprint", getCircuitTier(st), s, ItemStack.DECIMALFORMAT.format(s / (double)MT_CircuitResearchMachine.SOLDER_PER_WIRE)));
 	}	
 	
 	public static int getSolder(ItemStack st) {

@@ -1,6 +1,10 @@
 package dohyun22.jst3.container;
 
+import java.util.Arrays;
+
+import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.tiles.TileEntityMeta;
+import dohyun22.jst3.tiles.interfaces.IConfigurable;
 import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,18 +13,16 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerGeneric extends ContainerMTE {
-	public int progress;
-	public int mxprogress;
-	public long energy;
-	public long mxenergy;
-	public int fuel;
-	public int mxfuel;
+	public int progress, mxprogress, fuel, mxfuel;
+	public long energy, mxenergy;
+	private int[] guiDatas = new int[32];
 
-	public ContainerGeneric(IInventory inv, TileEntityMeta te) {
+	public ContainerGeneric(TileEntityMeta te) {
 		super(te);
 	}
 
@@ -32,7 +34,7 @@ public class ContainerGeneric extends ContainerMTE {
 			return;
 
 		IGenericGUIMTE r = (IGenericGUIMTE) te.mte;
-
+		int[] d = r.getGuiData();
 		for (IContainerListener icl : listeners) {
 			int n = r.getFuel();
 			if (fuel != n)
@@ -55,6 +57,11 @@ public class ContainerGeneric extends ContainerMTE {
 
 			if (mxenergy != te.mte.getMaxEnergy())
 				splitLongAndSend(icl, this, 108, te.mte.getMaxEnergy());
+
+			if (d != null)
+				for (int m = 0; m < Math.min(d.length, guiDatas.length); m++)
+					if (d[m] != guiDatas[m])
+						splitIntAndSend(icl, this, 200 + m * 2, d[m]);
 		}
 
 		fuel = r.getFuel();
@@ -63,6 +70,9 @@ public class ContainerGeneric extends ContainerMTE {
 		mxprogress = r.getMxPrg();
 		energy = te.mte.baseTile.energy;
 		mxenergy = te.mte.getMaxEnergy();
+		if (d != null)
+			for (int m = 0; m < Math.min(d.length, guiDatas.length); m++)
+				guiDatas[m] = d[m];
 	}
 
 	@Override
@@ -75,6 +85,11 @@ public class ContainerGeneric extends ContainerMTE {
 		mxprogress = getIntFromData(mxprogress, 102, id, data);
 		energy = getLongFromData(energy, 104, id, data);
 		mxenergy = getLongFromData(mxenergy, 108, id, data);
+
+		if (id >= 200 && id < 200 + guiDatas.length * 2) {
+			int idx = (id - 200) / 2;
+			guiDatas[idx] = getIntFromData(guiDatas[idx], 200 + idx * 2, id, data);
+		}
 	}
 
 	public void addSlot(Slot sl) {
@@ -85,13 +100,26 @@ public class ContainerGeneric extends ContainerMTE {
 		addPlayerInventorySlots(inv, 8, 84);
 	}
 
+	public int getGuiData(int idx) {
+		if (guiDatas == null || idx < 0 || idx >= guiDatas.length) return 0;
+		return guiDatas[idx];
+	}
+
 	@Override
 	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
-		if (!(te.mte instanceof IGenericGUIMTE)) return ItemStack.EMPTY;
-		if (si / 1000 == 1) {
+		int n = si / 1000;
+		boolean flag = false;
+		if (te.mte instanceof IGenericGUIMTE && n == 1) {
 			((IGenericGUIMTE)te.mte).handleBtn(si % 1000);
-			return pl.inventory.getItemStack();
+			flag = true;
 		}
-		return super.slotClick(si, mc, ct, pl);
+		if (te.mte instanceof IConfigurable) {
+			if (n == 2) {
+				BlockPos p = te.getPos();
+				pl.openGui(JustServerTweak.INSTANCE, si == 2000 ? 998 : 999, pl.world, p.getX(), p.getY(), p.getZ());
+				flag = true;
+			}
+		}
+		return flag ? pl.inventory.getItemStack() : super.slotClick(si, mc, ct, pl);
 	}
 }

@@ -76,6 +76,8 @@ public class JEISupport implements IModPlugin {
 		addGenericRecipe(rg, gh, MRecipes.HeatExcFakeRecipes);
 		addGenericRecipe(rg, gh, MRecipes.BioRecipes);
 	    addGenericRecipe(rg, gh, MRecipes.CircuitBuilderRecipes);
+	    addGenericRecipe(rg, gh, MRecipes.GrinderRecipes);
+	    addGenericRecipe(rg, gh, MRecipes.LiquifierRecipes);
 
 		rg.addRecipeCategories(new FusionCategory());
 		rg.addRecipes(FusionRecipeWrapper.make(), JustServerTweak.MODID + "." + MRecipes.FusionRecipes.name);
@@ -124,6 +126,7 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 62), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 63), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6010), s);
+		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 10019), s);
 		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 10042), s);
 
 		s = JustServerTweak.MODID + ".gasfuel";
@@ -190,10 +193,14 @@ public class JEISupport implements IModPlugin {
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 270 + n), s);
 		s = "minecraft.smelting";
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 280 + n), s);
-		list = new String[] {"macerator", "thermalexpansion.pulverizer"};
+		list = new String[] {JustServerTweak.MODID + ".grinder", "macerator", "thermalexpansion.pulverizer"};
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 290 + n), list);
 		s = JustServerTweak.MODID + ".crystalizer";
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 300 + n), s);
+		s = JustServerTweak.MODID + ".circuitbuilder";
+		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 350 + n), s);
+		list = new String[] {JustServerTweak.MODID + ".liquifier", "thermalexpansion.crucible", "tconstruct.smeltery"};
+		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 360 + n), list);
 
 		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C)
 			addDescription(rg, "cablechange", new ItemStack(ItemList.cables[1].getItem(), 1, 32767));
@@ -203,6 +210,12 @@ public class JEISupport implements IModPlugin {
 		addDescription(rg, "dust", new ItemStack(JSTItems.item1, 1, 10016), new ItemStack(JSTItems.item1, 1, 10017), new ItemStack(JSTItems.item1, 1, 10018), new ItemStack(JSTBlocks.blockTile, 1, 6042), new ItemStack(JSTBlocks.blockTile, 1, 6048), new ItemStack(JSTItems.mask));
 		addDescription(rg, "stirling", new ItemStack(b, 1, 31), new ItemStack(b, 1, 32), new ItemStack(b, 1, 33));
 		addDescription(rg, "degcomp", new ItemStack(b, 1, 6006), new ItemStack(JSTItems.item1, 1, 24));
+		ArrayList<ItemStack> a = new ArrayList();
+		for (int n = 0; n < 8; n++) a.add(new ItemStack(b, 1, 351 + n));
+		addDescription(rg, "circuit", a.toArray(new ItemStack[0]));
+		a = new ArrayList();
+		for (int n = 0; n < 3; n++) a.add(new ItemStack(b, 1, 341 + n));
+		addDescription(rg, "circuit2", a.toArray(new ItemStack[0]));
 	}
 	
 	@Override
@@ -236,6 +249,7 @@ public class JEISupport implements IModPlugin {
 			if (runTime != null) ((IJeiRuntime)runTime).getRecipesGui().showCategories(ls);
 		} catch (Throwable t) {
 			JSTUtils.LOG.error("An error occurred while trying to show JEI recipes");
+			t.printStackTrace();
 		}
 	}
 }

@@ -78,15 +78,15 @@ public class MetaTileFluidGen extends MetaTileGenerator {
 
 	@Override
 	public void onPreTick() {
-		if (this.isClient() || this.burningFuel > 0) return;
-		int fv = getFuelValue(this.type, this.tank.getFluid());
+		if (isClient() || burningFuel > 0) return;
+		int fv = getFuelValue(type, tank.getFluid());
 		if (fv > 0) {
 			int m = Math.max((int) Math.ceil(maxEUTransfer() / ((double)fv)), 1);
-			FluidStack fs = this.tank.drain(m, true);
-			this.burningFuel = fv * (fs == null ? 0 : fs.amount);
+			FluidStack fs = tank.drain(m, true);
+			burningFuel = fv * (fs == null ? 0 : fs.amount);
 		}
 	}
-	
+
 	public static int getFuelValue(byte t, FluidStack fs) {
 		if (fs == null) return 0;
 		String fn = fs.getFluid().getName();
@@ -106,7 +106,7 @@ public class MetaTileFluidGen extends MetaTileGenerator {
 		}
 		return ret == null ? 0 : ret.intValue();
 	}
-	
+
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
@@ -188,24 +188,22 @@ public class MetaTileFluidGen extends MetaTileGenerator {
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || isClient()) {
-			return true;
-		}
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		this.burningFuel = tag.getInteger("fuel");
+		burningFuel = tag.getInteger("fuel");
 		tank.readFromNBT(tag);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setInteger("fuel", this.burningFuel);
+		tag.setInteger("fuel", burningFuel);
 		tank.writeToNBT(tag);
 	}
 	

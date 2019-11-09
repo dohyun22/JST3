@@ -11,6 +11,8 @@ import dohyun22.jst3.utils.JSTChunkData.FRType;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -31,7 +33,8 @@ public class FluidResourceWrapper implements IRecipeWrapper {
 	public static List<FluidResourceWrapper> make() {
 		List<FluidResourceWrapper> ret = new LinkedList();
 		for (FRType fr : JSTChunkData.FLUID_RESOURCES) {
-			FluidStack fs = FluidRegistry.getFluidStack(fr.fluid, 1000);
+			int max = fr.min + fr.range;
+			FluidStack fs = FluidRegistry.getFluidStack(fr.fluid, max);
 			if (fs != null) ret.add(new FluidResourceWrapper(fs, fr));
 		}
 		return ret;
@@ -39,25 +42,25 @@ public class FluidResourceWrapper implements IRecipeWrapper {
 	
 	@Override
 	public void drawInfo(Minecraft mc, int w, int h, int mX, int mY) {
-		mc.fontRenderer.drawString("Min. " + frt.min + " mB", 36, 10, 0);
-		mc.fontRenderer.drawString("Max. " + (frt.min + frt.range) + " mB", 36, 20, 0);
-		mc.fontRenderer.drawString("Random Weight " + frt.itemWeight, 36, 30, 0);
+		mc.fontRenderer.drawString(I18n.format("jst.compat.jei.fluid.min", frt.min), 36, 10, 0);
+		mc.fontRenderer.drawString(I18n.format("jst.compat.jei.fluid.max", frt.min + frt.range), 36, 20, 0);
+		mc.fontRenderer.drawString(I18n.format("jst.compat.jei.fluid.rand", frt.itemWeight), 36, 30, 0);
 		List<String> ls = new ArrayList();
 		if (frt.dims != null && frt.dims.length > 0) {
-			ls.add("Dimension Whitelist:");
+			ls.add(I18n.format("jst.compat.jei.fluid.dimw"));
 			ls.add(convert(Arrays.toString(frt.dims)));
 		}
 		if (frt.dimsBL != null && frt.dimsBL.length > 0) {
-			ls.add("DIM Blacklist:");
+			ls.add(I18n.format("jst.compat.jei.fluid.dimb"));
 			ls.add(convert(Arrays.toString(frt.dimsBL)));
 		}
 		if (frt.biomes != null && frt.biomes.length > 0) {
-			ls.add("Biome Whitelist:");
-			ls.add(convert(Arrays.toString(frt.biomes)));
+			ls.add(I18n.format("jst.compat.jei.fluid.biow"));
+			ls.add(convert(convBiome(frt.biomes)));
 		}
 		if (frt.biomesBL != null && frt.biomesBL.length > 0) {
-			ls.add("Biome Blacklist:");
-			ls.add(convert(Arrays.toString(frt.biomesBL)));
+			ls.add(I18n.format("jst.compat.jei.fluid.biob"));
+			ls.add(convert(convBiome(frt.biomesBL)));
 		}
 		for (int n = 0; n < ls.size(); n++)
 			mc.fontRenderer.drawString(ls.get(n), 36, 40 + n * 10, 0);
@@ -67,5 +70,19 @@ public class FluidResourceWrapper implements IRecipeWrapper {
 		if (in.length() > 2)
 			in = in.substring(1, in.length() - 1);
 		return in;
+	}
+
+	private static String convBiome(Object[] in) {
+		String[] r = new String[in.length];
+		for (int n = 0; n < in.length; n++) {
+			Object o = in[n];
+			if (o instanceof String) {
+				r[n] = (String)o;
+			} else if (o instanceof Integer) {
+				Biome b = Biome.getBiome((Integer)o);
+				if (b != null) r[n] = b.getBiomeName();
+			}
+		}
+		return Arrays.toString(r);
 	}
 }

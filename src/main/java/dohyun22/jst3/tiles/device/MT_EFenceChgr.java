@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.interfaces.IDCGenerator;
 import dohyun22.jst3.tiles.noupdate.MetaTileEFenceWire;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;

@@ -59,10 +59,10 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 	public void onPostTick() {
 	    super.onPostTick();
 	    if (isClient()) return;
-	    if (this.batterySlot >= 0) {
+	    if (batterySlot >= 0) {
 	    	injectEnergy(null, JSTUtils.dischargeItem(inv.get(batterySlot), Math.min(getMaxEnergy() - baseTile.energy, maxEUTransfer()), tier, false, false), false);
 	    }
-	    if (isInCooldown()) this.cooldown = (byte)(cooldown - 1);
+	    if (isInCooldown()) cooldown = (byte)(cooldown - 1);
 	    if (baseTile.isActive()){
 	    	doWork();
 	    } else if (baseTile.getTimer() % 40L == 0L && baseTile.energy > 0L && !isInCooldown() && checkCanWork()) {
@@ -89,7 +89,7 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 	}
 
 	protected void interrupt(int cd) {
-		this.cooldown = ((byte) cd);
+		cooldown = ((byte) cd);
 		getWorld().playSound(null, getPos(), JSTSounds.INTERRUPT, SoundCategory.BLOCKS, 1.0F, getWorld().rand.nextFloat() * 0.4F + 0.8F);
 	}
 
@@ -97,7 +97,7 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 		if (energyUse > 0) {
 			if (cooldown > 0)
 				return;
-			int m = JSTUtils.getMultiplier(this.tier, this.energyUse);
+			int m = JSTUtils.getMultiplier(tier, energyUse);
 			int u = energyUse * m;
 			if (baseTile.energy >= u) {
 				baseTile.energy -= u;
@@ -168,7 +168,7 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 
 	@Override
 	public int maxEUTransfer() {
-		return JSTUtils.getVoltFromTier(this.tier);
+		return JSTUtils.getVoltFromTier(tier);
 	}
 
 	@Override
@@ -192,9 +192,9 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 		if (cooldown > 0) {
 			tag.setByte("cd", cooldown);
 		}
-		if (this.tankHandler != null) {
+		if (tankHandler != null) {
 			NBTTagCompound tag2 = new NBTTagCompound();
-			this.tankHandler.writeToNBT(tag2);
+			tankHandler.writeToNBT(tag2);
 			tag.setTag("fluid", tag2);
 		}
 	}
@@ -208,14 +208,14 @@ public abstract class MT_Machine extends MetaTileEnergyInput implements IGeneric
 	@Override
 	public <T> T getCapability(Capability<T> c, @Nullable EnumFacing f) {
 		super.getCapability(c, f);
-		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && this.tankHandler != null)
-			return (T) this.tankHandler;
+		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tankHandler != null)
+			return (T) tankHandler;
 		return null;
 	}
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric ret = new ContainerGeneric(inv, te);
+		ContainerGeneric ret = new ContainerGeneric(te);
 		addSlot(ret, inv, te);
 		ret.addPlayerSlots(inv);
 		return ret;

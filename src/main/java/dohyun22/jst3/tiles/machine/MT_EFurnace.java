@@ -66,5 +66,6 @@ public class MT_EFurnace extends MT_MachineProcess {
 		
 		gg.addSlot(8, 53, 2);
 		gg.addPwr(12, 31);
+		gg.addCfg(7, 7, true);
 	}
 }

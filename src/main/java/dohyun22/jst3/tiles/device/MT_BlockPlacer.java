@@ -89,12 +89,14 @@ public class MT_BlockPlacer extends MetaTileBase implements IGenericGUIMTE {
 							p = p.offset(f);
 							if (seed)
 								p = p.offset(EnumFacing.DOWN);
-							fp.setHeldItem(EnumHand.MAIN_HAND, st);
-							EnumActionResult res = ForgeHooks.onPlaceItemIntoWorld(st, fp, w, p, seed ? EnumFacing.UP : f.getOpposite(), 0.5F, 0.5F, 0.5F, EnumHand.MAIN_HAND);
-							if (st.isEmpty())
-								inv.set(n, ItemStack.EMPTY);
-							if (res != EnumActionResult.FAIL)
-								break;
+							if (seed || w.getBlockState(p).getBlock().isReplaceable(w, p)) {
+								fp.setHeldItem(EnumHand.MAIN_HAND, st);
+								EnumActionResult res = ForgeHooks.onPlaceItemIntoWorld(st, fp, w, p, seed ? EnumFacing.UP : f.getOpposite(), 0.5F, 0.5F, 0.5F, EnumHand.MAIN_HAND);
+								if (st.isEmpty())
+									inv.set(n, ItemStack.EMPTY);
+								if (res != EnumActionResult.FAIL)
+									break;
+							}
 						} catch (Throwable t) {
 							break;
 						}
@@ -148,7 +150,7 @@ public class MT_BlockPlacer extends MetaTileBase implements IGenericGUIMTE {
 
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric ret = new ContainerGeneric(inv, te);
+		ContainerGeneric ret = new ContainerGeneric(te);
 		for (int y = 0; y < 3; ++y)
 			for (int x = 0; x < 3; ++x)
 				ret.addSlot(new JSTSlot(te, x + y * 3, 62 + x * 18, 17 + y * 18));

@@ -8,7 +8,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import dohyun22.jst3.tiles.MetaTileBase;
-import dohyun22.jst3.tiles.interfaces.IScrewDriver;
+import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.Block;

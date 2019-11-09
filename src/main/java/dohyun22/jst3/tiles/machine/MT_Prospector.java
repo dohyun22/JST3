@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -214,7 +215,7 @@ public class MT_Prospector extends MT_Machine {
 
 	@Override
 	public long getMaxEnergy() {
-		return 10000;
+		return 25000;
 	}
 
 	@Override
@@ -265,7 +266,7 @@ public class MT_Prospector extends MT_Machine {
 
 	@Override
 	protected void onStartWork() {
-		getWorld().playSound(null, getPos(), prospected ? SoundEvents.BLOCK_METAL_BREAK : SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, 2.0F);
+		getWorld().playSound(null, getPos(), prospected ? SoundEvents.ENTITY_GENERIC_SWIM : SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, 2.0F);
 	}
 
 	@Override
@@ -273,6 +274,17 @@ public class MT_Prospector extends MT_Machine {
 		if (c == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank != null)
 			return (T) tank;
 		return super.getCapability(c, f);
+	}
+
+	@Override
+	public void getSubBlocks(int id, NonNullList<ItemStack> list) {
+		ItemStack st = new ItemStack(JSTBlocks.blockTile, 1, id);
+		list.add(st);
+		st = st.copy();
+		NBTTagCompound nbt = new NBTTagCompound();
+    	nbt.setLong("Energy", getMaxEnergy());
+    	st.setTagCompound(nbt);
+		list.add(st);
 	}
 
 	@Override

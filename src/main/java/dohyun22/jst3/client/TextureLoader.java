@@ -125,6 +125,8 @@ public class TextureLoader {
 		ls.add("hr_door");
 		ls.add("waterpurifier");
 		ls.add("filter");
+		ls.add("miner");
+		ls.add("creativegen");
 		
 		ls.add("bgbox");
 		ls.add("sgbox");
@@ -150,10 +152,12 @@ public class TextureLoader {
 		ls.add("recycler");
 		ls.add("recycler_off");
 		//ls.add("fl_recycler");
+		//ls.add("fl_recycler_off");
 		ls.add("circuit_research");
 		ls.add("circuit_builder");
 		ls.add("circuit_builder_off");
-		ls.add("bioprocess");
+		ls.add("liquifier");
+		ls.add("liquifier_off");
 		
 		ls.add("gen");
 		ls.add("heatres");
@@ -185,11 +189,12 @@ public class TextureLoader {
 		ls.add("fan");
 		ls.add("fan_off");
 		ls.add("fueler");
+		ls.add("bioprocess");
 		
 		registerTex(tm, pf, ls);
 		ls.clear();
 		
-		pf = "blocks/fluids/";
+		/*pf = "blocks/fluids/";
 		ls.add("oil");
 		ls.add("fuel");
 		ls.add("nitrofuel");
@@ -210,10 +215,11 @@ public class TextureLoader {
 		ls.add("chlorine");
 		ls.add("mercury");
 		ls.add("steam");
+		ls.add("hotsteam");
 		ls.add("acid");
 		ls.add("air");
 		registerTex(tm, pf, ls);
-		ls.clear();
+		ls.clear();*/
 		
 		if (JSTCfg.ic2Loaded) {
 			pf = "blocks/crop/";
@@ -265,9 +271,7 @@ public class TextureLoader {
 	
 	@SideOnly(Side.CLIENT)
 	private static void registerTex(TextureMap tm, String pf, List<String> locs) {
-		for(String s : locs) {
-			registerTex(tm, pf + s);
-		}
+		for(String s : locs) registerTex(tm, pf + s);
 	}
 	
 	@SideOnly(Side.CLIENT)

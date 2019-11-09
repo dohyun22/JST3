@@ -8,7 +8,7 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.FineDustCapability;
 import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.tiles.MetaTileBase;
-import dohyun22.jst3.tiles.interfaces.IScrewDriver;
+import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.energy.tile.IEnergySink;

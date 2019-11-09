@@ -1,4 +1,4 @@
-package dohyun22.jst3.tiles.test;
+package dohyun22.jst3.tiles.machine;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.recipe.RecipeContainer;
@@ -18,10 +18,12 @@ import dohyun22.jst3.tiles.machine.MT_MachineProcess;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidTank;
@@ -29,11 +31,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_CircuitBuilder extends MT_MachineProcess {
-	private int solder;
+	public int solder;
 
 	public MT_CircuitBuilder(int tier) {
 		//in-0~3: parts, out-4:circuit, 5:battery 6:blueprint 7:solder
-		super(tier, 4, 1, 0, 0, 0, MRecipes.CircuitBuilderRecipes, false, true, "circuit_builder", null);
+		super(tier, 4, 1, 0, 0, 0, MRecipes.CircuitBuilderRecipes, true, false, "circuit_builder", null);
 		setSfx(JSTSounds.SWITCH2, 0.6F, 1.0F);
 	}
 
@@ -48,16 +50,51 @@ public class MT_CircuitBuilder extends MT_MachineProcess {
 	}
 
 	@Override
-	protected boolean isInputSlot(int sl) {
-		if (sl == 6) return false;
-		if (sl == 7) return true;
-		return super.isInputSlot(sl);
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		solder = tag.getInteger("solder");
 	}
 
 	@Override
-	public boolean canExtractItem(int sl, ItemStack st, EnumFacing dir) {
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		tag.setInteger("solder", solder);
+	}
+
+	@Override
+	protected boolean isInputSlot(int sl) {
+		return sl != 6 && (sl == 7 || super.isInputSlot(sl));
+	}
+
+	@Override
+	public boolean canInsertItem(int sl, ItemStack st, EnumFacing f) {
+		short s = getCfg(f);
+		if (s == 2 || s == 5 || sl == 6) return false;
+		boolean b = JSTUtils.oreMatches(st, "wireSolder");
+		if (sl == 7) return b;
+		if (!b) return super.canInsertItem(sl, st, f);
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int sl, ItemStack st, EnumFacing f) {
 		if (sl >= 6) return false;
-		return super.canExtractItem(sl, st, dir);
+		return super.canExtractItem(sl, st, f);
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		int[] combined = new int[8];
+		if (combined.length > 0)
+			for (int n = 0; n < combined.length; n++)
+				combined[n] = n;
+		return combined;
+	}
+
+	@Override
+	protected void onStartWork() {
+		super.onStartWork();
+		solder = Math.max(0, solder - IB_BluePrint.getSolder(inv.get(6)));
 	}
 
 	@Override
@@ -71,44 +108,71 @@ public class MT_CircuitBuilder extends MT_MachineProcess {
 			st.shrink(n);
 		}
 		if (solder < s) return null;
-		RecipeContainer r = super.getContainer(recipe, in, fin, sl, fsl);
-		if (r != null && t != JSTUtils.getTierFromVolt(r.getEnergyPerTick())) return null;
+		RecipeContainer r = MRecipes.getRecipe(recipe, in, fin, tier, sl, fsl);
+		if (r != null && !canProcess(t, JSTUtils.getTierFromVolt(r.getEnergyPerTick()))) return null;
 		return r;
+	}
+
+	@Override
+	public boolean canSlotDrop(int num) {
+		return super.canSlotDrop(num) || num == 6 || num == 7;
 	}
 
 	@Override
 	protected void addSlot(ContainerGeneric cg, InventoryPlayer inv, TileEntityMeta te) {
 		cg.addSlot(new Slot(te, 0, 62, 17));
-		cg.addSlot(new Slot(te, 1, 62 + SLOT_SIZE, 17));
-		cg.addSlot(new Slot(te, 2, 62, 17 + SLOT_SIZE));
-		cg.addSlot(new Slot(te, 3, 62 + SLOT_SIZE, 17 + SLOT_SIZE));
+		cg.addSlot(new Slot(te, 1, 80, 17));
+		cg.addSlot(new Slot(te, 2, 62, 35));
+		cg.addSlot(new Slot(te, 3, 80, 35));
 		
 		cg.addSlot(JSTSlot.out(te, 4, 125, 26));
 		
 		cg.addSlot(new BatterySlot(te, 5, 8, 53, false, true));
 
-		cg.addSlot(new JSTSlot(te, 6, 8, 17).setPredicate(new JSTSlot.ItemMatcher(new ItemStack(JSTItems.item1, 1, 10051))));
-		cg.addSlot(new JSTSlot(te, 7, 8, 17 + SLOT_SIZE).setPredicate(new JSTSlot.ItemMatcher("wireSolder")));
+		cg.addSlot(new JSTSlot(te, 6, 8, 12).setPredicate(new JSTSlot.ItemMatcher(new ItemStack(JSTItems.item1, 1, 10051))));
+		cg.addSlot(new JSTSlot(te, 7, 26, 12).setPredicate(new JSTSlot.ItemMatcher("wireSolder")));
+
+		cg.addPlayerSlots(inv);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected void addComp(GUIGeneric gg) {
-		gg.addSlot(44, 17, 0);
-		gg.addSlot(44 + SLOT_SIZE, 17, 0);
-		gg.addSlot(44 + SLOT_SIZE * 2, 17, 0);
-		gg.addSlot(44, 17 + SLOT_SIZE, 0);
-		gg.addSlot(44 + SLOT_SIZE, 17 + SLOT_SIZE, 0);
-		gg.addSlot(44 + SLOT_SIZE * 2, 17 + SLOT_SIZE, 0);
+		gg.addSlot(62, 17, 0);
+		gg.addSlot(80, 17, 0);
+		gg.addSlot(62, 35, 0);
+		gg.addSlot(80, 35, 0);
 
-		gg.addSlot(6, 125, 0);
+		gg.addSlot(125, 26, 0);
 
 		gg.addPrg(98, 26, JustServerTweak.MODID + ".circuitbuilder");
 
 		gg.addSlot(8, 53, 2);
-		gg.addPwr(12, 31);
+		gg.addPwr(12, 32);
 
-		gg.addSlot(8, 17, 8);
-		gg.addSlot(8, 17 + SLOT_SIZE, 0);
+		gg.addSlot(8, 12, 8);
+		gg.addSlot(8 + 18, 12, 0);
+		gg.addCfg(25, 52, true);
+		gg.addText(54, 64, 0);
+	}
+
+	@Override
+	public int[] getGuiData() {
+		return new int[] {solder};
+	}
+
+	@Override
+	public String guiDataToStr(int id, int dat) {
+		return I18n.format("jst.msg.com.solder", dat, JSTUtils.formatNum(dat / (double)MT_CircuitResearchMachine.SOLDER_PER_WIRE));
+	}
+
+	private boolean canProcess(int bpt, int rt) {
+		switch (bpt) {
+		case 1: return rt >= 0 && rt <= 2;
+		case 2: return rt >= 3 && rt <= 4;
+		case 3: return rt >= 5 && rt <= 6;
+		case 4: return rt >= 7 && rt <= 9;
+		}
+		return false;
 	}
 }

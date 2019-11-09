@@ -13,6 +13,8 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.compat.jei.JEISupport;
 import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.tiles.MetaTileBase;
+import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
@@ -67,12 +69,20 @@ public class GUIGeneric extends GUIBase {
 		if (Loader.isModLoaded("jei")) components.add(new ComponentJEIButton(x, y, jei));
 	}
 
+	public void addCfg(int x, int y, boolean m) {
+		components.add(new ComponentCfgButton(x, y, m));
+	}
+
 	public void addButton(int x, int y, int w, int h, int id, String t, boolean f) {
 		btn.put(new GuiButton(id, x, y, w, h, f ? I18n.format(t) : t), new int[] {x, y});
 	}
 
 	public void addHoverText(int x, int y, int w, int h, String t) {
 		components.add(new ComponentHoverText(x, y, w, h, t));
+	}
+
+	public void addText(int x, int y, int idx) {
+		components.add(new ComponentText(x, y, idx));
 	}
 
 	@Override
@@ -92,7 +102,7 @@ public class GUIGeneric extends GUIBase {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(float pt, int mx, int my) {
 	    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(gui);
 	    int x = (width - xSize) / 2;
@@ -150,7 +160,7 @@ public class GUIGeneric extends GUIBase {
 		
 		@Override
 		public void draw(GUIGeneric g, int sX, int sY) {
-			g.drawTexturedModalRect(sX + _X - 1, sY + _Y - 1, 176 + 18 * (type % 2), 49 + 18 * (type / 2), 18, 18);
+			g.drawTexturedModalRect(sX + _X - 1, sY + _Y - 1, 176 + 18 * (type % 4), 49 + 18 * (type / 4), 18, 18);
 		}
 	}
 	
@@ -197,8 +207,8 @@ public class GUIGeneric extends GUIBase {
 			if (!g.isPointInRegion(_X, _Y, 7, 15, mX, mY)) return;
 			ContainerGeneric con = (ContainerGeneric)g.inventorySlots;
 			ArrayList<String> ls = new ArrayList();
-			ls.add(con.energy + " / " + con.mxenergy + " EU");
-			ls.add((con.energy * JSTCfg.RFPerEU) + " / " + (con.mxenergy * JSTCfg.RFPerEU) + " RF");
+			ls.add(JSTUtils.formatNum(con.energy) + " / " + JSTUtils.formatNum(con.mxenergy) + " EU");
+			ls.add(JSTUtils.formatNum(con.energy * JSTCfg.RFPerEU) + " / " + JSTUtils.formatNum(con.mxenergy * JSTCfg.RFPerEU) + " RF");
 			g.drawHoveringText(ls, mX, mY);
 		}
 
@@ -222,8 +232,8 @@ public class GUIGeneric extends GUIBase {
 			if (!g.isPointInRegion(_X, _Y, 32, 17, mX, mY)) return;
 			ContainerGeneric con = (ContainerGeneric)g.inventorySlots;
 			ArrayList<String> ls = new ArrayList();
-			ls.add(con.energy + " / " + con.mxenergy + " EU");
-			ls.add((con.energy * JSTCfg.RFPerEU) + " / " + (con.mxenergy * JSTCfg.RFPerEU) + " RF");
+			ls.add(JSTUtils.formatNum(con.energy) + " / " + JSTUtils.formatNum(con.mxenergy) + " EU");
+			ls.add(JSTUtils.formatNum(con.energy * JSTCfg.RFPerEU) + " / " + JSTUtils.formatNum(con.mxenergy * JSTCfg.RFPerEU) + " RF");
 			g.drawHoveringText(ls, mX, mY);
 		}
 
@@ -267,13 +277,45 @@ public class GUIGeneric extends GUIBase {
 
 		@Override
 		public void draw(GUIGeneric g, int sX, int sY) {
-			if (jei != null && jei.length > 0) g.drawTexturedModalRect(sX + _X, sY + _Y, 212, 49, 18, 18);
+			if (jei != null && jei.length > 0) g.drawTexturedModalRect(sX + _X, sY + _Y, 0, 166, 18, 18);
 		}
 
 		@Override
 		public boolean onClick(GUIGeneric g, int mX, int mY, int b) {
-			if (b == 0 && g.isPointInRegion(_X, _Y, 17, 17, mX, mY) && jei != null && jei.length > 0) {
+			if (b == 0 && g.isPointInRegion(_X + 1, _Y + 1, 16, 16, mX, mY) && jei != null && jei.length > 0) {
 				JEISupport.loadJEI(Arrays.asList(jei));
+				return true;
+			}
+			return false;
+		}
+	}
+
+	public static class ComponentCfgButton extends GUIComponent {
+		private final boolean mode;
+
+		public ComponentCfgButton(int x, int y, boolean m) {
+			super(x, y);
+			mode = m;
+		}
+
+		@Override
+		public void onHover(GUIGeneric g, int mX, int mY) {
+			if (g.isPointInRegion(_X + 1, _Y + 1, 16, 16, mX, mY)) {
+				String s = "jst.msg.com.cfg";
+				if (!mode) s += "2";
+				g.drawHoveringText(I18n.format(s), mX, mY);
+			}
+		}
+
+		@Override
+		public void draw(GUIGeneric g, int sX, int sY) {
+			g.drawTexturedModalRect(sX + _X, sY + _Y, mode ? 18 : 36, 166, 18, 18);
+		}
+
+		@Override
+		public boolean onClick(GUIGeneric g, int mX, int mY, int b) {
+			if (g.isPointInRegion(_X + 1, _Y + 1, 16, 16, mX, mY)) {
+				g.handleMouseClick(null, mode ? 2000 : 2001, 0, ClickType.QUICK_CRAFT);
 				return true;
 			}
 			return false;
@@ -295,6 +337,23 @@ public class GUIGeneric extends GUIBase {
 		public void onHover(GUIGeneric g, int mX, int mY) {
 			if (g.isPointInRegion(_X + 1, _Y + 1, w - 1, h - 1, mX, mY))
 				g.drawHoveringText(s, mX, mY);
+		}
+	}
+
+	public static class ComponentText extends GUIComponent {
+		private final int idx;
+
+		public ComponentText(int x, int y, int idx) {
+			super(x, y);
+			this.idx = idx;
+		}
+
+		public void drawForeground(GUIGeneric g) {
+			ContainerGeneric c = (ContainerGeneric)g.inventorySlots;
+			if (c.te.mte instanceof IGenericGUIMTE) {
+				String t = ((IGenericGUIMTE)c.te.mte).guiDataToStr(idx, c.getGuiData(idx));
+				if (t != null) g.fontRenderer.drawString(t, _X, _Y, 0);
+			}
 		}
 	}
 }

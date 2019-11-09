@@ -100,21 +100,20 @@ public class MT_ItemPort extends MetaTileBase implements IMultiBlockIO {
 	@Override
 	public void onPostTick() {
 		World w = getWorld();
-		if (w.isRemote || !this.isOutput || this.baseTile.getTimer() % 20 != 0) return;
-		EnumFacing f = this.getFacing();
-		BlockPos p = JSTUtils.getOffset(this.getPos(), f, 1);
-		TileEntity te = this.getWorld().getTileEntity(p);
+		if (w.isRemote || !isOutput || baseTile.getTimer() % 20 != 0) return;
+		EnumFacing f = getFacing();
+		BlockPos p = JSTUtils.getOffset(getPos(), f, 1);
+		TileEntity te = getWorld().getTileEntity(p);
 		if (te instanceof IInventory) {
 			IInventory iinv = ((IInventory) te);
 			if (!JSTUtils.checkInventoryFull(iinv, f.getOpposite())) {
-				for (int n = 0; n < this.inv.size(); n++) {
-					if (!this.getStackInSlot(n).isEmpty()) {
-						ItemStack st = JSTUtils.sendStackToInv(iinv, this.decrStackSize(n, 64), f.getOpposite());
-						if (st.isEmpty()) {
+				for (int n = 0; n < inv.size(); n++) {
+					if (!getStackInSlot(n).isEmpty()) {
+						ItemStack st = JSTUtils.sendStackToInv(iinv, decrStackSize(n, 64), f.getOpposite());
+						if (st.isEmpty())
 							iinv.markDirty();
-						} else {
-							this.setInventorySlotContents(n, st);
-						}
+						else
+							setInventorySlotContents(n, st);
 						break;
 					}
 				}

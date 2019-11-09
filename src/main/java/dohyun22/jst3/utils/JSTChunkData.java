@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.evhandler.DustHandler;
 import dohyun22.jst3.loader.JSTCfg;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -25,7 +26,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class JSTChunkData {
+public final class JSTChunkData {
 	/** Used for saving chunk data (i.e Oil in chunk, FineDust) */
 	private static final Map<Integer, Map<ChunkPos, NBTTagCompound>> DATA_CACHE = new HashMap();
 	public static final String FLUID_TAG_NAME = "Fluid";
@@ -54,7 +55,7 @@ public class JSTChunkData {
 					
 					weight = Integer.parseInt(ls[0]);
 					String str2 = ls[1].toLowerCase();
-					if (str2.equals("null") || str2.equals("none")) {
+					if (str2.equals("none") || str2.equals("empty")) {
 						f = null;
 					} else {
 						f = FluidRegistry.getFluid(ls[1]);
@@ -109,7 +110,7 @@ public class JSTChunkData {
 					FRType frt = new FRType(weight, f, min, rng, dim, dimbl, biome, biomebl);
 					FLUID_RESOURCES.add(frt);
 				} else {
-					System.out.println("[JST3] Failed to parse " + str);
+					JSTUtils.LOG.error("[JST3] Failed to parse " + str);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -220,19 +221,26 @@ public class JSTChunkData {
 	
 	@Nullable
 	public static FluidStack getFluidForChunk(World w, ChunkPos cp) {
-		List<FRType> ls = new ArrayList();
+		List<FRType> ls = getFluidsForChunk(w, cp);
+		if (ls.isEmpty()) return null;
+		long s = 1;
+	    s = 23 * s + w.getSeed();
+	    s = 23 * s + w.provider.getDimension();
+	    s = 23 * s + cp.x;
+	    s = 23 * s + cp.z;
+		Random r = new Random(s);
+		FRType frt = WeightedRandom.getRandomItem(r, ls);
+		return frt.getResource(w, cp, r);
+	}
+
+	public static List<FRType> getFluidsForChunk(World w, ChunkPos cp) {
+		ArrayList r = new ArrayList();
 		for (FRType frt : FLUID_RESOURCES)
 			if (frt.isRightChunk(w, cp))
-				ls.add(frt);
-		
-		if (ls.isEmpty())
-			return null;
-		
-		Random rnd = new Random(w.getSeed() + w.provider.getDimension() * 2 + cp.x + 7 * cp.z);
-		FRType frt = WeightedRandom.getRandomItem(rnd, ls);
-		return frt.getResource(w, cp, rnd);
+				r.add(frt);
+		return r;
 	}
-	
+
 	public static class FRType extends WeightedRandom.Item {
 		public final String fluid;
 		public final int min;
@@ -315,13 +323,16 @@ public class JSTChunkData {
 			return flag1 && flag2;
 		}
 		
-		private boolean matchBiome(Object obj, Biome biome) {
-			if (obj instanceof Integer && ((Integer)obj).intValue() == Biome.getIdForBiome(biome)) {
+		private boolean matchBiome(Object obj, Biome bIn) {
+			if (obj instanceof Integer && ((Integer)obj).intValue() == Biome.getIdForBiome(bIn)) {
 				return true;
 			} else if (obj instanceof String) {
-				String str = ((String)obj).toUpperCase();
-				for (BiomeDictionary.Type bt : BiomeDictionary.getTypes(biome))
-					if (str.equals(bt.toString()))
+				String s = (String)obj;
+				Biome b = Biome.REGISTRY.getObject(new ResourceLocation(s));
+				if (b != null && b == bIn) return true;
+				s = s.toUpperCase();
+				for (BiomeDictionary.Type bt : BiomeDictionary.getTypes(bIn))
+					if (s.equals(bt.toString()))
 						return true;
 			}
 			return false;
@@ -330,7 +341,7 @@ public class JSTChunkData {
 		@Override
 		public String toString() {
 			String ret = "";
-			ret += this.itemWeight + ";" + this.fluid + ";" + this.min + ";" + this.range + ";" + Arrays.toString(this.dims == null ? new int[0] : this.dims) + ";" + Arrays.toString(this.dimsBL == null ? new int[0] : this.dimsBL) + ";" + Arrays.toString(this.biomes == null ? new Object[0] : this.biomes) + ";" + Arrays.toString(this.biomesBL == null ? new Object[0] : this.biomesBL);
+			ret += itemWeight + ";" + fluid + ";" + min + ";" + range + ";" + Arrays.toString(dims == null ? new int[0] : dims) + ";" + Arrays.toString(dimsBL == null ? new int[0] : dimsBL) + ";" + Arrays.toString(biomes == null ? new Object[0] : biomes) + ";" + Arrays.toString(biomesBL == null ? new Object[0] : biomesBL);
 			return ret;
 		}
 	}

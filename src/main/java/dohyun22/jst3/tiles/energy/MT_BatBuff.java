@@ -166,7 +166,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric ret = new ContainerGeneric(inv, te);
+		ContainerGeneric ret = new ContainerGeneric(te);
 		for (int y = 0; y < 4; ++y) for (int x = 0; x < 4; ++x) ret.addSlot(new Slot(te, x + y * 4, 53 + x * 18, 8 + y * 18));
 		ret.addPlayerSlots(inv);
 		return ret;

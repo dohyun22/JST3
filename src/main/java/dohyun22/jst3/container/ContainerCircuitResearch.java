@@ -27,7 +27,7 @@ public class ContainerCircuitResearch extends ContainerMTE {
 
 	public ContainerCircuitResearch(IInventory inv, TileEntityMeta te) {
 		super(te);
-		addSlotToContainer(new Slot(te, 0, 185, 26));
+		addSlotToContainer(new JSTSlot(te, 0, 185, 26).setPredicate(new ItemMatcher("circuitBoardAny")));
 		addSlotToContainer(new JSTSlot(te, 1, 185, 44).setPredicate(new ItemMatcher("paper")));
 		addSlotToContainer(new JSTSlot(te, 2, 185, 62).setPredicate(new ItemMatcher("wireSolder")));
 		addSlotToContainer(new JSTSlot(te, 3, 185, 80).setPredicate(new ItemMatcher(new ItemStack(JSTItems.item1, 1, 10050))));
@@ -118,12 +118,12 @@ public class ContainerCircuitResearch extends ContainerMTE {
 									ItemStack st = cr.getStackInSlot(2);
 									if (cr.solder <= 0 && JSTUtils.oreMatches(st, "wireSolder")) {
 										st.shrink(1);
-										cr.solder = MT_CircuitResearchMachine.SOLDER_PER_WIRE;
+										cr.solder = MT_CircuitResearchMachine.SOLDER_PER_WIRE * 2;
 									}
 									if (cr.solder > 0 && JSTItems.item1.getBehaviour(cr.getStackInSlot(3)).useEnergy(cr.getStackInSlot(3), 100, false)) {
 										cr.solder--;
 										cr.listOfGame[id] = n;
-										if (g != 0) cr.checkClear();
+										if (g != 0 && cr.checkClear()) super.detectAndSendChanges();
 									}
 								}
 							}

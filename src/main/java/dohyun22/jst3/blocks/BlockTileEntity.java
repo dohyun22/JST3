@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import cofh.api.block.IDismantleable;
-//import cofh.api.block.IDismantleable;
 import dohyun22.jst3.JustServerTweak;
+import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTUtils;
@@ -60,10 +60,11 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Optional.InterfaceList({
 @Optional.Interface(iface="ic2.api.tile.IWrenchable", modid="ic2"),
-@Optional.Interface(iface = "cofh.api.block.IDismantleable", modid = "cofhapi")
+@Optional.Interface(iface="cofh.api.block.IDismantleable", modid="cofhapi")
 })
 public class BlockTileEntity extends Block implements ITileEntityProvider, IWrenchable, IDismantleable {
 	public static final IUnlistedProperty<WeakReference<MetaTileBase>> TE = new UnlistedProperty("tile");
@@ -86,7 +87,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.getLightOpacity();
         return 255;
     }
-	
+
 	@Override
     public int getLightValue(IBlockState bs, IBlockAccess w, BlockPos p) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -94,7 +95,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.getLightValue();
         return 0;
     }
-	
+
 	@Override
 	public float getBlockHardness(IBlockState bs, World w, BlockPos p) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -102,7 +103,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.getHardness();
 		return super.getBlockHardness(bs, w, p);
 	}
-	
+
 	@Override
     public float getExplosionResistance(World w, BlockPos p, Entity ee, Explosion ex) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -112,10 +113,14 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
     }
 
 	@Override
-	public boolean onBlockActivated(World w, BlockPos p, IBlockState state, EntityPlayer pl, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World w, BlockPos p, IBlockState bs, EntityPlayer pl, EnumHand h, EnumFacing d, float hX, float hY, float hZ) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
-	    if (mte != null && !pl.isSneaking())
-			return mte.onRightclick(pl, pl.getHeldItem(hand), side, hitX, hitY, hitZ);
+		ItemStack st = pl.getHeldItem(h);
+		for (ItemStack wr : MRecipes.Wrenches)
+			if (OreDictionary.itemMatches(wr, st, false))
+				return mte.setFacing(d, pl);
+	    if (mte != null && (mte.canRightclickIfSneaking(pl, st, d, hX, hY, hZ) || !pl.isSneaking()))
+			return mte.onRightclick(pl, st, d, hX, hY, hZ);
 		return false;
 	}
 
@@ -125,23 +130,22 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity(IBlockState bs) {
 		return true;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
-		return createNewTileEntity(world, 0);
+	public TileEntity createTileEntity(World w, IBlockState bs) {
+		return createNewTileEntity(w, 0);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(World w, int m) {
 		return new TileEntityMeta();
 	}
 
 	@Override
-	public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-			EntityLiving.SpawnPlacementType type) {
+	public boolean canCreatureSpawn(@Nonnull IBlockState bs, @Nonnull IBlockAccess w, @Nonnull BlockPos p, EntityLiving.SpawnPlacementType t) {
 		return false;
 	}
 
@@ -179,14 +183,14 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 		super.breakBlock(w, p, bs);
 		w.removeTileEntity(p);
 	}
-	
+
 	@Override
 	public void onBlockAdded(World w, BlockPos p, IBlockState bs) {
 		MetaTileBase.causeMTEUpdate(w, p);
 	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState bs, RayTraceResult target, World w, BlockPos p, EntityPlayer pl) {
+	public ItemStack getPickBlock(IBlockState bs, RayTraceResult tgt, World w, BlockPos p, EntityPlayer pl) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) {
 			ArrayList<ItemStack> ls = new ArrayList();
@@ -198,23 +202,23 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess w, BlockPos p) {
-		state = super.getExtendedState(state, w, p);
-		if (FMLCommonHandler.instance().getSide().isClient() && state instanceof IExtendedBlockState) {
-			IExtendedBlockState ebs = (IExtendedBlockState) state;
+	public IBlockState getExtendedState(IBlockState bs, IBlockAccess w, BlockPos p) {
+		bs = super.getExtendedState(bs, w, p);
+		if (FMLCommonHandler.instance().getSide().isClient() && bs instanceof IExtendedBlockState) {
+			IExtendedBlockState ebs = (IExtendedBlockState) bs;
 			MetaTileBase tile = MetaTileBase.getMTE(w, p);
 			if (tile != null)
 				ebs = ebs.withProperty(TE, new WeakReference(tile));
-			state = ebs;
+			bs = ebs;
 		}
-		return state;
+		return bs;
 	}
-	
+
 	@Override
 	public BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] { TE });
 	}
-	
+
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (Entry<Integer, MetaTileBase> n : MetaTileBase.tes.entrySet()) {
@@ -224,22 +228,21 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			mte.getSubBlocks(n.getKey().intValue(), list);
 		}
 	}
-	
+
 	@Override
 	public void neighborChanged(IBlockState s, World w, BlockPos p, Block b, BlockPos f) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null)
 			mte.onBlockUpdate();
 	}
-	
-	
+
 	@Override
 	public void onNeighborChange(IBlockAccess w, BlockPos p, BlockPos n) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 		if (mte != null)
 			mte.onBlockUpdate();
 	}
-	
+
 	@Override
 	public boolean isSideSolid(IBlockState bs, IBlockAccess w, BlockPos p, EnumFacing s) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -247,12 +250,12 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.isSideSolid(s);
 		return true;
 	}
-	
+
 	@Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(IBlockState bs) {
         return false;
     }
-    
+
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState bs, IBlockAccess w, BlockPos p) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -260,7 +263,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.getBoundingBox();
 		return FULL_BLOCK_AABB;
     }
-    
+
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState bs, IBlockAccess w, BlockPos p) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -268,7 +271,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.getCollisionBoundingBox();
         return FULL_BLOCK_AABB;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState bs, IBlockAccess w, BlockPos p, EnumFacing f) {
@@ -277,7 +280,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	        return false;
 	    return super.shouldSideBeRendered(bs, w, p, f);
     }
-    
+
     @Override
     public boolean doesSideBlockRendering(IBlockState bs, IBlockAccess w, BlockPos p, EnumFacing f) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -285,12 +288,12 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.isSideOpaque(f);
 		return true;
     }
-    
+
     @Override
     public boolean isFullCube(IBlockState bs) {
     	return false;
     }
-    
+
     @Override
     public boolean eventReceived(IBlockState bs, World w, BlockPos p, int id, int arg) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -298,7 +301,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.receiveClientEvent(id, arg);
     	return false;
     }
-    
+
     @Override
     public void addCollisionBoxToList(IBlockState bs, World w, BlockPos p, AxisAlignedBB ab, List<AxisAlignedBB> ls, Entity e, boolean b) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -308,79 +311,79 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 		}
 		super.addCollisionBoxToList(bs, w, p, ab, ls, e, false);
     }
-    
+
     @Override
     public SoundType getSoundType(IBlockState bs, World w, BlockPos p, Entity e) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) return mte.getSoundType(e);
         return blockSoundType;
     }
-    
+
     @Override
     public boolean canConnectRedstone(IBlockState bs, IBlockAccess w, BlockPos p, EnumFacing f) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) return mte.canConnectRedstone(f);
     	return false;
     }
-    
+
     @Override
     public int getWeakPower(IBlockState bs, IBlockAccess w, BlockPos p, EnumFacing f) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) return mte.getWeakRSOutput(f.getOpposite());
     	return 0;
     }
-    
+
     @Override
     public int getStrongPower(IBlockState bs, IBlockAccess w, BlockPos p, EnumFacing f) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) return mte.getStrongRSOutput(f.getOpposite());
     	return 0;
     }
-    
+
     @Override
     public boolean canProvidePower(IBlockState state) {
     	return true;
     }
-    
+
 	@Override
 	public void onEntityCollidedWithBlock(World w, BlockPos p, IBlockState bs, Entity e) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) mte.onEntityCollided(e);
 	}
-	
+
 	@Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
     }
-	
+
 	@Override
     public boolean recolorBlock(World w, BlockPos p, EnumFacing f, EnumDyeColor col) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) return mte.recolorTE(f, col);
         return false;
     }
-	
+
 	@Override
 	public boolean removedByPlayer(IBlockState bs, World w, BlockPos p, EntityPlayer pl, boolean wh) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 		if (mte != null && !mte.removedByPlayer(pl, wh)) return false;
 		return super.removedByPlayer(bs, w, p, pl, wh);
 	}
-	
+
 	@Override
 	public boolean canEntityDestroy(IBlockState s, IBlockAccess w, BlockPos p, Entity e) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte != null) return mte.canEntityDestroy(e);
 		return super.canEntityDestroy(s, w, p, e);
 	}
-	
+
 	@Override
 	public void onBlockExploded(World w, BlockPos p, Explosion ex) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 	    if (mte.onBlockExploded(ex)) super.onBlockExploded(w, p, ex);
 	}
-	
+
 	@Override
 	public MapColor getMapColor(IBlockState bs, IBlockAccess w, BlockPos p) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -388,7 +391,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 		if (mte != null) ret = mte.getMapColor();
 		return ret == null ? MapColor.BLUE : ret;
 	}
-	
+
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockAccess w, IBlockState bs, BlockPos p, EnumFacing s) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
@@ -396,7 +399,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 			return mte.isSideSolid(s) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 		return BlockFaceShape.UNDEFINED;
 	}
-	
+
 	@Override
     public boolean hasComparatorInputOverride(IBlockState bs) {
         return true;
@@ -410,15 +413,12 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
         return 0;
     }
 
-	  
 	//IC2 Wrench API
 	@Override
 	@Method(modid = "ic2")
 	public EnumFacing getFacing(World w, BlockPos p) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
-	    if (mte != null) {
-	    	return mte.getFacing();
-	    }
+	    if (mte != null) return mte.getFacing();
 		return null;
 	}
 
@@ -426,9 +426,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	@Method(modid = "ic2")
 	public boolean setFacing(World w, BlockPos p, EnumFacing nd, EntityPlayer pl) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
-	    if (mte != null) {
-	    	return mte.setFacing(nd, pl);
-	    }
+	    if (mte != null) return mte.setFacing(nd, pl);
 		return false;
 	}
 
@@ -436,20 +434,19 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	@Method(modid = "ic2")
 	public boolean wrenchCanRemove(World w, BlockPos p, EntityPlayer pl) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
-	    if (mte != null) {
-	    	return mte.wrenchCanRemove(pl);
-	    }
+	    if (mte != null) return mte.wrenchCanRemove(pl);
 		return false;
 	}
 
 	@Override
 	@Method(modid = "ic2")
 	public List<ItemStack> getWrenchDrops(World w, BlockPos p, IBlockState bs, TileEntity te, EntityPlayer pl, int f) {
-		return this.getDrops(w, p, bs, f);
+		return getDrops(w, p, bs, f);
 	}
-	
+
+	//CoFH Wrench API
 	@Override
-	@Optional.Method(modid = "cofhapi")
+	@Method(modid = "cofhapi")
 	public boolean canDismantle(World w, BlockPos p, IBlockState bs, EntityPlayer pl) {
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);
 		if (mte != null)
@@ -458,7 +455,7 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 	}
 
 	@Override
-	@Optional.Method(modid = "cofhapi")
+	@Method(modid = "cofhapi")
 	public ArrayList<ItemStack> dismantleBlock(World w, BlockPos p, IBlockState bs, EntityPlayer pl, boolean drop) {
 		ArrayList<ItemStack> ret = new ArrayList();
 		MetaTileBase mte = MetaTileBase.getMTE(w, p);

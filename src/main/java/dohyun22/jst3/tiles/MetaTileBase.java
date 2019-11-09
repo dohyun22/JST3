@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.blocks.JSTBlocks;
+import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -44,6 +45,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumSkyBlock;
@@ -179,7 +181,11 @@ public abstract class MetaTileBase {
 		return 10.0F;
 	}
 
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing s, float hX, float hY, float hZ) {
+		return false;
+	}
+
+	public boolean canRightclickIfSneaking(EntityPlayer pl, ItemStack st, EnumFacing s, float hX, float hY, float hZ) {
 		return false;
 	}
 	
@@ -193,6 +199,8 @@ public abstract class MetaTileBase {
 	}
 
 	public static final void registerTE(int id, MetaTileBase te) {
+		if (id <= 0)
+			throw new IllegalArgumentException("Negative values are not allowed!");
 		if (tes.containsKey(id))
 			throw new IllegalArgumentException("MetaTileEntity slot #" + id + " is already occupied!");
 		tes.put(id, te);
@@ -422,7 +430,7 @@ public abstract class MetaTileBase {
 	}
 
 	@Nullable
-	public static <T extends MetaTileBase> T getMTE(Class<T> cl, IBlockAccess w, BlockPos p) {
+	public static <T extends MetaTileBase> T getMTE(@Nonnull Class<T> cl, IBlockAccess w, BlockPos p) {
 		MetaTileBase ret = getMTE(w, p);
 		if (cl.isInstance(ret))
 			return (T) ret;
@@ -572,8 +580,17 @@ public abstract class MetaTileBase {
 	public long injectEnergy(@Nullable EnumFacing dir, long v, boolean sim) {
 		if (baseTile == null || !canAcceptEnergy() || !isEnergyInput(dir))
 			return 0L;
-		long eu = Math.min(getMaxEnergy() - baseTile.energy, Math.min(maxEUTransfer(), v));
-		if (!sim) baseTile.energy += eu;
+		long tr = maxEUTransfer();
+		long eu = Math.min(getMaxEnergy() - baseTile.energy, Math.min(tr, v));
+		if (!sim) {
+			if (JSTCfg.ovExplosion && tr > 0 && v > tr * 2L) {
+				BlockPos p = getPos();
+				getWorld().setBlockToAir(p);
+				getWorld().createExplosion(null, p.getX() + 0.5F, p.getY() + 0.5F, p.getZ() + 0.5F, 2.0F, false);
+				return eu;
+			}
+			baseTile.energy += eu;
+		}
 		return eu;
 	}
 	

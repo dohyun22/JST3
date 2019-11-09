@@ -305,7 +305,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	}
 
 	protected boolean tryUpg(EntityPlayer pl, ItemStack st) {
-		return tryUpg(pl, st, 3, 6, 4);
+		return tryUpg(pl, st, 3, 8, 4);
 	}
 
 	protected boolean tryUpg(EntityPlayer pl, ItemStack st, int minT, int maxT, int cnt) {

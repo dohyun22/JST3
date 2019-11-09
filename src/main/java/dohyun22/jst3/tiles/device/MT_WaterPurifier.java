@@ -137,10 +137,13 @@ public class MT_WaterPurifier extends MetaTileEnergyInput {
 					JSTUtils.giveItem(pl, st2);
 					watr -= 250;
 					getWorld().playSound(null, getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.6F, 1.0F);
+				} else if (JSTUtils.getRegName(st).equals("toughasnails:canteen")) {
+					st.setItemDamage(2);
+					watr -= 750;
+					getWorld().playSound(null, getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.6F, 1.0F);
 				} else {
 					IFluidHandlerItem cap = st.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-					if (cap != null)
-						watr -= cap.fill(new FluidStack(FluidRegistry.WATER, watr), true);
+					if (cap != null) watr -= cap.fill(new FluidStack(FluidRegistry.WATER, watr), true);
 				}
 			}
 		}

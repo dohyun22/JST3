@@ -173,17 +173,15 @@ public class MetaTileSolarFurnace extends MetaTileBase {
 	
 	@Override
     public void setInventorySlotContents(int sl, ItemStack st) {
-		ItemStack st2 = (ItemStack)this.inv.get(sl);
+		ItemStack st2 = (ItemStack)inv.get(sl);
         boolean flag = !st.isEmpty() && st.isItemEqual(st2) && ItemStack.areItemStackTagsEqual(st, st2);
-        this.inv.set(sl, st);
-
-        if (st.getCount() > this.baseTile.getInventoryStackLimit())
-            st.setCount(this.baseTile.getInventoryStackLimit());
-
+        inv.set(sl, st);
+        if (st.getCount() > baseTile.getInventoryStackLimit())
+            st.setCount(baseTile.getInventoryStackLimit());
         if (sl == 0 && !flag) {
-            this.totalCookTime = duration;
-            this.cookTime = 0;
-            this.markDirty();
+            totalCookTime = duration;
+            cookTime = 0;
+            markDirty();
         }
     }
 	

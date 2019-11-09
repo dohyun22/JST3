@@ -212,7 +212,7 @@ public class MetaTileAlloyFurnace extends MetaTileBase implements IGenericGUIMTE
     
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric r = new ContainerGeneric(inv, te);
+		ContainerGeneric r = new ContainerGeneric(te);
 		r.addSlot(new Slot(te, 0, 43, 17));
 		r.addSlot(new Slot(te, 1, 61, 17));
 		r.addSlot(new JSTSlot(te, 2, 116, 35, false, true, 64, true));

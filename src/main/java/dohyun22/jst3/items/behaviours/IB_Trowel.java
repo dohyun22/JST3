@@ -15,6 +15,8 @@ import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -132,5 +134,15 @@ public class IB_Trowel extends IB_Damageable {
 	@Override
 	public int getItemStackLimit(ItemStack st) {
 		return 1;
+	}
+
+	@Override
+	public int getEnchantability(ItemStack st) {
+		return 8;
+	}
+
+	@Override
+	public boolean canEnchant(ItemStack st, Enchantment en) {
+		return en.type == EnumEnchantmentType.DIGGER;
 	}
 }

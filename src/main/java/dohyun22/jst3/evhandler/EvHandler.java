@@ -2,6 +2,7 @@ package dohyun22.jst3.evhandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,7 @@ import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.RecipeLoader;
+import dohyun22.jst3.network.JSTPacketHandler;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -30,6 +32,7 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.ICropTile;
+import ic2.api.energy.EnergyNet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.BlockRailBase;
@@ -74,6 +77,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -96,6 +101,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.ForgeRegistry;
 
 public class EvHandler {
+	private static final HashMap<Integer, ArrayList<TileEntity>> toBeUnloaded = new HashMap();
 	private static final String TAG_NAME = "JST3_CD";
 	private static boolean err;
 	
@@ -454,11 +460,20 @@ public class EvHandler {
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent ev) {
 		if (JSTCfg.fineDust && ev.phase == TickEvent.Phase.END) {
+			long t = ev.world.getTotalWorldTime();
+			if (t % 20 == 0) {
+				int d = ev.world.provider.getDimension();
+				ArrayList<TileEntity> tes = toBeUnloaded.get(d);
+				if (tes != null) {
+					ev.world.tickableTileEntities.removeAll(tes);
+					toBeUnloaded.remove(d);
+				}
+			}
 			try {
-				DustHandler.update(ev.world, ev.world.getTotalWorldTime());
+				DustHandler.update(ev.world, t);
 			} catch (Exception e) {
 				if (!err) {
-					JSTUtils.LOG.error("Error ticking pollution");
+					JSTUtils.LOG.error("Error ticking fine dust");
 					JSTUtils.LOG.catching(e);
 					err = true;
 				}
@@ -502,5 +517,29 @@ public class EvHandler {
 		} else {
 			ev.getData().setTag(TAG_NAME, tag);
 		}
+	}
+
+	public static void makeMachineGoHaywire(World w, BlockPos p) {
+		TileEntity te = w.getTileEntity(p);
+		if (te == null) return;
+		boolean flag = false;
+		for (EnumFacing f : EnumFacing.VALUES) {
+			IEnergyStorage c = te.getCapability(CapabilityEnergy.ENERGY, f);
+			if (c != null && c.getEnergyStored() > 0) flag = true;
+		}
+		try {
+			if (!flag && JSTCfg.ic2Loaded && EnergyNet.instance.getSubTile(w, p) != null) flag = true;
+		} catch (Throwable t) {}
+		if (flag) unloadTE(w, te);
+	}
+
+	public static void unloadTE(World w, TileEntity te) {
+		int d = w.provider.getDimension();
+		ArrayList<TileEntity> ls = toBeUnloaded.get(d);
+		if (ls == null) {
+			ls = new ArrayList();
+			toBeUnloaded.put(d, ls);
+		}
+		ls.add(te);
 	}
 }

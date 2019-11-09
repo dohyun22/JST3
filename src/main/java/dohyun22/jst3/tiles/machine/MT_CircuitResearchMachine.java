@@ -39,7 +39,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 	public static final int ROW = 12, COLUMN = 9, SOLDER_PER_WIRE = 20;
 	public byte[] listOfGame = new byte[ROW * COLUMN];
 	private final int tier;
-	public byte solder, gameTier;
+	public byte solder, gameTier = -1;
 	public boolean lvlLoaded;
 	private static final HashMap<Integer, ArrayList<byte[][]>> LEVELS = new HashMap();
 	private static final HashMap<Integer, Object> BOARDS = new HashMap();
@@ -53,7 +53,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			for (int m = 0; m < c.length; m++)
 				new IC(d + m * 6 + 11, c[m][0], c[m][1], d);
 
-		addLvl(1, new byte[][] { { 38, 11 }, { 16, 40 }, { 21, 75 }, { 55, 54 } });
+		addLvl(1, new byte[][] { { 38, 11 }, { 16, 40 }, { 21, 75 }, { 55, 48 } });
 		addLvl(2, new byte[][] { { 14, 16 }, { 20, 24 }, { 53, 17 }, { 56, 71 }, { 62, 11 }, { 90, 60 } });
 		addLvl(2, new byte[][] { { 14, 11 }, { 29, 24 }, { 47, 71 }, { 50, 17 }, { 75, 21 }, { 80, 64 } });
 		addLvl(3, new byte[][] { { 22, 21 }, { 26, 76 }, { 37, 26 }, { 52, 80 }, { 55, 29 }, { 56, 65 }, { 65, 22 },
@@ -129,13 +129,13 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			return;
 		if (tier != 1)
 			baseTile.energy -= JSTUtils.chargeItem(getStackInSlot(3), Math.min(baseTile.energy, maxEUTransfer()), tier, false, false);
-		if (!lvlLoaded && baseTile.getTimer() % 10 == 0)
-			checkAndLoad();
 	}
 
 	public void checkAndLoad() {
 		int bt = getBoardTier(getStackInSlot(0));
 		if (bt >= 0 && canRun()) {
+			if (gameTier >= 0 && gameTier != bt)
+				clearLvl();
 			if (!lvlLoaded && loadLvl(bt))
 				lvlLoaded = true;
 		} else {
@@ -223,6 +223,16 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		return maxEUTransfer() * 100;
 	}
 
+	@Override
+    public void setInventorySlotContents(int sl, ItemStack st) {
+		ItemStack st2 = (ItemStack)inv.get(sl);
+        inv.set(sl, st);
+        if (st.isEmpty() || !st.isItemEqual(st2) || !ItemStack.areItemStackTagsEqual(st, st2)) {
+        	checkAndLoad();
+        	markDirty();
+        }
+    }
+
 	public BlockPos intToPos(int i) {
 		return new BlockPos(i % ROW, 0, i / ROW);
 	}
@@ -239,9 +249,9 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 		return p.getX() >= 0 && p.getX() <= ROW && p.getZ() >= 0 && p.getZ() <= COLUMN;
 	}
 
-	public void checkClear() {
+	public boolean checkClear() {
 		if (isClient())
-			return;
+			return false;
 		boolean clear = true;
 		for (int n = 0; n < listOfGame.length; n++) {
 			MiniGameTile t = MiniGameTile.getTile(listOfGame[n]);
@@ -272,7 +282,9 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 			getStackInSlot(1).shrink(1);
 			clearLvl();
 			makeBlueprint(consume, gameTier);
+			return true;
 		}
+		return false;
 	}
 
 	private boolean isConnected(BlockPos p, Colors c, EnumFacing from) {

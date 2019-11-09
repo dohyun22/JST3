@@ -12,31 +12,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ParametersAreNonnullByDefault
 public class JSTSounds {
-	public static SoundEvent TELEPORT;
-	public static SoundEvent LASER;
-	public static SoundEvent AIE;
-	public static SoundEvent SHOCK;
-	public static SoundEvent SHOCK2;
-	public static SoundEvent WRENCH;
-	public static SoundEvent BOOM;
-	public static SoundEvent DOWNLINE;
-	public static SoundEvent UPLINE;
-	public static SoundEvent LEVEL;
-	public static SoundEvent BONUS;
-	public static SoundEvent SCAN;
-	public static SoundEvent BICYCLE;
-	public static SoundEvent GEIGER;
-	public static SoundEvent DINGDONG;
-	public static SoundEvent SWITCH;
-	public static SoundEvent SWITCH2;
-	public static SoundEvent FORCEFIELD;
-	public static SoundEvent TRANSFORMER;
-	public static SoundEvent MICRO;
-	public static SoundEvent EJECT;
-	public static SoundEvent PUMP;
-	public static SoundEvent INTERRUPT;
-	public static SoundEvent FLAME;
-	public static SoundEvent ENGINE;
+	public static SoundEvent TELEPORT, LASER, AIE, SHOCK, SHOCK2, WRENCH, BOOM, DOWNLINE, UPLINE, LEVEL,
+	BONUS, SCAN, BICYCLE, GEIGER, DINGDONG, SWITCH, SWITCH2, FORCEFIELD, TRANSFORMER, MICRO,
+	EJECT, PUMP, INTERRUPT, FLAME, ENGINE;
 	
 	private static SoundEvent registerSound(String name) {
 		ResourceLocation rl = new ResourceLocation(JustServerTweak.MODID, name);

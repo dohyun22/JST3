@@ -64,7 +64,7 @@ public abstract class MetaTileEnergyInput extends MetaTileBase {
 
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
-		this.onBlockUpdate();
+		onBlockUpdate();
 	}
 	
 	@Method(modid="ic2")

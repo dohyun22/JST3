@@ -41,6 +41,7 @@ public class ItemBlockTE extends ItemBlock {
 						w.tickableTileEntities.remove(tem);
 					} catch (Exception e) {}
 				}
+				if (tem.mte.getLightOpacity() < 255) w.checkLight(p);
 			}
 		}
 		return true;

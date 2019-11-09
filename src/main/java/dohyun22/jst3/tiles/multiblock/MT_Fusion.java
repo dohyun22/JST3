@@ -1,12 +1,16 @@
 package dohyun22.jst3.tiles.multiblock;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.client.gui.GUIFusion;
 import dohyun22.jst3.container.ContainerFusion;
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
@@ -14,16 +18,15 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -35,7 +38,7 @@ public class MT_Fusion extends MT_Multiblock {
 	private final byte tier;
 	public boolean displayRF;
 	public boolean neut;
-	public int production;
+	public int production, boost;
 	/** 2D Structure Data of Fusion Reactor.
 	 * 0 = EMPTY, 1 = Casing, 2 = IO Port, 3 = Power OUT*/
 	private static final byte[][] STRUCTURE = {
@@ -52,22 +55,21 @@ public class MT_Fusion extends MT_Multiblock {
 
 	public MT_Fusion(byte t) {
 		if (t <= 0) throw new IllegalArgumentException("Invalid Tier");
-		this.tier = t;
+		tier = t;
 	}
 
 	@Override
 	protected boolean checkStructure() {
-		EnumFacing f = this.getFacing();
+		EnumFacing f = getFacing();
 		if (f == null || f.getAxis() == EnumFacing.Axis.Y) return false;
-		World w = this.getWorld();
-		BlockPos p = this.getPos();
+		World w = getWorld();
+		BlockPos p = getPos();
 		for (int x = 0; x < 9; x++)
 			for (int z = 0; z < 9; z++)
 				if (!isValid(STRUCTURE[z][x], w, getPosFromCoord(p, x - 4, 0, z, f.getOpposite()))) return false;
 
-		if (this.energyOutput.size() <= 0 || this.fluidOutput.size() != 1 || this.fluidInput.size() != 2) return false;
-		updateEnergyPort(JSTUtils.getVoltFromTier(7), 20000000, true);
-		
+		if (energyOutput.size() <= 0 || fluidOutput.size() != 1 || fluidInput.size() != 2) return false;
+		updateEnergyPort(20000000, 20000000, true);
 		return true;
 	}
 	
@@ -96,66 +98,78 @@ public class MT_Fusion extends MT_Multiblock {
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (this.baseTile != null) this.baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
+		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
 	
 	@Override
 	public long getMaxEnergy() {
-		return ES * tier;
+		return ES * tier * 2;
 	}
 	
 	@Override
 	public int maxEUTransfer() {
-		return JSTUtils.getVoltFromTier(this.tier + 5) * 2;
+		return Integer.MAX_VALUE;
 	}
 	
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new ContainerFusion(inv, te);
-		return null;
+		return new ContainerFusion(inv, te);
 	}
 
 	@Override
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		if (id == 1)
-			return new GUIFusion(new ContainerFusion(inv, te));
-		return null;
+		return new GUIFusion(new ContainerFusion(inv, te));
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (this.baseTile == null || getWorld().isRemote)
-			return true;
-		pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
+		if (baseTile != null && !isClient())
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 
 	@Override
 	protected boolean checkCanWork() {
-		MT_FluidPort fip1 = this.getFluidPort(0, false);
-		MT_FluidPort fip2 = this.getFluidPort(1, false);
-		if (this.fluidInput.size() != 2 || fip1 == null || fip2 == null)
+		MT_FluidPort fp1 = getFluidPort(0, false), fp2 = getFluidPort(1, false);
+		if (fluidInput.size() != 2 || fp1 == null || fp2 == null)
 			return false;
-		RecipeContainer rc = MRecipes.getRecipe(MRecipes.FusionRecipes, null, new FluidTank[] {fip1.tank, fip2.tank}, Integer.MAX_VALUE, false, true);
+		FluidTank[] tanks = new FluidTank[] {fp1.tank, fp2.tank};
+		RecipeContainer rc = MRecipes.getRecipe(MRecipes.FusionRecipes, null, tanks, Integer.MAX_VALUE, false, true);
 		if (rc != null) {
 			Object[] obj = rc.getObj();
-			if (obj == null || obj.length != 3 || !(obj[0] instanceof Integer) || !(obj[1] instanceof Integer) || !(obj[2] instanceof Boolean) || (!this.baseTile.isActive() && this.baseTile.energy < ((Integer)obj[0]).intValue())) return false;
-			
-			if (!this.baseTile.isActive()) {
-				this.baseTile.energy -= ((Integer)obj[0]).intValue();
+			if (obj == null || obj.length != 3 || !(obj[0] instanceof Integer) || !(obj[1] instanceof Integer) || !(obj[2] instanceof Boolean) || (!baseTile.isActive() && tier < MathHelper.ceil(((Integer)obj[0]).intValue() / (double)ES))) return false;
+			if (boost > 0) {
+				try {
+					int fa = boost + 1;
+					FluidStack f1 = rc.getInputFluids()[0], f2 = rc.getInputFluids()[1];
+					FluidStack[] mi = new FluidStack[] {JSTUtils.modFStack(f1, f1.amount * fa), JSTUtils.modFStack(f2, f2.amount * fa)};
+					f1 = rc.getOutputFluids()[0];
+					FluidStack[] mo = new FluidStack[] {JSTUtils.modFStack(f1, f1.amount * fa)};
+					int ml = (Integer)obj[1] * fa;
+					if (!(Boolean)obj[2]) ml = (int)(ml * 1.2D);
+					Object[] obj2 = new Object[] {obj[0], ml, obj[2]};
+					obj = obj2;
+					RecipeContainer rc2 = RecipeContainer.newContainer(null, mi, null, mo, rc.getEnergyPerTick() * fa, rc.getDuration(), obj2);
+					if (rc2.process(null, tanks, Integer.MAX_VALUE, false, true, false))
+						rc = rc2;
+					else
+						return false;
+				} catch (Exception e) {}
+			}
+			if (!baseTile.isActive()) {
+				baseTile.energy -= (Integer)obj[0];
 				getWorld().playSound((EntityPlayer) null, getPos(), JSTSounds.FORCEFIELD, SoundCategory.BLOCKS, 1.0F, 1.6F);
 			}
-			production = ((Integer)obj[1]).intValue();
-			neut = ((Boolean)obj[2]).booleanValue();
-			
-			if (this.energyUse == 0 || this.mxprogress == 0) {
-				this.energyUse = rc.getEnergyPerTick();
-				this.mxprogress = rc.getDuration();
-			} else if (this.energyUse != rc.getEnergyPerTick() || this.mxprogress != rc.getDuration()) {
+			production = (Integer)obj[1];
+			neut = (Boolean)obj[2];
+
+			if (energyUse == 0 || mxprogress == 0) {
+				energyUse = rc.getEnergyPerTick();
+				mxprogress = rc.getDuration();
+			} else if (energyUse != rc.getEnergyPerTick() || mxprogress != rc.getDuration()) {
 				return false;
 			}
-			rc.process(null, new FluidTank[] {fip1.tank, fip2.tank}, Integer.MAX_VALUE, false, true, true);
+			rc.process(null, tanks, Integer.MAX_VALUE, false, true, true);
 			fluidOut = rc.getOutputFluids();
 			return true;
 		}
@@ -165,32 +179,32 @@ public class MT_Fusion extends MT_Multiblock {
 	@Override
 	protected void doWork() {
 		super.doWork();
-		if (this.energyOutput.size() <= 0) return;
+		if (energyOutput.size() <= 0) return;
 		for (MT_EnergyPort eop : getEnergyPorts(true)) {
-			long pr = this.production / this.energyOutput.size();
+			long pr = production / energyOutput.size();
 			if (eop.baseTile.energy <= eop.getMaxEnergy() + pr)
 				eop.baseTile.energy += pr;
 		}
-		if (this.neut && this.baseTile.getTimer() % 400 == 0 && !this.inv.get(0).isEmpty()) {
-			RecipeContainer rc = MRecipes.getRecipe(MRecipes.FusionBreederRecipes, new ItemStack[] {this.inv.get(0)}, null, 0, false, false);
+		if (neut && baseTile.getTimer() % Math.max(4, 400 / Math.max(1, boost + 1)) == 0 && !inv.get(0).isEmpty()) {
+			RecipeContainer rc = MRecipes.getRecipe(MRecipes.FusionBreederRecipes, new ItemStack[] {inv.get(0)}, null, 0, false, false);
 			if (rc != null) {
 				ItemStack[] outputs = rc.getOutputItems();
 				if (outputs != null && outputs.length == 1) {
 					boolean flag = false;
 					ItemStack ro = outputs[0];
-					ItemStack out = (ItemStack) this.inv.get(1);
+					ItemStack out = (ItemStack) inv.get(1);
 					if (out.isEmpty()) {
-						this.inv.set(1, ro.copy());
+						inv.set(1, ro.copy());
 						flag = true;
 					} else if (JSTUtils.canCombine(out, ro)) {
 						int cnt = out.getCount() + ro.getCount();
-						if (cnt <= this.baseTile.getInventoryStackLimit() && cnt <= out.getMaxStackSize()) {
+						if (cnt <= baseTile.getInventoryStackLimit() && cnt <= out.getMaxStackSize()) {
 							out.setCount(cnt);
 							flag = true;
 						}
 					}
 					if (flag)
-						rc.process(new ItemStack[] {this.inv.get(0)}, null, 0, false, false, true);
+						rc.process(new ItemStack[] {inv.get(0)}, null, 0, false, false, true);
 				}
 			}
 		}
@@ -199,8 +213,8 @@ public class MT_Fusion extends MT_Multiblock {
 	@Override
 	protected void finishWork() {
 		MT_FluidPort p = getFluidPort(0, true);
-		if (!fluidOutput.isEmpty() && p != null && this.fluidOut != null && this.fluidOut.length == 1)
-			p.tank.fillInternal(this.fluidOut[0], true);
+		if (!fluidOutput.isEmpty() && p != null && fluidOut != null && fluidOut.length == 1)
+			p.tank.fillInternal(fluidOut[0], true);
 		super.finishWork();
 	}
 	
@@ -210,6 +224,7 @@ public class MT_Fusion extends MT_Multiblock {
 		displayRF = tag.getBoolean("dispRF");
 		neut = tag.getBoolean("neut");
 		production = tag.getInteger("output");
+		boost = tag.getByte("boost");
 	}
 
 	@Override
@@ -218,6 +233,7 @@ public class MT_Fusion extends MT_Multiblock {
 		if (displayRF) tag.setBoolean("dispRF", displayRF);
 		if (neut) tag.setBoolean("neut", neut);
 		if (production > 0) tag.setInteger("output", production);
+		if (boost > 0) tag.setByte("boost", (byte)boost);
 	}
 	
 	@Override
@@ -241,6 +257,23 @@ public class MT_Fusion extends MT_Multiblock {
 	public boolean canExtractItem(int sl, ItemStack st, EnumFacing dir) {
 		return sl == 1;
 	}
+
+	@Override
+	@Nonnull
+	public void getDrops(ArrayList<ItemStack> ls) {
+		super.getDrops(ls);
+		if (boost > 0) ls.add(new ItemStack(JSTItems.item1, Math.min(boost, 64), 13003));
+	}
+
+	@Override
+	public boolean tryUpgrade(String id) {
+		if (boost < (tier * 8) && id.equals("jst_fusion")) {
+			if (boost < 0) boost = 0;
+			boost++;
+			return true;
+		}
+		return false;
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -254,7 +287,7 @@ public class MT_Fusion extends MT_Multiblock {
 	public TextureAtlasSprite[] getTexture() {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++)
-			ret[n] = getTETex(this.baseTile.facing == JSTUtils.getFacingFromNum(n) ? "screen1" : "fr" + tier);
+			ret[n] = getTETex(baseTile.facing == JSTUtils.getFacingFromNum(n) ? "screen1" : "fr" + tier);
 		return ret;
 	}
 	
@@ -265,6 +298,6 @@ public class MT_Fusion extends MT_Multiblock {
 	}
 	
 	public byte getState() {
-		return (byte)(this.baseTile.isActive() ? neut ? 2 : 1 : 0);
+		return (byte)(baseTile.isActive() ? neut ? 2 : 1 : 0);
 	}
 }
