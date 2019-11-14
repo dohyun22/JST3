@@ -256,9 +256,9 @@ public class MRecipeLoader extends Loadable {
 		obj = new OreDictStack("blockGold");
 		MRecipes.addAssemblerRecipe(new Object[] {obj, obj, obj, obj, new ItemStack(Items.APPLE), obj, obj, obj, obj}, null, new ItemStack(Items.GOLDEN_APPLE, 1, 1), ItemStack.EMPTY, 30, 800);
 		obj = new ItemStack(Items.LEATHER, 2);
-		obj2 = new OreDictStack(pf + "Aluminum", 2);
-		st = new ItemStack(Blocks.END_ROD, 4);
-		MRecipes.addAssemblerRecipe(new Object[] {obj, obj2, obj, obj, obj2, obj, st, new ItemStack(Items.SHULKER_SHELL), st}, null, new ItemStack(Items.ELYTRA), ItemStack.EMPTY, 50, 1200);
+		obj2 = new OreDictStack(pf + "Aluminum", 4);
+		st = new ItemStack(Blocks.END_ROD, 5);
+		MRecipes.addAssemblerRecipe(new Object[] {obj, obj2, obj, obj, obj2, obj, st, new OreDictStack("gemDiamond", 5), st}, null, new ItemStack(Items.ELYTRA), ItemStack.EMPTY, 50, 1200);
 		
 		obj = new ItemStack(JSTItems.item1, 1, 105);
 		MRecipes.addAssemblerRecipe(new Object[] {null, new OreDictStack("dustRedstone", 2), null, null, new OreDictStack(pf + "Silicon"), null, null, obj, null}, null, new ItemStack(JSTItems.item1, 10, 85), null, 10, 250);

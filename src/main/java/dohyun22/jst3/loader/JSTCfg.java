@@ -126,7 +126,7 @@ public class JSTCfg {
 			harderCircuit = pr.getBoolean();
 
 			pr = cfg.get(c, "OnlyUseJSTCircuit", false);
-			pr.setComment("If true, JST Circuits can only be used in JST Recipes.");
+			pr.setComment("If true, JST recipes can only use JST circuits.");
 			onlyUseJSTCircuit = pr.getBoolean();
 
 			pr = cfg.get(c, "OvervoltageExplosion", false);
@@ -219,11 +219,11 @@ public class JSTCfg {
 				nerfCS = pr.getBoolean();
 			}
 
-			if (gtceLoaded) {
+			/*if (gtceLoaded) {
 				pr = cfg.get(c, "DisableGTOverlaps", false);
 				pr.setComment("If true, Overlapping features between JST and GTCE will be disabled.");
 				gtOverlaps = pr.getBoolean();
-			}
+			}*/
 
 			if (Loader.isModLoaded("forestry")) {
 				pr = cfg.get(c, "DarkerHive", false);
