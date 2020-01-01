@@ -56,7 +56,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 
 	@Override
 	public long getMaxEnergy() {
-		return JSTUtils.getVoltFromTier(tier) * 50L;
+		return JSTUtils.getVoltFromTier(tier) * 26L;
 	}
 
 	@Override
@@ -96,10 +96,11 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 
 		int a = JSTUtils.getVoltFromTier(tier);
 		if (boost) a *= 4;
-		if (baseTile.energy >= JSTUtils.getVoltFromTier(tier) * 40L) {
+		long v = JSTUtils.getVoltFromTier(tier);
+		if (baseTile.energy >= v * 22L) {
 			for (int n = 0; n < getInvSize(); n++)
 				baseTile.energy -= JSTUtils.chargeItem(inv.get(n), a, tier, false, false);
-		} else if (baseTile.energy < JSTUtils.getVoltFromTier(tier) * 10L) {
+		} else if (baseTile.energy < v * 5L) {
 			for (int n = 0; n < getInvSize(); n++)
 				baseTile.energy += JSTUtils.dischargeItem(inv.get(n), a, tier, false, false);
 		}
@@ -125,7 +126,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (baseTile != null && !isClient()) pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+		if (!isClient()) pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 

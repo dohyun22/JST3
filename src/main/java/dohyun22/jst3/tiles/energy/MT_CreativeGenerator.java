@@ -42,6 +42,12 @@ public class MT_CreativeGenerator extends MetaTileBase implements IGenericGUIMTE
 	public TextureAtlasSprite[] getDefaultTexture() {
 		return getSingleTETex("creativegen");
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getModelKey() {
+		return "jst_crgen";
+	}
 	
 	@Override
 	public boolean canProvideEnergy() {
@@ -69,32 +75,37 @@ public class MT_CreativeGenerator extends MetaTileBase implements IGenericGUIMTE
 	public void writeToNBT(NBTTagCompound tag) {
 		tag.setInteger("out", out);
 	}
-	
-	@Override
-	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		GUIGeneric r = new GUIGeneric((ContainerGeneric)getServerGUI(id, inv, te));
-		r.addButton(10, 39, 26, 20, 0, "+1", false);
-		r.addButton(36, 39, 26, 20, 1, "+10", false);
-		r.addButton(62, 39, 26, 20, 2, "+100", false);
-		r.addButton(88, 39, 26, 20, 3, "+1k", false);
-		r.addButton(114, 39, 26, 20, 4, "+10k", false);
-		r.addButton(140, 39, 26, 20, 5, "+100k", false);
-
-		r.addButton(10, 59, 26, 20, 6, "-1", false);
-		r.addButton(36, 59, 26, 20, 7, "-10", false);
-		r.addButton(62, 59, 26, 20, 8, "-100", false);
-		r.addButton(88, 59, 26, 20, 9, "-1k", false);
-		r.addButton(114, 59, 26, 20, 10, "-10k", false);
-		r.addButton(140, 59, 26, 20, 11, "-100k", false);
-
-		r.addText(80, 16, 0);
-		return r;
-	}
 
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
 		ContainerGeneric r = new ContainerGeneric(te);
-		r.addPlayerSlots(inv);
+		r.addPlayerSlots(inv, 31, 84);
+		return r;
+	}
+
+	@Override
+	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
+		GUIGeneric r = new GUIGeneric((ContainerGeneric)getServerGUI(id, inv, te), 222, 166);
+		r.addButton(7, 39, 26, 20, 0, "+1", false);
+		r.addButton(33, 39, 26, 20, 1, "+10", false);
+		r.addButton(59, 39, 26, 20, 2, "+100", false);
+		r.addButton(85, 39, 26, 20, 3, "+1k", false);
+		r.addButton(111, 39, 26, 20, 4, "+10k", false);
+		r.addButton(137, 39, 26, 20, 5, "+100k", false);
+		r.addButton(163, 39, 26, 20, 6, "+1M", false);
+		r.addButton(189, 39, 26, 20, 7, "+10M", false);
+
+		r.addButton(7, 59, 26, 20, 8, "-1", false);
+		r.addButton(33, 59, 26, 20, 9, "-10", false);
+		r.addButton(59, 59, 26, 20, 10, "-100", false);
+		r.addButton(85, 59, 26, 20, 11, "-1k", false);
+		r.addButton(111, 59, 26, 20, 12, "-10k", false);
+		r.addButton(137, 59, 26, 20, 13, "-100k", false);
+		r.addButton(163, 59, 26, 20, 14, "-1M", false);
+		r.addButton(189, 59, 26, 20, 15, "-10M", false);
+
+		r.addText(80, 16, 0);
+		r.addInv(31, 84);
 		return r;
 	}
 
@@ -109,12 +120,12 @@ public class MT_CreativeGenerator extends MetaTileBase implements IGenericGUIMTE
 	}
 
 	@Override
-	public void handleBtn(int id) {
-		if (id >= 0 && id <= 11) {
-			int m = id % 6;
-			m = (int)Math.pow(10, m);
-			if (id >= 6) m *= -1;
-			out = Math.max(0, out + m);
+	public void handleBtn(int id, EntityPlayer pl) {
+		if (id >= 0 && id <= 15) {
+			long m = id % 8;
+			m = (long)Math.pow(10, m);
+			if (id >= 8) m *= -1;
+			out = Math.max(0, (int)Math.min(Integer.MAX_VALUE, (out + m)));
 		}
 	}
 

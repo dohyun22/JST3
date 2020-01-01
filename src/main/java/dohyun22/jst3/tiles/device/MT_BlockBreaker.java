@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
+
+import com.mojang.authlib.GameProfile;
 
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.CompatBWM;
@@ -31,11 +34,14 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_BlockBreaker extends MetaTileBase {
+	private static final GameProfile BREAKER = new GameProfile(UUID.fromString("88092c88-13ed-11e9-ab14-d663bd873d95"), "[JSTBreaker]");
 	private boolean silkTouch;
 
 	@Override
@@ -45,11 +51,11 @@ public class MT_BlockBreaker extends MetaTileBase {
 	
 	@Override
 	public void onPostTick() {
+		if (isClient()) return;
 		World w = getWorld();
-		if (w.isRemote) return;
-		EnumFacing f = this.getFacing();
-		BlockPos p = JSTUtils.getOffset(this.getPos(), JSTUtils.getOppositeFacing(f), 1);
-		TileEntity te = this.getWorld().getTileEntity(p);
+		EnumFacing f = getFacing();
+		BlockPos p = JSTUtils.getOffset(getPos(), JSTUtils.getOppositeFacing(f), 1);
+		TileEntity te = getWorld().getTileEntity(p);
 		if (te instanceof IInventory) {
 			IInventory iinv = ((IInventory) te);
 			if (!JSTUtils.checkInventoryFull(iinv, f)) {
@@ -59,14 +65,14 @@ public class MT_BlockBreaker extends MetaTileBase {
 						if (st.isEmpty()) {
 							iinv.markDirty();
 						} else {
-							this.setInventorySlotContents(n, st);
+							setInventorySlotContents(n, st);
 						}
 					}
 				}
 			}
 		} else if (f != null && !w.getBlockState(p).isSideSolid(w, p, f)) {
-			for (int n = 0; n < this.inv.size(); n++) {
-				ItemStack st = this.inv.get(n);
+			for (int n = 0; n < inv.size(); n++) {
+				ItemStack st = inv.get(n);
 				if (!st.isEmpty()) {
 					JSTUtils.dropEntityItemInPos(w, p, st);
 					this.inv.set(n, ItemStack.EMPTY);
@@ -80,14 +86,14 @@ public class MT_BlockBreaker extends MetaTileBase {
 	public void onBlockUpdate() {
 		if (isClient()) return;
 		boolean rs = isRSPowered();
-		if (baseTile.setActive(rs) && rs && this.baseTile.isEmpty()) {
+		if (baseTile.setActive(rs) && rs && baseTile.isEmpty()) {
 			EnumFacing f = getFacing();
 			if (f == null) return;
 			BlockPos p = JSTUtils.getOffset(getPos(), f, 1);
 			World w = getWorld();
 			IBlockState bs = w.getBlockState(p);
 			Block b = bs.getBlock();
-			if (!b.isAir(bs, w, p) && bs.getBlockHardness(w, p) >= 0.0F) {
+			if (!b.isAir(bs, w, p) && bs.getBlockHardness(w, p) >= 0.0F && JSTUtils.canPlayerBreakThatBlock(FakePlayerFactory.get((WorldServer)w, BREAKER), p)) {
 				if (dontCollectDrop(w, p)) {
 					w.destroyBlock(p, true);
 				} else {
@@ -95,7 +101,8 @@ public class MT_BlockBreaker extends MetaTileBase {
 						inv.set(0, b.getItem(w, p, bs));
 					} else {
 						List<ItemStack> drops = JSTUtils.getBlockDrops(w, p, bs, 0, 1, false, null, true);
-						for (int n = 0; n < Math.min(getInvSize(), drops.size()); n++) inv.set(n, drops.get(n).copy());
+						for (int n = 0; n < Math.min(getInvSize(), drops.size()); n++)
+							inv.set(n, drops.get(n).copy());
 					}
 					w.destroyBlock(p, false);
 				}
@@ -103,7 +110,7 @@ public class MT_BlockBreaker extends MetaTileBase {
 		}
 	}
 	
-	private static boolean dontCollectDrop(World w, BlockPos p) {
+	public static boolean dontCollectDrop(World w, BlockPos p) {
 		if (w.getBlockState(p).getBlock() instanceof BlockDoor) return true;
 		TileEntity te = w.getTileEntity(p);
 		if (te == null) return false;
@@ -152,12 +159,12 @@ public class MT_BlockBreaker extends MetaTileBase {
 	
 	@Override
 	public void readSyncableDataFromNBT(NBTTagCompound tag) {
-		this.silkTouch = tag.getBoolean("st");
+		silkTouch = tag.getBoolean("st");
 	}
 
 	@Override
 	public void writeSyncableDataToNBT(NBTTagCompound tag) {
-		tag.setBoolean("st", this.silkTouch);
+		tag.setBoolean("st", silkTouch);
 	}
 	
 	@Override
@@ -175,7 +182,7 @@ public class MT_BlockBreaker extends MetaTileBase {
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
 		TextureAtlasSprite s = getTETex("basic_side");
-		return new TextureAtlasSprite[] {getTETex("st_out") , getTETex("block_breaker_off"), s, s, s, s};
+		return new TextureAtlasSprite[] {getTETex("st_out"), getTETex("block_breaker_off"), s, s, s, s};
 	}
 
 	@Override

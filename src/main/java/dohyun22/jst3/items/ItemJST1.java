@@ -19,7 +19,6 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.api.IItemJEU;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.utils.JSTUtils;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

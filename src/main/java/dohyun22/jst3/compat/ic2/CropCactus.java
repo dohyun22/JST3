@@ -11,7 +11,8 @@ import net.minecraft.util.DamageSource;
 public class CropCactus extends CropJST {
 	
 	public CropCactus() {
-		super("cactus", "Notch", 4, 1, -150, null, null, new ItemStack[] {new ItemStack(Blocks.CACTUS)}, new String[] {"Cactus", "Green", "Desert"}, 2, 1, 2, 3, 3, 2);
+		super("cactus", "Notch", 4, 1, -150, new String[] {"Cactus", "Green", "Desert"}, 2, 0, 1, 3, 1, 2);
+		drop(1, Blocks.CACTUS).fin();
 	}
 
 	@Override

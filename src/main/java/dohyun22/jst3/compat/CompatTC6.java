@@ -9,12 +9,6 @@ import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.item.ItemStack;
 
 public class CompatTC6 extends Loadable {
-
-	@Override
-	public String getRequiredMod() {
-		return "thaumcraft";
-	}
-
 	@Override
 	public void postInit() {
 		ItemStack st = JSTUtils.getModItemStack("thaumcraft:quicksilver");

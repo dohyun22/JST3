@@ -69,7 +69,8 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
-		return new TextureAtlasSprite[] {getTieredTex(2), getTieredTex(2), getTieredTex(2), getTieredTex(2), getTieredTex(2), getTETex("gti_side")};
+		TextureAtlasSprite t = getTieredTex(2);
+		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("gti_side")};
 	}
 	
 	@Override
@@ -78,7 +79,7 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 		TextureAtlasSprite[] ret = new TextureAtlasSprite[6];
 		for (byte n = 0; n < ret.length; n++) {
 			if (this.baseTile.facing == JSTUtils.getFacingFromNum(n)) {
-				ret[n] = getTETex("gti_side" + (this.baseTile.isActive() ? "" : "_off"));
+				ret[n] = getTETex("gti_side" + (baseTile.isActive() ? "" : "_off"));
 			} else {
 				ret[n] = getTieredTex(2);
 			}

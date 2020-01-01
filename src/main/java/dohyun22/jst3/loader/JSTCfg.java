@@ -7,7 +7,7 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
 
 public class JSTCfg {
-	public static boolean ic2Loaded, gtceLoaded, rongGtLoaded, bcLoaded, teLoaded, tfLoaded, ticLoaded, rcLoaded, ieLoaded;
+	public static boolean ic2Loaded, gtceLoaded, rongGtLoaded, bcLoaded, teLoaded, tfLoaded, ticLoaded, rcLoaded, ieLoaded, tcLoaded;
 	private static Configuration cfgObj;
 	
 	//Config related stuff
@@ -42,6 +42,7 @@ public class JSTCfg {
 	public static boolean BuffIEDieselGen;
 	public static boolean gtOverlaps;
 	public static boolean removeGolemMelting;
+	public static boolean suppModFarmland;
 
 	public static void loadCfg(Configuration cfg) {
 		cfgObj = cfg;
@@ -217,6 +218,10 @@ public class JSTCfg {
 				pr = cfg.get(c, "RestrictCropFarmland", false);
 				pr.setComment("If true, IC2 Crops can't be placed on non-farmland blocks.");
 				nerfCS = pr.getBoolean();
+
+				pr = cfg.get(c, "SupportModFarmland", true);
+				pr.setComment("If true, IC2 Crops can be placed on other mod's farmlands.");
+				suppModFarmland = pr.getBoolean();
 			}
 
 			/*if (gtceLoaded) {

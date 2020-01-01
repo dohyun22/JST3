@@ -100,6 +100,10 @@ public class ContainerGeneric extends ContainerMTE {
 		addPlayerInventorySlots(inv, 8, 84);
 	}
 
+	public void addPlayerSlots(IInventory inv, int x, int y) {
+		addPlayerInventorySlots(inv, x, y);
+	}
+
 	public int getGuiData(int idx) {
 		if (guiDatas == null || idx < 0 || idx >= guiDatas.length) return 0;
 		return guiDatas[idx];
@@ -110,7 +114,7 @@ public class ContainerGeneric extends ContainerMTE {
 		int n = si / 1000;
 		boolean flag = false;
 		if (te.mte instanceof IGenericGUIMTE && n == 1) {
-			((IGenericGUIMTE)te.mte).handleBtn(si % 1000);
+			((IGenericGUIMTE)te.mte).handleBtn(si % 1000, pl);
 			flag = true;
 		}
 		if (te.mte instanceof IConfigurable) {

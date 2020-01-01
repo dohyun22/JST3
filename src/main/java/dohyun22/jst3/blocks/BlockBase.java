@@ -65,14 +65,14 @@ public class BlockBase extends Block {
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((Integer) state.getValue(META)).intValue();
+	public int getMetaFromState(IBlockState bs) {
+		return ((Integer) bs.getValue(META)).intValue();
 	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+	public ItemStack getPickBlock(IBlockState bs, RayTraceResult target, World world, BlockPos pos,
 			EntityPlayer player) {
-		return new ItemStack(this, 1, ((Integer) state.getValue(META)).intValue());
+		return new ItemStack(this, 1, ((Integer) bs.getValue(META)).intValue());
 	}
 	
 	public boolean isEnabled(int n) {
@@ -83,8 +83,8 @@ public class BlockBase extends Block {
 		return getMeta(w.getBlockState(p));
 	}
 
-	public static int getMeta(IBlockState st) {
-		return ((Integer) st.getValue(META)).intValue();
+	public static int getMeta(IBlockState bs) {
+		return ((Integer) bs.getValue(META)).intValue();
 	}
 	
 	public void setHarvestLevel (String tool, int lv, int i) {

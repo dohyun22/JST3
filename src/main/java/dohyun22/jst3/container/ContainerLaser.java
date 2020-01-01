@@ -2,7 +2,7 @@ package dohyun22.jst3.container;
 
 import dohyun22.jst3.items.ItemJST1;
 import dohyun22.jst3.items.JSTItems;
-import dohyun22.jst3.items.behaviours.IB_Laser;
+import dohyun22.jst3.items.behaviours.tool.IB_Laser;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

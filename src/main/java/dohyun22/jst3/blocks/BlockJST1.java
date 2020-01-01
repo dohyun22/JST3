@@ -221,6 +221,11 @@ public class BlockJST1 extends BlockBase implements IDismantleable, IWrenchable 
     			w.spawnParticle(EnumParticleTypes.REDSTONE, p.getX() + r.nextFloat(), p.getY() + 0.1D + r.nextFloat() * 0.8D, p.getZ() + r.nextFloat(), 0.3D, 1.0D, 0.5D);
     	}
 	}
+
+	@Override
+	public boolean causesSuffocation(IBlockState s) {
+		return getMeta(s) != 7;
+	}
 	
 	@Override
     public MapColor getMapColor(IBlockState s, IBlockAccess w, BlockPos p) {

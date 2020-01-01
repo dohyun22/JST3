@@ -12,11 +12,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CompatPR extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "projectred-core";
-	}
-
-	@Override
 	public void postInit() {
 		MRecipes.addPressRecipe(new OreDictStack("ingotRedAlloy"), ItemList.molds[0], JSTUtils.getModItemStack("projectred-transmission:wire", 4), null, 10, 64);
 		OreDictionary.registerOre("dustElectrotine", new ItemStack(JSTItems.item1, 1, 27));

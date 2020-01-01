@@ -455,9 +455,9 @@ public class TileEntityMeta extends TileEntity implements ITickable, ISidedInven
 	
 	public boolean createNewMetatileEntity(int id) {
 		MetaTileBase te = MetaTileBase.getTE(id);
-		if (id < 0 || id >= maxID || te == null)
+		if (te == null)
 			return false;
-		if (id != 0) {
+		if (id > 0) {
 			if (hasValidMTE()) {
 				mte.invalidate();
 				mte.baseTile = null;

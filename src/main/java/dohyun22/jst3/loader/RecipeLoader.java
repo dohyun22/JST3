@@ -50,17 +50,7 @@ import net.minecraftforge.registries.RegistryManager;
 
 public class RecipeLoader extends Loadable {
 	private static int rID;
-	
-	@Override
-	public boolean canLoad() {
-		return true;
-	}
-	
-	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-	
+
 	@Override
 	public void init() {
 		GameRegistry.addSmelting(new ItemStack(JSTBlocks.blockNO, 1, 0), new ItemStack(Items.COAL), 0.5F);
@@ -123,6 +113,7 @@ public class RecipeLoader extends Loadable {
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 37), new ItemStack(JSTItems.item1, 1, 36), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 71), new ItemStack(JSTItems.item1, 1, 70), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 79), new ItemStack(JSTItems.item1, 1, 78), 0.0F);
+		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 93), new ItemStack(JSTItems.item1, 1, 92), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 96), new ItemStack(JSTItems.item1, 1, 95), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 39), new ItemStack(JSTItems.item1, 1, 38), 0.0F);
 		GameRegistry.addSmelting(new ItemStack(JSTItems.item1, 1, 104), new ItemStack(JSTItems.item1, 1, 70), 0.0F);
@@ -220,6 +211,7 @@ public class RecipeLoader extends Loadable {
 		st = new ItemStack(JSTItems.item1, 1, 9000);
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10046), "IR", " C", " C", 'I', "ingotIron", 'R', "dyeRed", 'C', st);
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10047), "DII", "IM ", "I B", 'D', Blocks.DISPENSER, 'I', "ingotAluminum", 'M', ItemList.motors[1], 'B', new ItemStack(JSTItems.item1, 1, 12000));
+		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10049), "I I", "I I", "SRS", 'I', JSTUtils.oreValid("plateIron") ? "plateIron" : "ingotIron", 'S', "stickWood", 'R', "dyeRed");
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10050), "  N", " B ", "I  ", 'N', "dustNikolite", 'B', new ItemStack(JSTItems.item1, 1, 12000), 'I', "ingotIron");
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 10060), "III", "CCC", "CCC", 'I', "ingotIron", 'C', st, 'I', "ingotIron");
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 10061), "BIB", 'B', new ItemStack(JSTItems.item1, 1, 10060), 'I', "ingotIron");
@@ -248,9 +240,9 @@ public class RecipeLoader extends Loadable {
 			addShapedRecipe(new ItemStack(JSTItems.item1, 1, 88), "RNR", "GCG", "RNR", 'R', "dustRedstone", 'G', Items.GLOWSTONE_DUST, 'N', "dustNikolite", 'C', ItemList.circuits[1]);
 			addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 88), "dustRedstone", "dustRedstone", Items.GLOWSTONE_DUST, Items.GLOWSTONE_DUST, ItemList.circuits[2]);
 			addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 88), new ItemStack(JSTItems.item1, 1, 83), new ItemStack(JSTItems.item1, 1, 83), obj2, ItemList.circuits[1]);
+			addShapedRecipe(new ItemStack(JSTItems.item1, 1, 28), "BGB", "RCR", "BGB", 'G', new ItemStack(JSTItems.item1, 1, 106), 'B', pf + "BlueAlloy", 'R', pf + "RedAlloy", 'C', ItemList.circuits[3]);
+			addShapedRecipe(new ItemStack(JSTItems.item1, 1, 28), "TRT", "BCB", 'T', new ItemStack(JSTItems.item1, 1, 83), 'R', pf + "RedAlloy", 'B', new ItemStack(JSTItems.item1, 1, 106), 'C', ItemList.circuits[3]);
 		}
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 28), "BGB", "RCR", "BGB", 'G', new ItemStack(JSTItems.item1, 1, 106), 'B', pf + "BlueAlloy", 'R', pf + "RedAlloy", 'C', ItemList.circuits[3]);
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 28), "TRT", "BCB", 'T', new ItemStack(JSTItems.item1, 1, 83), 'R', pf + "RedAlloy", 'B', new ItemStack(JSTItems.item1, 1, 106), 'C', ItemList.circuits[3]);
 		addSHWRecycle(new ItemStack(JSTItems.item1, 1, 103), "NSN", "SBS", "NSN", 'N', new ItemStack(JSTItems.item1, 1, 150), 'S', "gemSapphire", 'B', "gemDiamond");
 		addShapedRecipe(new ItemStack(JSTItems.item1, 3, 152), " G ", "GWG", "RWR", 'G', Blocks.GLASS, 'W', ItemList.uninsCables[1], 'R', "dustRedstone");
 		addShapedRecipe(new ItemStack(JSTItems.item1, 3, 190), "PP", 'P', Blocks.WOODEN_PRESSURE_PLATE);
@@ -264,6 +256,7 @@ public class RecipeLoader extends Loadable {
 		addShapedRecipe(new ItemStack(JSTItems.item1, 16, 9000), " I ", "IGI", " I ", 'I', "plateAluminum", 'G', Blocks.GLASS_PANE);
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 67), new ItemStack(JSTItems.item1, 1, 9014));
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 108), new ItemStack(JSTItems.item1, 1, 9018));
+		addShapelessRecipe(new ItemStack(Items.MILK_BUCKET), new ItemStack(JSTItems.item1, 1, 15), Items.BUCKET);
 		
 		obj = new OreDictStack(JSTCfg.ic2Loaded && JSTUtils.oreValid("platePlatinum") ? "platePlatinum" : JSTUtils.oreValid("ingotPlatinum") ? "ingotPlatinum" : "gemDiamond");
 		addSHWRecycle(new ItemStack(JSTItems.item1, 1, 11), "AIB", "NCN", "DcE",
@@ -318,7 +311,7 @@ public class RecipeLoader extends Loadable {
 					'I', ItemList.circuits[n + 1],
 					'M', ItemList.machineBlock[n + 1]
 					);
-			
+
 			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 190 + n), 
 					"mCm", "cMD",
 					'm', n >= 3 ? "plateElectricalSteel" : "ingotIron",
@@ -327,6 +320,8 @@ public class RecipeLoader extends Loadable {
 					'M', ItemList.machineBlock[n],
 					'D', ItemList.cables[n + 1]
 					);
+
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6070 + n), "ggg", "gmg", "ggg", 'g', Blocks.GLASS, 'm', ItemList.machineBlock[n]);
 		}
 
 		st = new ItemStack(JSTItems.item1, 1, 9001);
@@ -959,7 +954,7 @@ public class RecipeLoader extends Loadable {
 
 		addShapedRecipe(new ItemStack(JSTBlocks.block2, 2, 9), "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 6));
 
-		addShapedRecipe(new ItemStack(JSTBlocks.blockOHW, 32), "HHH", "CCC", 'H', ItemList.uninsCables[4], 'C', ItemList.uninsCables[2]);
+		addShapedRecipe(new ItemStack(JSTBlocks.blockOHW, 16), "HHH", "CCC", 'H', ItemList.uninsCables[4], 'C', ItemList.uninsCables[2]);
 
 		obj = new Object[] {new ItemStack(Blocks.GLASS), "gemPeridot", "gemSapphire", "gemRuby", "gemDiamond", new ItemStack(JSTItems.item1, 1, 103), "dustNaquadah", "dustUnobtainium",
 				new ItemStack(JSTItems.item1, 1, 12004), new ItemStack(JSTItems.item1, 1, 12011), new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 12018)

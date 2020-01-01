@@ -27,7 +27,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -36,12 +35,6 @@ public class CompatForestry extends Loadable {
 	public static Item IridiumFrame = null;
 
 	@Override
-	public String getRequiredMod() {
-		return "forestry";
-	}
-
-	@Override
-	@Method(modid = "forestry")
 	public void preInit() {
 		IridiumFrame = new ItemIridiumFrame();
 		ForgeRegistries.ITEMS.register(IridiumFrame);
@@ -49,7 +42,6 @@ public class CompatForestry extends Loadable {
 	}
 
 	@Override
-	@Method(modid = "forestry")
 	public void postInit() {
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_compound"));
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_bio"));

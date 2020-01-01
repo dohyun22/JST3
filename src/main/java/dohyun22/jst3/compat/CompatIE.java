@@ -40,7 +40,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.function.Predicate;
@@ -53,12 +52,6 @@ import blusunrize.immersiveengineering.api.energy.DieselHandler;
 public class CompatIE extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "immersiveengineering";
-	}
-
-	@Override
-	@Method(modid = "immersiveengineering")
 	public void init() {
 		ThermoelectricHandler.registerSourceInKelvin("blockNaquadah", 4000);
 		ThermoelectricHandler.registerSourceInKelvin("blockNaquadahAlloy", 3000);
@@ -154,7 +147,7 @@ public class CompatIE extends Loadable {
 						w.createExplosion(pl, p.getX() + 0.5F, p.getY() + 0.5F, p.getZ() + 0.5F, 0.5F + w.rand.nextFloat(), false);
 				}
 			}
-			
+
 			@Override
 			public void applyToEntity(EntityLivingBase elb, @Nullable EntityPlayer pl, ItemStack st, Fluid f) {
 				super.applyToEntity(elb, pl, st, f);
@@ -168,12 +161,14 @@ public class CompatIE extends Loadable {
 		ChemthrowerHandler.registerEffect("potassium", eff);
 		ChemthrowerHandler.registerEffect("rubidium", eff);
 		ChemthrowerHandler.registerEffect("cesium", eff);
-		ChemthrowerHandler.registerEffect("acid", new ChemthrowerHandler.ChemthrowerEffect_Damage(IEDamageSources.acid, 4.0F));
-		
+		eff = new ChemthrowerHandler.ChemthrowerEffect_Damage(IEDamageSources.acid, 4.0F);
+		ChemthrowerHandler.registerEffect("acid", eff);
+		ChemthrowerHandler.registerEffect("sulphuricacid", eff);
+
 		RailgunHandler.registerProjectileProperties(new IngredientStack("ingotTungsten"), 40.0, 2.0).setColourMap(new int[][] { { 0x5A5A64, 0x5A5A64, 0x5A5A64, 0x464650, 0x32323C, 0x32323C } });
 		RailgunHandler.registerProjectileProperties(new IngredientStack("ingotTitanium"), 35.0, 1.1).setColourMap(new int[][] { { 0xBE78C8, 0xBE78C8, 0xBE78C8, 0x963CA0, 0x5A2864, 0x5A2864 } });
 		RailgunHandler.registerProjectileProperties(new IngredientStack("ingotIridium"), 60.0, 2.5).setColourMap(new int[][] { { 0xC8FAFA, 0xC8FAFA, 0xC8FAFA, 0xB4E6E6, 0x96D2D2, 0x96D2D2 } });
-	
+
 		ExcavatorHandler.addMineral("Nikolite", 25, 0.2F, new String[] { "oreNikolite", "oreDiamond" }, new float[] { 0.97F, 0.03F });
 		ExcavatorHandler.addMineral("Tungsten", 5, 0.35F, new String[] { "oreTungsten", "oreIron", "dustLithium" }, new float[] { 0.3F, 0.6F, 0.1F });
 		ExcavatorHandler.addMineral("Sphalerite", 20, 0.2F, new String[] { "oreZinc", "oreSulfur" }, new float[] { 0.5F, 0.5F });

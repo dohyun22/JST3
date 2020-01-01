@@ -25,17 +25,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class CompatIFG extends Loadable {
-
-	@Override
-	public String getRequiredMod() {
-		return "industrialforegoing";
-	}
 
 	@Override
 	public void preInit() {
@@ -68,14 +62,12 @@ public class CompatIFG extends Loadable {
 		}
 	}
 
-	@Method(modid="industrialforegoing")
 	@SubscribeEvent
 	public void regPlant(RegistryEvent.Register<PlantRecollectable> ev) {
 		IForgeRegistry<PlantRecollectable> reg = ev.getRegistry();
 		if (JSTCfg.ic2Loaded) reg.register(new PlantIC2Crop());
 	}
 
-	@Method(modid="industrialforegoing")
 	@SubscribeEvent
 	public void regStraw(RegistryEvent.Register<StrawHandler> ev) {
 		IForgeRegistry<StrawHandler> reg = ev.getRegistry();
@@ -107,7 +99,6 @@ public class CompatIFG extends Loadable {
 		if (in != null && !in.isEmpty()) try {IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(in, w));} catch (Throwable t) {}
 	}
 
-	@Method(modid="industrialforegoing")
 	private void regStrawEffect(IForgeRegistry<StrawHandler> reg, String fl, Object... eff) {
 		if (!FluidRegistry.isFluidRegistered(fl)) return;
 		reg.register(new CSH(fl, eff).setRegistryName("jst_" + fl));

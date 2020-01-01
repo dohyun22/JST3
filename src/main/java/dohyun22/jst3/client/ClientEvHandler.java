@@ -66,8 +66,9 @@ public class ClientEvHandler implements IResourceManagerReloadListener {
     public void onModelBake(ModelBakeEvent ev) {
         IRegistry<ModelResourceLocation, IBakedModel> reg = ev.getModelRegistry();
         String pf = JustServerTweak.MODID + ":";
-        reg.putObject(new ModelResourceLocation(pf + "BlockTE#normal"), ModelMTE.INSTANCE);
-        reg.putObject(new ModelResourceLocation(pf + "BlockTE#inventory"), ModelMTE.INSTANCE);
+        reg.putObject(new ModelResourceLocation(pf + "blockte#opaque=true"), ModelMTE.INSTANCE);
+        reg.putObject(new ModelResourceLocation(pf + "blockte#opaque=false"), ModelMTE.INSTANCE);
+        reg.putObject(new ModelResourceLocation(pf + "blockte#inventory"), ModelMTE.INSTANCE);
     }
     
 	@SubscribeEvent

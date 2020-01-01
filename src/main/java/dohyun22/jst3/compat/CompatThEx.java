@@ -28,16 +28,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CompatThEx extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-
-	@Override
-	public boolean canLoad() {
-		return JSTCfg.tfLoaded;
-	}
-	
-	@Override
 	public void init() {
 		if (!Loader.isModLoaded("thermalexpansion")) return;
 		try {
@@ -48,25 +38,25 @@ public class CompatThEx extends Loadable {
 			ThermalExpansionHelper.addCompressionFuel("heavyfuel", 480000);
 			ThermalExpansionHelper.addPulverizerRecipe(2000, new ItemStack(JSTItems.item1, 1, 73), new ItemStack(JSTItems.item1, 1, 74), ItemStack.EMPTY, 0);
 			ThermalExpansionHelper.addPulverizerRecipe(2000, new ItemStack(JSTItems.item1, 1, 89), new ItemStack(JSTItems.item1, 1, 90), ItemStack.EMPTY, 0);
-			
-			ItemStack st = new ItemStack(Items.REDSTONE, 4);
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotCopper", 1), new ItemStack(JSTItems.item1, 1, 25));
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustCopper", 1), new ItemStack(JSTItems.item1, 1, 25));
-			st = JSTUtils.getFirstItem("dustNikolite", 4);
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotSilver", 1), new ItemStack(JSTItems.item1, 1, 26));
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustSilver", 1), new ItemStack(JSTItems.item1, 1, 26));
-			st = JSTUtils.getFirstItem("ingotCopper", 3);
+
+			ItemStack st = new ItemStack(Items.REDSTONE, 4), st2 = JSTUtils.getFirstItem("ingotRedAlloy");
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotCopper", 1), st2);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustCopper", 1), st2);
+			st = JSTUtils.getFirstItem("dustNikolite", 4); st2 = JSTUtils.getFirstItem("ingotBlueAlloy");
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotSilver", 1), st2);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustSilver", 1), st2);
+			st = JSTUtils.getFirstItem("ingotCopper", 3); st2 = JSTUtils.getFirstItem("ingotBrass", 4);
 			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotZinc", 1), new ItemStack(JSTItems.item1, 4, 36));
 			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustZinc", 1), new ItemStack(JSTItems.item1, 4, 36));
 			st = JSTUtils.getFirstItem("dustCopper", 3);
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotZinc", 1), new ItemStack(JSTItems.item1, 4, 36));
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustZinc", 1), new ItemStack(JSTItems.item1, 4, 36));
-			st = JSTUtils.getFirstItem("ingotTin", 6);
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotLead", 4), new ItemStack(JSTItems.item1, 10, 183));
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustLead", 4), new ItemStack(JSTItems.item1, 10, 183));
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotZinc", 1), st2);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustZinc", 1), st2);
+			st = JSTUtils.getFirstItem("ingotTin", 6); st2 = JSTUtils.getFirstItem("ingotSolder", 10);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotLead", 4), st2);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustLead", 4), st2);
 			st = JSTUtils.getFirstItem("dustTin", 6);
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotLead", 4), new ItemStack(JSTItems.item1, 10, 183));
-			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustLead", 4), new ItemStack(JSTItems.item1, 10, 183));
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("ingotLead", 4), st2);
+			ThermalExpansionHelper.addSmelterRecipe(4000, st, JSTUtils.getFirstItem("dustLead", 4), st2);
 		} catch (Throwable t) {}
 	}
 

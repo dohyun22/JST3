@@ -60,7 +60,7 @@ public class PacketCustomAuxSFX implements IMessage {
 					if (d == 0)
 						d = 10;
 					if (d < 0) {
-						w.playSound(null, p, JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+						w.playSound(p.getX() + 0.5F, p.getY() + 0.5F, p.getZ() + 0.5F, JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.5F, 1.0F, false);
 						d *= -1;
 					}
 					for (int i = 0; i < d; i++)

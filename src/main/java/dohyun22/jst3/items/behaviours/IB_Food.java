@@ -30,6 +30,10 @@ public class IB_Food extends ItemBehaviour {
     	this.isDrink = drink;
     	this.effects = eff;
     }
+
+    public IB_Food(int amt, float sat) {
+    	this(amt, sat, 32, false, false);
+    }
 	
 	@Override
     public ItemStack onUseFinish(ItemStack st, World w, EntityLivingBase elb) {

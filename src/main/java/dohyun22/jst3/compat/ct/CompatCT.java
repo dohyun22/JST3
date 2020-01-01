@@ -7,11 +7,6 @@ import dohyun22.jst3.loader.Loadable;
 public class CompatCT extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "crafttweaker";
-	}
-
-	@Override
 	public void preInit() {
 		CTSupport.init();
 		CraftTweakerAPI.registerClass(CTSupport.class);

@@ -60,7 +60,7 @@ public class MetaTileCasingAdv extends MetaTileCasing {
 	}
 	
 	@Override
-	public int getLightOpacity() {
-		return opaque ? 255 : 0;
+	public boolean isOpaque() {
+		return opaque;
 	}
 }

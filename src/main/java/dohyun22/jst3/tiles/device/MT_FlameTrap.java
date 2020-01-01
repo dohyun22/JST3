@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import dohyun22.jst3.items.behaviours.IB_Flamethrower;
+import dohyun22.jst3.items.behaviours.tool.IB_Flamethrower;
 import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;

@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import dohyun22.jst3.blocks.BlockTileEntity;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.ic2.CompatIC2;
 import dohyun22.jst3.container.ContainerAdvChest;
@@ -247,8 +248,11 @@ public class EvHandler {
 							BlockSnapshot bn = new BlockSnapshot(w, p, w.getBlockState(p));
 							if (w.setBlockState(p, JSTBlocks.blockTile.getDefaultState(), 3)) {
 								TileEntityMeta tem = (TileEntityMeta) w.getTileEntity(p);
-								if (tem != null)
+								if (tem != null) {
 									tem.createNewMetatileEntity(mte);
+									if (tem.hasValidMTE() && !tem.mte.isOpaque())
+										BlockTileEntity.setState(w, p, false, 2);
+								}
 								if (ForgeEventFactory.onPlayerBlockPlace(ev.getEntityPlayer(), bn, ev.getFace(), ev.getHand()).isCanceled()) {
 									bn.restore(true, false);
 								} else {
@@ -380,7 +384,7 @@ public class EvHandler {
 			String s = ds.getDamageType();
 			if (s != null) {
 				s = s.toLowerCase();
-				if (s.contains("electric") || s.contains("flux")) {
+				if (s.contains("electric") || s.contains("flux") || s.startsWith("ierazorshock") || s.startsWith("iewireshock")) {
 					if (JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, ev.getEntityLiving()))
 						ev.setCanceled(true);
 				} else if (s.startsWith("radiation") && JSTDamageSource.hasFullHazmat(EnumHazard.RADIO, ev.getEntityLiving()))
@@ -461,7 +465,7 @@ public class EvHandler {
 	public void onWorldTick(TickEvent.WorldTickEvent ev) {
 		if (JSTCfg.fineDust && ev.phase == TickEvent.Phase.END) {
 			long t = ev.world.getTotalWorldTime();
-			if (t % 20 == 0) {
+			if (t % 10 == 0) {
 				int d = ev.world.provider.getDimension();
 				ArrayList<TileEntity> tes = toBeUnloaded.get(d);
 				if (tes != null) {

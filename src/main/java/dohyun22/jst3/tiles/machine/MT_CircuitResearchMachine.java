@@ -14,7 +14,7 @@ import dohyun22.jst3.client.gui.GUIGeneric;
 import dohyun22.jst3.container.ContainerCircuitResearch;
 import dohyun22.jst3.items.ItemMetaBase;
 import dohyun22.jst3.items.JSTItems;
-import dohyun22.jst3.items.behaviours.IB_BluePrint;
+import dohyun22.jst3.items.behaviours.misc.IB_BluePrint;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
@@ -308,7 +308,7 @@ public class MT_CircuitResearchMachine extends MetaTileEnergyInput {
 
 	private void makeBlueprint(int consume, int tier) {
 		ItemStack itemStack = new ItemStack(JSTItems.item1, 1, 10051);
-		IB_BluePrint.setSizeOfConsumedLeadAndTier(itemStack, consume, tier);
+		IB_BluePrint.setSizeOfConsumedSolderAndTier(itemStack, consume, tier);
 		this.setInventorySlotContents(4, itemStack);
 	}
 

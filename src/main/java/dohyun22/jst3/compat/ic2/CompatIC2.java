@@ -1,10 +1,7 @@
 package dohyun22.jst3.compat.ic2;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,52 +9,34 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
+import dohyun22.jst3.api.recipe.OreDictStack;
+import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.blocks.JSTBlocks;
-import dohyun22.jst3.compat.ic2.BehaviorNeutDoubler;
-import dohyun22.jst3.compat.ic2.BehaviourDepleted;
-import dohyun22.jst3.compat.ic2.BehaviourEnrichable;
-import dohyun22.jst3.compat.ic2.BehaviourFuelRod;
-import dohyun22.jst3.compat.ic2.BehaviourHeatExc;
-import dohyun22.jst3.compat.ic2.BehaviourHeatStorage;
-import dohyun22.jst3.compat.ic2.BehaviourVent;
-import dohyun22.jst3.compat.ic2.BehaviourVentComponent;
-import dohyun22.jst3.compat.ic2.CropElecMushroom;
-import dohyun22.jst3.compat.ic2.CropJST;
-import dohyun22.jst3.compat.ic2.ItemReactorComponent;
-import dohyun22.jst3.compat.ic2.CropJSTBase;
-import dohyun22.jst3.compat.ic2.ReactorItemBehaviour;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.loader.Loadable;
 import dohyun22.jst3.loader.RecipeLoader;
-import dohyun22.jst3.api.recipe.OreDictStack;
-import dohyun22.jst3.api.recipe.RecipeContainer;
 import dohyun22.jst3.recipes.ItemList;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTDamageSource;
+import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
-import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
 import ic2.api.crops.BaseSeed;
 import ic2.api.crops.CropSoilType;
 import ic2.api.crops.Crops;
 import ic2.api.crops.ICropTile;
 import ic2.api.info.Info;
 import ic2.api.recipe.IBasicMachineRecipeManager;
-import ic2.api.recipe.ICannerBottleRecipeManager;
 import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
-import ic2.api.recipe.IMachineRecipeManager;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.MachineRecipe;
 import ic2.api.recipe.Recipes;
 import ic2.api.tile.ExplosionWhitelist;
-import ic2.core.item.armor.ItemArmorHazmat;
 import ic2.core.uu.UuIndex;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -66,13 +45,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -82,19 +57,9 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CompatIC2 extends Loadable {
 	private static Field crop_dirty;
 	public static Item jstn;
+	public static int ic2_ver;
 
 	@Override
-	public boolean canLoad() {
-		return JSTCfg.ic2Loaded;
-	}
-
-	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-
-	@Override
-	@Method(modid = "ic2")
 	public void preInit() {
 		jstn = new ItemReactorComponent();
 		ForgeRegistries.ITEMS.register(jstn);
@@ -158,8 +123,14 @@ public class CompatIC2 extends Loadable {
 	}
 
 	@Override
-	@Method(modid = "ic2")
 	public void init() {
+		try {
+			CropLoader.load();
+		} catch (Throwable t) {
+			JSTUtils.LOG.info("Failed to load crops");
+			JSTUtils.LOG.catching(t);
+		}
+
 		ExplosionWhitelist.addWhitelistedBlock(Blocks.END_PORTAL);
 		ExplosionWhitelist.addWhitelistedBlock(Blocks.END_PORTAL_FRAME);
 		ExplosionWhitelist.addWhitelistedBlock(Blocks.END_GATEWAY);
@@ -210,56 +181,11 @@ public class CompatIC2 extends Loadable {
 		addUURecipe("crystalCertusQuartz", 1200);
 		addUURecipe("ingotNeutronium", 100000000);
 
-		if (JSTUtils.isClient()) CropJSTBase.tex = new ArrayList();
-
-		new CropJST("bluewheat", "Eloraam", 7, 1, 100, null, new Object[] {"oreNikolite", "blockNikolite"}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 27), new ItemStack(JSTItems.item1, 1, 59)}, new String[] {"Blue", "Nikolite", "Wheat"}, 6, 2, 1, 0, 3, 0);
-		new CropJST("coalplant", null, 5, 3, 0, null, new Object[] {"oreCoal", "blockCoal"}, new ItemStack[] {new ItemStack(Items.COAL), new ItemStack(Items.COAL, 1)}, new String[] {"Coal", "Fuel", "Carbon"}, 6, 1, 0, 1, 0, 0);
-		new CropJST("blazewood", null, 5, 3, 0, null, null, new ItemStack[] {new ItemStack(Items.BLAZE_POWDER), new ItemStack(Items.BLAZE_ROD)}, new String[] {"Blaze", "Wood"}, 7, 4, 0, 2, 2, 0);
-		new CropJST("thorwood", "GregoriusT", 4, 1, 250, null, new Object[] {"oreCoal", "blockCoal", "oreThorium", "blockThorium"}, new ItemStack[] {null, new ItemStack(JSTItems.item1, 1, 100)}, new String[] {"Thorium", "Radioactive", "Coal"}, 8, 5, 0, 0, 1, 1);
-		new CropJST("urania", "Alblaka", 4, 1, 250, null, new Object[] {"oreUranium", "blockUranium"}, new ItemStack[] {JSTUtils.getModItemStack("ic2:nuclear", 1, 6), JSTUtils.getModItemStack("ic2:nuclear", 1, 2)}, new String[] {"Uranium", "Radioactive", "Danger"}, 10, 5, 0, 0, 2, 1);
-		new CropJST("irium", "Alblaka", 4, 1, 400, null, new Object[] {"oreIridium", "blockIridium"}, new ItemStack[] {JSTUtils.getModItemStack("ic2:misc_resource", 1, 2)}, new String[] {"Iridium", "Rare", "Quantum"}, 13, 1, 0, 4, 0, 2);
-		new CropJST("diaplant", null, 5, 1, 0, null, new Object[] {"oreDiamond", "blockDiamond"}, new ItemStack[] {null, new ItemStack(Items.DIAMOND)}, new String[] {"Diamond", "Carbon", "Rare", "Crystal"}, 12, 0, 0, 0, 1, 1);
-		new CropJST("chorus", "jeb_", 4, 3, 0, new ItemStack(Items.CHORUS_FRUIT), null, new ItemStack[] {new ItemStack(Items.CHORUS_FRUIT)}, new String[] {"Chorus", "Ender"}, 6, 2, 0, 1, 2, 0);
-		new CropElecMushroom();
-		new CropJST("emeria", "jeb_", 5, 1, 0, null, new Object[] {"oreEmerald", "blockEmerald"}, new ItemStack[] {null, new ItemStack(Items.EMERALD)}, new String[] {"Emerald", "Green", "Crystal"}, 11, 0, 0, 0, 2, 1);
-		new CropJST("lapoleaf", null, 4, 1, 0, null, new Object[] {"oreLapis", "blockLapis"}, new ItemStack[] {null, new ItemStack(Items.DYE, 1, 4)}, new String[] {"Lapis Lazuli", "Blue", "Dye"}, 6, 2, 0, 1, 5, 1);
-		new CropJST("glowood", null, 4, 1, 0, null, new Object[] {Blocks.GLOWSTONE}, new ItemStack[] {null, new ItemStack(Items.GLOWSTONE_DUST)}, new String[] {"Glowstone", "Bright", "Nether"}, 6, 3, 0, 2, 4, 1);
-		new CropJST("nickelum", "KingLemming", 4, 2, 0, null, new Object[] {"oreNickel", "blockNickel"}, getNuggetOrDust("Nickel"), new String[] {"Shiny", "Leaves", "Metal", "Nickel"}, 6, 3, 0, 3, 1, 2);
-		new CropJST("alumia", "GregoriusT", 4, 2, 0, null, new Object[] {"oreBauxite", "oreAluminum", "blockAluminum"}, getNuggetOrDust("Aluminum"), new String[] {"Shiny", "Leaves", "Metal", "Aluminium"}, 6, 4, 0, 2, 0, 1);
-		new CropJST("platina", "KingLemming", 4, 2, 0, null, new Object[] {"orePlatinum", "blockPlatinum"}, getNuggetOrDust("Platinum"), new String[] {"Shiny", "Leaves", "Metal", "Platinum"}, 11, 1, 0, 5, 2, 0);
-		new CropJST("niobis", "dohyun22", 4, 2, 0, null, new Object[] {"oreNiobium", "blockNiobium"}, getNuggetOrDust("Niobium"), new String[] {"Shiny", "Leaves", "Metal", "Niobium"}, 8, 2, 0, 3, 1, 1);
-		new CropJST("zincium", "GregoriusT", 4, 2, 0, null, new Object[] {"oreZinc", "blockZinc"}, getNuggetOrDust("Zinc"), new String[] {"Shiny", "Leaves", "Metal", "Zinc"}, 6, 2, 0, 3, 1, 1);
-		new CropJST("naquadium", "GregoriusT", 4, 2, 0, null, new Object[] {"oreNaquadah", "blockNaquadah"}, getNuggetOrDust("Naquadah"), new String[] {"Leaves", "Metal", "Alien", "Naquadah"}, 13, 6, 0, 6, 1, 3);
-		ItemStack st = JSTUtils.getModItemStack("immersiveengineering:seed");
-		new CropJST("hemp", "BluSunrize", 4, 1, -350, st, null, st.isEmpty() ? new ItemStack[] {new ItemStack(Items.STRING)} : new ItemStack[] {JSTUtils.getModItemStack("immersiveengineering:material", 1, 4), st, st}, new String[] {"Industrial", "Hemp", "Addictive"}, 3, 1, 0, 1, 2, 2);
-		new CropJST("oilplant", "SpaceToad", 4, 2, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 151)}, new String[] {"Berries", "Oil", "Fuel"}, 6, 4, 1, 0, 0, 0);
-		new CropJST("saltgrass", "dohyun22", 4, 1, 0, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 107), JSTUtils.getValidOne("dustRockSalt", "foodRockSalt")}, new String[] {"Food", "Salt"}, 4, 2, 1, 1, 2, 2);
-		new CropCactus();
-		new CropJST("nitrowood", "Creepers", 3, 1, 0, null, null, new ItemStack[] {new ItemStack(Items.GUNPOWDER)}, new String[] {"Creeper", "Sulfur", "Saltpeter"}, 6, 5, 0, 2, 1, 2);
-
-		new CropJST("oak", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 0), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.SAPLING, 1, 0), new ItemStack(Items.APPLE)}, new String[] {"Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
-		new CropJST("spruce", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 1), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 1), new ItemStack(Blocks.SAPLING, 1, 1)}, new String[] {"Spruce", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
-		new CropJST("birch", "Notch", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 2), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 2), new ItemStack(Blocks.SAPLING, 1, 2)}, new String[] {"Birch", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
-		new CropJST("jungle", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 3), null, new ItemStack[] {new ItemStack(Blocks.LOG, 1, 3), new ItemStack(Blocks.SAPLING, 1, 3)}, new String[] {"Jungle", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
-		new CropJST("acacia", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 4), null, new ItemStack[] {new ItemStack(Blocks.LOG2, 1, 0), new ItemStack(Blocks.SAPLING, 1, 4)}, new String[] {"Acacia", "Wood", "Bonsai"}, 3, 0, 0, 1, 1, 0);
-		new CropJST("roofedoak", "Jeb_", 3, 1, 0, new ItemStack(Blocks.SAPLING, 1, 5), null, new ItemStack[] {new ItemStack(Blocks.LOG2, 1, 1), new ItemStack(Blocks.SAPLING, 1, 5)}, new String[] {"Dark Oak", "Wood", "Apple", "Bonsai"}, 3, 0, 1, 1, 1, 0);
-		new CropJST("rubwood", "Alblaka", 3, 1, -600, JSTUtils.getModItemStack("ic2:sapling"), null, new ItemStack[] {JSTUtils.getModItemStack("ic2:rubber_wood"), JSTUtils.getModItemStack("ic2:sapling"), JSTUtils.getModItemStack("ic2:misc_resource", 1, 4)}, new String[] {"Rubber", "Wood", "Bonsai"}, 4, 2, 0, 2, 1, 0);
-
-		st = JSTUtils.getValidOne("cropBarley", "plantBarley");
-		if (!st.isEmpty()) new CropJST("barley", "mDiyo", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Barley", "Crop", "Edible"}, 2, 0, 3, 1, 2, 1);
-		st = JSTUtils.getValidOne("cropRice", "plantRice", "plantWildrice");
-		if (!st.isEmpty()) new CropJST("rice", "glitchfiend", 3, 1, 0, st, null, new ItemStack[] {st}, new String[] {"Rice", "Crop", "Edible"}, 2, 0, 4, 0, 2, 1);
-		st = JSTUtils.getModItemStack("biomesoplenty:bamboo");
-		if (!st.isEmpty()) new CropJST("bamboo", "glitchfiend", 3, 1, -200, st, null, new ItemStack[] {st}, new String[] {"Bamboo", "Stick"}, 3, 0, 1, 1, 1, 2);
-
-		if (JSTUtils.isClient()) {
-			registerTex();
-			CropJSTBase.tex = null;
+		if (JSTCfg.suppModFarmland) {
+			addCropSoilType("FOR_HUMUS", JSTUtils.getModBlock("forestry:humus"));
+			addCropSoilType("BOP_FARMLANDA", JSTUtils.getModBlock("biomesoplenty:farmland_0"));
+			addCropSoilType("BOP_FARMLANDB", JSTUtils.getModBlock("biomesoplenty:farmland_1"));
 		}
-
-		addCropSoilType("FOR_HUMUS", JSTUtils.getModBlock("forestry:humus"));
-		addCropSoilType("BOP_FARMLANDA", JSTUtils.getModBlock("biomesoplenty:farmland_0"));
-		addCropSoilType("BOP_FARMLANDB", JSTUtils.getModBlock("biomesoplenty:farmland_1"));
 
 		if (JSTCfg.nerfCS) {
 			try {
@@ -284,16 +210,7 @@ public class CompatIC2 extends Loadable {
 		if (JSTCfg.noSuddenHoes) ReflectionUtils.setFieldValue("ic2.core.IC2", "suddenlyHoes", null, false);
 	}
 
-	@SideOnly(Side.CLIENT)
-	private static void registerTex() {
-		Map<ResourceLocation, TextureAtlasSprite> map = new HashMap();
-		for (ResourceLocation rl : CropJST.tex)
-			map.put(rl, FMLClientHandler.instance().getClient().getTextureMapBlocks().getAtlasSprite(rl.toString()));
-		Crops.instance.registerCropTextures(map);
-	}
-
 	@Override
-	@Method(modid = "ic2")
 	public void postInit() {
 		Object obj = new ItemStack[] {JSTUtils.getModItemStack("ic2:hazmat_helmet", 1, 32767), JSTUtils.getModItemStack("ic2:hazmat_chestplate", 1, 32767), JSTUtils.getModItemStack("ic2:hazmat_leggings", 1, 32767), JSTUtils.getModItemStack("ic2:rubber_boots", 1, 32767)};
 	    for (ItemStack st : (ItemStack[]) obj)
@@ -408,6 +325,12 @@ public class CompatIC2 extends Loadable {
 			MRecipes.addAssemblerRecipe(new Object[] {null, os, null, os, null, os, null, os, null}, fs, new ItemStack(jstn, 1, 26), null, 10, 200);
 			MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9004), new ItemStack(JSTItems.item1, 1, 9019)}, null, JSTUtils.getModItemStack("ic2:crafting", 32), new ItemStack(JSTItems.item1, 2, 9000), null, 24, 400);
 			MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9019)}, new FluidStack(JSTFluids.fuel, 1000), JSTUtils.getModItemStack("ic2:crafting", 32), new ItemStack(JSTItems.item1, 1, 9000), null, 24, 400);
+		}
+		fs = FluidRegistry.getFluidStack("ic2weed_ex", 1000);
+		st = JSTUtils.getModItemStack("ic2:crop_res", 1, 3);
+		if (fs != null && !st.isEmpty()) {
+			MRecipes.addChemMixerRecipe(new Object[] {st, new OreDictStack("dustRedstone")}, null, null, null, fs, 8, 300);
+			MRecipes.addChemMixerRecipe(new Object[] {st}, new FluidStack(JSTFluids.acid, 1000), null, null, JSTUtils.modFStack(fs, 2000), 8, 300);
 		}
 		String[] str = {
 				"uranium_fuel_rod",
@@ -852,9 +775,7 @@ public class CompatIC2 extends Loadable {
 					if (increaseSize && g >= dur) {
 						cr.setCurrentSize((byte) (cr.getCurrentSize() + 1));
 						cr.setGrowthPoints(0);
-						try {
-							crop_dirty.setBoolean(te, true);
-						} catch (Exception e) {}
+						updateCrop(te);
 					} else {
 						cr.setGrowthPoints(Math.min(g, dur));
 					}
@@ -863,6 +784,12 @@ public class CompatIC2 extends Loadable {
 			}
 		} catch (Throwable t) {}
 		return false;
+	}
+
+	public static void updateCrop(TileEntity te) {
+		try {
+			crop_dirty.setBoolean(te, true);
+		} catch (Throwable e) {}
 	}
 
 	public static void removeIC2RecipeByInput(ItemStack in, IBasicMachineRecipeManager ic) {
@@ -934,18 +861,6 @@ public class CompatIC2 extends Loadable {
 				addCentrifugeRecipe(4000, new ItemStack(jstn, 1, sID + 3 + n), result);
 			}
 		}
-	}
-
-	private static ItemStack[] getNuggetOrDust(String name) {
-		ItemStack res = JSTUtils.getFirstItem("nugget" + name);
-		if (res.isEmpty()) {
-			res = JSTUtils.getFirstItem("dust" + name);
-			if (!res.isEmpty())
-				return new ItemStack[] {null, null, null, res};
-		} else {
-			return new ItemStack[] {res};
-		}
-		return null;
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -27,10 +27,8 @@ public class ItemBlockTE extends ItemBlock {
 
 	@Override
 	public boolean placeBlockAt(ItemStack st, EntityPlayer pl, World w, BlockPos p, EnumFacing sd, float hx, float hy, float hz, IBlockState bs) {
-		if (!w.setBlockState(p, bs.getBlock().getDefaultState(), 3))
-			return false;
+		if (!w.setBlockState(p, bs, 3)) return false;
 		if (w.isRemote) return true;
-
 		TileEntityMeta tem = (TileEntityMeta) w.getTileEntity(p);
 		if (tem != null) {
 			tem.createNewMetatileEntity(st.getItemDamage());
@@ -41,7 +39,8 @@ public class ItemBlockTE extends ItemBlock {
 						w.tickableTileEntities.remove(tem);
 					} catch (Exception e) {}
 				}
-				if (tem.mte.getLightOpacity() < 255) w.checkLight(p);
+				if (!tem.mte.isOpaque())
+					BlockTileEntity.setState(w, p, false, 2);
 			}
 		}
 		return true;

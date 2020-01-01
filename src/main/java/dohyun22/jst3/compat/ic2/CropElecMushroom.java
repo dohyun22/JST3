@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -28,7 +29,8 @@ import net.minecraft.world.WorldServer;
 public class CropElecMushroom extends CropJST {
 	
 	public CropElecMushroom() {
-		super("elecmushroom", "dohyun22", 4, 1, 200, null, null, new ItemStack[] {null, new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.REDSTONE), new ItemStack(JSTItems.item1, 1, 27)}, new String[] {"Mushroom", "Electricity", "High Voltage", "Danger"}, 8, 1, 2, 4, 4, 1);
+		super("elecmushroom", "dohyun22", 4, 1, 200, new String[] {"Mushroom", "Electricity", "High Voltage", "Danger"}, 8, 0, 2, 5, 2, 0);
+		drop(1, Items.GLOWSTONE_DUST, Items.REDSTONE, "dustNikolite").fin();
 	}
 
 	@Override
@@ -37,9 +39,10 @@ public class CropElecMushroom extends CropJST {
 		
 		if (cr.getCurrentSize() == 1) return;
 		BlockPos p = cr.getPosition();
-		for (EnumFacing f : EnumFacing.VALUES) {
-			int n = Math.max(1, cr.getCurrentSize() * 24 + cr.getStatGrowth() * 4) * (cr.getCustomData().hasKey("pwr") ? 8 : 1);
+		for (EnumFacing f : EnumFacing.HORIZONTALS) {
+			int n = Math.max(1, cr.getCurrentSize() * 50 + cr.getStatGain() * 32) * (cr.getCustomData().hasKey("pwr") ? 8 : 1);
 			if (JSTUtils.sendEnergy(w, p.offset(f), f.getOpposite(), n, false) > 0) {
+				if (cr.getWorldObj().rand.nextInt(16) == 0) effect(w, p);
 				cr.getCustomData().removeTag("pwr");
 				break;
 			}
@@ -56,17 +59,26 @@ public class CropElecMushroom extends CropJST {
 			cr.getCustomData().setBoolean("pwr", true);
 		} else {
 			for (EntityLivingBase elb : list)
-				if (!JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, elb) && elb.attackEntityFrom(JSTDamageSource.ELECTRIC, MathHelper.clamp(cr.getCurrentSize(), 1.0F, 3.0F)))
+				if (shock(elb, cr))
 					flag = true;
 		}
-		if (flag) {
-			JSTPacketHandler.playCustomEffect(w, p, 1, 0);
-			w.playSound(null, p, JSTSounds.SHOCK2, SoundCategory.BLOCKS, 1.0F, 1.0F);
-		}
+		if (flag) effect(w, p);
 	}
 
 	@Override
 	public boolean onEntityCollision(ICropTile cr, Entity e) {
+		World w = cr.getWorldObj();
+		if (cr.getCurrentSize() >= 2 && e instanceof EntityLivingBase && w.rand.nextInt(Math.max(1, 90 - (cr.getCurrentSize() - 1) * 20)) == 0 && shock((EntityLivingBase)e, cr))
+			effect(w, cr.getPosition());
 		return false;
+	}
+
+	private static boolean shock(EntityLivingBase elb, ICropTile cr) {
+		return !JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, elb) && elb.attackEntityFrom(JSTDamageSource.ELECTRIC, MathHelper.clamp(cr.getCurrentSize(), 1.0F, 3.0F));
+	}
+
+	private static void effect(World w, BlockPos p) {
+		JSTPacketHandler.playCustomEffect(w, p, 1, 0);
+		w.playSound(null, p, JSTSounds.SHOCK2, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	}
 }

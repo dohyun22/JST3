@@ -1,7 +1,6 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "jst3:tileentity/blocktile" }
-        ]
-    }
+	"variants":{
+		"opaque=false":{"model":"jst3:tileentity/blocktile"},
+		"opaque=true":{"model":"jst3:tileentity/blocktile"}
+	}
 }

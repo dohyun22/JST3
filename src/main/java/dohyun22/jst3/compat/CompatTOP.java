@@ -34,26 +34,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @Optional.Interface(iface="com.google.common.base.Function", modid="theoneprobe")
 public class CompatTOP extends Loadable implements Function<ITheOneProbe, Void> {
 
 	@Override
-	public String getRequiredMod() {
-		return "theoneprobe";
-	}
-
-	@Override
-	@Method(modid = "theoneprobe")
 	public void preInit() {
 		FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", getClass().getName());
 	}
 
 	@Override
 	@Nullable
-	@Method(modid = "theoneprobe")
 	public Void apply(@Nullable ITheOneProbe in) {
 		if (in != null) {
 			EUInfoProvider eu = new EUInfoProvider();

@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
 import javax.annotation.Nonnull;
@@ -22,6 +23,7 @@ import com.google.common.collect.Lists;
 
 import dohyun22.jst3.compat.CompatBWM;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.loader.ValueLoader;
 import dohyun22.jst3.network.JSTPacketHandler;
 import dohyun22.jst3.api.IItemJEU;
 import dohyun22.jst3.api.JSTConstants;
@@ -122,15 +124,20 @@ public final class JSTUtils {
 	 * checks player can break block at BlockPos. 
 	 * @return true if player can destroy that block.
 	 * */
-	public static boolean canPlayerBreakThatBlock (@Nullable EntityPlayer ep, @Nullable BlockPos p) {
-		return canPlayerBreakThatBlockInt(ep, p) >= 0;
+	public static boolean canPlayerBreakThatBlock(@Nullable EntityPlayer pl, @Nullable BlockPos p) {
+		return canPlayerBreakThatBlockExp(pl, p) >= 0;
 	}
 	
-	public static int canPlayerBreakThatBlockInt (@Nullable EntityPlayer ep, @Nullable BlockPos p) {
-		if (ep == null || p == null || !ep.world.canMineBlockBody(ep, p))
+	public static int canPlayerBreakThatBlockExp(@Nullable EntityPlayer pl, @Nullable BlockPos p) {
+		if (pl == null || p == null || !pl.world.canMineBlockBody(pl, p))
 			return -1;
-		if (ep instanceof EntityPlayerMP)
-			return ForgeHooks.onBlockBreakEvent(ep.world, GameType.SURVIVAL, (EntityPlayerMP) ep, p);
+		if (pl instanceof FakePlayer) {
+			BlockEvent.BreakEvent ev = new BlockEvent.BreakEvent(pl.world, p, pl.world.getBlockState(p), pl);
+			MinecraftForge.EVENT_BUS.post(ev);
+			return ev.isCanceled() ? -1 : 0;
+		}
+		if (pl instanceof EntityPlayerMP)
+			return ForgeHooks.onBlockBreakEvent(pl.world, GameType.SURVIVAL, (EntityPlayerMP) pl, p);
 		return 0;
 	}
 	
@@ -421,8 +428,8 @@ public final class JSTUtils {
 		}
 	}
 	
-	public static int fillTank (World w, BlockPos p, EnumFacing f, FluidStack fs) {
-	    TileEntity te = w.getTileEntity(p.offset(f));
+	public static int fillTank (World w, BlockPos p, @Nullable EnumFacing f, FluidStack fs) {
+	    TileEntity te = w.getTileEntity(f == null ? p : p.offset(f));
 	    if (te == null || fs == null) return 0;
 	    
 	    if (te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, f.getOpposite())) {
@@ -476,8 +483,8 @@ public final class JSTUtils {
 	}
 	
 	public static void dropAll(World w, BlockPos p, List<ItemStack> in) {
-		for (ItemStack st : in)
-			dropEntityItemInPos(w, p, st);
+		if (in == null) return;
+		for (ItemStack st : in) dropEntityItemInPos(w, p, st);
 	}
 
 	public static boolean dropEntityItemInPos (World w, BlockPos p, ItemStack st) {
@@ -573,13 +580,6 @@ public final class JSTUtils {
 				return getFirstItem(((OreDictStack)obj).name, ((OreDictStack)obj).count);
 		}
 		return ret;
-	}
-	
-	@Nonnull
-	public static String getItemID(Item i) {
-		if (i == null) return "";
-		Object rl = Item.REGISTRY.getNameForObject(i);
-		return rl == null ? "" : rl .toString();
 	}
 
 	public static long chargeItem(ItemStack st, long eu, int tier, boolean itl, boolean sim) {
@@ -947,7 +947,7 @@ public final class JSTUtils {
 	}
 
 	public static ItemStack modStack(ItemStack s, int c, int m) {
-		if (s.isEmpty()) return ItemStack.EMPTY;
+		if (s == null || s.isEmpty()) return ItemStack.EMPTY;
 		s = s.copy();
 		if (c > 0) s.setCount(c);
 		if (m >= 0) s.setItemDamage(m);
@@ -1002,6 +1002,8 @@ public final class JSTUtils {
 					ret = ee.getKey();
 					break;
 				}
+		} else if (iob instanceof TileEntity) {
+			ret = ValueLoader.TEreg.getNameForObject(((TileEntity)iob).getClass());
 		}
 		if (ed && ret instanceof ResourceLocation)
 			return ((ResourceLocation)ret).getResourcePath();
@@ -1052,6 +1054,17 @@ public final class JSTUtils {
 			try { return getLangClient().toLowerCase(); } catch (Throwable t) {}
 		}
 		return "en_us";
+	}
+
+	public static void bigIntToNBT(NBTTagCompound nbt, BigInteger in, String key) {
+		nbt.setByteArray(key, in.toByteArray());
+	}
+
+	public static BigInteger nbtToBigInt(NBTTagCompound nbt, String key) {
+		try {
+			return new BigInteger(nbt.getByteArray(key));
+		} catch (Exception e) {}
+		return BigInteger.ZERO;
 	}
 
 	//Client Stuff

@@ -2,7 +2,10 @@ package dohyun22.jst3.items;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.items.behaviours.*;
-import dohyun22.jst3.items.behaviours.IB_GenericTool.EnumToolType;
+import dohyun22.jst3.items.behaviours.tool.*;
+import dohyun22.jst3.items.behaviours.energy.*;
+import dohyun22.jst3.items.behaviours.misc.*;
+import dohyun22.jst3.items.behaviours.tool.IB_GenericTool.EnumToolType;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -38,7 +41,7 @@ public class JSTItems {
 		Object[] tmp = new Object[] {new IB_AlkaliMetal()};
     	Object[] obj = {
     			"gashyd", "ti_ingot", "ti_dust", "ti_plate", "elite_circuit", "master_circuit", "shard1", "shard2", "shard3", "shard4",
-    			"shard5", "admin_core", "just_coin", "wireless_set", "ir_plate", "uu_1", "ruby", "peridot", "sapphire", new Object[] {"garilc", new IB_Food(2, 2, 32, false, false)},
+    			"shard5", "admin_core", "just_coin", "wireless_set", "ir_plate", new Object[] {"milkberry", new IB_Food(2, 5)}, "ruby", "peridot", "sapphire", new Object[] {"garilc", new IB_Food(2, 2)},
     			"bedrock_shard", "bedrock_dust", "airc_circuit", "airc_engine", "neut_ingot", "ra_ingot", "ba_ingot", "nikolite", "hadv_circuit", "ir_ingot",
     			"ir_dust", "zn_ingot", "zn_dust", "si_ingot", "ra_dust", "ba_dust", "brass_ingot", "brass_dust", "nq_ingot", "nq_dust",
     			"ub_ingot", "ub_dust", "ub_plate", "zn_plate", "ra_plate", "ba_plate", "comp_mtr_1", "comp_mtr_2", "comp_mtr_3", "q_nugget",
@@ -46,7 +49,7 @@ public class JSTItems {
     			"nq_ref", "rad_dust", "scr_fe", "sfe_dust", "cr_ingot", "cr_dust", "cr_plate", new Object[] {"li_dust", tmp[0]}, "ialloy", "ialloy_2",
     			"al_ingot", "al_dust", "al_plate", "w_ingot", "w_dust", "w_plate", "liph", "pblue", "es_ingot", "es_dust",
     			"es_plate", "insp", "p_ecap", "p_mosfet", "p_igbt", "p_tr", "circ", "circ_i", "circ_a", "re_ingot",
-    			"re_dust", "re_plate", null, null, null, "nb_ingot", "nb_dust", "nb_plate", "fuel", "fuel2",
+    			"re_dust", "re_plate", "mg_ingot", "mg_dust", "mg_plate", "nb_ingot", "nb_dust", "nb_plate", "fuel", "fuel2",
     			"th", "fuel3", "qcrystal", "ncrystal", "bx_dust", "pla", "pla_adv", "salt", new Object[] {"na_dust", tmp[0]}, "c_dust",
     			null, "mt1", "mt2", "mt3", "mt4", "mt5", "mt6", "mt7", "mt8", null,
     			null, "se1", "se2", "se3", "se4", "se5", "se6", "se7", "se8", null,
@@ -108,7 +111,8 @@ public class JSTItems {
 		item1.registerMetaItem(10045, "tool_mover", new IB_Mover());
 		item1.registerMetaItem(10046, "tool_fireex", new IB_FireExtinguisher());
 		item1.registerMetaItem(10047, "tool_autobow", new IB_AutoBow());
-
+		item1.registerMetaItem(10048, "tool_tescanner", new IB_TEScanner());
+		item1.registerMetaItem(10049, "tool_leafcutter", new IB_LeafCutter());
 		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingIron());
 		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
 
@@ -161,7 +165,7 @@ public class JSTItems {
 		item1.registerMetaItem(12019, "bat_n3", new IB_Battery(400000000L, 6, 2.0F, 0));
 		item1.registerMetaItem(12020, "bat_s", new IB_Battery(1000000000000L, 7, 4.0F, 0));
 		item1.registerMetaItem(12021, "bat_s2", new IB_Battery(4000000000000L, 8, 4.0F, 0));
-		item1.registerMetaItem(12022, "bat_max", new IB_Battery(Long.MAX_VALUE, 9));
+		item1.registerMetaItem(12022, "bat_max", new IB_InfBattery());
 		item1.registerMetaItem(12023, "bat_cr", new IB_Battery(15000L, 1, 1));
 		item1.registerMetaItem(12024, "bat_cr2", new IB_Battery(60000L, 2, 1));
 		item1.registerMetaItem(12025, "bat_sn", new IB_Battery(50000L, 1, 1));

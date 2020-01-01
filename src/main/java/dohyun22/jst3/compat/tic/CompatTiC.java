@@ -60,17 +60,6 @@ public class CompatTiC extends Loadable {
 	private static final ResourceLocation RL = new ResourceLocation(JustServerTweak.MODID, "ticcap");
 
 	@Override
-	public boolean canLoad() {
-		return JSTCfg.ticLoaded;
-	}
-
-	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-	
-	@Override
-	@Optional.Method(modid = "tconstruct")
 	public void preInit() {
 		HashMap<IModifier, String> mods = new HashMap();
 		Modifier mod = new ModExtraMod(1);
@@ -112,7 +101,7 @@ public class CompatTiC extends Loadable {
 
 		if (JSTUtils.isClient()) {
 			try {
-				java.lang.reflect.Method m = ReflectionUtils.getMethod("slimeknights.tconstruct.common.ModelRegisterUtil", "registerModifierModel", IModifier.class, ResourceLocation.class);
+				Method m = ReflectionUtils.getMethod("slimeknights.tconstruct.common.ModelRegisterUtil", "registerModifierModel", IModifier.class, ResourceLocation.class);
 				for (Entry<IModifier, String> e : mods.entrySet())
 					m.invoke(null, e.getKey(), new ResourceLocation(e.getValue()));
 			} catch (Throwable t) {
@@ -132,7 +121,6 @@ public class CompatTiC extends Loadable {
 	}
 
 	@Override
-	@Optional.Method(modid = "tconstruct")
 	public void postInit() {
 		RecipeLoader.addShapedRecipe(JSTUtils.getModItemStack("tconstruct:edible", 8, 10), "RRR", "RSR", "RRR", 'R', new ItemStack(Items.ROTTEN_FLESH), 'S', "dustSalt");
 		MRecipes.addChemMixerRecipe(new Object[] {JSTUtils.getModItemStack("tconstruct:clear_stained_glass", 1, 32767)}, new FluidStack(JSTFluids.chlorine, 125), JSTUtils.getModItemStack("tconstruct:clear_glass"), null, null, 10, 200);
@@ -165,7 +153,6 @@ public class CompatTiC extends Loadable {
 		if (isTiCTool(st)) ev.addCapability(RL, new EnergyCapTiC(st));
 	}
 
-	@Optional.Method(modid = "tconstruct")
 	@SubscribeEvent
 	public void onRegisterEntityMelting(EntityMeltingRegisterEvent ev) {
 		if (JSTCfg.removeGolemMelting && ev.getRecipe() == EntityIronGolem.class) ev.setCanceled(true);
@@ -244,8 +231,8 @@ public class CompatTiC extends Loadable {
 	}
 
 	/** Makes TiC Tools with JST EU modifiers compatible with IC2 EU*/
-	@Optional.Method(modid = "ic2")
-	public void addChargeManager() {
+	@Optional.Method(modid="ic2")
+	private void addChargeManager() {
 		ElectricItem.registerBackupManager(new IBackupElectricItemManager() {
 			
 			@Override

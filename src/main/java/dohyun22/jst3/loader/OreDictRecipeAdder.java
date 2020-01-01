@@ -13,11 +13,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class OreDictRecipeAdder extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-
-	@Override
 	public void postInit() {
 		String[] ores = OreDictionary.getOreNames();
 		for (int i = 0; i < ores.length; i++) {

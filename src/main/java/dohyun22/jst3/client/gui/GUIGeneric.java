@@ -16,6 +16,7 @@ import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.interfaces.IGenericGUIMTE;
 import dohyun22.jst3.utils.JSTUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.ClickType;
@@ -32,9 +33,22 @@ public class GUIGeneric extends GUIBase {
 	protected static final ResourceLocation gui = new ResourceLocation(JustServerTweak.MODID, "textures/gui/modular.png");
 	protected final List<GUIComponent> components = new ArrayList();
 	protected HashMap<GuiButton, int[]> btn = new HashMap();
+	protected int gX, gY;
+
+	public GUIGeneric(ContainerGeneric c, int x, int y) {
+		super(c);
+		if (x < 36 || y < 36) throw new IllegalArgumentException("Invalid Size");
+		gX = x / 32;
+		gY = y / 32;
+		if (x % 32 > 0) gX++;
+		if (y % 32 > 0) gY++;
+		xSize = x;
+		ySize = y;
+	}
 
 	public GUIGeneric(ContainerGeneric c) {
-		super(c);
+		this(c, 176, 166);
+		addInv(8, 84);
 	}
 
 	public void addComp(GUIComponent gc) {
@@ -73,8 +87,16 @@ public class GUIGeneric extends GUIBase {
 		components.add(new ComponentCfgButton(x, y, m));
 	}
 
+	public void addInv(int x, int y) {
+		components.add(new ComponentInv(x, y));
+	}
+
 	public void addButton(int x, int y, int w, int h, int id, String t, boolean f) {
 		btn.put(new GuiButton(id, x, y, w, h, f ? I18n.format(t) : t), new int[] {x, y});
+	}
+
+	public void addButton(int x, int y, int w, int h, int id, int did) {
+		btn.put(new ButtonGuiData(id, x, y, w, h, did, this), new int[] {x, y});
 	}
 
 	public void addHoverText(int x, int y, int w, int h, String t) {
@@ -107,7 +129,15 @@ public class GUIGeneric extends GUIBase {
 		mc.getTextureManager().bindTexture(gui);
 	    int x = (width - xSize) / 2;
 	    int y = (height - ySize) / 2;
-	    drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+	    for (int a = 0; a < gX; a++) {
+		    for (int b = 0; b < gY; b++) {
+		    	boolean l = a == 0, u = b == 0, r = a == gX - 1, d = b == gY - 1;
+		    	int px = x + a * 32, py = y + b * 32;
+		    	if (r) px -= 32 - xSize % 32;
+		    	if (d) py -= 32 - ySize % 32;
+		    	drawTexturedModalRect(px, py, 32 + (l ? -32 : r ? 32 : 0), 32 + (u ? -32 : d ? 32 : 0), 32, 32);
+		    }
+	    }
 		for (GUIComponent gc : components)
 			gc.draw(this, x, y);
 	}
@@ -149,7 +179,24 @@ public class GUIGeneric extends GUIBase {
 		
 		public void drawForeground(GUIGeneric g) {}
 	}
-	
+
+	public static class ComponentInv extends GUIComponent {
+
+		public ComponentInv(int x, int y) {
+			super(x - 1, y - 1);
+		}
+		
+		@Override
+		public void draw(GUIGeneric g, int sX, int sY) {
+			for (int x = 0; x < 9; x++) {
+				g.drawTexturedModalRect(sX + _X + x * 18, sY + _Y, 176, 49, 18, 18);
+				g.drawTexturedModalRect(sX + _X + x * 18, sY + _Y + 18, 176, 49, 18, 18);
+				g.drawTexturedModalRect(sX + _X + x * 18, sY + _Y + 36, 176, 49, 18, 18);
+				g.drawTexturedModalRect(sX + _X + x * 18, sY + _Y + 58, 176, 49, 18, 18);
+			}
+		}
+	}
+
 	public static class ComponentSlot extends GUIComponent {
 		private final byte type;
 		
@@ -354,6 +401,30 @@ public class GUIGeneric extends GUIBase {
 				String t = ((IGenericGUIMTE)c.te.mte).guiDataToStr(idx, c.getGuiData(idx));
 				if (t != null) g.fontRenderer.drawString(t, _X, _Y, 0);
 			}
+		}
+	}
+
+	public static class ButtonGuiData extends GuiButton {
+		private final int idx;
+		private final GUIGeneric gui;
+		private int debug = 5;
+
+		public ButtonGuiData(int b, int x, int y, int w, int h, int i, GUIGeneric g) {
+			super(b, x, y, w, h, "");
+			idx = i;
+			gui = g;
+		}
+
+		@Override
+		public void drawButton(Minecraft mc, int mx, int my, float pt) {
+			if (visible) {
+				ContainerGeneric cg = (ContainerGeneric)gui.inventorySlots;
+				if (cg.te.mte instanceof IGenericGUIMTE) {
+					String t = ((IGenericGUIMTE)cg.te.mte).guiDataToStr(idx, cg.getGuiData(idx));
+					displayString = t == null ? "" : t;
+				}
+			}
+			super.drawButton(mc, mx, my, pt);
 		}
 	}
 }

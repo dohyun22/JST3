@@ -140,17 +140,17 @@ public class ReflectionUtils {
 		return false;
 	}
 	
-	public static boolean checkFieldExists(String clz, String fld) {
+	public static boolean checkFieldExists(Object obj, String fld) {
 		try {
-			Class.forName(clz).getField(fld);
+			getClassObj(obj).getField(fld);
 			return true;
 		} catch (Throwable t) {}
 		return false;
 	}
 	
-	public static boolean checkMethodExists(String clz, String fnc, Class... param) {
+	public static boolean checkMethodExists(Object obj, String fnc, Class... param) {
 		try {
-			Class.forName(clz).getMethod(fnc, param);
+			getClassObj(obj).getMethod(fnc, param);
 			return true;
 		} catch (Throwable t) {}
 		return false;

@@ -14,11 +14,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class OreDictLoader extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-	
-	@Override
 	public void preInit() {
 		OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL, 1, 0));
 		OreDictionary.registerOre("gemCharcoal", new ItemStack(Items.COAL, 1, 1));
@@ -135,6 +130,9 @@ public class OreDictLoader extends Loadable {
 		regOre("circuitGood", 87);
 		regOre("circuitAdvanced", 88);
 		regOre("dustRhenium", 90);
+		regOre("ingotMagnesium", 92);
+		regOre("dustMagnesium", 93);
+		regOre("plateMagnesium", 94);
 		regOre("ingotNiobium", 95);
 		regOre("dustNiobium", 96);
 		regOre("plateNiobium", 97);

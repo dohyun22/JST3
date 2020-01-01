@@ -8,7 +8,7 @@ import dohyun22.jst3.container.BatterySlot;
 import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.container.JSTSlot;
 import dohyun22.jst3.items.JSTItems;
-import dohyun22.jst3.items.behaviours.IB_BluePrint;
+import dohyun22.jst3.items.behaviours.misc.IB_BluePrint;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;

@@ -65,8 +65,8 @@ public class MT_InductiveCharger extends MetaTileEnergyInput {
 	}
 	
 	@Override
-	public int getLightOpacity() {
-		return 0;
+	public boolean isOpaque() {
+		return false;
 	}
 	
 	@Override

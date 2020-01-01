@@ -15,11 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 public class CompatTAN extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "toughasnails";
-	}
-
-	@Override
 	public void postInit() {
 		ItemStack st;
 		if (JSTCfg.ic2Loaded) {
@@ -34,8 +29,7 @@ public class CompatTAN extends Loadable {
 			RecipeLoader.addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 330 + n), "ImI", "CMC", "IcI", 'I', ItemList.baseMaterial[n], 'm', ItemList.motors[n], 'C', ItemList.circuits[n], 'M', ItemList.machineBlock[n], 'c', ItemList.coils[1]);
 		st = JSTUtils.getModItemStack("toughasnails:charcoal_filter");
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6050), "FmF", "FMF", "FCF", 'F', st.isEmpty() ? "dustCarbon" : st, 'm', ItemList.motors[1], 'M', ItemList.machineBlock[1], 'C', ItemList.circuits[1]);
-		st = new ItemStack(JSTItems.item1, 1, 12007);
-		RecipeLoader.addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 10021), new ItemStack(JSTBlocks.blockTile, 1, 6050), st);
-		RecipeLoader.addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 10022), new ItemStack(JSTBlocks.blockTile, 1, 331), st);
+		RecipeLoader.addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 10021), new ItemStack(JSTBlocks.blockTile, 1, 6050), new ItemStack(JSTItems.item1, 1, 12007));
+		RecipeLoader.addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 10022), new ItemStack(JSTBlocks.blockTile, 1, 331), new ItemStack(JSTItems.item1, 1, 12010));
 	}
 }

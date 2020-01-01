@@ -297,10 +297,10 @@ public class MT_Prospector extends MT_Machine {
 	}
 
 	@Override
-	public void handleBtn(int id) {
+	public void handleBtn(int id, EntityPlayer pl) {
 		if (id == 0)
 			activated = empty ? false : prospected ? !activated : true;
-		else if (hlt <= 0)
+		else
 			hlt = 100;
 	}
 
@@ -313,11 +313,5 @@ public class MT_Prospector extends MT_Machine {
 	public double getDurability(ItemStack st) {
 		if (!st.hasTagCompound()) return 1.0D;
 		return 1.0D - (double)st.getTagCompound().getLong("Energy") / (double)getMaxEnergy();
-	}
-	
-	@Override
-	public int getComparatorInput() {
-		if (baseTile.energy <= 0) return 0;
-		return (int) (JSTUtils.safeMultiplyLong(baseTile.energy, 15) / getMaxEnergy());
 	}
 }

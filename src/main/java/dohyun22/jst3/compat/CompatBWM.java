@@ -13,11 +13,6 @@ import net.minecraft.item.ItemStack;
 public class CompatBWM extends Loadable {
 	/** Used for bypassing BWM HCPiles feature */
 	private static Map<IBlockState, ItemStack> HCPiles;
-
-	@Override
-	public String getRequiredMod() {
-		return "betterwithmods";
-	}
 	
 	@Override
 	public void postInit() {

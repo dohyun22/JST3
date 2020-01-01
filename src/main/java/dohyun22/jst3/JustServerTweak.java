@@ -50,7 +50,7 @@ public class JustServerTweak {
 	public static CommonProxy proxy;
 	
 	public static final String MODID = "jst3";
-	public static final String VERSION = "3.6.1MC1.12";
+	public static final String VERSION = "3.6.2MC1.12";
 	public static final String NAME = "Just Server Tweak 3";
 
 	@Mod.Instance(JustServerTweak.MODID)
@@ -86,6 +86,7 @@ public class JustServerTweak {
 		JSTCfg.ticLoaded = Loader.isModLoaded("tconstruct");
 		JSTCfg.rcLoaded = Loader.isModLoaded("railcraft");
 		JSTCfg.ieLoaded = Loader.isModLoaded("immersiveengineering");
+		JSTCfg.tcLoaded = Loader.isModLoaded("thaumcraft");
 
 		JSTCfg.loadCfg(new Configuration(event.getSuggestedConfigurationFile()));
 

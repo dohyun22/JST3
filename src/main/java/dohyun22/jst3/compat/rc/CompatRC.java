@@ -21,16 +21,6 @@ import net.minecraftforge.fluids.Fluid;
 public class CompatRC extends Loadable {
 
 	@Override
-	public boolean canLoad() {
-		return JSTCfg.rcLoaded;
-	}
-
-	@Override
-	public String getRequiredMod() {
-		return null;
-	}
-
-	@Override
 	public void postInit() {
 		addFluidFuel(JSTFluids.nitrofuel, 200000);
 		addFluidFuel(JSTFluids.heavyfuel, 100000);

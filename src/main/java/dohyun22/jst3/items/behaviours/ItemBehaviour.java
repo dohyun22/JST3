@@ -296,6 +296,10 @@ public class ItemBehaviour {
 
 	public void onCrowbarUsed(ItemStack st, EntityLivingBase el) {}
 
+	public boolean isGrafter(ItemStack st) {
+		return false;
+	}
+
 	public void onHitBlock(ItemStack st, BlockPos p, EntityPlayer ep) {
 	}
 

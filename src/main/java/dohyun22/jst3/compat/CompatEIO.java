@@ -15,11 +15,6 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 public class CompatEIO extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "enderio";
-	}
-
-	@Override
 	public void postInit() {
 		Object o1 = new OreDictStack("ingotIron"), o2 = new ItemStack(Items.ENDER_PEARL);
 		MRecipes.addAlloyFurnaceRecipe(o1, new OreDictStack("dustRedstone"), JSTUtils.getFirstItem("ingotConductiveIron"), 5, 200);

@@ -47,7 +47,6 @@ public class MT_LEDLight extends MetaTileEnergyInput {
 
 	@Override
 	public List<AxisAlignedBB> getBox() {
-		super.getBox();
 		return Arrays.asList(new AxisAlignedBB[] { LED_AABB });
 	}
 	
@@ -127,18 +126,18 @@ public class MT_LEDLight extends MetaTileEnergyInput {
 	}
 	
 	@Override
-	public int getLightOpacity() {
-		return 0;
+	public boolean isOpaque() {
+		return false;
 	}
 	
 	@Override
-	@SideOnly(value = Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	public String getModelKey() {
 		return "jst_led" + tier + baseTile.isActive();
 	}
 	
 	@Override
-	@SideOnly(value=Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	public List<BakedQuad> getModel(boolean isItem) {
 		return JSTUtils.makeCubeAABB(isItem ? getDefaultTexture() : getTexture(), isItem ? LED_AABB.offset(0, -0.4375D, 0) : LED_AABB);
 	}

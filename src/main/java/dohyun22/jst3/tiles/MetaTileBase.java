@@ -370,8 +370,8 @@ public abstract class MetaTileBase {
 		return false;
 	}
 
-	public int getLightOpacity() {
-		return 255;
+	public boolean isOpaque() {
+		return true;
 	}
 	
 	public int getLightValue() {

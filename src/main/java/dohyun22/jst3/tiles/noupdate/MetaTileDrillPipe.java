@@ -52,8 +52,8 @@ public class MetaTileDrillPipe extends MetaTileBase {
 	}
 	
 	@Override
-	public int getLightOpacity() {
-		return 0;
+	public boolean isOpaque() {
+		return false;
 	}
 	
 	@Override

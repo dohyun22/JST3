@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import dohyun22.jst3.blocks.BlockTileEntity;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.ic2.CompatIC2;
 import dohyun22.jst3.loader.JSTCfg;
@@ -241,15 +242,15 @@ public class MetaTileCable extends MetaTileEnergyInput {
 	    	return true;
 	    }
 	    if (foam == 0) {
-	    	String name = Item.REGISTRY.getNameForObject(st.getItem()).toString();
-			if ("ic2:foam".equals(name)) {
+	    	String name = JSTUtils.getRegName(st);
+			if (name.equals("ic2:foam")) {
 				if (st.getItemDamage() == 0) {
 		    		if (!pl.capabilities.isCreativeMode)
 		    			st.shrink(1);
 		    		setFoam((byte) -1);
 			    	return true;
 				}
-	    	} else if ("ic2:foam_sprayer".equals(name)) {
+	    	} else if (name.equals("ic2:foam_sprayer")) {
 	    		if (st.hasTagCompound()) {
 		    		NBTTagCompound nbt = st.getTagCompound();
 		    		NBTTagCompound nbt2 = nbt.getCompoundTag("Fluid");
@@ -278,7 +279,7 @@ public class MetaTileCable extends MetaTileEnergyInput {
 		    		}
 	    		}
 	    		return true;
-	    	} else if (st.getItem() instanceof ItemShears || "ic2:cutter".equals(name) || ("immersiveengineering:tool".equals(name) && st.getItemDamage() == 1)) {
+	    	} else if (st.getItem() instanceof ItemShears || name.equals("ic2:cutter") || (name.equals("immersiveengineering:tool") && st.getItemDamage() == 1)) {
 	    		EnumFacing f = JSTUtils.determineWrenchingSide(side, hitX, hitY, hitZ);
 	    		if (f != null) {
 	    			boolean cut = false;
@@ -508,10 +509,8 @@ public class MetaTileCable extends MetaTileEnergyInput {
 	}
 	
 	@Override
-	public int getLightOpacity() {
-		if (foam > 0)
-			return 255;
-		return 0;
+	public boolean isOpaque() {
+		return foam > 0;
 	}
 	
 	@Override
@@ -655,8 +654,8 @@ public class MetaTileCable extends MetaTileEnergyInput {
 		foam = f;
 		World w = getWorld();
 		BlockPos p = getPos();
+		BlockTileEntity.setState(w, p, isOpaque(), 3);
 		IBlockState bs = w.getBlockState(p);
-		w.notifyNeighborsOfStateChange(p, bs .getBlock(), true);
 		w.notifyBlockUpdate(getPos(), bs, bs, 3);
 		return true;
 	}

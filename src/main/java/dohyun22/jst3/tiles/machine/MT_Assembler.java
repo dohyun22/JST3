@@ -149,7 +149,7 @@ public class MT_Assembler extends MT_MachineProcess {
 	}
 
 	@Override
-	public void handleBtn(int id) {
+	public void handleBtn(int id, EntityPlayer pl) {
 		if (!forced && baseTile != null && !baseTile.isActive())
 			forced = true;
 	}

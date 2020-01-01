@@ -252,8 +252,6 @@ public class MTELoader {
 		MetaTileBase.registerTE(6022, new MT_Prospector());
 		MetaTileBase.registerTE(6024, new MT_EFenceChgr());
 		MetaTileBase.registerTE(6025, new MT_HeatBoiler());
-		//6026=boiler
-		if (JSTCfg.ticLoaded)
 		MetaTileBase.registerTE(6026, new MT_Heater());
 		MetaTileBase.registerTE(6027, new MT_SaltExtractor(1));
 		MetaTileBase.registerTE(6028, new MT_AirCompressor(1));
@@ -283,6 +281,9 @@ public class MTELoader {
 		MetaTileBase.registerTE(6063, new MT_LargeBoiler());
 		MetaTileBase.registerTE(6064, new MT_SaltExtractor(3));
 		MetaTileBase.registerTE(6065, new MT_AirCompressor(3));
+		MetaTileBase.registerTE(6066, new MT_ChunkQuarry());
+		for (int n = 0; n <= 9; n++)
+			MetaTileBase.registerTE(6070 + n, new MT_Drum(n));
 
 		/* #7000: EarlyTech Kinetic energy based machines */
 		MetaTileBase.registerTE(7000, new MetaTileGearBox(true));

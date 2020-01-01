@@ -62,12 +62,14 @@ public class MT_EFenceChgr extends MetaTileEnergyInput {
 	public TextureAtlasSprite[] getDefaultTexture() {
 		return this.getSingleTETex("hvsign");
 	}
-	
-	@SideOnly(value=Side.CLIENT)
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public String getModelKey() {
 		return "jst_efence";
 	}
-	
+
+	@Override
 	public void onPostTick() {
 		super.onPostTick();
 		if (isClient()) return;
@@ -75,7 +77,7 @@ public class MT_EFenceChgr extends MetaTileEnergyInput {
 		if (baseTile.energy > 0 && baseTile.getTimer() % (20L + size * 2L) == 0) {
 			size = 0;
 			ArrayList<MetaTileEFenceWire> ls = new ArrayList();
-			check(new ArrayList(), ls, this.getPos());
+			check(new ArrayList(), ls, getPos());
 			if (ls.size() <= 0) return;
 			long e = Math.max(1, baseTile.energy / ls.size());
 			for (int n = 0; n < ls.size() && baseTile.energy > 0; n++)

@@ -125,8 +125,10 @@ public class TextureLoader {
 		ls.add("hr_door");
 		ls.add("waterpurifier");
 		ls.add("filter");
+		ls.add("pump");
 		ls.add("miner");
 		ls.add("creativegen");
+		ls.add("drum");
 		
 		ls.add("bgbox");
 		ls.add("sgbox");
@@ -194,33 +196,6 @@ public class TextureLoader {
 		registerTex(tm, pf, ls);
 		ls.clear();
 		
-		/*pf = "blocks/fluids/";
-		ls.add("oil");
-		ls.add("fuel");
-		ls.add("nitrofuel");
-		ls.add("liquid_lng");
-		ls.add("liquid_lpg");
-		ls.add("gas.natural");
-		ls.add("hydrogen");
-		ls.add("deuterium");
-		ls.add("tritium");
-		ls.add("helium");
-		ls.add("helium3");
-		ls.add("lithium");
-		ls.add("carbon");
-		ls.add("nitrogen");
-		ls.add("oxygen");
-		ls.add("sodium");
-		ls.add("silicon");
-		ls.add("chlorine");
-		ls.add("mercury");
-		ls.add("steam");
-		ls.add("hotsteam");
-		ls.add("acid");
-		ls.add("air");
-		registerTex(tm, pf, ls);
-		ls.clear();*/
-		
 		if (JSTCfg.ic2Loaded) {
 			pf = "blocks/crop/";
 			for (int n = 1; n <= 7; n++) {
@@ -249,6 +224,18 @@ public class TextureLoader {
 					ls.add("oilplant" + n);
 					ls.add("saltgrass" + n);
 					ls.add("cactus" + n);
+					ls.add("milkberry" + n);
+					ls.add("graveplant" + n);
+					ls.add("enderberry" + n);
+					ls.add("slimeberry" + n);
+					ls.add("rubium" + n);
+					ls.add("peridotia" + n);
+					ls.add("sapphiria" + n);
+					ls.add("quartzint" + n);
+					ls.add("wolframia" + n);
+					ls.add("titania" + n);
+					ls.add("sulfonia" + n);
+					ls.add("goldenapple" + n);
 				}
 				if (n <= 3) {
 					ls.add("oak" + n);
@@ -262,6 +249,19 @@ public class TextureLoader {
 					ls.add("barley" + n);
 					ls.add("rice" + n);
 					ls.add("bamboo" + n);
+					ls.add("chickenbush" + n);
+					ls.add("meatgrass" + n);
+					ls.add("ghastplant" + n);
+					ls.add("leatherleaf" + n);
+					ls.add("starflower" + n);
+					ls.add("avataria" + n);
+					ls.add("quarkium" + n);
+					ls.add("spiderbush" + n);
+					ls.add("oceanplant" + n);
+					ls.add("fishingbush" + n);
+					ls.add("apatium" + n);
+					ls.add("shimmerleaf" + n);
+					ls.add("cinderpearl" + n);
 				}
 			}
 			registerTex(tm, pf, ls);

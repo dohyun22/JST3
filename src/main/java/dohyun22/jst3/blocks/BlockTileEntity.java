@@ -23,6 +23,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
@@ -67,7 +68,9 @@ import net.minecraftforge.oredict.OreDictionary;
 @Optional.Interface(iface="cofh.api.block.IDismantleable", modid="cofhapi")
 })
 public class BlockTileEntity extends Block implements ITileEntityProvider, IWrenchable, IDismantleable {
+	public static final IProperty<Boolean> OPAQUE = PropertyBool.create("opaque");
 	public static final IUnlistedProperty<WeakReference<MetaTileBase>> TE = new UnlistedProperty("tile");
+	private static boolean ignoreBreaking;
 	private static ThreadLocal<TileEntityMeta> temp = new ThreadLocal();
 
 	public BlockTileEntity() {
@@ -78,14 +81,12 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 		setHardness(2.0F);
 		setResistance(10.0F);
 		setSoundType(SoundType.METAL);
+		setDefaultState(blockState.getBaseState().withProperty(OPAQUE, true));
 	}
 
 	@Override
     public int getLightOpacity(IBlockState bs, IBlockAccess w, BlockPos p) {
-		MetaTileBase mte = MetaTileBase.getMTE(w, p);
-		if (mte != null)
-			return mte.getLightOpacity();
-        return 255;
+        return bs.getValue(OPAQUE) ? 255 : 0;
     }
 
 	@Override
@@ -173,14 +174,15 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 
 	@Override
 	public void breakBlock(World w, BlockPos p, IBlockState bs) {
-		MetaTileBase.causeMTEUpdate(w, p);
-		TileEntity te = w.getTileEntity(p);
-		if (te instanceof TileEntityMeta) {
-			TileEntityMeta tem = (TileEntityMeta) te;
-			temp.set(tem);
-			if (tem.hasValidMTE()) tem.mte.onBreak();
+		if (!ignoreBreaking) {
+			MetaTileBase.causeMTEUpdate(w, p);
+			TileEntity te = w.getTileEntity(p);
+			if (te instanceof TileEntityMeta) {
+				TileEntityMeta tem = (TileEntityMeta) te;
+				temp.set(tem);
+				if (tem.hasValidMTE()) tem.mte.onBreak();
+			}
 		}
-		super.breakBlock(w, p, bs);
 		w.removeTileEntity(p);
 	}
 
@@ -216,7 +218,17 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 
 	@Override
 	public BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] { TE });
+		return new ExtendedBlockState(this, new IProperty[] {OPAQUE}, new IUnlistedProperty[] {TE});
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int m) {
+		return getDefaultState().withProperty(OPAQUE, m == 0);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState bs) {
+		return bs.getValue(OPAQUE) ? 0 : 1;
 	}
 
 	@Override
@@ -466,5 +478,18 @@ public class BlockTileEntity extends Block implements ITileEntityProvider, IWren
 		}
 		w.setBlockToAir(p);
 		return ret;
+	}
+
+	public static void setState(World w, BlockPos p, boolean o, int f) {
+		IBlockState bs = w.getBlockState(p);
+		if (bs == null || bs.getBlock() != JSTBlocks.blockTile) return;
+		TileEntity te = w.getTileEntity(p);
+		ignoreBreaking = true;
+		w.setBlockState(p, JSTBlocks.blockTile.getDefaultState().withProperty(BlockTileEntity.OPAQUE, o), f);
+		ignoreBreaking = false;
+		if (te != null) {
+			te.validate();
+			w.setTileEntity(p, te);
+		}
 	}
 }

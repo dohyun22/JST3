@@ -54,6 +54,8 @@ public class ModelMTE extends ModelBase {
 	private static Cache<String, List<BakedQuad>> modelCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
 	private static Cache<Integer, IBakedModel> itemModelCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
 
+	private ModelMTE() {}
+
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		MetaTileBase te = null;

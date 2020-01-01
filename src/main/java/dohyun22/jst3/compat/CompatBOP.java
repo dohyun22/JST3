@@ -14,11 +14,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class CompatBOP extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "biomesoplenty";
-	}
-
-	@Override
 	public void postInit() {
 		MRecipes.addLEDCrop(JSTUtils.getModBlock("biomesoplenty:bamboo"));
 		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("biomesoplenty:bamboo", 20, 0), new ItemStack(Items.COAL, 32, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 400);

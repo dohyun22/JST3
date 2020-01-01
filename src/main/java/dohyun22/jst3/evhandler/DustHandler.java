@@ -13,11 +13,11 @@ import dohyun22.jst3.api.FineDustCapability;
 import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.loader.ValueLoader;
 import dohyun22.jst3.utils.EffectBlocks;
 import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTPotions;
 import dohyun22.jst3.utils.JSTUtils;
-import dohyun22.jst3.utils.ReflectionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -53,17 +53,8 @@ public class DustHandler {
 	public static HashMap<Class, Object[]> TEs = new HashMap();
 
 	public static void init() {
-		if (JSTCfg.fineDustTEs == null) return;
-		RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>> reg = null;
-		try {
-			reg = (RegistryNamespaced) ReflectionUtils.getFieldObf(TileEntity.class, "field_190562_f", "REGISTRY").get(null);
-			if (reg == null) throw new RuntimeException();
-		} catch (Throwable t) {
-			JSTUtils.LOG.error("Can't get TE registry");
-			JSTUtils.LOG.catching(t);
-			return;
-		}
-		
+		if (JSTCfg.fineDustTEs == null || ValueLoader.TEreg == null) return;
+
 		for (String s : JSTCfg.fineDustTEs) {
 			if (s.startsWith("#") || s.isEmpty()) continue;
 			String[] arr = s.split(";");
@@ -71,7 +62,7 @@ public class DustHandler {
 				JSTUtils.LOG.error("Invalid arguments: " + s);
 				continue;
 			}
-			Class c = reg.getObject(new ResourceLocation(arr[0]));
+			Class c = ValueLoader.getTEClass(arr[0]);
 			if (c == null)
 				continue;
 			int p;

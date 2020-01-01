@@ -29,11 +29,6 @@ import zmaster587.advancedRocketry.api.satellite.SatelliteProperties;
 public class CompatAR extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "advancedrocketry";
-	}
-
-	@Override
 	public void init() {
 		if (JSTCfg.ic2Loaded) {
 			String s = "dustDilithium";

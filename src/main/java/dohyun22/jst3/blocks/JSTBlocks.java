@@ -24,7 +24,7 @@ public class JSTBlocks {
 	public static BlockBase blockOre;
 	public static BlockBase blockNO;
 	public static BlockBase blockEO;
-	public static Block blockTile;
+	public static BlockTileEntity blockTile;
 	public static Block blockOHW;
 	public static Item tileItem;
 

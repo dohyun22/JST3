@@ -148,8 +148,8 @@ public class MetaTileEnergyMeter extends MetaTileCable {
 	}
 	
 	@Override
-	public int getLightOpacity() {
-		return 255;
+	public boolean isOpaque() {
+		return true;
 	}
 	
 	@Override

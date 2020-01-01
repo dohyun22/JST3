@@ -115,8 +115,11 @@ public class GUICfg extends GUIBase {
 		EnumRelativeFacing f = getFace(mX, mY);
 		if (f != null) {
 			ContainerCfg c = (ContainerCfg)inventorySlots;
-			int n = c.cfg[toNum(f, c.front)];
-			if (n >= 0) drawHoveringText(I18n.format("jst.msg.gui.c" + n), mX, mY);
+			int n = toNum(f, c.front);
+			if (n >= 0) {
+				n = c.cfg[n];
+				if (n >= 0) drawHoveringText(I18n.format("jst.msg.gui.c" + n), mX, mY);
+			}
 		}
 	}
 

@@ -8,7 +8,7 @@ import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.client.gui.GUIRPlanner;
 import dohyun22.jst3.container.ContainerRPlanner;
 import dohyun22.jst3.items.JSTItems;
-import dohyun22.jst3.items.behaviours.IB_Memory;
+import dohyun22.jst3.items.behaviours.misc.IB_Memory;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.tiles.MetaTileBase;

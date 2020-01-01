@@ -18,13 +18,8 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CompatAE2 extends Loadable {
 
 	@Override
-	public String getRequiredMod() {
-		return "appliedenergistics2";
-	}
-
-	@Override
 	public void postInit() {
-		String s = getRequiredMod() + ":";
+		String s = "appliedenergistics2:";
 		FluidStack fs = new FluidStack(FluidRegistry.WATER, 1000);
 		Item it = JSTUtils.getModItem(s + "crystal_seed"), it2 = JSTUtils.getModItem(s + "material");
 		MRecipes.addCrystalRecipe(new ItemStack(it), null, fs, new ItemStack(it2, 1, 10), 30, 750);

@@ -91,7 +91,7 @@ public class MT_Pump extends MT_Machine {
 				wX = MathHelper.clamp(wX, -r, r);
 				wY = Math.min(wY, -1);
 				wZ = MathHelper.clamp(wZ, -r, r);
-				energyUse = 16;
+				energyUse = 4;
 				mxprogress = 40;
 				return true;
 			}
@@ -207,7 +207,7 @@ public class MT_Pump extends MT_Machine {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite ws = getTETex("miner");
+		TextureAtlasSprite ws = getTETex("pump");
 		return new TextureAtlasSprite[] {getTETex("vent"), getTieredTex(tier), ws, ws, ws, ws};
 	}
 
@@ -215,6 +215,12 @@ public class MT_Pump extends MT_Machine {
 	@SideOnly(Side.CLIENT)
 	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.pump", getRadius()));
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getModelKey() {
+		return "jst_pump" + tier;
 	}
 
 	private int getRadius() {

@@ -19,7 +19,6 @@ public class JSTModelLoader implements ICustomModelLoader {
 	}
 
 	public void register(ResourceLocation location, IModel model) {
-	    //System.out.println("Registering Model: " + location.getResourcePath());
 		models.put(location, model);
 	}
 
