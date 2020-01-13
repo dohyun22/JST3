@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileGridTieInverter;
+import dohyun22.jst3.tiles.energy.MT_GTI;
 import dohyun22.jst3.api.IDCGenerator;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.material.MapColor;
@@ -16,7 +16,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -126,7 +125,6 @@ public class MetaTileDCCable extends MetaTileBase {
 	@Override
 	public void onBlockUpdate() {
 		if (isClient()) return;
-		
 		byte c = 0;
 		byte i = 0;
 		for (byte j = 0; i < 6; i++) {
@@ -134,9 +132,8 @@ public class MetaTileDCCable extends MetaTileBase {
 			TileEntity te = getWorld().getTileEntity(getPos().offset(EnumFacing.VALUES[i]));
 			if (te instanceof TileEntityMeta && ((TileEntityMeta)te).hasValidMTE()) {
 				MetaTileBase mtb = ((TileEntityMeta)te).mte;
-				if (mtb instanceof MetaTileDCCable || mtb instanceof IDCGenerator || mtb instanceof MetaTileGridTieInverter) {
+				if (mtb instanceof MetaTileDCCable || mtb instanceof IDCGenerator || mtb instanceof MT_GTI)
 					c = ((byte) (c | 1 << i));
-				}
 			}
 		}
 		if (connection != c) {
@@ -195,7 +192,7 @@ public class MetaTileDCCable extends MetaTileBase {
 	}
 	
 	@Override
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.dccable.desc"));
 	}
 }

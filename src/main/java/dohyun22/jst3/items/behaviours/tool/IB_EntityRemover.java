@@ -11,6 +11,7 @@ import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.utils.JSTDamageSource;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -67,6 +68,7 @@ public class IB_EntityRemover extends ItemBehaviour {
 	
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.add(I18n.format("jst.msg.com.op"));
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.entityremover"));
 	}
 	

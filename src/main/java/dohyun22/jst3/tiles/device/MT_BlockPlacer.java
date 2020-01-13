@@ -92,7 +92,7 @@ public class MT_BlockPlacer extends MetaTileBase implements IGenericGUIMTE {
 							if (seed || w.getBlockState(p).getBlock().isReplaceable(w, p)) {
 								fp.setHeldItem(EnumHand.MAIN_HAND, st);
 								EnumActionResult res = ForgeHooks.onPlaceItemIntoWorld(st, fp, w, p, seed ? EnumFacing.UP : f.getOpposite(), 0.5F, 0.5F, 0.5F, EnumHand.MAIN_HAND);
-								if (st.isEmpty())
+								if (fp.getHeldItem(EnumHand.MAIN_HAND).isEmpty())
 									inv.set(n, ItemStack.EMPTY);
 								if (res != EnumActionResult.FAIL)
 									break;

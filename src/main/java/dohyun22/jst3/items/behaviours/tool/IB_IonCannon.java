@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class IB_IonCannon extends ItemBehaviour {
 
 	public IB_IonCannon() {
-		maxEnergy = 1000000;
+		maxEnergy = 2400000;
 	}
 
 	@Override
@@ -85,12 +85,14 @@ public class IB_IonCannon extends ItemBehaviour {
 				if (n % 2 == 1) continue;
 				List<EntityLivingBase> ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(px - sz, py - sz, pz - sz, px + sz, py + sz, pz + sz), pr);
 				if (!ls.isEmpty()) {
+					Entity r = pl.getRidingEntity();
+					if (r instanceof EntityLivingBase) ls.remove((EntityLivingBase)r);
 					Entity e = ls.get(w.rand.nextInt(ls.size()));
 					boolean flag = false;
 					ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(e.posX - 3.5F, e.posY - 3.5F, e.posZ - 3.5F, e.posX + 3.5F, e.posY + 3.5F, e.posZ + 3.5F), pr);
 					for (EntityLivingBase e2 : ls)
-						if (e2 instanceof EntityLivingBase && e2 != pl.getRidingEntity() && ((EntityLivingBase)e2).attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl), 7)) {
-							JSTPacketHandler.playCustomEffect(w, ((EntityLivingBase)e2).getPosition(), 1, -10);
+						if (e2 != r && e2.attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl), 7)) {
+							JSTPacketHandler.playCustomEffect(w, e2.getPosition(), 1, -10);
 							flag = true;
 						}
 					if (flag) break;

@@ -11,9 +11,8 @@ import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileCable;
-import dohyun22.jst3.tiles.energy.MetaTileGenerator;
-import dohyun22.jst3.tiles.energy.MetaTileSolarGen;
+import dohyun22.jst3.tiles.energy.MT_Cable;
+import dohyun22.jst3.tiles.energy.MT_Generator;
 import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +23,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TestMetaTileEntityGenerator extends MetaTileGenerator implements IScrewDriver, IDust {
+public class TestMetaTileEntityGenerator extends MT_Generator implements IScrewDriver, IDust {
 	public List<BlockPos> cablePos = new ArrayList<BlockPos>();
 	public List<BlockPos> connectedMachine = new ArrayList<BlockPos>();
 
@@ -65,7 +64,7 @@ public class TestMetaTileEntityGenerator extends MetaTileGenerator implements IS
 			TileEntity t = world.getTileEntity(padd);
 			if (t instanceof TileEntityMeta) {
 				TileEntityMeta tm = (TileEntityMeta) t;
-				if (tm.mte instanceof MetaTileCable) {
+				if (tm.mte instanceof MT_Cable) {
 					cablePos.add(p);
 					addCable(posList, padd, world);
 				} else if ((tm).hasValidMTE()) {

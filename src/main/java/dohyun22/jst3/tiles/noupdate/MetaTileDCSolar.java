@@ -11,7 +11,6 @@ import dohyun22.jst3.api.IDCGenerator;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -72,13 +71,13 @@ public class MetaTileDCSolar extends MetaTileBase implements IDCGenerator {
 	}
 	
 	@Override
-	@SideOnly(value = Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	public String getModelKey() {
 		return "jst_dcsolar" + tier;
 	}
 	
 	@Override
-	@SideOnly(value=Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	public List<BakedQuad> getModel(boolean isItem) {
 		return JSTUtils.makeCubeAABB(getDefaultTexture(), SLAB_BOTTOM_AABB);
 	}
@@ -92,7 +91,7 @@ public class MetaTileDCSolar extends MetaTileBase implements IDCGenerator {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.dcgen.desc"));
 	}
 }

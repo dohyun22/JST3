@@ -456,12 +456,12 @@ public final class JSTUtils {
 		return h == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 	}
 
-	public static void sendMessage(EntityPlayer pl, String key, Object... obj) {
-		if (pl != null) pl.sendMessage(new TextComponentTranslation(key, obj));
+	public static void sendMessage(Entity e, String key, Object... obj) {
+		if (e instanceof EntityPlayer) e.sendMessage(new TextComponentTranslation(key, obj));
 	}
 	
-	public static void sendSimpleMessage(EntityPlayer pl, String msg) {
-		if (pl != null) pl.sendMessage(new TextComponentString(msg));
+	public static void sendSimpleMessage(Entity e, String msg) {
+		if (e instanceof EntityPlayer) e.sendMessage(new TextComponentString(msg));
 	}
     
     /** Used for getting Object from array without Exception. */

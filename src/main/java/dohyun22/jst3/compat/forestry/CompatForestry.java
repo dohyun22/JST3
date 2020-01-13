@@ -45,7 +45,7 @@ public class CompatForestry extends Loadable {
 	public void postInit() {
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_compound"));
 		MRecipes.addFertilizer(JSTUtils.getModItemStack("forestry:fertilizer_bio"));
-		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("forestry:wood_pile", 4), new ItemStack(Items.COAL, 32, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 300);
+		MRecipes.addCokeOvenRecipe(JSTUtils.getModItemStack("forestry:wood_pile", 4), new ItemStack(Items.COAL, 40, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 300);
 		MRecipes.addWrench(JSTUtils.getModItemStack("forestry:wrench", 1, 32767));
 
 		FluidStack fs = FluidRegistry.getFluidStack("bio.ethanol", 4000), fs2;
@@ -79,7 +79,6 @@ public class CompatForestry extends Loadable {
 			if (b != Blocks.AIR) b.setLightLevel(0.0f);
 			b = JSTUtils.getModBlock("magicbees:hiveblock");
 			if (b != Blocks.AIR) b.setLightLevel(0.0f);
-			
 			if (Loader.isModLoaded("magicbees")) {
 				try {
 					Class c = Class.forName("magicbees.bees.EnumBeeHives");
@@ -98,7 +97,7 @@ public class CompatForestry extends Loadable {
 					
 				} catch (Throwable t) {
 					JSTUtils.LOG.error("Failed to disable hive lighting for MagicBees");
-					t.printStackTrace();
+					JSTUtils.LOG.catching(t);
 				}
 			}
 		}

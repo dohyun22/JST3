@@ -49,7 +49,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 	public MT_SHFurnace() {
 		circuitTier = 2;
 	}
-	
+
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MT_SHFurnace();
@@ -71,7 +71,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 				}
 			}
 		}
-		
+
 		int coilType = -1;
 		for (int x = -1; x <= 1; x++) {
 			for (int y = 1; y < 3; y++) {
@@ -165,46 +165,46 @@ public class MT_SHFurnace extends MT_Multiblock {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
-		if (baseTile != null && !isClient() && !tryUpg(pl, st))
+		if (!isClient() && !tryUpg(pl, st))
 			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
-	
+
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
 		if (baseTile != null) baseTile.facing = JSTUtils.getClosestSide(p, elb, true);
 	}
-	
+
 	@Override
 	protected int getTier() {
 		return Math.min(circuitTier, coilTier);
 	}
-	
+
 	@Override
 	protected boolean isPortPowered() {
 		return true;
 	}
-	
+
 	@Override
 	protected int getEnergyUse() {
-		return this.energyUse * JSTUtils.getMultiplier(getTier(), energyUse);
+		return energyUse * JSTUtils.getMultiplier(getTier(), energyUse);
 	}
-	
+
 	@Override
 	protected int getSpeed() {
 		return Math.max(1, JSTUtils.getMultiplier(getTier(), energyUse));
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		coilTier = tag.getByte("tcoil");
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
@@ -215,12 +215,12 @@ public class MT_SHFurnace extends MT_Multiblock {
 	public boolean canAcceptEnergy() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isEnergyInput(EnumFacing side) {
 		return false;
 	}
-	
+
 	@Override
 	public int getLightValue() {
 		return baseTile.isActive() ? 15 : 0;
@@ -230,14 +230,20 @@ public class MT_SHFurnace extends MT_Multiblock {
 	public int getDust() {
 		return 150;
 	}
-	
+
+	@Override
+	public int getData() {
+		if (getMode() != 2) return 0;
+		return mxprogress <= 0 ? 0 : progress * 100 / mxprogress;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
 		TextureAtlasSprite t = getTETex("heatres");
 		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("firebox")};
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getTexture() {
@@ -246,13 +252,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 			ret[n] = getTETex(baseTile.facing == JSTUtils.getFacingFromNum(n) ? "firebox" + (baseTile.isActive() ? "" : "_off") : "heatres");
 		return ret;
 	}
-	
-	@Override
-	public int getData() {
-		if (getMode() != 2) return 0;
-		return mxprogress <= 0 ? 0 : progress * 100 / mxprogress;
-	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void doDisplay(byte state, int data, FontRenderer fr) {
@@ -261,7 +261,7 @@ public class MT_SHFurnace extends MT_Multiblock {
 		else
 			super.doDisplay(state, data, fr);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {

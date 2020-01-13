@@ -60,7 +60,7 @@ public class MT_CokeOven extends MT_Multiblock {
 			for (int z = 0; z <= 2; z++) {
 				BlockPos p = getRelativePos(x, 1, z);
 				if (x == 0 && z == 1) {
-					if (!this.getWorld().isAirBlock(p))
+					if (!getWorld().isAirBlock(p))
 						return false;
 					continue;
 				}

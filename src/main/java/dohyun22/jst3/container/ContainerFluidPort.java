@@ -1,7 +1,6 @@
 package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileFluidGen;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 

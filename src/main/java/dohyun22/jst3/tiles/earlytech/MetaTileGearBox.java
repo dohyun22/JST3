@@ -9,7 +9,6 @@ import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.tiles.interfaces.IKineticMachine;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -91,7 +90,7 @@ public class MetaTileGearBox extends MetaTileKinetic {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.add("WIP");
 	}
 }

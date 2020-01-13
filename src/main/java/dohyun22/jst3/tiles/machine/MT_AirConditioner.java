@@ -9,7 +9,6 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -156,7 +155,7 @@ public class MT_AirConditioner extends MetaTileEnergyInput {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		int r = (5 + (tier - 1) * 4) * 2 + 1;
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.aircon", r +"x" + r + "x" + r));
 	}

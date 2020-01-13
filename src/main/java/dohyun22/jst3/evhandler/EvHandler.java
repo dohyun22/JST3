@@ -71,7 +71,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
@@ -129,7 +128,7 @@ public class EvHandler {
 		if (w.provider.getDimension() == -1) {
 			if (JSTCfg.PNT && ev.getPos().getY() > 127 && pl != null && !pl.capabilities.isCreativeMode) {
 				ev.setCanceled(true);
-				pl.sendMessage(new TextComponentString("\u00A7cYou can't edit blocks on the top of the nether!"));
+				JSTUtils.sendSimpleMessage(pl, "\u00A7cYou can't edit blocks on the top of the nether!");
 				return;
 			}
 			
@@ -195,16 +194,16 @@ public class EvHandler {
 	public void onPlace(PlaceEvent ev) {
 		World w = ev.getWorld();
 		if (ev.isCanceled()) return;
-		EntityPlayer pl = ev.getPlayer();
+		Entity e = ev.getPlayer();
 		BlockPos p = ev.getPos();
-		if (JSTCfg.PNT && w.provider.getDimension() == -1 && ev.getPos().getY() > 127 && pl != null && !pl.capabilities.isCreativeMode) {
+		if (JSTCfg.PNT && w.provider.getDimension() == -1 && ev.getPos().getY() > 127 && e != null && !(e instanceof EntityPlayer && ((EntityPlayer)e).isCreative())) {
 			ev.setCanceled(true);
-			pl.sendMessage(new TextComponentString("\u00A7cYou can't edit blocks on the top of the nether!"));
+			JSTUtils.sendSimpleMessage(e, "\u00A7cYou can't edit blocks on the top of the nether!");
 			return;
 		}
 		/*if (w.getBlockState(p.down()).getBlock() == Blocks.SPONGE) {
 			ev.setCanceled(true);
-			pl.sendMessage(new TextComponentString("Test"));
+			JSTUtils.sendSimpleMessage(e, "Test");
 		}*/
 	}
 
@@ -213,6 +212,7 @@ public class EvHandler {
 		World w = ev.getWorld();
 		ItemStack st = ev.getItemStack();
 		String name = JSTUtils.getRegName(st);
+		EntityPlayer pl = ev.getEntityPlayer();
 
 		if (!st.isEmpty()) {
 			if (!w.isRemote && JSTCfg.DVEP && st.getItem() == Items.ENDER_EYE && w.getBlockState(ev.getPos()).getBlock() == Blocks.END_PORTAL_FRAME) {
@@ -223,17 +223,17 @@ public class EvHandler {
 
 		if (JSTCfg.RIC2C) {
 			if (ev.getHand() == EnumHand.OFF_HAND) {
-				ItemStack st2 = ev.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
+				ItemStack st2 = pl.getHeldItem(EnumHand.MAIN_HAND);
 				if (!st2.isEmpty() && "ic2:cable".equals(name)) {
 					ev.setCanceled(true);
 					return;
 				}
 			}
 			if (!st.isEmpty() && "ic2:cable".equals(name)) {
-				ev.getEntityPlayer().swingArm(ev.getHand());
+				pl.swingArm(ev.getHand());
 				ev.setCanceled(true);
-				ev.setCancellationResult(EnumActionResult.SUCCESS);
-				if (!w.isRemote) {
+				ev.setCancellationResult(pl instanceof FakePlayer ? EnumActionResult.FAIL : EnumActionResult.SUCCESS);
+				if (!w.isRemote && !(pl instanceof FakePlayer)) {
 					byte ins = st.hasTagCompound() ? st.getTagCompound().getByte("insulation") : 0;
 					boolean flag = ins >= getMaxIns((byte) st.getMetadata());
 					int mte = getJSTMeta((byte) st.getMetadata(), flag);
@@ -243,7 +243,7 @@ public class EvHandler {
 						if (!b.isReplaceable(w, p))
 							p = p.offset(ev.getFace());
 							
-						if (b.isReplaceable(w, p) && ev.getEntityPlayer().canPlayerEdit(p, ev.getFace(), st)) {
+						if (b.isReplaceable(w, p) && pl.canPlayerEdit(p, ev.getFace(), st)) {
 							boolean flag2 = false;
 							BlockSnapshot bn = new BlockSnapshot(w, p, w.getBlockState(p));
 							if (w.setBlockState(p, JSTBlocks.blockTile.getDefaultState(), 3)) {
@@ -253,23 +253,23 @@ public class EvHandler {
 									if (tem.hasValidMTE() && !tem.mte.isOpaque())
 										BlockTileEntity.setState(w, p, false, 2);
 								}
-								if (ForgeEventFactory.onPlayerBlockPlace(ev.getEntityPlayer(), bn, ev.getFace(), ev.getHand()).isCanceled()) {
+								if (ForgeEventFactory.onPlayerBlockPlace(pl, bn, ev.getFace(), ev.getHand()).isCanceled()) {
 									bn.restore(true, false);
 								} else {
 									w.notifyNeighborsOfStateChange(p, w.getBlockState(p).getBlock(), false);
 									if (tem.hasValidMTE())
-										tem.mte.onPlaced(p, w.getBlockState(p), ev.getEntityPlayer(), st);
+										tem.mte.onPlaced(p, w.getBlockState(p), pl, st);
 									flag2 = true;
 								}
 							}
 		
 							if (flag2) {
-								SoundType sn = w.getBlockState(p).getBlock().getSoundType(w.getBlockState(p), w, p, ev.getEntityPlayer());
+								SoundType sn = w.getBlockState(p).getBlock().getSoundType(w.getBlockState(p), w, p, pl);
 								w.playSound(null, p, sn.getPlaceSound(), SoundCategory.BLOCKS, (sn.getVolume() + 1.0F) / 2.0F, sn.getPitch() * 0.8F);
-								if (!ev.getEntityPlayer().capabilities.isCreativeMode) {
+								if (!pl.capabilities.isCreativeMode) {
 									Item it = JSTUtils.getModItem("ic2:crafting");
 									if (!flag && ins > 0 && it != null)
-										ev.getEntityPlayer().addItemStackToInventory(new ItemStack(it, ins));
+										pl.addItemStackToInventory(new ItemStack(it, ins));
 									st.shrink(1);
 								}
 							}
@@ -293,8 +293,8 @@ public class EvHandler {
 						flag = true;
 					}
 					if (flag) {
-						ev.getEntityPlayer().swingArm(ev.getHand());
-						if (!ev.getEntityPlayer().capabilities.isCreativeMode)
+						pl.swingArm(ev.getHand());
+						if (!pl.capabilities.isCreativeMode)
 							st.shrink(1);
 					}
 					ev.setCanceled(true);
@@ -311,10 +311,8 @@ public class EvHandler {
 		IBlockState b = (ev.getEntityPlayer().world.getBlockState(ev.getPos()));
 		if (st != null && st.getItem() instanceof ItemJST1)
 			((ItemJST1)st.getItem()).getBehaviour(st).onHitBlock(st, ev.getPos(), ev.getEntityPlayer());
-		
 		try {
-			if (!ev.getEntityPlayer().capabilities.isCreativeMode && st != null && st.getUnlocalizedName().toLowerCase().contains("ichorpickgem") &&
-				b.getBlockHardness(ev.getWorld(), ev.getPos()) < 0.0F)
+			if (!ev.getEntityPlayer().capabilities.isCreativeMode && st != null && st.getUnlocalizedName().toLowerCase().contains("ichorpickgem") && b.getBlockHardness(ev.getWorld(), ev.getPos()) < 0.0F)
 				ev.setCanceled(true);
 		} catch (Exception e) {}
 	}

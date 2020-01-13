@@ -18,7 +18,8 @@ public class BatterySlot extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack in) {
-		return (JSTUtils.chargeItem(in, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0 && charge) || 
-				(JSTUtils.dischargeItem(in, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0 && discharge);
+		in = in.copy();
+		in.setCount(1);
+		return (JSTUtils.chargeItem(in, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0 && charge) || (JSTUtils.dischargeItem(in, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0 && discharge);
 	}
 }

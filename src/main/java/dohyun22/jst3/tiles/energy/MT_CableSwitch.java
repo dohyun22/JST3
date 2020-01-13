@@ -5,15 +5,15 @@ import dohyun22.jst3.tiles.TileEntityMeta;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-public class MetaTileCableSwitch extends MetaTileCable {
+public class MT_CableSwitch extends MT_Cable {
 
-	public MetaTileCableSwitch() {
+	public MT_CableSwitch() {
 		super("cable_sw", 8192, (byte)2, (byte)4, 5, (byte)6);
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileCableSwitch();
+		return new MT_CableSwitch();
 	}
 	
 	@Override

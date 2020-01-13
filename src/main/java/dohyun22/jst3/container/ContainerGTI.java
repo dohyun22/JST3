@@ -1,7 +1,7 @@
 package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileGridTieInverter;
+import dohyun22.jst3.tiles.energy.MT_GTI;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -21,28 +21,26 @@ public class ContainerGTI extends ContainerMTE {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		if (this.te.getWorld().isRemote || !(te.mte instanceof MetaTileGridTieInverter)) {
+		if (te.getWorld().isRemote || !(te.mte instanceof MT_GTI))
 			return;
-		}
 
-		MetaTileGridTieInverter r = (MetaTileGridTieInverter) te.mte;
+		MT_GTI r = (MT_GTI) te.mte;
+		for (int i = 0; i < listeners.size(); ++i) {
+			IContainerListener icl = (IContainerListener) listeners.get(i);
 
-		for (int i = 0; i < this.listeners.size(); ++i) {
-			IContainerListener icl = (IContainerListener) this.listeners.get(i);
-
-			if (this.err != r.getErrorState())
+			if (err != r.getErrorState())
 				icl.sendWindowProperty(this, 50, r.getErrorState());
 			
-			if (this.output != r.output)
+			if (output != r.output)
 				splitLongAndSend(icl, this, 51, (long)(r.output * 100));
 			
-			if (this.size != r.size)
+			if (size != r.size)
 				splitIntAndSend(icl, this, 55, r.size);
 		}
 
-		this.err = r.getErrorState();
-		this.output = (long)(r.output * 100);
-		this.size = r.size;
+		err = r.getErrorState();
+		output = (long)(r.output * 100);
+		size = r.size;
 	}
 	
 	@Override
@@ -51,8 +49,8 @@ public class ContainerGTI extends ContainerMTE {
 		super.updateProgressBar(id, data);
 		
 		if (id == 50)
-			this.err = (byte) data;
-		this.output = getLongFromData(this.output, 51, id, data);
-		this.size = getIntFromData(this.size, 55, id, data);
+			err = (byte) data;
+		output = getLongFromData(output, 51, id, data);
+		size = getIntFromData(size, 55, id, data);
 	}
 }

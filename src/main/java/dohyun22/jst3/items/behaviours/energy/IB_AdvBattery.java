@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.items.FluidItemWrapper;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.loader.JSTCfg;
-import dohyun22.jst3.tiles.energy.MetaTileFluidGen;
+import dohyun22.jst3.tiles.energy.MT_FluidGen;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -52,7 +52,7 @@ public class IB_AdvBattery extends ItemBehaviour {
 				NBTTagCompound nbt = JSTUtils.getOrCreateNBT(st);
 				int bf = nbt.getInteger("buff");
 				if (bf <= 0) {
-					int fv = MetaTileFluidGen.getFuelValue((byte) 1, fh.drain(1, false));
+					int fv = MT_FluidGen.getFuelValue((byte) 1, fh.drain(1, false));
 					if (fv > 0) {
 						int m = Math.max((int) Math.ceil(32 / (double)fv), 1);
 						FluidStack fs = fh.drain(m, !sim);
@@ -138,7 +138,7 @@ public class IB_AdvBattery extends ItemBehaviour {
 		public int fill(FluidStack fs, boolean fill) {
 			if (type == 1 && fs != null) {
 				String s = FluidRegistry.getFluidName(fs);
-				if (MetaTileFluidGen.getFuelValue((byte) 1, fs) > 0) return super.fill(fs, fill);
+				if (MT_FluidGen.getFuelValue((byte) 1, fs) > 0) return super.fill(fs, fill);
 			}
 			return 0;
 		}

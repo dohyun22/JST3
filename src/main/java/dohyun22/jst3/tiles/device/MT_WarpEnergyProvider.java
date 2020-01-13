@@ -9,7 +9,6 @@ import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -21,8 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_WarpEnergyProvider extends MetaTileEnergyInput {
 	private static Class tileWarpCore;
-	private static Method getSpaceObject;
-	private static Method addFuel;
+	private static Method getSpaceObject, addFuel;
 
 	static {
 		tileWarpCore = ReflectionUtils.getClassObj("zmaster587.advancedRocketry.tile.multiblock.TileWarpCore");
@@ -80,7 +78,7 @@ public class MT_WarpEnergyProvider extends MetaTileEnergyInput {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.warpenergy"));
 	}
 }

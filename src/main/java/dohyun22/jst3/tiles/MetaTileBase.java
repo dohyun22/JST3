@@ -296,9 +296,7 @@ public abstract class MetaTileBase {
 		return new TextureAtlasSprite[] {ErrorTex, ErrorTex, ErrorTex, ErrorTex, ErrorTex, ErrorTex};
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
-	}
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {}
 	
 	@Nullable
 	public AxisAlignedBB getBoundingBox() {
@@ -439,9 +437,8 @@ public abstract class MetaTileBase {
 	
 	public static int getMTEId(World w, BlockPos p) {
 		TileEntity te = w.getTileEntity(p);
-		if (te instanceof TileEntityMeta) {
+		if (te instanceof TileEntityMeta)
 			return ((TileEntityMeta)te).getID();
-		}
 		return 0;
 	}
 

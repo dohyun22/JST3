@@ -44,7 +44,7 @@ public class JSTItems {
     			"shard5", "admin_core", "just_coin", "wireless_set", "ir_plate", new Object[] {"milkberry", new IB_Food(2, 5)}, "ruby", "peridot", "sapphire", new Object[] {"garilc", new IB_Food(2, 2)},
     			"bedrock_shard", "bedrock_dust", "airc_circuit", "airc_engine", "neut_ingot", "ra_ingot", "ba_ingot", "nikolite", "hadv_circuit", "ir_ingot",
     			"ir_dust", "zn_ingot", "zn_dust", "si_ingot", "ra_dust", "ba_dust", "brass_ingot", "brass_dust", "nq_ingot", "nq_dust",
-    			"ub_ingot", "ub_dust", "ub_plate", "zn_plate", "ra_plate", "ba_plate", "comp_mtr_1", "comp_mtr_2", "comp_mtr_3", "q_nugget",
+    			"ub_ingot", "ub_dust", "ub_plate", "zn_plate", "ra_plate", "ba_plate", new Object[] {"uuberry", new IB_Food(6, 16, 32, true, false, new PotionEffect(MobEffects.REGENERATION, 600, 2))}, null, null, "q_nugget",
     			"q_mtr", "super_circuit", "hyper_circuit", "si_plate", "brass_plate", "nq_plate", "rubydust", "peridotdust", "sapphiredust", "si_dust",
     			"nq_ref", "rad_dust", "scr_fe", "sfe_dust", "cr_ingot", "cr_dust", "cr_plate", new Object[] {"li_dust", tmp[0]}, "ialloy", "ialloy_2",
     			"al_ingot", "al_dust", "al_plate", "w_ingot", "w_dust", "w_plate", "liph", "pblue", "es_ingot", "es_dust",
@@ -55,7 +55,7 @@ public class JSTItems {
     			null, "se1", "se2", "se3", "se4", "se5", "se6", "se7", "se8", null,
     			null, "re1", "re2", "re3", "re4", "re5", "re6", "re7", "re8", null,
     			null, null, null, null, null, null, null, null, null, null, //140~149: Reserved for new tiered part
-    			"cnt", new Object[] {"oilberry", new IB_Food(6, 10, 32, false, false, new PotionEffect(MobEffects.NAUSEA, 200))}, "vtube", "inf_circuit", ac("arsolar", fl[0]), null, null, "est_ingot", "est_dust", "est_plate",
+    			"cnt", new Object[] {"oilberry", new IB_Food(4, 10, 32, false, false, new PotionEffect(MobEffects.NAUSEA, 200))}, "vtube", "inf_circuit", ac("arsolar", fl[0]), null, null, "est_ingot", "est_dust", "est_plate",
     			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null, //160~169: Reserved for molds
     			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1]), null,
     			null, null, null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null,
@@ -115,6 +115,7 @@ public class JSTItems {
 		item1.registerMetaItem(10049, "tool_leafcutter", new IB_LeafCutter());
 		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingIron());
 		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
+		item1.registerMetaItem(10052, "tool_bp", new IB_BlockPlacer());
 
 		item1.registerMetaItem(10060, "ucell", new IB_UniversalCell(8000));
 		item1.registerMetaItem(10061, "ucell2", new IB_UniversalCell(32000));
@@ -175,6 +176,7 @@ public class JSTItems {
 		item1.registerMetaItem(12029, "bat_na3", new IB_Battery(1600000L, 3));
 		item1.registerMetaItem(12030, "sb_rtg", new IB_AdvBattery(0));
 		item1.registerMetaItem(12031, "sb_fcell", new IB_AdvBattery(1));
+		item1.registerMetaItem(12032, "bat_aec", new IB_Battery(1000000000000L, 7, 1));
 		item1.registerMetaItem(12040, "chgr1", new IB_Charger(100000, 1, false));
 		item1.registerMetaItem(12041, "chgr2", new IB_Charger(600000, 2, false));
 		item1.registerMetaItem(12042, "chgr3", new IB_Charger(2400000, 3, false));
@@ -190,6 +192,7 @@ public class JSTItems {
 		item1.registerMetaItem(13001, "upg_batbuff", new IB_Upgrade("jst_bat", "batbuff"));
 		item1.registerMetaItem(13002, "upg_water", new IB_Upgrade("jst_water", "water"));
 		item1.registerMetaItem(13003, "upg_fusion", new IB_Upgrade("jst_fusion", "fusion"));
+		item1.registerMetaItem(13004, "upg_inv", new IB_Upgrade("jst_inv"));
 
 		item1.addFuelValue(98, 25600);
 		item1.addFuelValue(99, 102400);

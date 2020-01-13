@@ -23,7 +23,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -46,23 +45,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust {
-	protected List<BlockPos> energyInput = new ArrayList();
-	protected List<BlockPos> energyOutput = new ArrayList();
-	protected List<BlockPos> itemInput = new ArrayList();
-	protected List<BlockPos> itemOutput = new ArrayList();
-	protected List<BlockPos> fluidInput = new ArrayList();
-	protected List<BlockPos> fluidOutput = new ArrayList();
+	protected List<BlockPos> energyInput = new ArrayList(), energyOutput = new ArrayList(), itemInput = new ArrayList(), itemOutput = new ArrayList(), fluidInput = new ArrayList(), fluidOutput = new ArrayList();
 	protected boolean structureValid;
-	private byte timer;
-	private byte timer2 = 50;
+	protected byte timer, timer2 = 50;
 	protected ItemStack[] itemOut;
 	protected FluidStack[] fluidOut;
-	protected int energyUse;
-	protected int progress;
-	protected int mxprogress;
-	private byte cooldown;
-	protected boolean canIEL;
-	protected byte circuitTier = -1;
+	protected int energyUse, progress, mxprogress;
+	protected byte cooldown, circuitTier = -1;
 	private ItemStack upgradeCircuit;
 	
 	@Override
@@ -75,13 +64,13 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 	}
 
 	protected abstract boolean checkStructure();
-	
+
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
 		setUpdateTimer();
 	}
-	
+
 	@Override
 	public void onPostTick() {
 		super.onPostTick();
@@ -142,10 +131,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 			if (getUsableEnergy() >= u) {
 				consumeEnergy(u);
 				if (getUsableEnergy() < u) {
-					if (canIEL)
-						stopWorking(true);
-					else
-						interrupt(80);
+					interrupt(80);
 					return;
 				}
 				progress += Math.max(1, getSpeed());
@@ -482,7 +468,7 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		addInfo(st, ls);
 		int d = getDust();
 		if (d > 0) ls.add(I18n.format("jst.tooltip.tile.com.dust", FineDustCapability.toMicrogram(d * 60)));
@@ -514,36 +500,36 @@ public abstract class MT_Multiblock extends MetaTileEnergyInput implements IDust
 
 	/** @param p Location of the Port
 	 * @param mode 1=EnergyIN, 2=EnergyOUT, 4=ItemIN, 8=ItemOUT, 16=FluidIN, 32=FluidOUT flags can be added together (i.e using 12 to allow Item Input and Output) */
-	protected boolean getAndAddPort(BlockPos p, int mode, String tex) {
+	protected boolean getAndAddPort(BlockPos p, int mode, @Nullable String tex) {
 		if (p instanceof MutableBlockPos) p = ((MutableBlockPos)p).toImmutable();
 		MetaTileBase mte = MetaTileBase.getMTE(getWorld(), p);
 		if (mte instanceof IMultiBlockPart && tex != null)
 			((IMultiBlockPart)mte).setTexture(tex);
 		if (mte instanceof MT_EnergyPort) {
 			if ((mode & 1) == 1 && !((MT_EnergyPort)mte).isOutput) {
-				energyInput.add(p);
+				if (!energyInput.contains(p)) energyInput.add(p);
 				return true;
 			}
 			if ((mode >> 1 & 1) == 1 && ((MT_EnergyPort)mte).isOutput) {
-				energyOutput.add(p);
+				if (!energyOutput.contains(p)) energyOutput.add(p);
 				return true;
 			}
 		} else if (mte instanceof MT_ItemPort) {
 			if ((mode >> 2 & 1) == 1 && !((MT_ItemPort)mte).isOutput) {
-				itemInput.add(p);
+				if (!itemInput.contains(p)) itemInput.add(p);
 				return true;
 			}
 			if ((mode >> 3 & 1) == 1 && ((MT_ItemPort)mte).isOutput) {
-				itemOutput.add(p);
+				if (!itemOutput.contains(p)) itemOutput.add(p);
 				return true;
 			}
 		} else if (mte instanceof MT_FluidPort) {
 			if ((mode >> 4 & 1) == 1 && !((MT_FluidPort)mte).isOutput) {
-				fluidInput.add(p);
+				if (!fluidInput.contains(p)) fluidInput.add(p);
 				return true;
 			}
 			if ((mode >> 5 & 1) == 1 && ((MT_FluidPort)mte).isOutput) {
-				fluidOutput.add(p);
+				if (!fluidOutput.contains(p)) fluidOutput.add(p);
 				return true;
 			}
 		}

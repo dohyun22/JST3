@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.client.gui.GUIGeneric;
+import dohyun22.jst3.container.BatterySlot;
 import dohyun22.jst3.container.ContainerGeneric;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.loader.JSTCfg;
@@ -25,7 +26,6 @@ import ic2.api.item.ISpecialElectricItem;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -43,7 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, IScanSupport {
 	private final byte tier;
-	private boolean boost;
+	private boolean boost, moreSlot;
 
 	public MT_BatBuff(int t) {
 		tier = (byte) t;
@@ -56,7 +56,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 
 	@Override
 	public long getMaxEnergy() {
-		return JSTUtils.getVoltFromTier(tier) * 26L;
+		return JSTUtils.getVoltFromTier(tier) * 48L;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 
 	@Override
 	public int getInvSize() {
-		return 16;
+		return 32;
 	}
 
 	@Override
@@ -95,12 +95,12 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 			return;
 
 		int a = JSTUtils.getVoltFromTier(tier);
-		if (boost) a *= 4;
+		if (!moreSlot && boost) a *= 2;
 		long v = JSTUtils.getVoltFromTier(tier);
-		if (baseTile.energy >= v * 22L) {
+		if (baseTile.energy >= v * 37) {
 			for (int n = 0; n < getInvSize(); n++)
 				baseTile.energy -= JSTUtils.chargeItem(inv.get(n), a, tier, false, false);
-		} else if (baseTile.energy < v * 5L) {
+		} else if (baseTile.energy <= v * 4) {
 			for (int n = 0; n < getInvSize(); n++)
 				baseTile.energy += JSTUtils.dischargeItem(inv.get(n), a, tier, false, false);
 		}
@@ -126,7 +126,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!isClient()) pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+		if (!isClient()) pl.openGui(JustServerTweak.INSTANCE, moreSlot ? 2 : 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
 
@@ -150,7 +150,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 	
 	@Override
 	public boolean isItemValidForSlot(int sl, ItemStack st) {
-		return super.isItemValidForSlot(sl, st) && inv.get(sl).isEmpty() && (JSTUtils.chargeItem(st, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0 || JSTUtils.dischargeItem(st, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0);
+		return (moreSlot ? true : sl < 16) && super.isItemValidForSlot(sl, st) && inv.get(sl).isEmpty() && (JSTUtils.chargeItem(st, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0 || JSTUtils.dischargeItem(st, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) > 0);
 	}
 	
 	@Override
@@ -164,19 +164,15 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 		if (bi[0].compareTo(BigInteger.ZERO) <= 0 || bi[1].compareTo(BigInteger.ZERO) <= 0) return 0;
 		return bi[0].multiply(BigInteger.valueOf(15)).divide(bi[1]).intValue();
 	}
-	
-	@Override
-	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		ContainerGeneric ret = new ContainerGeneric(te);
-		for (int y = 0; y < 4; ++y) for (int x = 0; x < 4; ++x) ret.addSlot(new Slot(te, x + y * 4, 53 + x * 18, 8 + y * 18));
-		ret.addPlayerSlots(inv);
-		return ret;
-	}
 
 	@Override
 	public boolean tryUpgrade(String id) {
 		if (!boost && tier < 9 && id.equals("jst_bat")) {
 			boost = true;
+			return true;
+		}
+		if (!moreSlot && id.equals("jst_inv")) {
+			moreSlot = true;
 			return true;
 		}
 		return false;
@@ -187,39 +183,49 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 	public void getDrops(ArrayList<ItemStack> ls) {
 		super.getDrops(ls);
 		if (boost) ls.add(new ItemStack(JSTItems.item1, 1, 13001));
+		if (moreSlot) ls.add(new ItemStack(JSTItems.item1, 1, 13004));
 	}
-	
+
+	@Override
+	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
+		ContainerGeneric r = new ContainerGeneric(te);
+		int xs = id == 2 ? 8 : 4;
+		for (int y = 0; y < 4; y++) for (int x = 0; x < xs; x++)
+			r.addSlot(new BatterySlot(te, x + y * xs, 53 + x * 18, 8 + y * 18, true, true));
+		r.addPlayerSlots(inv, id == 2 ? 18 : 8, 84);
+		return r;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Object getClientGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
-		GUIGeneric ret = new GUIGeneric((ContainerGeneric) getServerGUI(id, inv, te));
-		ret.addPwr2(9, 25);
+		GUIGeneric r = new GUIGeneric((ContainerGeneric)getServerGUI(id, inv, te), id == 2 ? 204 : 176, 166);
+		r.addInv(id == 2 ? 18 : 8, 84);
+		r.addPwr2(9, 25);
 		for (int n = 0; n < getInvSize(); n++) {
 			try {
-				Slot s = ret.inventorySlots.inventorySlots.get(n);
-				ret.addSlot(s.xPos, s.yPos, 2);
-			} catch (IndexOutOfBoundsException e) {
-				e.printStackTrace();
-			}
+				Slot s = r.inventorySlots.inventorySlots.get(n);
+				r.addSlot(s, 2);
+			} catch (Exception e) {}
 		}
-		return ret;
+		return r;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.batbuff"));
 		int e = JSTUtils.getVoltFromTier(this.tier);
 		ls.add(I18n.format("jst.msg.com.out") + " " + e + " EU/t, " + ((long)e * JSTCfg.RFPerEU) + " RF/t");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
 		TextureAtlasSprite t = this.getTieredTex(tier);
 		return new TextureAtlasSprite[] {t, t, t, t, t, getTETex("besu")};
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getTexture() {
@@ -228,7 +234,7 @@ public class MT_BatBuff extends MetaTileEnergyInput implements IGenericGUIMTE, I
 			ret[n] = baseTile.facing == JSTUtils.getFacingFromNum(n) ? getTETex("besu") : getTieredTex(tier);
 		return ret;
 	}
-	
+
 	protected BigInteger[] getCapacity() {
 		BigInteger eu = BigInteger.ZERO;
 		BigInteger mx = BigInteger.ZERO;

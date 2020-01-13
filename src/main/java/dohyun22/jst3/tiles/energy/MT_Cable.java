@@ -33,7 +33,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,7 +63,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class MetaTileCable extends MetaTileEnergyInput {
+public class MT_Cable extends MetaTileEnergyInput {
 	public final String tex;
 	protected final int maxv;
 	protected final byte insMode;
@@ -78,11 +77,11 @@ public class MetaTileCable extends MetaTileEnergyInput {
 	protected byte blockedSide;
 	protected static final DecimalFormat fmt = new DecimalFormat("#.###");
 
-	public MetaTileCable(String tex, int volt, int insMode, int r, int vd) {
+	public MT_Cable(String tex, int volt, int insMode, int r, int vd) {
 		this(tex, volt, insMode, r, vd, -1);
 	}
 
-	public MetaTileCable(String tex, int volt, int insMode, int r, int vd, int ic2rep) {
+	public MT_Cable(String tex, int volt, int insMode, int r, int vd, int ic2rep) {
 		this.tex = tex;
 		this.maxv = volt;
 		this.insMode = ((byte)insMode);
@@ -93,7 +92,7 @@ public class MetaTileCable extends MetaTileEnergyInput {
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileCable(tex, maxv, insMode, r, drop, ic2rep);
+		return new MT_Cable(tex, maxv, insMode, r, drop, ic2rep);
 	}
 
 	@Override
@@ -134,9 +133,9 @@ public class MetaTileCable extends MetaTileEnergyInput {
                         if (te instanceof TileEntityMeta) {
                             TileEntityMeta tem = (TileEntityMeta)te;
                             if (tem.hasValidMTE()) {
-                                if (tem.mte instanceof MetaTileCable) {
-                                    long tp = ((MetaTileCable)tem.mte).getTransferrablePower(input, dist);
-                                    long cr = tp - ((MetaTileCable)tem.mte).transferEnergy(od, tp, dist, loc, sim);
+                                if (tem.mte instanceof MT_Cable) {
+                                    long tp = ((MT_Cable)tem.mte).getTransferrablePower(input, dist);
+                                    long cr = tp - ((MT_Cable)tem.mte).transferEnergy(od, tp, dist, loc, sim);
                                     input -= cr;
                                     if (!sim) trans += cr;
                                 }
@@ -265,8 +264,8 @@ public class MetaTileCable extends MetaTileEnergyInput {
 				    						if ((x | y | z) == 0) continue;
 				    						if (amt < 100) break;
 				    						MetaTileBase te = getMTE(getWorld(), getPos().add(x, y, z));
-				    						if (te instanceof MetaTileCable && ((MetaTileCable)te).foam == 0) {
-				    							((MetaTileCable)te).setFoam((byte) -1);
+				    						if (te instanceof MT_Cable && ((MT_Cable)te).foam == 0) {
+				    							((MT_Cable)te).setFoam((byte) -1);
 				    		    				amt -= 100;
 				    						}
 				    					}
@@ -397,7 +396,7 @@ public class MetaTileCable extends MetaTileEnergyInput {
 	}
 	
 	@Override
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		String str = maxv < 0 ? "\u221E EU/t, \u221E RF/t" : maxv + " EU/t, " + (maxv * (long)JSTCfg.RFPerEU) + " RF/t";
 		ls.add(I18n.format("jst.tooltip.tile.cable.maxpower", str));
 		float l = drop <= 0 ? -drop : 1.0f / drop;

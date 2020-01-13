@@ -51,7 +51,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MT_StirlingGen extends MetaTileGenerator implements IGenericGUIMTE {
+public class MT_StirlingGen extends MT_Generator implements IGenericGUIMTE {
 	private double fuelLeft;
 	private int fuelValue, /* 20•ÏB */water;
 	private MultiTankHandler tank;

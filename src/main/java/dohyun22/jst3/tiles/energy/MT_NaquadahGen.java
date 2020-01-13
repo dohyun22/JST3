@@ -20,17 +20,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileNaquadahGen extends MetaTileGenerator {
+public class MT_NaquadahGen extends MT_Generator {
 	private byte rods;
 
-	public MetaTileNaquadahGen(int tier) {
+	public MT_NaquadahGen(int tier) {
 		super(tier, true);
 		if (tier < 4) throw new IllegalArgumentException("Naquadah generator only supports EV+ tiers");
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileNaquadahGen(this.tier);
+		return new MT_NaquadahGen(this.tier);
 	}
 	
 	@Override

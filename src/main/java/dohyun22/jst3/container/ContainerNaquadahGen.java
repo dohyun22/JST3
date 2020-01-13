@@ -1,7 +1,7 @@
 package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileNaquadahGen;
+import dohyun22.jst3.tiles.energy.MT_NaquadahGen;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -28,11 +28,11 @@ public class ContainerNaquadahGen extends ContainerMTE {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-	    if (this.te.getWorld().isRemote ||!(te.mte instanceof MetaTileNaquadahGen)) {
+	    if (this.te.getWorld().isRemote ||!(te.mte instanceof MT_NaquadahGen)) {
 	        return;
 	    }
 	    
-	    MetaTileNaquadahGen r = (MetaTileNaquadahGen)te.mte;
+	    MT_NaquadahGen r = (MT_NaquadahGen)te.mte;
 	    
         for (int i = 0; i < this.listeners.size(); ++i) {
             IContainerListener icl = (IContainerListener)this.listeners.get(i);

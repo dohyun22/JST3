@@ -2,7 +2,7 @@ package dohyun22.jst3.entity;
 
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.recipes.MRecipes;
-import dohyun22.jst3.tiles.energy.MetaTileFluidGen;
+import dohyun22.jst3.tiles.energy.MT_FluidGen;
 import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class EntityCarDiesel extends EntityCar {
 	private static final ResourceLocation TEX = new ResourceLocation("jst3:textures/entity/car_f.png");
-	private FluidTank tank = new MetaTileFluidGen.FuelTank(4000, null, -1, 0);
+	private FluidTank tank = new MT_FluidGen.FuelTank(4000, null, -1, 0);
 
 	public EntityCarDiesel(World w) {
 		super(w);

@@ -22,27 +22,27 @@ import net.minecraft.world.World;
 public class IB_Ruler extends ItemBehaviour {
 
 	@Override
-	public EnumActionResult onUseFirst(ItemStack st, EntityPlayer ep, World w, BlockPos p, EnumFacing s, float hx, float hy, float hz, EnumHand h) {
+	public EnumActionResult onUseFirst(ItemStack st, EntityPlayer pl, World w, BlockPos p, EnumFacing s, float hx, float hy, float hz, EnumHand h) {
 		if (w.isRemote)
 			return EnumActionResult.PASS;
 
 		NBTTagCompound nbt = JSTUtils.getOrCreateNBT(st);
 		byte mode = nbt.getByte("mode");
-		if (ep.isSneaking()) {
+		if (pl.isSneaking()) {
 			byte m = (byte) ((mode + 1) % 2);
 			nbt.setByte("mode", m);
-			JSTUtils.sendMessage(ep, "jst.tooltip.ruler.mode" + m);
+			JSTUtils.sendMessage(pl, "jst.tooltip.ruler.mode" + m);
 			return EnumActionResult.SUCCESS;
 		}
 
 		NBTTagCompound tag = nbt.getCompoundTag("coord");
-		w.playSound((EntityPlayer) null, ep.posX, ep.posY, ep.posZ, JSTSounds.SWITCH2, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		w.playSound(null, p, JSTSounds.SWITCH2, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		if (!nbt.hasKey("coord")) {
 			tag.setInteger("x", p.getX());
 			tag.setInteger("y", p.getY());
 			tag.setInteger("z", p.getZ());
 			nbt.setTag("coord", tag);
-			ep.sendMessage(new TextComponentTranslation("jst.tooltip.ruler.start"));
+			pl.sendMessage(new TextComponentTranslation("jst.tooltip.ruler.start"));
 		} else {
 			int x = tag.getInteger("x");
 			int y = tag.getInteger("y");
@@ -57,9 +57,9 @@ public class IB_Ruler extends ItemBehaviour {
 
 			double dist = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2));
 
-			ep.sendMessage(new TextComponentTranslation("jst.tooltip.ruler.distance", JSTUtils.getDist(dist, false), JSTUtils.getDist(dist, true)));
+			pl.sendMessage(new TextComponentTranslation("jst.tooltip.ruler.distance", JSTUtils.getDist(dist, false), JSTUtils.getDist(dist, true)));
 			
-			if (dist > 0.0D) JSTUtils.clearAdvancement(ep, JustServerTweak.MODID, "main/ruler");
+			if (dist > 0.0D) JSTUtils.clearAdvancement(pl, JustServerTweak.MODID, "main/ruler");
 		}
 
 		return EnumActionResult.SUCCESS;

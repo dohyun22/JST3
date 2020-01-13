@@ -236,6 +236,7 @@ public class TextureLoader {
 					ls.add("titania" + n);
 					ls.add("sulfonia" + n);
 					ls.add("goldenapple" + n);
+					ls.add("uuberry" + n);
 				}
 				if (n <= 3) {
 					ls.add("oak" + n);

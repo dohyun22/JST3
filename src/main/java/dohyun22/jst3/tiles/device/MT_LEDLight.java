@@ -19,7 +19,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -158,7 +157,7 @@ public class MT_LEDLight extends MetaTileEnergyInput {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		int a = tier * 2 + 1, b = 4 + tier;
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.led", a + "x" + b + "x" + a));
 	}

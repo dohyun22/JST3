@@ -225,7 +225,7 @@ public class IB_Flamethrower extends ItemBehaviour {
 		} else {
 			bs = w.getBlockState(p.up());
 			b = bs.getBlock();
-			if (b == Blocks.SNOW_LAYER || (b.getFlammability(w, p, EnumFacing.UP) > 50 && (bs.getMaterial() == Material.VINE || bs.getMaterial() == Material.PLANTS))) {
+			if (b == Blocks.SNOW_LAYER || (b.getFlammability(w, p.up(), EnumFacing.UP) > 50 && (bs.getMaterial() == Material.VINE || bs.getMaterial() == Material.PLANTS))) {
 				bs2 = Blocks.AIR.getDefaultState();
 				p = p.up();
 			}
@@ -254,6 +254,8 @@ public class IB_Flamethrower extends ItemBehaviour {
 				case "fuel": return 512;
 				}
 				Integer v = MRecipes.DieselGenFuel.get(s);
+				if (v != null) return v.intValue();
+				v = MRecipes.GasGenFuel.get(s);
 				if (v != null) return v.intValue();
 			}
 		}

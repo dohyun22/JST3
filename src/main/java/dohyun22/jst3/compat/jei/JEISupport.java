@@ -121,20 +121,22 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 32), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 33), s);
 
+		ItemStack st = new ItemStack(JSTItems.item1, 1, 10019);
 		s = JustServerTweak.MODID + ".dieselfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 61), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 62), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 63), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6010), s);
-		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 10019), s);
 		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 10042), s);
+		rg.addRecipeCatalyst(st, s);
 
 		s = JustServerTweak.MODID + ".gasfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 71), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 72), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 73), s);
-		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 12031), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 6011), s);
+		rg.addRecipeCatalyst(new ItemStack(JSTItems.item1, 1, 12031), s);
+		rg.addRecipeCatalyst(st, s);
 
 		s = JustServerTweak.MODID + ".steamfuel";
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 81), s);
@@ -193,6 +195,7 @@ public class JEISupport implements IModPlugin {
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 270 + n), s);
 		s = "minecraft.smelting";
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 280 + n), s);
+		rg.addRecipeCatalyst(new ItemStack(b, 1, 6067), s);
 		list = new String[] {JustServerTweak.MODID + ".grinder", "macerator", "thermalexpansion.pulverizer"};
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 290 + n), list);
 		s = JustServerTweak.MODID + ".crystalizer";

@@ -41,20 +41,20 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileFluidGen extends MetaTileGenerator {
+public class MT_FluidGen extends MT_Generator {
 	public int burningFuel;
 	/** Diesel Gas Steam Thermal*/
 	public final byte type;
 	private FluidTank tank;
 
-	public MetaTileFluidGen(int tier, int type) {
+	public MT_FluidGen(int tier, int type) {
 		super(tier, true);
 		this.type = (byte)type;
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		MetaTileFluidGen ret = new MetaTileFluidGen(tier, type);
+		MT_FluidGen ret = new MT_FluidGen(tier, type);
 		ret.tank = new FuelTank(16000, ret, 2, type);
 		return ret;
 	}
@@ -226,7 +226,7 @@ public class MetaTileFluidGen extends MetaTileGenerator {
 	
 	@Override
 	public boolean isItemValidForSlot(int sl, ItemStack st) {
-		return super.isItemValidForSlot(sl, st) && sl == 0 && MetaTileFluidGen.getFuelValue(type, FluidUtil.getFluidContained(st)) > 0;
+		return super.isItemValidForSlot(sl, st) && sl == 0 && MT_FluidGen.getFuelValue(type, FluidUtil.getFluidContained(st)) > 0;
 	}
 	
     @Override

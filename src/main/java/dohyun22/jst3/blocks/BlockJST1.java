@@ -348,31 +348,31 @@ public class BlockJST1 extends BlockBase implements IDismantleable, IWrenchable 
 	public AxisAlignedBB getBoundingBox(IBlockState bs, IBlockAccess w, BlockPos p) {
 		int m = getMeta(bs);
 		if (m == 7) {
-			float a_2 = 0.0625F;
+			float n = 0.0625F;
 			try {
 				for (EnumFacing f : EnumFacing.VALUES) {
 					if (w.isSideSolid(p.offset(f), f.getOpposite(), false)) {
 						AxisAlignedBB ret = FULL_BLOCK_AABB;
 						switch (f) {
 						case DOWN: 
-							ret = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, a_2, 1.0F); break;
+							ret = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, n, 1.0F); break;
 						case UP: 
-							ret = new AxisAlignedBB(0.0F, 1.0F - a_2, 0.0F, 1.0F, 1.0F, 1.0F); break;
+							ret = new AxisAlignedBB(0.0F, 1.0F - n, 0.0F, 1.0F, 1.0F, 1.0F); break;
 						case NORTH: 
-							ret = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, a_2); break;
+							ret = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, n); break;
 						case SOUTH: 
-							ret = new AxisAlignedBB(0.0F, 0.0F, 1.0F - a_2, 1.0F, 1.0F, 1.0F); break;
+							ret = new AxisAlignedBB(0.0F, 0.0F, 1.0F - n, 1.0F, 1.0F, 1.0F); break;
 						case EAST: 
-							ret = new AxisAlignedBB(0.0F, 0.0F, 0.0F, a_2, 1.0F, 1.0F); break;
+							ret = new AxisAlignedBB(1.0F - n, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F); break;
 						case WEST: 
-							ret = new AxisAlignedBB(1.0F - a_2, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+							ret = new AxisAlignedBB(0.0F, 0.0F, 0.0F, n, 1.0F, 1.0F);
 						}
 						return ret;
 					}
 				}
 			}
 			catch (Throwable a_5) {}
-			return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, a_2, 1.0F);
+			return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, n, 1.0F);
 		}
 		return FULL_BLOCK_AABB;
 	}

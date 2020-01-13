@@ -7,11 +7,10 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileFluidGen;
+import dohyun22.jst3.tiles.energy.MT_FluidGen;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -40,7 +39,7 @@ public class MT_Fueler extends MetaTileBase {
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		MT_Fueler ret = new MT_Fueler();
-		ret.tank = new MetaTileFluidGen.FuelTank(16000, ret, -1, 0);
+		ret.tank = new MT_FluidGen.FuelTank(16000, ret, -1, 0);
 		return ret;
 	}
 
@@ -96,7 +95,7 @@ public class MT_Fueler extends MetaTileBase {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.fueler"));
 	}
 

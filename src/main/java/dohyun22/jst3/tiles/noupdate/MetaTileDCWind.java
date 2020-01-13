@@ -9,7 +9,6 @@ import dohyun22.jst3.api.IDCGenerator;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +30,7 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
 		return new MetaTileDCWind(tier);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		currentWind = tag.getInteger("wind");
@@ -51,17 +50,17 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 			ret *= 1.5D;
 		else if (w.isRaining())
 			ret *= 1.2D;
-		if (ret > 1.0D) ret = 1.0D;
+		if (ret > 1.25D) ret = 1.25D;
 		if (w.rand.nextInt(5) == 0) w.playSound(null, getPos(), SoundEvents.ITEM_ELYTRA_FLYING, SoundCategory.BLOCKS, (float)ret * 1.5F, 1.0F);
 		ret = (tier < 0 ? 4 : JSTUtils.getVoltFromTier(tier)) * ret;
 		return ret;
 	}
-	
+
 	@Override
 	public boolean canUpdate() {
 		return false;
 	}
-	
+
 	private int cntBlocks(World w) {
 		BlockPos p = getPos();
 		int cnt = -1;
@@ -73,7 +72,7 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 						cnt++;
 		return cnt;
 	}
-	
+
 	public static int updateWind(int pwr, Random r) {
 		if (pwr <= 0) pwr = 10 + r.nextInt(10);
 		int upChance = 10;
@@ -90,13 +89,13 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 	    }
 		return pwr;
 	}
-	
+
 	@Override
 	@SideOnly(value = Side.CLIENT)
 	public String getModelKey() {
 		return "jst_dcwind" + tier;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite[] getDefaultTexture() {
@@ -104,10 +103,10 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 		TextureAtlasSprite w = getTETex("basic_wind");
 		return new TextureAtlasSprite[] {s, s, w, w, w, w};
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.dcgen.desc"));
 		int rng = Math.max(0, tier + 1);
 		ls.add(I18n.format("jst.tooltip.tile.dcgen.wind", 4 + rng, 2 + rng / 2));

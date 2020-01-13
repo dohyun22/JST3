@@ -9,7 +9,7 @@ import dohyun22.jst3.container.ContainerMulti;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileFluidGen;
+import dohyun22.jst3.tiles.energy.MT_FluidGen;
 import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
@@ -33,7 +33,6 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/** TODO: Solid Fuel Support (i.e Coal) */
 public class MT_LargeGenerator extends MT_Multiblock {
 	public int burningFuel;
 	/** Diesel Gas Steam Thermal*/
@@ -90,8 +89,8 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	@Override
 	protected boolean checkCanWork() {
 		if (burningFuel > 0) return true;
-		for (MT_FluidPort fp : this.getFluidPorts(false)) {
-			int fv = (int)(MetaTileFluidGen.getFuelValue(this.type, fp.tank.getFluid()) * 1.2F);
+		for (MT_FluidPort fp : getFluidPorts(false)) {
+			int fv = (int)(MT_FluidGen.getFuelValue(this.type, fp.tank.getFluid()) * 1.2F);
 			if (fv > 0) {
 				FluidStack fs = fp.tank.drainInternal(Math.max((int) Math.ceil(OUTPUT / ((double)fv)), 1), true);
 				if (type == 2 && fluidOutput.size() > 0) {
@@ -164,7 +163,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 			}
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected void addInfo(ItemStack st, List<String> ls) {
@@ -172,14 +171,14 @@ public class MT_LargeGenerator extends MT_Multiblock {
 		if (type == 2) ls.add(I18n.format("jst.tooltip.tile.multigen.steam"));
 		ls.add(I18n.format("jst.msg.com.out") + " " + OUTPUT + " EU/t, " + (OUTPUT * JSTCfg.RFPerEU) + " RF/t");
 	}
-	
+
 	@Override
 	public boolean onRightclick(EntityPlayer pl, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (baseTile != null && !isClient())
-			pl.openGui(JustServerTweak.INSTANCE, 1, this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+			pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
-	
+
 	@Override
 	public Object getServerGUI(int id, InventoryPlayer inv, TileEntityMeta te) {
 		return new ContainerMulti(inv, te);
@@ -266,7 +265,7 @@ public class MT_LargeGenerator extends MT_Multiblock {
 	}
 	
 	@Override
-	public boolean isEnergyInput(EnumFacing side) {
+	public boolean isEnergyInput(EnumFacing f) {
 		return false;
 	}
 

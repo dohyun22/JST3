@@ -16,7 +16,6 @@ import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,9 +29,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileEnergyMeter extends MetaTileCable {
+public class MT_EnergyMeter extends MT_Cable {
 	
-	public MetaTileEnergyMeter() {
+	public MT_EnergyMeter() {
 		super(null, -1, (byte)2, (byte)8, 10);
 	}
 
@@ -45,7 +44,7 @@ public class MetaTileEnergyMeter extends MetaTileCable {
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileEnergyMeter();
+		return new MT_EnergyMeter();
 	}
 
 	@Override
@@ -135,7 +134,7 @@ public class MetaTileEnergyMeter extends MetaTileCable {
 	}
 	
 	@Override
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {}
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {}
 	
 	@Override
 	public boolean isSideSolid(EnumFacing s) {

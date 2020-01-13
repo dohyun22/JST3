@@ -53,7 +53,7 @@ public class ItemBlockTE extends ItemBlock {
 		if (mte == null)
 			ls.add(I18n.format("jst.tooltip.tile.com.error"));
 		else
-			mte.getInformation(st, w, ls, adv);
+			mte.getInformation(st, w, ls, adv != null && adv.isAdvanced());
 	}
 	
 	@Override

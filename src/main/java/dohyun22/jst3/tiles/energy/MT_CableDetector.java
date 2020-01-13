@@ -14,10 +14,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-public class MetaTileCableDetector extends MetaTileCable {
+public class MT_CableDetector extends MT_Cable {
 	private boolean on = false;
 	
-	public MetaTileCableDetector() {
+	public MT_CableDetector() {
 		super("cable_dt", 8192, (byte)2, (byte)4, 5, (byte)5);
 	}
 	
@@ -41,7 +41,7 @@ public class MetaTileCableDetector extends MetaTileCable {
 	
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileCableDetector();
+		return new MT_CableDetector();
 	}
 	
 	@Override

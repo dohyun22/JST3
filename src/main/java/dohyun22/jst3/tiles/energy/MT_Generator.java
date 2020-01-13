@@ -13,7 +13,6 @@ import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,14 +24,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.capabilities.Capability;
 
-public abstract class MetaTileGenerator extends MetaTileBase implements IScrewDriver, IDust {
+public abstract class MT_Generator extends MetaTileBase implements IScrewDriver, IDust {
 	protected final int tier;
 	protected final boolean canRSControl;
 	protected boolean rsPowered;
 	/** 0: ignore signal, 1: HIGH, 2: LOW */
 	protected byte mode;
 	
-	public MetaTileGenerator(int tier, boolean rsc) {
+	public MT_Generator(int tier, boolean rsc) {
 		this.tier = tier;
 		this.canRSControl = rsc;
 	}
@@ -55,13 +54,12 @@ public abstract class MetaTileGenerator extends MetaTileBase implements IScrewDr
 	
 	@Override
 	public long getMaxEnergy() {
-		return this.maxEUTransfer() * 400;
+		return maxEUTransfer() * 400;
 	}
 	
 	@Override
 	public void onPostTick() {
-		if (getWorld().isRemote)
-			return;
+		if (isClient()) return;
 		
 		if (checkRSBehavior()) {
 			checkCanGenerate();
@@ -90,7 +88,7 @@ public abstract class MetaTileGenerator extends MetaTileBase implements IScrewDr
 	}
 	
 	@Override
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.add(I18n.format("jst.tooltip.tile.com.sd.rs"));
 		int d = getDust();
 		if (d > 0) ls.add(I18n.format("jst.tooltip.tile.com.dust", FineDustCapability.toMicrogram(d * 60)));

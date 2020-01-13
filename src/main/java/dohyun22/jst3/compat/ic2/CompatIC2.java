@@ -162,6 +162,8 @@ public class CompatIC2 extends Loadable {
 		addUURecipe("ingotChrome", 62100);
 		addUURecipe("dustAluminum", 821);
 		addUURecipe("ingotAluminum", 821);
+		addUURecipe("dustMagnesium", 1000);
+		addUURecipe("ingotMagnesium", 1000);
 		addUURecipe("dustZinc", 950);
 		addUURecipe("ingotZinc", 950);
 		addUURecipe("dustNiobium", 21000);
@@ -405,6 +407,7 @@ public class CompatIC2 extends Loadable {
 		st = getIC2Cable(3, 0, 5);
 		MRecipes.addPressRecipe(new OreDictStack("ingotAluminum"), obj, st, null, 16, 64);
 		MRecipes.addPressRecipe(new OreDictStack("ingotSteel"), obj, st, null, 16, 64);
+		MRecipes.addLiquifierRecipe(new ItemStack(JSTItems.item1, 1, 46), FluidRegistry.getFluidStack("ic2uu_matter", 10), 10, 100);
 
 		st = JSTUtils.getModItemStack("ic2:resource");
 		if (!st.isEmpty()) {

@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -86,7 +87,8 @@ public class ClientEvHandler implements IResourceManagerReloadListener {
 				MetaTileBase mtb = MetaTileBase.getTE(id);
 				if (mtb == null) return;
 				List<String> str = new ArrayList();
-				mtb.getInformation(st, ev.getEntityPlayer().world, str, ev.getFlags());
+				ITooltipFlag f = ev.getFlags();
+				mtb.getInformation(st, ev.getEntityPlayer().world, str, f != null && f.isAdvanced());
 				for (String s : str) if (s != null) tl.add(s);
 			} else if (st.hasTagCompound() && CompatTiC.isTiCTool(st)) {
 				NBTTagCompound tag = st.getTagCompound();

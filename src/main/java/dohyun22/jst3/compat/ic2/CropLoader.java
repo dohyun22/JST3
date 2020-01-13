@@ -70,6 +70,7 @@ public class CropLoader {
 		new CropJST("oceanplant", "jeb_", 3, 1, 0, new String[] {"Ocean", "Prismarine", "Crystal"}, 4, 0, 0, 1, 2, 2).drop(2, Items.PRISMARINE_SHARD).drop(1, Items.PRISMARINE_CRYSTALS).fin();
 		new CropJST("sulfonia", "jeb_", 4, 2, 0, new String[] {"Yellow", "Fire", "Sulfur"}, 5, 4, 0, 1, 1, 1).block(Blocks.LAVA, Blocks.FLOWING_LAVA, "oreSulfur", "blockSulfur").drop(1, "dustSulfur").fin();
 		new CropJST("goldenapple", "Notch", 4, 2, 0, new String[] {"Gold", "Apple", "Magic"}, 12, 0, 4, 0, 3, 0).block("oreGold", "blockGold").drop(9, Items.GOLDEN_APPLE).drop(1, new ItemStack(Items.GOLDEN_APPLE, 1, 1)).fin();
+		new CropJST("uuberry", "Alblaka", 4, 2, 0, new String[] {"Rare", "UU-Matter"}, 12, 4, 2, 0, 3, 0).drop(1, ItemStack.EMPTY, new ItemStack(JSTItems.item1, 1, 46)).fin();
 
 		if (!JSTUtils.getValidOne("dustNickel", "nuggetNickel").isEmpty())
 			new CropJST("nickelum", "KingLemming", 4, 2, 0, new String[] {"Shiny", "Leaves", "Metal", "Nickel"}, 6, 3, 0, 3, 1, 2).block("oreNickel", "blockNickel").drop(getNuggetOrDust("Nickel")).fin();

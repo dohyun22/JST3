@@ -53,9 +53,9 @@ public class MT_Fusion extends MT_Multiblock {
 			{0, 2, 1, 1, 1, 1, 1, 2, 0}
 			};
 
-	public MT_Fusion(byte t) {
+	public MT_Fusion(int t) {
 		if (t <= 0) throw new IllegalArgumentException("Invalid Tier");
-		tier = t;
+		tier = (byte) t;
 	}
 
 	@Override

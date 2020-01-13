@@ -54,51 +54,51 @@ public class MTELoader {
 		MetaTileBase.registerTE(32, new MT_StirlingGen(2));
 		MetaTileBase.registerTE(33, new MT_StirlingGen(3));
 		
-		MetaTileBase.registerTE(40, new MetaTileSolarGen(-1));
-		MetaTileBase.registerTE(41, new MetaTileSolarGen(0));
-		MetaTileBase.registerTE(42, new MetaTileSolarGen(1));
-		MetaTileBase.registerTE(43, new MetaTileSolarGen(2));
-		MetaTileBase.registerTE(44, new MetaTileSolarGen(3));
-		MetaTileBase.registerTE(45, new MetaTileSolarGen(4));
-		MetaTileBase.registerTE(46, new MetaTileSolarGen(5));
-		MetaTileBase.registerTE(47, new MetaTileSolarGen(6));
-		MetaTileBase.registerTE(48, new MetaTileSolarGen(7));
-		MetaTileBase.registerTE(49, new MetaTileSolarGen(8));
+		MetaTileBase.registerTE(40, new MT_SolarGen(-1));
+		MetaTileBase.registerTE(41, new MT_SolarGen(0));
+		MetaTileBase.registerTE(42, new MT_SolarGen(1));
+		MetaTileBase.registerTE(43, new MT_SolarGen(2));
+		MetaTileBase.registerTE(44, new MT_SolarGen(3));
+		MetaTileBase.registerTE(45, new MT_SolarGen(4));
+		MetaTileBase.registerTE(46, new MT_SolarGen(5));
+		MetaTileBase.registerTE(47, new MT_SolarGen(6));
+		MetaTileBase.registerTE(48, new MT_SolarGen(7));
+		MetaTileBase.registerTE(49, new MT_SolarGen(8));
 		
-		MetaTileBase.registerTE(51, new MetaTileNaquadahGen(4));
-		MetaTileBase.registerTE(52, new MetaTileNaquadahGen(5));
-		MetaTileBase.registerTE(53, new MetaTileNaquadahGen(6));
+		MetaTileBase.registerTE(51, new MT_NaquadahGen(4));
+		MetaTileBase.registerTE(52, new MT_NaquadahGen(5));
+		MetaTileBase.registerTE(53, new MT_NaquadahGen(6));
 		
-		MetaTileBase.registerTE(61, new MetaTileFluidGen(1, 0));
-		MetaTileBase.registerTE(62, new MetaTileFluidGen(2, 0));
-		MetaTileBase.registerTE(63, new MetaTileFluidGen(3, 0));
+		MetaTileBase.registerTE(61, new MT_FluidGen(1, 0));
+		MetaTileBase.registerTE(62, new MT_FluidGen(2, 0));
+		MetaTileBase.registerTE(63, new MT_FluidGen(3, 0));
 		
-		MetaTileBase.registerTE(71, new MetaTileFluidGen(1, 1));
-		MetaTileBase.registerTE(72, new MetaTileFluidGen(2, 1));
-		MetaTileBase.registerTE(73, new MetaTileFluidGen(3, 1));
+		MetaTileBase.registerTE(71, new MT_FluidGen(1, 1));
+		MetaTileBase.registerTE(72, new MT_FluidGen(2, 1));
+		MetaTileBase.registerTE(73, new MT_FluidGen(3, 1));
 		
-		MetaTileBase.registerTE(81, new MetaTileFluidGen(1, 2));
-		MetaTileBase.registerTE(82, new MetaTileFluidGen(2, 2));
-		MetaTileBase.registerTE(83, new MetaTileFluidGen(3, 2));
+		MetaTileBase.registerTE(81, new MT_FluidGen(1, 2));
+		MetaTileBase.registerTE(82, new MT_FluidGen(2, 2));
+		MetaTileBase.registerTE(83, new MT_FluidGen(3, 2));
 		
-		MetaTileBase.registerTE(91, new MetaTileFluidGen(1, 3));
-		MetaTileBase.registerTE(92, new MetaTileFluidGen(2, 3));
-		MetaTileBase.registerTE(93, new MetaTileFluidGen(3, 3));
+		MetaTileBase.registerTE(91, new MT_FluidGen(1, 3));
+		MetaTileBase.registerTE(92, new MT_FluidGen(2, 3));
+		MetaTileBase.registerTE(93, new MT_FluidGen(3, 3));
 		
-		MetaTileBase.registerTE(101, new MT_Fusion((byte) 1));
-		MetaTileBase.registerTE(102, new MT_Fusion((byte) 2));
-		MetaTileBase.registerTE(103, new MT_Fusion((byte) 3));
-		MetaTileBase.registerTE(104, new MT_Fusion((byte) 4));
+		MetaTileBase.registerTE(101, new MT_Fusion(1));
+		MetaTileBase.registerTE(102, new MT_Fusion(2));
+		MetaTileBase.registerTE(103, new MT_Fusion(3));
+		MetaTileBase.registerTE(104, new MT_Fusion(4));
 		
-		MetaTileBase.registerTE(111, new MetaTileMagicGenerator(1));
-		MetaTileBase.registerTE(112, new MetaTileMagicGenerator(2));
-		MetaTileBase.registerTE(113, new MetaTileMagicGenerator(3));
+		MetaTileBase.registerTE(111, new MT_MagicGenerator(1));
+		MetaTileBase.registerTE(112, new MT_MagicGenerator(2));
+		MetaTileBase.registerTE(113, new MT_MagicGenerator(3));
 		
 		for (int n = 1; n <= 9; n++)
 			MetaTileBase.registerTE(180 + n, new MT_BatBuff(n));
 		
 		for (int n = 0; n <= 8; n++)
-			MetaTileBase.registerTE(190 + n, new MetaTileTransformer(n));
+			MetaTileBase.registerTE(190 + n, new MT_Transformer(n));
 		
 		for (int n = 1; n <= 5; n++)
 			MetaTileBase.registerTE(200 + n, new MT_WaterMaker(n));
@@ -158,39 +158,39 @@ public class MTELoader {
 
 		/* #4000: Cables */
 		//IC2 compatible cables
-	    MetaTileBase.registerTE(4001, new MetaTileCable("cable_sn", 32, 0, 3, 5, 20));
-	    MetaTileBase.registerTE(4002, new MetaTileCable("wire_sn", 32, 1, 2, 2, 4));
-	    MetaTileBase.registerTE(4003, new MetaTileCable("cable_cu", 128, 0, 3, 5, 16));
-	    MetaTileBase.registerTE(4004, new MetaTileCable("wire_cu", 128, 1, 2, 2, 0));
-	    MetaTileBase.registerTE(4005, new MetaTileCable("cable_au", 512, 0, 4, 3, 34));
-	    MetaTileBase.registerTE(4006, new MetaTileCable("wire_au", 512, 1, 2, 1, 2));
-	    MetaTileBase.registerTE(4007, new MetaTileCable("cable_hv", 2048, 0, 5, 1, 51));
-	    MetaTileBase.registerTE(4008, new MetaTileCable("wire_hv", 2048, 1, 2, -2, 3));
-	    MetaTileBase.registerTE(4009, new MetaTileCable("cable_gf", 8192, 2, 2, 40, 1));
-	    MetaTileBase.registerTE(4010, new MetaTileCableSwitch());
-	    MetaTileBase.registerTE(4011, new MetaTileCableDetector());
+	    MetaTileBase.registerTE(4001, new MT_Cable("cable_sn", 32, 0, 3, 5, 20));
+	    MetaTileBase.registerTE(4002, new MT_Cable("wire_sn", 32, 1, 2, 2, 4));
+	    MetaTileBase.registerTE(4003, new MT_Cable("cable_cu", 128, 0, 3, 5, 16));
+	    MetaTileBase.registerTE(4004, new MT_Cable("wire_cu", 128, 1, 2, 2, 0));
+	    MetaTileBase.registerTE(4005, new MT_Cable("cable_au", 512, 0, 4, 3, 34));
+	    MetaTileBase.registerTE(4006, new MT_Cable("wire_au", 512, 1, 2, 1, 2));
+	    MetaTileBase.registerTE(4007, new MT_Cable("cable_hv", 2048, 0, 5, 1, 51));
+	    MetaTileBase.registerTE(4008, new MT_Cable("wire_hv", 2048, 1, 2, -2, 3));
+	    MetaTileBase.registerTE(4009, new MT_Cable("cable_gf", 8192, 2, 2, 40, 1));
+	    MetaTileBase.registerTE(4010, new MT_CableSwitch());
+	    MetaTileBase.registerTE(4011, new MT_CableDetector());
 		
 		//JST
-	    MetaTileBase.registerTE(4012, new MetaTileCable("cable_sc", -1, 2, 2, 0));
-	    MetaTileBase.registerTE(4013, new MetaTileCable("cable_pb", 8, 0, 3, 16));
-	    MetaTileBase.registerTE(4014, new MetaTileCable("wire_pb", 8, 1, 2, 8));
-	    MetaTileBase.registerTE(4015, new MetaTileCable("cable_ag", 768, 0, 4, 10));
-	    MetaTileBase.registerTE(4016, new MetaTileCable("wire_ag", 768, 1, 2, 5));
-	    MetaTileBase.registerTE(4017, new MetaTileCable("cable_ba", 1536, 0, 4, 12));
-	    MetaTileBase.registerTE(4018, new MetaTileCable("wire_ba", 1536, 1, 2, 6));
-	    MetaTileBase.registerTE(4019, new MetaTileCable("cable_pt", 8192, 0, 5, 10));
-	    MetaTileBase.registerTE(4020, new MetaTileCable("wire_pt", 8192, 1, 2, 5));
-	    MetaTileBase.registerTE(4021, new MetaTileCable("cable_nb", 32768, 0, 6, -2));
-	    MetaTileBase.registerTE(4022, new MetaTileCable("wire_nb", 32768, 1, 2, -4));
-	    MetaTileBase.registerTE(4023, new MetaTileCable("cable_zn", 32, 0, 3, 6));
-	    MetaTileBase.registerTE(4024, new MetaTileCable("wire_zn", 32, 1, 2, 3));
-	    MetaTileBase.registerTE(4025, new MetaTileCable("cable_bz", 128, 0, 3, 6));
-	    MetaTileBase.registerTE(4026, new MetaTileCable("wire_bz", 128, 1, 2, 3));
-	    MetaTileBase.registerTE(4027, new MetaTileCable("cable_ir", 131072, 0, 6, -3));
-	    MetaTileBase.registerTE(4028, new MetaTileCable("wire_ir", 131072, 1, 2, -6));
-	    MetaTileBase.registerTE(4029, new MetaTileCable("cable_re", 524288, 0, 6, -3));
-	    MetaTileBase.registerTE(4030, new MetaTileCable("wire_re", 524288, 1, 2, -6));
-	    MetaTileBase.registerTE(4031, new MetaTileCable("cable_n", 32768, 2, 3, 100));
+	    MetaTileBase.registerTE(4012, new MT_Cable("cable_sc", -1, 2, 2, 0));
+	    MetaTileBase.registerTE(4013, new MT_Cable("cable_pb", 8, 0, 3, 16));
+	    MetaTileBase.registerTE(4014, new MT_Cable("wire_pb", 8, 1, 2, 8));
+	    MetaTileBase.registerTE(4015, new MT_Cable("cable_ag", 768, 0, 4, 10));
+	    MetaTileBase.registerTE(4016, new MT_Cable("wire_ag", 768, 1, 2, 5));
+	    MetaTileBase.registerTE(4017, new MT_Cable("cable_ba", 1536, 0, 4, 12));
+	    MetaTileBase.registerTE(4018, new MT_Cable("wire_ba", 1536, 1, 2, 6));
+	    MetaTileBase.registerTE(4019, new MT_Cable("cable_pt", 8192, 0, 5, 10));
+	    MetaTileBase.registerTE(4020, new MT_Cable("wire_pt", 8192, 1, 2, 5));
+	    MetaTileBase.registerTE(4021, new MT_Cable("cable_nb", 32768, 0, 6, -2));
+	    MetaTileBase.registerTE(4022, new MT_Cable("wire_nb", 32768, 1, 2, -4));
+	    MetaTileBase.registerTE(4023, new MT_Cable("cable_zn", 32, 0, 3, 6));
+	    MetaTileBase.registerTE(4024, new MT_Cable("wire_zn", 32, 1, 2, 3));
+	    MetaTileBase.registerTE(4025, new MT_Cable("cable_bz", 128, 0, 3, 6));
+	    MetaTileBase.registerTE(4026, new MT_Cable("wire_bz", 128, 1, 2, 3));
+	    MetaTileBase.registerTE(4027, new MT_Cable("cable_ir", 131072, 0, 6, -3));
+	    MetaTileBase.registerTE(4028, new MT_Cable("wire_ir", 131072, 1, 2, -6));
+	    MetaTileBase.registerTE(4029, new MT_Cable("cable_re", 524288, 0, 6, -3));
+	    MetaTileBase.registerTE(4030, new MT_Cable("wire_re", 524288, 1, 2, -6));
+	    MetaTileBase.registerTE(4031, new MT_Cable("cable_n", 32768, 2, 3, 100));
 
 		/* #5000: Non-ticking TEs and MultiBlock structure parts */
 		MetaTileBase.registerTE(5000, new MetaTileCasing("gen"));
@@ -211,7 +211,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(5017, new MetaTileDCWatermill(1));
 		MetaTileBase.registerTE(5018, new MetaTileDCWatermill(2));
 		MetaTileBase.registerTE(5020, new MetaTileDCTEG());
-		
+
 		MetaTileBase.registerTE(5065, new MetaTileDrillPipe());
 		MetaTileBase.registerTE(5066, new MetaTileCasing("coil1"));
 		MetaTileBase.registerTE(5067, new MetaTileCasing("coil2"));
@@ -230,14 +230,15 @@ public class MTELoader {
 		MetaTileBase.registerTE(5082, new MetaTileEFenceWire());
 		MetaTileBase.registerTE(5083, new MetaTileCasing("csg_a"));
 		MetaTileBase.registerTE(5084, new MetaTileCasing("filter"));
-		
+		MetaTileBase.registerTE(5085, new MetaTileCasing("fan_off"));
+
 		/* #6000: Non-tiered TEs*/
 		//MetaTileBase.registerTE(6000, new MetaTileMESU());
-		MetaTileBase.registerTE(6001, new MetaTileGridTieInverter());
-		MetaTileBase.registerTE(6002, new MetaTileEnergyMeter());
+		MetaTileBase.registerTE(6001, new MT_GTI());
+		MetaTileBase.registerTE(6002, new MT_EnergyMeter());
 		MetaTileBase.registerTE(6003, new MetaTileAlloyFurnace());
 		MetaTileBase.registerTE(6004, new MetaTileSolarFurnace());
-		MetaTileBase.registerTE(6005, new MetaTileDummyLoad());
+		MetaTileBase.registerTE(6005, new MT_DummyLoad());
 		MetaTileBase.registerTE(6006, new MT_SuperCompressor());
 		MetaTileBase.registerTE(6007, new MT_BlockBreaker());
 		if (JSTCfg.ic2Loaded) {
@@ -272,7 +273,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(6046, new MT_Rectenna());}
 		MetaTileBase.registerTE(6047, new MT_BioProcessor());
 		MetaTileBase.registerTE(6048, new MT_LargePurifier());
-		//6049=dam
+		MetaTileBase.registerTE(6049, new MT_Dam());
 		if (Loader.isModLoaded("toughasnails"))
 		MetaTileBase.registerTE(6050, new MT_WaterPurifier());
 		MetaTileBase.registerTE(6060, new MT_Fueler());
@@ -282,6 +283,7 @@ public class MTELoader {
 		MetaTileBase.registerTE(6064, new MT_SaltExtractor(3));
 		MetaTileBase.registerTE(6065, new MT_AirCompressor(3));
 		MetaTileBase.registerTE(6066, new MT_ChunkQuarry());
+		MetaTileBase.registerTE(6067, new MT_LargeFurnace());
 		for (int n = 0; n <= 9; n++)
 			MetaTileBase.registerTE(6070 + n, new MT_Drum(n));
 

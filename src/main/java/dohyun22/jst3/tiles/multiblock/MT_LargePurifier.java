@@ -29,7 +29,6 @@ public class MT_LargePurifier extends MT_Multiblock {
 
 	public MT_LargePurifier() {
 		circuitTier = 2;
-		canIEL = true;
 	}
 
 	@Override

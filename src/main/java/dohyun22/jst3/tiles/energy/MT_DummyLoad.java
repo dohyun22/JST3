@@ -10,7 +10,6 @@ import dohyun22.jst3.tiles.MetaTileEnergyInput;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -20,9 +19,9 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileDummyLoad extends MetaTileEnergyInput {
+public class MT_DummyLoad extends MetaTileEnergyInput {
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileDummyLoad();
+		return new MT_DummyLoad();
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class MetaTileDummyLoad extends MetaTileEnergyInput {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.dummyload"));
 	}
 

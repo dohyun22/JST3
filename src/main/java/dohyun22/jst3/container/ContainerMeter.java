@@ -1,6 +1,6 @@
 package dohyun22.jst3.container;
 
-import dohyun22.jst3.tiles.energy.MetaTileEnergyMeter;
+import dohyun22.jst3.tiles.energy.MT_EnergyMeter;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.utils.JSTUtils;
@@ -30,10 +30,10 @@ public class ContainerMeter extends ContainerMTE {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		if (JSTUtils.isClient() || !(te.mte instanceof MetaTileEnergyMeter))
+		if (JSTUtils.isClient() || !(te.mte instanceof MT_EnergyMeter))
 	        return;
 
-	    MetaTileEnergyMeter r = (MetaTileEnergyMeter)te.mte;
+		MT_EnergyMeter r = (MT_EnergyMeter)te.mte;
 	    
         for (int i = 0; i < this.listeners.size(); ++i) {
             IContainerListener icl = (IContainerListener)this.listeners.get(i);
@@ -72,11 +72,11 @@ public class ContainerMeter extends ContainerMTE {
 	
 	@Override
 	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
-	    if (!(te.mte instanceof MetaTileEnergyMeter))
+	    if (!(te.mte instanceof MT_EnergyMeter))
 	        return ItemStack.EMPTY;
 	    
 	    if (!pl.world.isRemote && ct == ClickType.PICKUP) {
-	    	MetaTileEnergyMeter em = ((MetaTileEnergyMeter)te.mte);
+	    	MT_EnergyMeter em = ((MT_EnergyMeter)te.mte);
 	    	switch (si) {
 	    	case 0:
 	    		em.avg20X100 = 0;

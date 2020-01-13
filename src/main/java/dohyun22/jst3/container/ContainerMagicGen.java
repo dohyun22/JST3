@@ -1,7 +1,7 @@
 package dohyun22.jst3.container;
 
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileMagicGenerator;
+import dohyun22.jst3.tiles.energy.MT_MagicGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IContainerListener;
@@ -33,11 +33,11 @@ public class ContainerMagicGen extends ContainerMTE {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-	    if (this.te.getWorld().isRemote ||!(te.mte instanceof MetaTileMagicGenerator)) {
+	    if (this.te.getWorld().isRemote ||!(te.mte instanceof MT_MagicGenerator)) {
 	        return;
 	    }
 
-	    MetaTileMagicGenerator r = (MetaTileMagicGenerator)te.mte;
+	    MT_MagicGenerator r = (MT_MagicGenerator)te.mte;
 	    
         for (int i = 0; i < this.listeners.size(); ++i) {
             IContainerListener icl = (IContainerListener)this.listeners.get(i);
@@ -79,11 +79,11 @@ public class ContainerMagicGen extends ContainerMTE {
 	
 	@Override
 	public ItemStack slotClick(int si, int mc, ClickType ct, EntityPlayer pl) {
-	    if (!(te.mte instanceof MetaTileMagicGenerator))
+	    if (!(te.mte instanceof MT_MagicGenerator))
 	        return ItemStack.EMPTY;
 	    
 	    if (!pl.world.isRemote && ct == ClickType.PICKUP && si == 3)
-	    	((MetaTileMagicGenerator)te.mte).collectEndCrystal = !((MetaTileMagicGenerator)te.mte).collectEndCrystal;
+	    	((MT_MagicGenerator)te.mte).collectEndCrystal = !((MT_MagicGenerator)te.mte).collectEndCrystal;
 	    
 		return super.slotClick(si, mc, ct, pl);
 	}

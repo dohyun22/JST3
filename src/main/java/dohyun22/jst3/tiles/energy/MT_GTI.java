@@ -18,7 +18,6 @@ import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -34,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /** Grid-Tie inverters are used for lag free solar and wind power plants. */
-public class MetaTileGridTieInverter extends MetaTileGenerator {
+public class MT_GTI extends MT_Generator {
 	public int size;
 	public double output;
 	private double buffer;
@@ -42,13 +41,13 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 	/** If true, this inverter will be controlled by master inverter(which is the inverter that updated and checked the DC grid first). */
 	private boolean isSlave;
 	
-	public MetaTileGridTieInverter() {
+	public MT_GTI() {
 		super(5, false);
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileGridTieInverter();
+		return new MT_GTI();
 	}
 	
 	@Override
@@ -136,9 +135,9 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 					setErrored((byte) 3);
 					return;
 				}
-				if (!flag && mtb instanceof MetaTileGridTieInverter) {
+				if (!flag && mtb instanceof MT_GTI) {
 					setErrored((byte) 1);
-					((MetaTileGridTieInverter)mtb).setErrored((byte) 1);
+					((MT_GTI)mtb).setErrored((byte) 1);
 					return;
 				}
 			}
@@ -213,7 +212,7 @@ public class MetaTileGridTieInverter extends MetaTileGenerator {
 	}
 	
 	@Override
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.gti.desc"));
 	}
 	

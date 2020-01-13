@@ -198,7 +198,7 @@ public class RecipeLoader extends Loadable {
 		st = st.copy(); JSTUtils.getOrCreateNBT(st).setBoolean("UPG", true);
 		addShapedRecipe(st, "BCB", "CFC", "BCB", 'B', Items.BLAZE_POWDER, 'C', Items.FIRE_CHARGE, 'F', st2);
 
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10020), "CCR", "LLT", 'C', ItemList.coils[3], 'R', new ItemStack(JSTItems.item1, 1, 133), 'T', new ItemStack(JSTItems.item1, 1, 12011), 'L', pf + "Niobium");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10020), "CCR", "LLT", 'C', ItemList.coils[3], 'R', new ItemStack(JSTItems.item1, 1, 133), 'T', new ItemStack(JSTItems.item1, 1, 12012), 'L', pf + "Niobium");
 
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10030), "W", "C", "B", 'W', ItemList.cables[1], 'C', ItemList.circuits[1], 'B', Blocks.STONE_BUTTON);
 		RecipeLoader.addShapedRecipe(new ItemStack(JSTItems.item1, 1, 10031), "AAC", "mMm", "IRI", 'A', "ingotAluminum", 'C', Blocks.HARDENED_CLAY, 'm', ItemList.motors[1], 'M', ItemList.machineBlock[1], 'I', ItemList.circuits[1], 'R', Items.MINECART);
@@ -225,6 +225,7 @@ public class RecipeLoader extends Loadable {
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 13000), "CcC", "CFC", 'C', st, 'c', ItemList.circuits[1], 'F', Blocks.FURNACE);
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 13001), "GCG", "GTG", 'G', Blocks.GLASS, 'C', ItemList.circuits[2], 'T', new ItemStack(JSTBlocks.blockTile, 1, 192));
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 13002), " C ", "CWC", " C ", 'C', st, 'W', new ItemStack(JSTBlocks.blockTile, 1, 201));
+		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 13004), " c ", "ICI", 'c', ItemList.circuits[1], 'I', "ingotIron", 'C', Blocks.CHEST);
 
 		//Materials
 		obj = new ItemStack(JSTItems.item1, 1, 190);
@@ -304,30 +305,13 @@ public class RecipeLoader extends Loadable {
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 27), "CWC", "WBW", "CMC", 'W', ItemList.cables[7], 'C', ItemList.circuits[7], 'B', new ItemStack(JSTItems.item1, 1, 12020), 'M', ItemList.machineBlock[7]);
 		
 		for (int n = 0; n < 9; n++) {
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 181 + n), 
-					"CHC", "IMI", "CIC",
-					'C', ItemList.cables[n + 1],
-					'H', new ItemStack(Blocks.CHEST),
-					'I', ItemList.circuits[n + 1],
-					'M', ItemList.machineBlock[n + 1]
-					);
-
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 190 + n), 
-					"mCm", "cMD",
-					'm', n >= 3 ? "plateElectricalSteel" : "ingotIron",
-					'C', ItemList.coils[n],
-					'c', ItemList.cables[n],
-					'M', ItemList.machineBlock[n],
-					'D', ItemList.cables[n + 1]
-					);
-
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6070 + n), "ggg", "gmg", "ggg", 'g', Blocks.GLASS, 'm', ItemList.machineBlock[n]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 181 + n), "CHC", "IMI", "CIC", 'C', ItemList.cables[n + 1], 'H', new ItemStack(Blocks.CHEST), 'I', ItemList.circuits[n + 1], 'M', ItemList.machineBlock[n + 1]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 190 + n), "mCm", "cMD", 'm', n >= 3 ? "plateElectricalSteel" : "ingotIron", 'C', ItemList.coils[n], 'c', ItemList.cables[n], 'M', ItemList.machineBlock[n], 'D', ItemList.cables[n + 1]);
 		}
 
 		st = new ItemStack(JSTItems.item1, 1, 9001);
 		st2 = new ItemStack(JSTItems.item1, 1, 9000);
 		for (int n = 0; n < 8; n++) {
-
 			if (n < 5)
 				addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 201 + n), 
 					"EEE", "BMB", "CGC",
@@ -447,67 +431,23 @@ public class RecipeLoader extends Loadable {
 
 		//#5000 multi-block structure parts
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 2, 5000), " C ", "TMT", " C ", 'C', ItemList.circuits[2], 'T', pf + "Titanium", 'M', ItemList.machineBlock[3]);
-		
 		obj = pf + "Invar";
 		if(!JSTUtils.oreValid((String)obj))
 			obj = pf + "Iron";
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5001), " I ", "IBI", " I ",
-				'I', obj,
-				'B', Blocks.NETHER_BRICK
-				);
-
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5001), " I ", "IBI", " I ", 'I', obj, 'B', Blocks.NETHER_BRICK);
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 4, 5002), "III", "CMC", "III", 'I', ItemList.baseMaterial[2], 'C', ItemList.circuits[1], 'M', ItemList.machineBlock[1]);
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 4, 5003), "III", "CMC", "III", 'I', ItemList.baseMaterial[3], 'C', ItemList.circuits[3], 'M', ItemList.machineBlock[3]);
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 4, 5083), "III", "CMC", "III", 'I', ItemList.baseMaterial[6], 'C', ItemList.circuits[5], 'M', ItemList.machineBlock[4]);
+		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 4, 5004), "WNW", 'W', ItemList.cables[1], 'N', "dustNikolite");
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5005), "SGS", "WMW", 'S', pf + "Silicon", 'G', new ItemStack(Blocks.GLASS), 'W', new ItemStack(JSTBlocks.blockTile, 1, 5004), 'M', ItemList.machineBlock[0]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5010), " I ", " m ", "IMI", 'I', pf + "Aluminum", 'm', ItemList.motors[0], 'M', ItemList.machineBlock[0]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5015), "iIi", "ImI", "iMi", 'i', new ItemStack(Blocks.IRON_BARS), 'I', pf + "Aluminum", 'm', ItemList.motors[0], 'M', ItemList.machineBlock[0]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5020), "ACA", "RMR", "BRB", 'A', pf + "Aluminum", 'C', new ItemStack(JSTBlocks.blockTile, 1, 5004), 'R', pf + "RedAlloy", 'M', ItemList.machineBlock[0], 'B', pf + "BlueAlloy");
 
-		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 4, 5004), "WNW",
-				'W', ItemList.cables[1],
-				'N', "dustNikolite"
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5005), "SGS", "WMW",
-				'S', pf + "Silicon",
-				'G', new ItemStack(Blocks.GLASS),
-				'W', new ItemStack(JSTBlocks.blockTile, 1, 5004),
-				'M', ItemList.machineBlock[0]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5010), " I ", " m ", "IMI",
-				'I', pf + "Aluminum",
-				'm', ItemList.motors[0],
-				'M', ItemList.machineBlock[0]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5015), "iIi", "ImI", "iMi",
-				'i', new ItemStack(Blocks.IRON_BARS),
-				'I', pf + "Aluminum",
-				'm', ItemList.motors[0],
-				'M', ItemList.machineBlock[0]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5020), "ACA", "RMR", "BRB",
-				'A', pf + "Aluminum",
-				'C', new ItemStack(JSTBlocks.blockTile, 1, 5004),
-				'R', pf + "RedAlloy",
-				'M', ItemList.machineBlock[0],
-				'B', pf + "BlueAlloy"
-				);
-		
 		for (int n = 0; n < 2; n++) {
-			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, n == 0 ? 5011 : 5016), "WMW",
-					'W', new ItemStack(JSTBlocks.blockTile, 1, n == 0 ? 5010 : 5015),
-					'M', ItemList.machineBlock[0]
-					);
-			
-			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 5012 + n), " W ", "WMW", " W ",
-					'W', new ItemStack(JSTBlocks.blockTile, 1, 5011 + n),
-					'M', ItemList.machineBlock[1 + n]
-					);
-			
-			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 5017 + n), " W ", "WMW", " W ",
-					'W', new ItemStack(JSTBlocks.blockTile, 1, 5016 + n),
-					'M', ItemList.machineBlock[1 + n]
-					);
+			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, n == 0 ? 5011 : 5016), "WMW", 'W', new ItemStack(JSTBlocks.blockTile, 1, n == 0 ? 5010 : 5015), 'M', ItemList.machineBlock[0]);
+			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 5012 + n), " W ", "WMW", " W ", 'W', new ItemStack(JSTBlocks.blockTile, 1, 5011 + n), 'M', ItemList.machineBlock[1 + n]);
+			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 5017 + n), " W ", "WMW", " W ", 'W', new ItemStack(JSTBlocks.blockTile, 1, 5016 + n), 'M', ItemList.machineBlock[1 + n]);
 		}
 		
 		for (int n = 1; n <= 9; n++) {
@@ -515,484 +455,140 @@ public class RecipeLoader extends Loadable {
 			addSHWRecycle(ItemList.coils[n], "WWW", "WSW", "WWW", 'W', ItemList.uninsCables[n], 'S', n <= 3 ? "plankWood" : "ingotElectricalSteel");
 		}
 		addSHWRecycle(ItemList.coils[5], "WwW", "wSw", "WwW", 'W', ItemList.uninsCables[5], 'w', ItemList.uninsCables[4], 'S', "ingotElectricalSteel");
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 2, 5080), "AIA", "I I", "AIA",
-				'I', new ItemStack(Blocks.IRON_BARS),
-				'A', pf + "Aluminum"
-				);
-		
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 2, 5080), "AIA", "I I", "AIA", 'I', new ItemStack(Blocks.IRON_BARS), 'A', pf + "Aluminum");
 		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 4, 5082), "WwW", 'W', ItemList.uninsCables[4], 'w', ItemList.uninsCables[2]);
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5084), "IBI", "CCC", "IBI", 'I', "ingotIron", 'B', Blocks.IRON_BARS, 'C', "dustCarbon");
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 5085), "mFm", "MMM", "mFm", 'm', pf + "Magnesium", 'F', new ItemStack(JSTBlocks.blockTile, 1, 5080), 'M', ItemList.motors[2]);
 
 		//#6000 machines
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6001), "DCD", "BMB", "WCW",
-				'D', new ItemStack(JSTBlocks.blockTile, 1, 5004),
-				'C', ItemList.circuits[3],
-				'B', pf + "BlueAlloy",
-				'M', ItemList.machineBlock[2],
-				'W', ItemList.cables[4]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6002), " C ", "WMW", "LGL",
-				'C', ItemList.circuits[2],
-				'W', ItemList.cables[4],
-				'M', ItemList.machineBlock[1],
-				'G', new ItemStack(Blocks.GLASS_PANE),
-				'L', new ItemStack(Items.GLOWSTONE_DUST)
-				);
-		
-		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 6003), "SBS", "F F", "SBS",
-				'S', new ItemStack(Blocks.STONE),
-				'F', new ItemStack(Blocks.FURNACE),
-				'B', new ItemStack(Blocks.BRICK_BLOCK)
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6004), "GSG", "C C", "CFC",
-				'G', new ItemStack(Blocks.GLASS),
-				'S', (JSTUtils.oreValid("ingotSilver") ? "ingotSilver" : "ingotGold"),
-				'C', new ItemStack(Blocks.COBBLESTONE),
-				'F', new ItemStack(Blocks.FURNACE)
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6005), "CMC",
-				'C', ItemList.cables[4],
-				'M', ItemList.machineBlock[1]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6006), "mCm", "OMO", "mCm",
-				'O', pf + "Rhenium",
-				'C', ItemList.circuits[5],
-				'M', ItemList.machineBlock[5],
-				'm', ItemList.motors[5]
-				);
-		
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6001), "DCD", "BMB", "WCW", 'D', new ItemStack(JSTBlocks.blockTile, 1, 5004), 'C', ItemList.circuits[3], 'B', pf + "BlueAlloy", 'M', ItemList.machineBlock[2], 'W', ItemList.cables[4]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6002), " C ", "WMW", "LGL", 'C', ItemList.circuits[2], 'W', ItemList.cables[4], 'M', ItemList.machineBlock[1], 'G', new ItemStack(Blocks.GLASS_PANE), 'L', new ItemStack(Items.GLOWSTONE_DUST));
+		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 6003), "SBS", "F F", "SBS", 'S', new ItemStack(Blocks.STONE), 'F', new ItemStack(Blocks.FURNACE), 'B', new ItemStack(Blocks.BRICK_BLOCK));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6004), "GSG", "C C", "CFC", 'G', new ItemStack(Blocks.GLASS), 'S', (JSTUtils.oreValid("ingotSilver") ? "ingotSilver" : "ingotGold"), 'C', new ItemStack(Blocks.COBBLESTONE), 'F', new ItemStack(Blocks.FURNACE));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6005), "CMC", 'C', ItemList.cables[4], 'M', ItemList.machineBlock[1]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6006), "mCm", "OMO", "mCm", 'O', pf + "Rhenium", 'C', ItemList.circuits[5], 'M', ItemList.machineBlock[5], 'm', ItemList.motors[5]);
 		st = new ItemStack(JSTBlocks.blockTile, 1, 6007);
-		addSHWRecycle(st, "IPI", "ImI",
-				'I', pf + "Iron",
-				'P', new ItemStack(Items.IRON_PICKAXE),
-				'm', ItemList.motors[1]
-				);
-		
+		addSHWRecycle(st, "IPI", "ImI", 'I', pf + "Iron", 'P', new ItemStack(Items.IRON_PICKAXE), 'm', ItemList.motors[1]);
+
 		st = st.copy();
 		obj = st.copy();
 		JSTUtils.setEnchant(Enchantments.SILK_TOUCH, 1, st);
-		addShapedRecipe(st, " E ", "GMG",
-				'E', "gemEmerald",
-				'G', pf + "Gold",
-				'M', obj
-				);
-		
+		addShapedRecipe(st, " E ", "GMG", 'E', "gemEmerald", 'G', pf + "Gold", 'M', obj);
+
 		if (JSTCfg.ic2Loaded) {
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6008), "zzz", "cGc", "rMb",
-					'z', pf + "Zinc",
-					'c', ItemList.circuits[2],
-					'G', new ItemStack(Blocks.GLASS_PANE),
-					'r', "ingotRedAlloy",
-					'M', ItemList.machineBlock[1],
-					'b', "ingotBlueAlloy"
-					);
-			
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6009), "PcP", "dGd", "cMc",
-					'P', ItemList.baseMaterial[3],
-					'c', ItemList.circuits[3],
-					'd', "gemPeridot",
-					'G', new ItemStack(Blocks.GLASS_PANE),
-					'M', ItemList.machineBlock[2]
-					);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6008), "zzz", "cGc", "rMb", 'z', pf + "Zinc", 'c', ItemList.circuits[2], 'G', new ItemStack(Blocks.GLASS_PANE), 'r', "ingotRedAlloy", 'M', ItemList.machineBlock[1], 'b', "ingotBlueAlloy");
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6009), "PcP", "dGd", "cMc", 'P', ItemList.baseMaterial[3], 'c', ItemList.circuits[3], 'd', "gemPeridot", 'G', new ItemStack(Blocks.GLASS_PANE), 'M', ItemList.machineBlock[2]);
 		}
-		
+
 		for (int n = 0; n < 4; n++)
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6010 + n), "CGC", "GTG", "CGC",
-					'C', ItemList.circuits[6],
-					'G', new ItemStack(JSTBlocks.blockTile, 1, 63 + n * 10),
-					'T', new ItemStack(JSTBlocks.blockTile, 1, 196)
-					);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6020), "CcC", "H H", "CcC",
-				'C', ItemList.coils[2],
-				'c', ItemList.circuits[3],
-				'H', new ItemStack(JSTBlocks.blockTile, 1, 5001)
-				);
-		
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6010 + n), "CGC", "GTG", "CGC", 'C', ItemList.circuits[6], 'G', new ItemStack(JSTBlocks.blockTile, 1, 63 + n * 10), 'T', new ItemStack(JSTBlocks.blockTile, 1, 196));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6020), "CcC", "H H", "CcC", 'C', ItemList.coils[2], 'c', ItemList.circuits[3], 'H', new ItemStack(JSTBlocks.blockTile, 1, 5001));
+
 		st = new ItemStack(JSTBlocks.blockTile, 1, 6022);
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6021), "CCC", "MPM", "mmm",
-				'C', ItemList.circuits[3],
-				'M', ItemList.machineBlock[2],
-				'P', st,
-				'm', ItemList.motors[2]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6024), " W ", "CTC", " W ",
-				'W', new ItemStack(JSTBlocks.blockTile, 1, 5082),
-				'C', ItemList.circuits[2],
-				'T', new ItemStack(JSTBlocks.blockTile, 1, 191)
-				);
-		
-		addSHWRecycle(st, " F ", "CMC", "mmm",
-				'F', new ItemStack(JSTBlocks.blockTile, 1, 5080),
-				'C', ItemList.circuits[1],
-				'M', ItemList.machineBlock[1],
-				'm', ItemList.motors[1]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6025), "HCH", "CMC", "HCH",
-				'H', new ItemStack(JSTBlocks.blockTile, 1, 5001),
-				'C', ItemList.circuits[5],
-				'M', ItemList.machineBlock[5]
-				);
-		
-		if (JSTCfg.ticLoaded)
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6026), " c ", "CHC", " c ",
-					'c', ItemList.circuits[2],
-					'C', ItemList.coils[2],
-					'H', new ItemStack(JSTBlocks.blockTile, 1, 5001)
-					);
-		
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6021), "CCC", "MPM", "mmm", 'C', ItemList.circuits[3], 'M', ItemList.machineBlock[2], 'P', st, 'm', ItemList.motors[2]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6024), " W ", "CTC", " W ", 'W', new ItemStack(JSTBlocks.blockTile, 1, 5082), 'C', ItemList.circuits[2], 'T', new ItemStack(JSTBlocks.blockTile, 1, 191));
+		addSHWRecycle(st, " F ", "CMC", "mmm", 'F', new ItemStack(JSTBlocks.blockTile, 1, 5080), 'C', ItemList.circuits[1], 'M', ItemList.machineBlock[1], 'm', ItemList.motors[1]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6025), "HCH", "CMC", "HCH", 'H', new ItemStack(JSTBlocks.blockTile, 1, 5001), 'C', ItemList.circuits[5], 'M', ItemList.machineBlock[5]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6026), " c ", "CHC", " c ", 'c', ItemList.circuits[2], 'C', ItemList.coils[2], 'H', new ItemStack(JSTBlocks.blockTile, 1, 5001));
 		st = new ItemStack(JSTItems.item1, 1, 9000);
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6027), "BIB", "CMC", "cOc",
-				'B', ItemList.motors[1],
-				'I', new ItemStack(Blocks.IRON_BARS),
-				'C', ItemList.circuits[2],
-				'M', ItemList.machineBlock[1],
-				'c', st,
-				'O', ItemList.coils[2]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6028), "BCB", "IMI", "CcC",
-				'B', ItemList.motors[1],
-				'C', ItemList.circuits[2],
-				'I', new ItemStack(Blocks.IRON_BARS),
-				'M', ItemList.machineBlock[1],
-				'c', st
-				);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6029), "WWW", "cTc", "MaM",
-				'W', ItemList.uninsCables[3],
-				'c', ItemList.circuits[3],
-				'T', new ItemStack(JSTBlocks.blockTile, 1, 193),
-				'M', ItemList.baseMaterial[3],
-				'a', ItemList.cables[3]
-				);
-
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6027), "BIB", "CMC", "cOc", 'B', ItemList.motors[1], 'I', new ItemStack(Blocks.IRON_BARS), 'C', ItemList.circuits[2], 'M', ItemList.machineBlock[1], 'c', st, 'O', ItemList.coils[2]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6028), "BCB", "IMI", "CcC", 'B', ItemList.motors[1], 'C', ItemList.circuits[2], 'I', new ItemStack(Blocks.IRON_BARS), 'M', ItemList.machineBlock[1], 'c', st);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6029), "WWW", "cTc", "MaM", 'W', ItemList.uninsCables[3], 'c', ItemList.circuits[3], 'T', new ItemStack(JSTBlocks.blockTile, 1, 193), 'M', ItemList.baseMaterial[3], 'a', ItemList.cables[3]);
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6030), "CPC", "LPL", 'C', ItemList.circuits[1], 'P', ItemList.baseMaterial[2], 'L', Blocks.REDSTONE_LAMP);
-
 		if (JSTCfg.ic2Loaded)
 			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6031), "MSM", "CBC", "MSM", 'M', ItemList.motors[3], 'S', ItemList.sensors[3], 'C', new ItemStack(JSTItems.item1, 1, 9000), 'B', ItemList.machineBlock[3]);
-
 		for (int n = 0; n < 3; n++)
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6033 + n), "CPC", "PLP",
-					'C', ItemList.circuits[2 + n],
-					'P', ItemList.baseMaterial[2 + n],
-					'L', new ItemStack(JSTBlocks.blockTile, 1, n == 0 ? 6030 : 6032 + n)
-					);
-
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6033 + n), "CPC", "PLP", 'C', ItemList.circuits[2 + n], 'P', ItemList.baseMaterial[2 + n], 'L', new ItemStack(JSTBlocks.blockTile, 1, n == 0 ? 6030 : 6032 + n));
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6040), "PCP", "PMP", 'P', ItemList.baseMaterial[1], 'C', Blocks.CHEST, 'M', ItemList.motors[1]);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6041), "cCc", "CHC", "cCc",
-				'C', ItemList.coils[2],
-				'c', ItemList.circuits[2],
-				'H', new ItemStack(JSTBlocks.blockTile, 1, 5001)
-				);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6042), "PWP", "CMC", "mcm",
-				'P', ItemList.baseMaterial[1],
-				'W', Blocks.WOOL,
-				'C', "dustCarbon",
-				'M', ItemList.machineBlock[1],
-				'm', ItemList.motors[1],
-				'c', ItemList.circuits[3]
-				);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6043), "MMM", "CBC", "DDD",
-				'M', ItemList.motors[3],
-				'C', ItemList.circuits[3],
-				'B', ItemList.machineBlock[3],
-				'D', "gemDiamond"
-				);
-
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6041), "cCc", "CHC", "cCc", 'C', ItemList.coils[2], 'c', ItemList.circuits[2], 'H', new ItemStack(JSTBlocks.blockTile, 1, 5001));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6042), "PWP", "CMC", "mcm", 'P', ItemList.baseMaterial[1], 'W', Blocks.WOOL, 'C', "dustCarbon", 'M', ItemList.machineBlock[1], 'm', ItemList.motors[1], 'c', ItemList.circuits[3]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6043), "MMM", "CBC", "DDD", 'M', ItemList.motors[3], 'C', ItemList.circuits[3], 'B', ItemList.machineBlock[3], 'D', "gemDiamond");
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6044), "LLL", "CMC", "LLL", 'L', ItemList.coils[3], 'C', ItemList.circuits[3], 'M', new ItemStack(JSTBlocks.blockTile, 1, 243));
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6047), "AcA", "MMM", "AmA",
-				'A', new ItemStack(JSTBlocks.blockTile, 1, 5003),
-				'M', ItemList.motors[2],
-				'c', new ItemStack(JSTBlocks.blockTile, 1, 252),
-				'm', new ItemStack(JSTBlocks.blockTile, 1, 242)
-				);
-
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6047), "AcA", "MMM", "AmA", 'A', new ItemStack(JSTBlocks.blockTile, 1, 5003), 'M', ItemList.motors[2], 'c', new ItemStack(JSTBlocks.blockTile, 1, 252), 'm', new ItemStack(JSTBlocks.blockTile, 1, 242));
 		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6048), "IFI", "MIM", "CCC", 'I', ItemList.baseMaterial[4], 'M', ItemList.motors[4], 'F', new ItemStack(JSTBlocks.blockTile, 1, 5084), 'C', ItemList.circuits[4]);
-
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6049), "CCC", "FIF", "MMM", 'C', ItemList.circuits[3], 'F', new ItemStack(JSTBlocks.blockTile, 1, 5080), 'I', ItemList.machineBlock[3], 'M', pf + "Magnesium");
 		st = new ItemStack(JSTItems.item1, 1, 9000);
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6060), "ccc", "CMF",
-				'c', st,
-				'C', ItemList.circuits[1],
-				'M', ItemList.machineBlock[1],
-				'F', new ItemStack(JSTItems.item1, 1, 10009)
-				);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6062), " F ", "cMc", " C ",
-				'c', st,
-				'C', ItemList.circuits[1],
-				'M', ItemList.machineBlock[1],
-				'F', new ItemStack(JSTItems.item1, 1, 10019)
-				);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6063), "cCc", "CHC", "FFF",
-				'c', st,
-				'C', ItemList.circuits[4],
-				'H', new ItemStack(JSTBlocks.blockTile, 1, 5001),
-				'F', new ItemStack(JSTBlocks.blockTile, 1, 33)
-				);
-
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6064), "BIB", "CMC", "cOc",
-				'B', ItemList.motors[3],
-				'I', new ItemStack(Blocks.IRON_BARS),
-				'C', ItemList.circuits[3],
-				'M', ItemList.machineBlock[3],
-				'c', st,
-				'O', ItemList.coils[3]
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6065), "BCB", "IMI", "CcC",
-				'B', ItemList.motors[3],
-				'C', ItemList.circuits[3],
-				'I', new ItemStack(Blocks.IRON_BARS),
-				'M', ItemList.machineBlock[3],
-				'c', st
-				);
-
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6060), "ccc", "CMF", 'c', st, 'C', ItemList.circuits[1], 'M', ItemList.machineBlock[1], 'F', new ItemStack(JSTItems.item1, 1, 10009));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6062), " F ", "cMc", " C ", 'c', st, 'C', ItemList.circuits[1], 'M', ItemList.machineBlock[1], 'F', new ItemStack(JSTItems.item1, 1, 10019));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6063), "cCc", "CHC", "FFF", 'c', st, 'C', ItemList.circuits[4], 'H', new ItemStack(JSTBlocks.blockTile, 1, 5001), 'F', new ItemStack(JSTBlocks.blockTile, 1, 33));
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6064), "BIB", "CMC", "cOc", 'B', ItemList.motors[3], 'I', new ItemStack(Blocks.IRON_BARS), 'C', ItemList.circuits[3], 'M', ItemList.machineBlock[3], 'c', st, 'O', ItemList.coils[3]);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6065), "BCB", "IMI", "CcC", 'B', ItemList.motors[3], 'C', ItemList.circuits[3], 'I', new ItemStack(Blocks.IRON_BARS), 'M', ItemList.machineBlock[3], 'c', st);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6067), "cHc", "cCc", 'C', new ItemStack(JSTBlocks.blockTile, 1, 5001), 'c', ItemList.circuits[2], 'H', new ItemStack(JSTBlocks.blockTile, 1, 282));
+		for (int n = 0; n <= 9; n++)
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 6070 + n), "ggg", "gmg", "ggg", 'g', Blocks.GLASS, 'm', ItemList.machineBlock[n]);
 		//Generators
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 31), 
-				"C", "M", "F",
-				'C', ItemList.circuits[1],
-				'M', ItemList.machineBlock[1],
-				'F', new ItemStack(Blocks.FURNACE)
-				);
-		
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 31), "C", "M", "F", 'C', ItemList.circuits[1], 'M', ItemList.machineBlock[1], 'F', new ItemStack(Blocks.FURNACE));
 		st = JSTUtils.getModItemStack("ic2:te", 1, 46);
 		if (st.isEmpty()) st = new ItemStack(Blocks.FURNACE);
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 32), 
-				" C ", " M ", "FFF",
-				'C', ItemList.circuits[2],
-				'M', ItemList.machineBlock[2],
-				'F', st
-				);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 33), 
-				"FCF", "FMF", "FFF",
-				'C', ItemList.circuits[3],
-				'M', ItemList.machineBlock[3],
-				'F', st
-				);
-		
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 32), " C ", " M ", "FFF", 'C', ItemList.circuits[2], 'M', ItemList.machineBlock[2], 'F', st);
+		addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 33), "FCF", "FMF", "FFF", 'C', ItemList.circuits[3], 'M', ItemList.machineBlock[3], 'F', st);
+
 		obj = new Object[] {
 				pf + "Iridium", pf + "Rhenium", pf + "Unobtainium",
 				new ItemStack(Items.ENDER_PEARL), new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.SKULL, 1, 1),
 				new ItemStack(Items.BLAZE_ROD), new ItemStack(Blocks.ENCHANTING_TABLE)
 		};
 		for (int n = 0; n < 3; n++) {
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 61 + n), 
-					"PEP", "EME", "CEC",
-					'P', ItemList.motors[1 + n],
-					'E', ItemList.baseMaterial[1 + n],
-					'M', ItemList.machineBlock[1 + n],
-					'C', ItemList.circuits[1 + n]
-					);
-			
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 71 + n), 
-					"PTP", "EME", "CmC",
-					'P', new ItemStack(Blocks.IRON_BARS),
-					'T', new ItemStack(Items.FLINT_AND_STEEL),
-					'E', ItemList.baseMaterial[1 + n],
-					'M', ItemList.machineBlock[1 + n],
-					'C', ItemList.circuits[1 + n],
-					'm', ItemList.motors[1 + n]
-					);
-		
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 81 + n), 
-					"PmP", "EME", "CEC",
-					'P', new ItemStack(Blocks.IRON_BARS),
-					'E', ItemList.baseMaterial[1 + n],
-					'M', ItemList.machineBlock[1 + n],
-					'C', ItemList.circuits[1 + n],
-					'm', ItemList.motors[1 + n]
-					);
-			
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 91 + n), 
-					"PTP", "EME", "CmC",
-					'P', new ItemStack(Blocks.NETHER_BRICK),
-					'T', new ItemStack(Blocks.GLASS),
-					'E', ItemList.baseMaterial[1 + n],
-					'M', ItemList.machineBlock[1 + n],
-					'C', ItemList.circuits[1 + n],
-					'm', ItemList.motors[1 + n]
-					);
-			
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 111 + n), 
-					"CPC", "EME", "CPC",
-					'C', ItemList.circuits[2 + n],
-					'P', ((Object[])obj)[3 + n],
-					'E', ((Object[])obj)[Math.min(6 + n, 7)],
-					'M', ItemList.machineBlock[1 + n]
-					);
-			
-			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 51 + n), 
-					"CNC", "mMm", "CNC",
-					'C', ItemList.circuits[4 + n],
-					'N', new ItemStack(JSTItems.item1, 1, 103),
-					'm', ((Object[])obj)[n],
-					'M', ItemList.machineBlock[4 + n]
-					);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 51 + n), "CNC", "mMm", "CNC", 'C', ItemList.circuits[4 + n], 'N', new ItemStack(JSTItems.item1, 1, 103), 'm', ((Object[]) obj)[n], 'M', ItemList.machineBlock[4 + n]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 61 + n), "PEP", "EME", "CEC", 'P', ItemList.motors[1 + n], 'E', ItemList.baseMaterial[1 + n], 'M', ItemList.machineBlock[1 + n], 'C', ItemList.circuits[1 + n]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 71 + n), "PTP", "EME", "CmC", 'P', new ItemStack(Blocks.IRON_BARS), 'T', new ItemStack(Items.FLINT_AND_STEEL), 'E', ItemList.baseMaterial[1 + n], 'M', ItemList.machineBlock[1 + n], 'C', ItemList.circuits[1 + n], 'm', ItemList.motors[1 + n]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 81 + n), "PmP", "EME", "CEC", 'P', new ItemStack(Blocks.IRON_BARS), 'E', ItemList.baseMaterial[1 + n], 'M', ItemList.machineBlock[1 + n], 'C', ItemList.circuits[1 + n], 'm', ItemList.motors[1 + n]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 91 + n), "PTP", "EME", "CmC", 'P', new ItemStack(Blocks.NETHER_BRICK), 'T', new ItemStack(Blocks.GLASS), 'E', ItemList.baseMaterial[1 + n], 'M', ItemList.machineBlock[1 + n], 'C', ItemList.circuits[1 + n], 'm', ItemList.motors[1 + n]);
+			addSHWRecycle(new ItemStack(JSTBlocks.blockTile, 1, 111 + n), "CPC", "EME", "CPC", 'C', ItemList.circuits[2 + n], 'P', ((Object[]) obj)[3 + n], 'E', ((Object[]) obj)[Math.min(6 + n, 7)], 'M', ItemList.machineBlock[1 + n]);
 		}
-		
+
 		for (int n = 0; n < 4; n++) {
 			obj = ItemList.circuits[1 + n];
 			addShapelessRecipe(new ItemStack(JSTBlocks.blockTile, 1, 40 + n), new ItemStack(JSTBlocks.blockTile, 1, 5005 + n), obj, obj);
 		}
-		
-		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 41), 
-				"SSS", "SCS", "SSS",
-				'S', "craftingSolarPanel",
-				'C', ItemList.circuits[2]
-				);
-		
+
+		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 41), "SSS", "SCS", "SSS", 'S', "craftingSolarPanel", 'C', ItemList.circuits[2]);
+
 		for (int n = 0; n < 8; n++)
-			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 42 + n), 
-					" S ", "STS", " S ",
-					'S', new ItemStack(JSTBlocks.blockTile, 1, 41 + n),
-					'T', new ItemStack(JSTBlocks.blockTile, 1, 190 + n)
-					);
-		
+			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 1, 42 + n), " S ", "STS", " S ", 'S', new ItemStack(JSTBlocks.blockTile, 1, 41 + n), 'T', new ItemStack(JSTBlocks.blockTile, 1, 190 + n));
+
 		//Superconductor
-		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 4, 4012), 
-				"CHC", "WWW", "CEC",
-				'C', ItemList.baseMaterial[3],
-				'H', ItemList.circuits[4],
-				'W', "craftingSCWire",
-				'E', new ItemStack(JSTItems.item1, 1, 9016)
-				);
-		
-		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 5, 4012), 
-				"CHC", "WWW", "CEC",
-				'C', ItemList.baseMaterial[3],
-				'H', ItemList.circuits[4],
-				'W', "craftingSCWire",
-				'E', new ItemStack(JSTItems.item1, 1, 9013)
-				);
-		
-		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 10, 4031), 
-				"FFF", "DCD", "FFF",
-				'F', new ItemStack(JSTItems.item1, 1, 106),
-				'C', new ItemStack(JSTItems.item1, 1, 150),
-				'D', "gemDiamond"
-				);
+		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 4, 4012), "CHC", "WWW", "CEC", 'C', ItemList.baseMaterial[3], 'H', ItemList.circuits[4], 'W', "craftingSCWire", 'E', new ItemStack(JSTItems.item1, 1, 9016));
+		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 5, 4012), "CHC", "WWW", "CEC", 'C', ItemList.baseMaterial[3], 'H', ItemList.circuits[4], 'W', "craftingSCWire", 'E', new ItemStack(JSTItems.item1, 1, 9013));
+		addShapedRecipe(new ItemStack(JSTBlocks.blockTile, 10, 4031), "FFF", "DCD", "FFF", 'F', new ItemStack(JSTItems.item1, 1, 106), 'C', new ItemStack(JSTItems.item1, 1, 150), 'D', "gemDiamond");
 		
 		//Non-Tile device
 		addShapelessRecipe(new ItemStack(JSTBlocks.block1, 4, 14), new ItemStack(JSTBlocks.block1, 1, 13));
+
+		obj = new String[] {"Zinc", "Tin", "Aluminum"};
+		for (String s : (String[])obj)
+			addShapedRecipe(new ItemStack(JSTBlocks.block1, 20, 1), "BMB", "MBM", "BMB", 'B', new ItemStack(Blocks.STONEBRICK), 'M', "ingot" + s);
+
+		addSHWRecycle(new ItemStack(JSTBlocks.block1, 1, 5), "NNN", "ICI", "NNN", 'I', "ingotIridium", 'N', "ingotNeutronium", 'C', new ItemStack(JSTItems.item1, 1, 11));
+
+		if (!JSTCfg.hardEG) addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 6), "ENE", "EDE", "ENE", 'E', Items.ENDER_EYE, 'D', Blocks.DIAMOND_BLOCK, 'N', Items.NETHER_STAR);
 		
-		for (int n = 0; n < 2; n++)
-			addShapedRecipe(new ItemStack(JSTBlocks.block1, 10, 1), 
-					"BMB", "MBM", "BMB",
-					'B', new ItemStack(Blocks.STONEBRICK),
-					'M', "ingot" + (n == 0 ? "Zinc" : "Tin")
-					);
-		
-		addSHWRecycle(new ItemStack(JSTBlocks.block1, 1, 5), 
-				"NNN", "ICI", "NNN",
-				'I', "ingotIridium",
-				'N', "ingotNeutronium",
-				'C', new ItemStack(JSTItems.item1, 1, 11)
-				);
-
-		if (!JSTCfg.hardEG)
-			addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 6), 
-					"ENE", "EDE", "ENE",
-					'E', Items.ENDER_EYE,
-					'D', Blocks.DIAMOND_BLOCK,
-					'N', Items.NETHER_STAR
-					);
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 8), 
-				"II", "II",
-				'I', new ItemStack(JSTBlocks.block2, 1, 1)
-				);
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 11), 
-				"III", "III", "III",
-				'I', "dustNikolite"
-				);
-
+		addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 8), "II", "II", 'I', new ItemStack(JSTBlocks.block2, 1, 1));
+		addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 11), "III", "III", "III", 'I', "dustNikolite");
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 9, 27), new ItemStack(JSTBlocks.block1, 1, 11));
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 12), 
-				"III", "III", "III",
-				'I', "ingotNeutronium"
-				);
-
+		addShapedRecipe(new ItemStack(JSTBlocks.block1, 1, 12), "III", "III", "III", 'I', "ingotNeutronium");
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 9, 24), new ItemStack(JSTBlocks.block1, 1, 12));
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 3), 
-				"BB", "BB",
-				'B', new ItemStack(JSTBlocks.block2, 1, 2)
-				);
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 4), 
-				"BB", "BB",
-				'B', new ItemStack(JSTBlocks.block2, 1, 3)
-				);
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block2, 2, 5), 
-				"BB",
-				'B', new ItemStack(JSTBlocks.block2, 1, 2)
-				);
-
-		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 7), 
-				"BB", "BB",
-				'B', new ItemStack(JSTBlocks.block2, 1, 6)
-				);
-
+		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 3), "BB", "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 2));
+		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 4), "BB", "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 3));
+		addShapedRecipe(new ItemStack(JSTBlocks.block2, 2, 5), "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 2));
+		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 7), "BB", "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 6));
 		addShapedRecipe(new ItemStack(JSTBlocks.block2, 4, 8), "BB", "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 7));
-
 		addShapedRecipe(new ItemStack(JSTBlocks.block2, 2, 9), "BB", 'B', new ItemStack(JSTBlocks.block2, 1, 6));
-
 		addShapedRecipe(new ItemStack(JSTBlocks.blockOHW, 16), "HHH", "CCC", 'H', ItemList.uninsCables[4], 'C', ItemList.uninsCables[2]);
 
 		obj = new Object[] {new ItemStack(Blocks.GLASS), "gemPeridot", "gemSapphire", "gemRuby", "gemDiamond", new ItemStack(JSTItems.item1, 1, 103), "dustNaquadah", "dustUnobtainium",
 				new ItemStack(JSTItems.item1, 1, 12004), new ItemStack(JSTItems.item1, 1, 12011), new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 12018)
 		};
 		for (int n = 1; n <= 8; n++) {
-			addSHWRecycle(ItemList.motors[n], 
-					" b ", "cCc", " b ",
-					'b', ItemList.baseMaterial[n],
-					'c', ItemList.cables[n],
-					'C', ItemList.coils[n]
-					);
-			
-			addSHWRecycle(ItemList.sensors[n], 
-					"cbc", "CiC", "cbc",
-					'c', ItemList.cables[n],
-					'b', ItemList.baseMaterial[n],
-					'C', ItemList.circuits[n],
-					'i', ((Object[])obj)[n - 1]
-					);
-			
-			addSHWRecycle(ItemList.raygens[n], 
-					"COC", "bib", "bib",
-					'C', ItemList.circuits[n],
-					'O', ItemList.coils[n],
-					'b', ItemList.baseMaterial[n],
-					'i', ((Object[])obj)[n - 1]
-					);
-			
+			addSHWRecycle(ItemList.motors[n], " b ", "cCc", " b ", 'b', ItemList.baseMaterial[n], 'c', ItemList.cables[n], 'C', ItemList.coils[n]);
+			addSHWRecycle(ItemList.sensors[n], "cbc", "CiC", "cbc", 'c', ItemList.cables[n], 'b', ItemList.baseMaterial[n], 'C', ItemList.circuits[n], 'i', ((Object[]) obj)[n - 1]);
+			addSHWRecycle(ItemList.raygens[n], "COC", "bib", "bib", 'C', ItemList.circuits[n], 'O', ItemList.coils[n], 'b', ItemList.baseMaterial[n], 'i', ((Object[]) obj)[n - 1]);
+
 			if (n <= 5) {
 				st = new ItemStack(JSTItems.item1, 1, 12039 + n);
-				addSHWRecycle(st, 
-						"WWW", "CBC",
-						'W', ItemList.uninsCables[n],
-						'C', ItemList.circuits[n],
-						'B', ((Object[])obj)[n + 7]
-						);
+				addSHWRecycle(st, "WWW", "CBC", 'W', ItemList.uninsCables[n], 'C', ItemList.circuits[n], 'B', ((Object[]) obj)[n + 7]);
 			}
-			
+
 			if (n <= 3)
 				addSLWRecycle(new ItemStack(JSTItems.item1, 1, 12049 + n), st, new ItemStack(JSTBlocks.blockTile, 1, 5005 + n));
 		}

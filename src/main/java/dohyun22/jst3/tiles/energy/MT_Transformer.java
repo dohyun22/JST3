@@ -14,7 +14,6 @@ import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -27,18 +26,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MetaTileTransformer extends MetaTileEnergyInput implements IScrewDriver {
+public class MT_Transformer extends MetaTileEnergyInput implements IScrewDriver {
 	private final byte tier;
 	/** 0: RS=Step-up, 1: Step-up, 2: Step-down */
 	protected byte mode;
 
-	public MetaTileTransformer(int tier) {
+	public MT_Transformer(int tier) {
 		this.tier = (byte) tier;
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileTransformer(this.tier);
+		return new MT_Transformer(this.tier);
 	}
 
 	@Override
@@ -134,7 +133,7 @@ public class MetaTileTransformer extends MetaTileEnergyInput implements IScrewDr
 	}
 	
 	@Override
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.transformer.desc"));
 		ls.add(I18n.format("jst.tooltip.tile.com.sd.rs"));
 	}

@@ -21,7 +21,6 @@ import dohyun22.jst3.api.IScrewDriver;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.recipe.Recipes;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -107,7 +106,7 @@ public class MT_Recycler extends MT_MachineProcess implements IScrewDriver {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		double n = 100.0D / getMaxCnt();
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.recycler", ItemStack.DECIMALFORMAT.format(n)));
 		if (tier >= 3) ls.add(I18n.format("jst.tooltip.tile.com.sd.rs"));

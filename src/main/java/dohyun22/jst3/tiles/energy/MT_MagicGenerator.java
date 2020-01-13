@@ -19,7 +19,6 @@ import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -46,20 +45,20 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 
-public class MetaTileMagicGenerator extends MetaTileGenerator {
+public class MT_MagicGenerator extends MT_Generator {
 	public int fuelLeft, fuelValue;
 	public boolean collectEndCrystal;
 	private EntityEnderCrystal crystal;
 	@Nullable
 	private BlockPos crystalPos;
 
-	public MetaTileMagicGenerator(int tier) {
+	public MT_MagicGenerator(int tier) {
 		super(tier, true);
 	}
 
 	@Override
 	public MetaTileBase newMetaEntity(TileEntityMeta tem) {
-		return new MetaTileMagicGenerator(tier);
+		return new MT_MagicGenerator(tier);
 	}
 
 	@Override
@@ -241,7 +240,7 @@ public class MetaTileMagicGenerator extends MetaTileGenerator {
 							for (Entry<Aspect, Integer> as : al.aspects.entrySet()) {
 								int am = Math.min(maxEUTransfer() / 4, as.getValue());
 								if (((IAspectContainer) te).takeFromContainer(as.getKey(), am)) {
-									am *= 1000;
+									am *= as.getKey().isPrimal() ? 250 : 750;
 									fuelLeft = am;
 									fuelValue = am;
 								}
@@ -284,7 +283,7 @@ public class MetaTileMagicGenerator extends MetaTileGenerator {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, ITooltipFlag adv) {
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.magicgen"));
 		if (JSTCfg.tcLoaded)
 			ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.magicgen.tc"));

@@ -8,7 +8,6 @@ import dohyun22.jst3.container.ContainerFluidPort;
 import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
-import dohyun22.jst3.tiles.energy.MetaTileFluidGen;
 import dohyun22.jst3.tiles.interfaces.IMultiBlockIO;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
