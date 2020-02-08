@@ -70,6 +70,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -79,6 +80,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -332,14 +334,14 @@ public final class JSTUtils {
 	}
 
 	@Nullable
-	public static EnumFacing getFacingFromNum(byte n) {
+	public static EnumFacing getFacingFromNum(int n) {
 		if (n < 0 || n >= EnumFacing.VALUES.length)
 			return null;
 		return EnumFacing.values()[n];
 	}
 	
 	@Nullable
-	public static EnumFacing getOppositeFacing(byte n) {
+	public static EnumFacing getOppositeFacing(int n) {
 		EnumFacing ret = getFacingFromNum(n);
 		return ret == null ? null : ret.getOpposite();
 	}
@@ -556,17 +558,40 @@ public final class JSTUtils {
 	}
 
 	@Nonnull
-	public static ItemStack getValidOne(String... ores) {
-		for (String s : ores) {
-			ItemStack ret;
+	public static ItemStack getValidOne(String... oi) {
+		for (String s : oi) {
+			ItemStack st;
 			if (s.contains(":"))
-				ret = JSTUtils.getModItemStack(s);
+				st = JSTUtils.getModItemStack(s);
 			else
-				ret = getFirstItem(s);
-			if (!ret.isEmpty())
-				return ret;
+				st = getFirstItem(s);
+			if (!st.isEmpty())
+				return st;
 		}
 		return ItemStack.EMPTY;
+	}
+
+	@Nonnull
+	public static List<ItemStack> getAll(String... oi) {
+		List<ItemStack> r = new ArrayList();
+		for (String s : oi) {
+			ItemStack st;
+			if (s.contains(":"))
+				st = JSTUtils.getModItemStack(s);
+			else
+				st = getFirstItem(s);
+			if (!st.isEmpty()) {
+				boolean stop = false;
+				for (ItemStack s2 : r) {
+					if (st.getItem() == s2.getItem() && (s2.getMetadata() == 32767 || st.getMetadata() == s2.getMetadata())) {
+						stop = true;
+						break;
+					}
+				}
+				if (!stop) r.add(st);
+			}
+		}
+		return r;
 	}
 	
 	public static ItemStack getFirstOrSecond(String ore, int cnt, Object obj) {
@@ -875,12 +900,6 @@ public final class JSTUtils {
         return e.world.rayTraceBlocks(v3d, v3d2, liq, ibwbb, rlucb);
     }
 
-    /*public static Vec3d getDiffRatio(Vec3d a, Vec3d b) {
-        double xd = a.x - b.x, yd = a.y - b.y,  zd = a.y - b.y;
-        double di = Math.sqrt(xd * xd + yd * yd + zd * zd);
-        return new Vec3d(xd / di, yd / di, zd / di);
-    }*/
-
 	public static boolean checkSun(World w, BlockPos p) {
 		return !w.provider.isNether() && w.getLightFor(EnumSkyBlock.SKY, p.up()) > 7 && w.isDaytime() && (!w.isRaining() || w.getBiome(p).getRainfall() <= 0.0F) && w.canBlockSeeSky(p.up());
 	}
@@ -1060,11 +1079,38 @@ public final class JSTUtils {
 		nbt.setByteArray(key, in.toByteArray());
 	}
 
+	@Nonnull
 	public static BigInteger nbtToBigInt(NBTTagCompound nbt, String key) {
 		try {
 			return new BigInteger(nbt.getByteArray(key));
 		} catch (Exception e) {}
 		return BigInteger.ZERO;
+	}
+
+	public static void shortArrayToNBT(NBTTagCompound nbt, short[] in, String key) {
+		if (in.length <= 0) return;
+		NBTTagList tl = new NBTTagList();
+		for (int n = 0; n < in.length; n++)
+			tl.appendTag(new NBTTagShort(in[n]));
+		nbt.setTag(key, tl);
+	}
+
+	@Nonnull
+	public static short[] nbtToShortArray(NBTTagCompound nbt, String key) {
+		NBTTagList tl = nbt.getTagList(key, 2);
+		short[] r = new short[tl.tagCount()];
+		for (int n = 0; n < r.length; n++)
+			r[n] = ((NBTTagShort)tl.get(n)).getShort();
+		return r;
+	}
+
+	public static short toRelativePos(BlockPos p) {
+		return (short)(((p.getX() & 15) << 12) | ((p.getY() & 255) << 4) | (p.getZ() & 15));
+	}
+
+	public static BlockPos backToBlockPos(ChunkPos cp, short s) {
+		int rx = (s >> 12) & 15, ry = (s >> 4) & 255, rz = s & 15;
+		return new BlockPos((cp.x << 4) + rx, ry, (cp.z << 4) + rz);
 	}
 
 	//Client Stuff

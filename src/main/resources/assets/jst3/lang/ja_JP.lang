@@ -656,15 +656,18 @@ item.itemjst1.12029.name=Large Sodium-Ion Battery
 item.itemjst1.12030.name=Portable RTG
 item.itemjst1.12031.name=Portable Fuel Cell
 item.itemjst1.12032.name=古代のエネルギー結晶
-item.itemjst1.12040.name=低電圧ポータブル充電器
-item.itemjst1.12041.name=中電圧ポータブル充電器
-item.itemjst1.12042.name=高電圧ポータブル充電器
-item.itemjst1.12043.name=特高圧ポータブル充電器
-item.itemjst1.12044.name=超高圧ポータブル充電器
-item.itemjst1.12050.name=低電圧ポータブル充電器（ソーラー）
-item.itemjst1.12051.name=中電圧ポータブル充電器（ソーラー）
-item.itemjst1.12052.name=高電圧ポータブル充電器（ソーラー）
-item.itemjst1.12053.name=特高圧ポータブル充電器（ソーラー）
+item.itemjst1.12040.name=低電圧モバイルバッテリー
+item.itemjst1.12041.name=中電圧モバイルバッテリー
+item.itemjst1.12042.name=高電圧モバイルバッテリー
+item.itemjst1.12043.name=特高圧モバイルバッテリー
+item.itemjst1.12044.name=超高圧モバイルバッテリー
+item.itemjst1.12045.name=極超高圧モバイルバッテリー
+item.itemjst1.12050.name=低電圧モバイルバッテリー（ソーラー）
+item.itemjst1.12051.name=中電圧モバイルバッテリー（ソーラー）
+item.itemjst1.12052.name=高電圧モバイルバッテリー（ソーラー）
+item.itemjst1.12053.name=特高圧モバイルバッテリー（ソーラー）
+item.itemjst1.12054.name=超高圧モバイルバッテリー（ソーラー）
+item.itemjst1.12055.name=極超高圧モバイルバッテリー（ソーラー）
 
 item.iridiumframe.name=イリジウム巣枠
 

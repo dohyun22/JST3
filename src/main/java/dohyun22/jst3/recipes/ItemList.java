@@ -99,11 +99,11 @@ public class ItemList {
 		baseMaterial[9] = "ingotNeutronium";
 		
 		cables[0] = new ItemStack(JSTBlocks.blockTile, 1, 4013);
-		cables[1] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(4, 1) : null;
-		cables[2] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(0, 1) : null;
-		cables[3] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(2, 2) : null;
-		cables[4] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(3, 3) : null;
-		cables[5] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(1, 0) : null;
+		cables[1] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(4, 1) : null;
+		cables[2] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(0, 1) : null;
+		cables[3] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(2, 2) : null;
+		cables[4] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(3, 3) : null;
+		cables[5] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(1, 0) : null;
 		cables[6] = new ItemStack(JSTBlocks.blockTile, 1, 4021);
 		cables[7] = new ItemStack(JSTBlocks.blockTile, 1, 4027);
 		cables[8] = new ItemStack(JSTBlocks.blockTile, 1, 4029);
@@ -120,11 +120,11 @@ public class ItemList {
 			cables[5] = new ItemStack(JSTBlocks.blockTile, 1, 4009); 
 		
 		uninsCables[0] = new ItemStack(JSTBlocks.blockTile, 1, 4014);
-		uninsCables[1] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(4, 0) : null;
-		uninsCables[2] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(0, 0) : null;
-		uninsCables[3] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(2, 0) : null;
-		uninsCables[4] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(3, 0) : null;
-		uninsCables[5] = JSTCfg.RIC2C ? CompatIC2.getIC2Cable(1, 0) : null;
+		uninsCables[1] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(4, 0) : null;
+		uninsCables[2] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(0, 0) : null;
+		uninsCables[3] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(2, 0) : null;
+		uninsCables[4] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(3, 0) : null;
+		uninsCables[5] = JSTCfg.rIC2C ? CompatIC2.getIC2Cable(1, 0) : null;
 		uninsCables[6] = new ItemStack(JSTBlocks.blockTile, 1, 4022);
 		uninsCables[7] = new ItemStack(JSTBlocks.blockTile, 1, 4028);
 		uninsCables[8] = new ItemStack(JSTBlocks.blockTile, 1, 4030);

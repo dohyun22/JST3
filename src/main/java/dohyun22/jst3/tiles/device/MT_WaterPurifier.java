@@ -2,6 +2,7 @@ package dohyun22.jst3.tiles.device;
 
 import javax.annotation.Nullable;
 
+import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.tiles.MTETank;
 import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.MetaTileEnergyInput;
@@ -19,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -114,6 +116,8 @@ public class MT_WaterPurifier extends MetaTileEnergyInput {
 			if (!st.isEmpty() && pl.getHeldItem(EnumHand.MAIN_HAND) == st && FluidUtil.interactWithFluidHandler(pl, EnumHand.MAIN_HAND, tank))
 				return true;
 			if (watr >= 250) {
+				SoundEvent se = null;
+				int m = st.getMetadata();
 				if (st.isEmpty()) {
 					if (Loader.isModLoaded("toughasnails"))
 					try {
@@ -123,7 +127,7 @@ public class MT_WaterPurifier extends MetaTileEnergyInput {
 							td.setThirst(ct + 8);
 							td.setHydration(10.0f);
 							td.setExhaustion(0.0f);
-							getWorld().playSound(null, getPos(), SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.BLOCKS, 0.6F, 1.0F);
+							se = SoundEvents.ENTITY_GENERIC_DRINK;
 							watr -= 250;
 						}
 					} catch (Throwable t) {}
@@ -136,15 +140,21 @@ public class MT_WaterPurifier extends MetaTileEnergyInput {
 					}
 					JSTUtils.giveItem(pl, st2);
 					watr -= 250;
-					getWorld().playSound(null, getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.6F, 1.0F);
-				} else if (JSTUtils.getRegName(st).equals("toughasnails:canteen")) {
+					se = SoundEvents.ITEM_BOTTLE_FILL;
+				} else if (st.getItem() == JSTItems.item1 && m == 10023) {
+					st.shrink(1);
+					JSTUtils.giveItem(pl, new ItemStack(JSTItems.item1, 1, 10025));
+					watr -= 250;
+					se = SoundEvents.ITEM_BOTTLE_FILL;
+				} else if (JSTUtils.getRegName(st).equals("toughasnails:canteen") && m == 0 && watr >= 750) {
 					st.setItemDamage(2);
 					watr -= 750;
-					getWorld().playSound(null, getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.6F, 1.0F);
+					se = SoundEvents.ITEM_BOTTLE_FILL;
 				} else {
 					IFluidHandlerItem cap = st.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 					if (cap != null) watr -= cap.fill(new FluidStack(FluidRegistry.WATER, watr), true);
 				}
+				if (se != null) getWorld().playSound(null, getPos(), se, SoundCategory.BLOCKS, 0.6F, 1.0F);
 			}
 		}
 		return true;

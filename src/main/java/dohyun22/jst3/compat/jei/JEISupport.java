@@ -107,7 +107,10 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipes(ItemFuelRecipeWrapper.make(MRecipes.MagicGenFuel, false), JustServerTweak.MODID + ".magicfuel");
 
 		rg.addRecipeCategories(new ItemFuelCategory("fgenfuel"));
-		rg.addRecipes(ItemFuelRecipeWrapper.makeFGFuelList(rg), JustServerTweak.MODID + ".fgenfuel");
+		rg.addRecipes(ItemFuelRecipeWrapper.makeFuelList(rg), JustServerTweak.MODID + ".fgenfuel");
+
+		rg.addRecipeCategories(new ItemFuelCategory("foodfuel"));
+		rg.addRecipes(ItemFuelRecipeWrapper.makeBioFuelList(rg), JustServerTweak.MODID + ".foodfuel");
 
 		rg.addRecipeCategories(new FluidResourceCategory());
 		rg.addRecipes(FluidResourceWrapper.make(), JustServerTweak.MODID + ".fluidresource");
@@ -154,6 +157,11 @@ public class JEISupport implements IModPlugin {
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 111), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 112), s);
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 113), s);
+
+		s = JustServerTweak.MODID + ".foodfuel";
+		rg.addRecipeCatalyst(new ItemStack(b, 1, 121), s);
+		rg.addRecipeCatalyst(new ItemStack(b, 1, 122), s);
+		rg.addRecipeCatalyst(new ItemStack(b, 1, 123), s);
 
 		String[] list = new String[] {JustServerTweak.MODID + ".fusion", JustServerTweak.MODID + ".fusionbreeder"};
 		rg.addRecipeCatalyst(new ItemStack(b, 1, 101), list);
@@ -205,7 +213,7 @@ public class JEISupport implements IModPlugin {
 		list = new String[] {JustServerTweak.MODID + ".liquifier", "thermalexpansion.crucible", "tconstruct.smeltery"};
 		for (int n = 1; n <= 8; n++) rg.addRecipeCatalyst(new ItemStack(b, 1, 360 + n), list);
 
-		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C)
+		if (JSTCfg.ic2Loaded && JSTCfg.rIC2C)
 			addDescription(rg, "cablechange", new ItemStack(ItemList.cables[1].getItem(), 1, 32767));
 		addDescription(rg, "neutdrill", new ItemStack(JSTItems.item1, 1, 10006));
 		addDescription(rg, "scanner", new ItemStack(JSTItems.item1, 1, 10008));

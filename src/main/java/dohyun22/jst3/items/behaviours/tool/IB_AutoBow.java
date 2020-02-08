@@ -104,16 +104,6 @@ public class IB_AutoBow extends ItemBehaviour {
 		return new ActionResult(EnumActionResult.PASS, st);
 	}
 
-	@Override
-	public int getEnchantability(ItemStack st) {
-		return 4;
-	}
-
-	@Override
-	public boolean canEnchant(ItemStack st, Enchantment en) {
-		return en != Enchantments.UNBREAKING && en.type == EnumEnchantmentType.BOW;
-	}
-
 	private static ItemStack findAmmo(EntityPlayer pl) {
 		if (pl.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemArrow)
 			return pl.getHeldItem(EnumHand.OFF_HAND);

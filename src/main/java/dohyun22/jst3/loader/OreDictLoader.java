@@ -139,6 +139,7 @@ public class OreDictLoader extends Loadable {
 		regOre("gemThorium", 100);
 		regOre("dustBauxite", 104);
 		regOre("dustSalt", 107);
+		regOre("foodSalt", 107);
 		regOre("dustSodium", 108);
 		regOre("dustCarbon", 109);
 		regOre("circuitPrimitive", 152);
@@ -168,14 +169,14 @@ public class OreDictLoader extends Loadable {
 	/** To prevent Tech-Breaking recipes being added by other MODs, it registers some material to OreDict later.*/
 	@Override
 	public void postInit() {
-		OreDictionary.registerOre("ingotUnobtainium", new ItemStack(JSTItems.item1, 1, 40));
-		OreDictionary.registerOre("plateUnobtainium", new ItemStack(JSTItems.item1, 1, 42));
-		OreDictionary.registerOre("ingotTungsten", new ItemStack(JSTItems.item1, 1, 73));
-		OreDictionary.registerOre("plateTungsten", new ItemStack(JSTItems.item1, 1, 75));
-		OreDictionary.registerOre("ingotRhenium", new ItemStack(JSTItems.item1, 1, 89));
-		OreDictionary.registerOre("plateRhenium", new ItemStack(JSTItems.item1, 1, 91));
-		OreDictionary.registerOre("ingotChrome", new ItemStack(JSTItems.item1, 1, 64));
-		OreDictionary.registerOre("plateChrome", new ItemStack(JSTItems.item1, 1, 66));
+		regOre("ingotUnobtainium", 40);
+		regOre("plateUnobtainium", 42);
+		regOre("ingotChrome", 64);
+		regOre("plateChrome", 66);
+		regOre("ingotTungsten", 73);
+		regOre("plateTungsten", 75);
+		regOre("ingotRhenium", 89);
+		regOre("plateRhenium", 91);
 	}
 
 	private static void regOre(String ore, int meta) {

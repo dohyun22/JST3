@@ -88,11 +88,13 @@ public class TextureLoader {
 		ls.add("steamgen");
 		ls.add("lavagen");
 		ls.add("magicgen");
+		ls.add("biogen");
 		ls.add("dieselgen_off");
 		ls.add("gasgen_off");
 		ls.add("steamgen_off");
 		ls.add("lavagen_off");
 		ls.add("magicgen_off");
+		ls.add("biogen_off");
 		
 		ls.add("watergen_side");
 		ls.add("meter_side");
@@ -237,6 +239,7 @@ public class TextureLoader {
 					ls.add("sulfonia" + n);
 					ls.add("goldenapple" + n);
 					ls.add("uuberry" + n);
+					ls.add("soy" + n);
 				}
 				if (n <= 3) {
 					ls.add("oak" + n);

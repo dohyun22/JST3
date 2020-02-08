@@ -93,6 +93,10 @@ public class MTELoader {
 		MetaTileBase.registerTE(111, new MT_MagicGenerator(1));
 		MetaTileBase.registerTE(112, new MT_MagicGenerator(2));
 		MetaTileBase.registerTE(113, new MT_MagicGenerator(3));
+
+		MetaTileBase.registerTE(121, new MT_BioGen(1));
+		MetaTileBase.registerTE(122, new MT_BioGen(2));
+		MetaTileBase.registerTE(123, new MT_BioGen(3));
 		
 		for (int n = 1; n <= 9; n++)
 			MetaTileBase.registerTE(180 + n, new MT_BatBuff(n));

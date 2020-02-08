@@ -184,7 +184,8 @@ public class MetaTileEFenceWire extends MetaTileBase {
 		if (!isClient() && e instanceof EntityLivingBase) {
 			int dmg = Math.max(2, (int)(baseTile.energy / 3200));
 			if (baseTile.energy > 50 * dmg && !JSTDamageSource.hasFullHazmat(EnumHazard.ELECTRIC, (EntityLivingBase)e) && e.attackEntityFrom(JSTDamageSource.ELECTRIC, dmg)) {
-				JSTPacketHandler.playCustomEffect(getWorld(), getPos(), 1, -10);
+				getWorld().playSound(null, getPos(), JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.5F, 1.0F);
+				JSTPacketHandler.playCustomEffect(getWorld(), getPos(), 1, 10);
 				baseTile.energy -= 50 * dmg;
 			}
 		}

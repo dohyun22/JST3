@@ -1,28 +1,24 @@
 package dohyun22.jst3.utils;
 
-import java.util.ArrayList;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import dohyun22.jst3.JustServerTweak;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @ParametersAreNonnullByDefault
 public class JSTSounds {
-	public static SoundEvent TELEPORT, LASER, AIE, SHOCK, SHOCK2, WRENCH, BOOM, DOWNLINE, UPLINE, LEVEL,
-	BONUS, SCAN, BICYCLE, GEIGER, DINGDONG, SWITCH, SWITCH2, FORCEFIELD, TRANSFORMER, MICRO,
-	EJECT, PUMP, INTERRUPT, FLAME, ENGINE;
-	
+	public static SoundEvent TELEPORT, LASER, AIE, SHOCK, SHOCK2, WRENCH, BOOM, DOWNLINE, UPLINE, LEVEL, BONUS, SCAN,
+			BICYCLE, GEIGER, DINGDONG, SWITCH, SWITCH2, FORCEFIELD, MICRO, INTERRUPT, FLAME, ENGINE, OVERLOAD;
+
 	private static SoundEvent registerSound(String name) {
 		ResourceLocation rl = new ResourceLocation(JustServerTweak.MODID, name);
-	    SoundEvent ev = new SoundEvent(rl);
-	    ForgeRegistries.SOUND_EVENTS.register(ev.setRegistryName(rl));
-	    return ev;
+		SoundEvent ev = new SoundEvent(rl);
+		ForgeRegistries.SOUND_EVENTS.register(ev.setRegistryName(rl));
+		return ev;
 	}
-	  
+
 	public static void init() {
 		TELEPORT = registerSound("teleport");
 		LASER = registerSound("laser");
@@ -42,12 +38,10 @@ public class JSTSounds {
 		SWITCH = registerSound("switch");
 		SWITCH2 = registerSound("switch2");
 		FORCEFIELD = registerSound("forcefield");
-		TRANSFORMER = registerSound("transformer");
 		MICRO = registerSound("micro");
-		EJECT = registerSound("eject");
-		PUMP = registerSound("pump");
 		INTERRUPT = registerSound("interrupt");
 		FLAME = registerSound("flame");
 		ENGINE = registerSound("engine");
+		OVERLOAD = registerSound("overload");
 	}
 }

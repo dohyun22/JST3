@@ -269,7 +269,7 @@ public class MT_StirlingGen extends MT_Generator implements IGenericGUIMTE {
 	}
 
 	@Override
-	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hitX, float hitY, float hitZ) {
+	public boolean onRightclick(EntityPlayer pl, ItemStack st, EnumFacing f, float hX, float hY, float hZ) {
 		if (!isClient()) pl.openGui(JustServerTweak.INSTANCE, 1, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 		return true;
 	}
@@ -319,7 +319,7 @@ public class MT_StirlingGen extends MT_Generator implements IGenericGUIMTE {
 
 	@Override
 	public boolean canInsertItem(int sl, ItemStack st, EnumFacing dir) {
-		return sl == 0;
+		return sl == 0 && getFuelValue(st) > 0;
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package dohyun22.jst3.items.behaviours;
 
+import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -40,7 +42,9 @@ public class IB_Food extends ItemBehaviour {
         if (elb instanceof EntityPlayer) {
             EntityPlayer pl = (EntityPlayer)elb;
             pl.getFoodStats().addStats(getAmt(st), getSatMod(st));
-            if (!isDrink)
+            if (isDrink)
+            	JSTUtils.giveItem(pl, new ItemStack(Items.GLASS_BOTTLE));
+            else
             	w.playSound(null, pl.posX, pl.posY, pl.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, w.rand.nextFloat() * 0.1F + 0.9F);
             onEaten(st, w, pl);
             if (pl instanceof EntityPlayerMP) CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)pl, st);
@@ -63,7 +67,7 @@ public class IB_Food extends ItemBehaviour {
     public EnumAction useAction(ItemStack st) {
         return isDrink ? EnumAction.DRINK : EnumAction.EAT;
     }
-	
+
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return duration;

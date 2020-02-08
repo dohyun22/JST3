@@ -112,16 +112,16 @@ public class IB_FluidCan extends ItemBehaviour {
 	}
 
 	private static class CanFluidHandler implements IFluidHandlerItem {
-		private ItemStack container;
+		private ItemStack con;
 		private CanType type;
 
 		public CanFluidHandler(ItemStack con, CanType type) {
-			this.container = con;
+			this.con = con;
 			this.type = type;
 		}
 
 		public int fill(FluidStack r, boolean d) {
-			if (container.getCount() != 1 || r == null || r.amount <= 0 || type.fname != null)
+			if (con.getCount() != 1 || r == null || r.amount <= 0 || type.fname != null)
 				return 0;
 			IB_FluidCan.CanType ct = IB_FluidCan.getCanType(r);
 			if (ct != null) {
@@ -144,7 +144,7 @@ public class IB_FluidCan extends ItemBehaviour {
 
 		@Override
 		public FluidStack drain(int a, boolean d) {
-			if (container.getCount() != 1 || a < (type.is144mb ? 144 : 1000))
+			if (con.getCount() != 1 || a < (type.is144mb ? 144 : 1000))
 				return null;
 			FluidStack fs = type.getFluid();
 			if (fs == null || fs.amount <= 0)
@@ -156,7 +156,7 @@ public class IB_FluidCan extends ItemBehaviour {
 
 		@Override
 		public ItemStack getContainer() {
-			return container;
+			return con;
 		}
 
 		@Override
@@ -167,10 +167,10 @@ public class IB_FluidCan extends ItemBehaviour {
 		public void setContainer(int id) {
 			CanType[] ct = CanType.values();
 			try {
-				container.setItemDamage(startID + id);
+				con.setItemDamage(startID + id);
 				type = ct[startID + id - startID];
 			} catch (Exception e) {
-				container.setItemDamage(startID);
+				con.setItemDamage(startID);
 				type = CanType.NONE;
 			}
 		}

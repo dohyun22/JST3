@@ -47,7 +47,7 @@ public class MT_Transformer extends MetaTileEnergyInput implements IScrewDriver 
 	
 	@Override
 	public long getMaxEnergy() {
-		return JSTUtils.getVoltFromTier(tier + 1) * 2;
+		return JSTUtils.getVoltFromTier(tier + 1) * 2L;
 	}
 	
 	@Override
@@ -101,7 +101,6 @@ public class MT_Transformer extends MetaTileEnergyInput implements IScrewDriver 
 	@Override
 	public void onPlaced(BlockPos p, IBlockState bs, EntityLivingBase elb, ItemStack st) {
 		super.onPlaced(p, bs, elb, st);
-		if (this.baseTile == null) return;
 		baseTile.facing = JSTUtils.getClosestSide(p, elb, false);
 	}
 	

@@ -490,7 +490,7 @@ public class MT_Cable extends MetaTileEnergyInput {
 	
 	@Override
 	public void getDrops(ArrayList<ItemStack> ls) {
-		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C && ic2rep >= 0) {
+		if (JSTCfg.ic2Loaded && JSTCfg.rIC2C && ic2rep >= 0) {
 			ItemStack st = CompatIC2.getIC2Cable(ic2rep & 0xF, ic2rep >> 4);
 			if (!st.isEmpty()) ls.add(st);
 		}
@@ -499,7 +499,7 @@ public class MT_Cable extends MetaTileEnergyInput {
 	
 	@Override
 	public void getSubBlocks(int id, NonNullList<ItemStack> list) {
-		if (JSTCfg.ic2Loaded && JSTCfg.RIC2C && ic2rep >= 0) {
+		if (JSTCfg.ic2Loaded && JSTCfg.rIC2C && ic2rep >= 0) {
 			ArrayList ls = new ArrayList();
 			getDrops(ls);
 			list.addAll(ls);
@@ -514,8 +514,10 @@ public class MT_Cable extends MetaTileEnergyInput {
 	
 	@Override
 	public void onEntityCollided(Entity e) {
-		if (insMode == 1 && volt > 0 && e instanceof EntityLivingBase && e.attackEntityFrom(JSTDamageSource.ELECTRIC, JSTDamageSource.hasFullHazmat(JSTDamageSource.EnumHazard.ELECTRIC, (EntityLivingBase)e) ? 0.0F : Math.min(volt, maxv) / 64.0F))
-			JSTPacketHandler.playCustomEffect(getWorld(), getPos(), 1, -10);
+		if (insMode == 1 && volt > 0 && e instanceof EntityLivingBase && e.attackEntityFrom(JSTDamageSource.ELECTRIC, JSTDamageSource.hasFullHazmat(JSTDamageSource.EnumHazard.ELECTRIC, (EntityLivingBase)e) ? 0.0F : Math.min(volt, maxv) / 64.0F)) {
+			getWorld().playSound(null, getPos(), JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.5F, 1.0F);
+			JSTPacketHandler.playCustomEffect(getWorld(), getPos(), 1, 10);
+		}
 	}
 	
 	protected static String getCFColor(byte meta) {

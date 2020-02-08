@@ -107,28 +107,10 @@
        "jst3:forcefield"
      ]
    },
-   "transformer": {
-     "category": "master",
-     "sounds": [
-       "jst3:transformer"
-     ]
-   },
    "micro": {
      "category": "master",
      "sounds": [
        "jst3:micro"
-     ]
-   },
-   "eject": {
-     "category": "master",
-     "sounds": [
-       "jst3:eject"
-     ]
-   },
-   "pump": {
-     "category": "master",
-     "sounds": [
-       "jst3:pump"
      ]
    },
    "interrupt": {
@@ -147,6 +129,12 @@
      "category": "master",
      "sounds": [
        "jst3:engine"
+     ]
+   },
+   "overload": {
+     "category": "master",
+     "sounds": [
+       "jst3:overload"
      ]
    }
 }

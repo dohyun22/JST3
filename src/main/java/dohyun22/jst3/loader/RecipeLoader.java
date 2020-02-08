@@ -143,7 +143,7 @@ public class RecipeLoader extends Loadable {
 
 	@Override
 	public void postInit() {
-		if (!JSTCfg.ic2Loaded || !JSTCfg.RIC2C) {
+		if (!JSTCfg.ic2Loaded || !JSTCfg.rIC2C) {
 			addWireRecipe("Tin", 1, 4001, 4002, 2, 3);
 			addWireRecipe("Copper", 2, 4003, 4004, 2, 3);
 			addWireRecipe("Gold", 3, 4005, 4006, 3, 4);
@@ -228,6 +228,7 @@ public class RecipeLoader extends Loadable {
 		RecipeLoader.addSHWRecycle(new ItemStack(JSTItems.item1, 1, 13004), " c ", "ICI", 'c', ItemList.circuits[1], 'I', "ingotIron", 'C', Blocks.CHEST);
 
 		//Materials
+		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 76), (JSTUtils.oreValid("gemApatite") ? "gemApatite" : new ItemStack(Items.BLAZE_POWDER)), (JSTUtils.oreValid("dustIron") ? "dustIron" : "ingotIron"), "dustLithium");
 		obj = new ItemStack(JSTItems.item1, 1, 190);
 		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 86), "CSC", "SBS", "CSC", 'C', ItemList.cables[1], 'S', "dustRedstone", 'B', obj);
 		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 86), " C ", "VBV", " C ", 'C', ItemList.cables[1], 'V', ItemList.circuits[0], 'B', obj);
@@ -577,14 +578,14 @@ public class RecipeLoader extends Loadable {
 		addShapedRecipe(new ItemStack(JSTBlocks.blockOHW, 16), "HHH", "CCC", 'H', ItemList.uninsCables[4], 'C', ItemList.uninsCables[2]);
 
 		obj = new Object[] {new ItemStack(Blocks.GLASS), "gemPeridot", "gemSapphire", "gemRuby", "gemDiamond", new ItemStack(JSTItems.item1, 1, 103), "dustNaquadah", "dustUnobtainium",
-				new ItemStack(JSTItems.item1, 1, 12004), new ItemStack(JSTItems.item1, 1, 12011), new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 12018)
+				new ItemStack(JSTItems.item1, 1, 12004), new ItemStack(JSTItems.item1, 1, 12011), new ItemStack(JSTItems.item1, 1, 12012), new ItemStack(JSTItems.item1, 1, 12017), new ItemStack(JSTItems.item1, 1, 12018), new ItemStack(JSTItems.item1, 1, 12019)
 		};
 		for (int n = 1; n <= 8; n++) {
 			addSHWRecycle(ItemList.motors[n], " b ", "cCc", " b ", 'b', ItemList.baseMaterial[n], 'c', ItemList.cables[n], 'C', ItemList.coils[n]);
 			addSHWRecycle(ItemList.sensors[n], "cbc", "CiC", "cbc", 'c', ItemList.cables[n], 'b', ItemList.baseMaterial[n], 'C', ItemList.circuits[n], 'i', ((Object[]) obj)[n - 1]);
 			addSHWRecycle(ItemList.raygens[n], "COC", "bib", "bib", 'C', ItemList.circuits[n], 'O', ItemList.coils[n], 'b', ItemList.baseMaterial[n], 'i', ((Object[]) obj)[n - 1]);
 
-			if (n <= 5) {
+			if (n <= 6) {
 				st = new ItemStack(JSTItems.item1, 1, 12039 + n);
 				addSHWRecycle(st, "WWW", "CBC", 'W', ItemList.uninsCables[n], 'C', ItemList.circuits[n], 'B', ((Object[]) obj)[n + 7]);
 			}
@@ -594,102 +595,47 @@ public class RecipeLoader extends Loadable {
 		}
 		obj = new ItemStack(JSTBlocks.blockTile, 1, 5008);
 		addSLWRecycle(new ItemStack(JSTItems.item1, 1, 12053), new ItemStack(JSTItems.item1, 1, 12043), obj, obj, obj, obj);
-		
+
 		//Battery
 		addBasicBatteryRecipe(new int[] {12000, 12001}, 0, ItemList.cables[1], new Object[] {"dustRedstone"}, null);
-		
 		addBasicBatteryRecipe(new int[] {12002, 12003}, 0, ItemList.cables[1], new Object[] {"dustNikolite"}, null);
-		
 		addBasicBatteryRecipe(new int[] {12004, 12005, 12006}, 0, ItemList.cables[0], new Object[] {pf + "Lead", "dustSulfur"}, null);
-		
 		addBasicBatteryRecipe(new int[] {12007, 12008, 12009}, 0, ItemList.cables[2], new Object[] {"dustNickel", new ItemStack(JSTItems.item1, 1, 9009)}, new ItemStack(JSTItems.item1, 1, 9000));
-		
 		addBasicBatteryRecipe(new int[] {12010, 12011, 12012}, 0, ItemList.cables[2], new Object[] {"dustLithium"}, null);
-		
 		addBasicBatteryRecipe(new int[] {12013, 12014, 12015, 12016}, 0, ItemList.cables[2], new Object[] {new ItemStack(JSTItems.item1, 1, 76)}, null);
-		
 		addBasicBatteryRecipe(new int[] {12023, 12024}, 15000, ItemList.cables[1], new Object[] {JSTUtils.oreValid("dustCoal") ? "dustCoal" : new ItemStack(Items.COAL), "dustRedstone"}, null);
-		
 		addBasicBatteryRecipe(new int[] {12025, 12026}, 50000, ItemList.cables[1], new Object[] {"dustSulfur", "dustNikolite"}, null);
-		
 		addBasicBatteryRecipe(new int[] {12027, 12028, 12029}, 0, ItemList.cables[2], new Object[] {"dustSodium"}, null);
-		
+
 		st = JSTUtils.getModItemStack("ic2:crafting", 1, 15);
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 12017), 
-				"NCN", "NnN", "NCN",
-				'N', (st.isEmpty() ? "plateNiobium" : st),
-				'n', new ItemStack(JSTItems.item1, 1, 103),
-				'C', ItemList.circuits[3]
-				);
-		
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 12017), "NCN", "NnN", "NCN", 'N', (st.isEmpty() ? "plateNiobium" : st), 'n', new ItemStack(JSTItems.item1, 1, 103), 'C', ItemList.circuits[3]);
+
 		st = new ItemStack(JSTItems.item1, 1, 12017);
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 12018), st, st, st, st);
 		st = new ItemStack(JSTItems.item1, 1, 12018);
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 12019), st, st, st, st);
-		
-		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 76), 
-				(JSTUtils.oreValid("gemApatite") ? "gemApatite" : new ItemStack(Items.BLAZE_POWDER)),
-				(JSTUtils.oreValid("dustIron") ? "dustIron" : "ingotIron"),
-				"dustLithium"
-				);
-		
 		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 12030), "CRC", "LRL", "CRC", 'C', ItemList.circuits[3], 'L', new ItemStack(JSTBlocks.blockTile, 1, 5020), 'R', "blockUranium");
 		addShapedRecipe(new ItemStack(JSTItems.item1, 1, 12031), "PCP", "GcG", "PcP", 'P', pf + "Aluminum", 'C', ItemList.circuits[2], 'c', new ItemStack(JSTItems.item1, 1, 9000), 'G', pf + "Gold");
-		
+
 		st = new ItemStack(JSTItems.item1, 1, 12020);
 		addShapelessRecipe(new ItemStack(JSTItems.item1, 1, 12021), st, st, st, st);
 		addShapedRecipe(new ItemStack(JSTItems.mask), "SCS", "SCS", 'S', Items.STRING, 'C', new ItemStack(Blocks.CARPET));
-		
-		if (JSTCfg.NoElecEngine) removeRecipeByOutput(JSTUtils.getModItemStack("forestry:engine_electrical"), true, true);
-		
-		addShapedRecipe(new ItemStack(Items.STRING, 48), 
-				"PPP",
-				'P', new ItemStack(JSTItems.item1, 1, 105)
-				);
+		if (JSTCfg.noElecEngine) removeRecipeByOutput(JSTUtils.getModItemStack("forestry:engine_electrical"), true, true);
+		addShapedRecipe(new ItemStack(Items.STRING, 48), "PPP", 'P', new ItemStack(JSTItems.item1, 1, 105));
 	}
 
 	private static void addToolRecipes(int sID, Object mat, boolean sickle) {
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID), 
-				"G", "G", "S",
-				'G', mat,
-				'S', "stickWood"
-				);
-		
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 1), 
-				"G", "S", "S",
-				'G', mat,
-				'S', "stickWood"
-				);
-		
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 2), 
-				"GGG", " S ", " S ",
-				'G', mat,
-				'S', "stickWood"
-				);
-		
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 3), 
-				"GG", "GS", " S",
-				'G', mat,
-				'S', "stickWood"
-				);
-		
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 4), 
-				"GG", " S", " S",
-				'G', mat,
-				'S', "stickWood"
-				);
-		
-		if (sickle)
-		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 5), 
-				" G ", "  G", "SG ",
-				'G', mat,
-				'S', "stickWood"
-				);
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID), "G", "G", "S", 'G', mat, 'S', "stickWood");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 1), "G", "S", "S", 'G', mat, 'S', "stickWood");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 2), "GGG", " S ", " S ", 'G', mat, 'S', "stickWood");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 3), "GG", "GS", " S", 'G', mat, 'S', "stickWood");
+		addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 4), "GG", " S", " S", 'G', mat, 'S', "stickWood");
+		if (sickle) addShapedRecipe(new ItemStack(JSTItems.item1, 1, sID + 5), " G ", "  G", "SG ", 'G', mat, 'S', "stickWood");
 	}
 
 	private static void addWireRecipe(String name, int tier, int i, int ui, int min, int max) {
 		if (!JSTUtils.oreValid("ingot" + name)) return;
-		
+
 		Object ins = JSTUtils.oreValid("itemRubber") ? "itemRubber" : new ItemStack(Blocks.WOOL, 1, Short.MAX_VALUE);
 		if (JSTCfg.ic2Loaded) {
 			addShapelessRecipe(new ItemStack(JSTBlocks.blockTile, min, ui), "plate" + name, "craftingToolWireCutter");
@@ -699,17 +645,10 @@ public class RecipeLoader extends Loadable {
 		    	CompatIC2.addFormerRecipe(new OreDictStack("ingot" + name), new ItemStack(JSTBlocks.blockTile, max, ui), 1);
 		}
 		MRecipes.addPressRecipe(new OreDictStack("ingot" + name), ItemList.molds[0], new ItemStack(JSTBlocks.blockTile, max, ui), null, 16, 64);
-		if (!JSTCfg.ic2Loaded || JSTCfg.CheaperIC2) {
+		if (!JSTCfg.ic2Loaded || JSTCfg.cheaperIC2) {
 			if (min * 3 == 6 && tier < 3)
-				addShapedRecipe(new ItemStack(JSTBlocks.blockTile, min * 3, i), 
-						"WWW", "III", "WWW",
-						'W', ins, 'I', "ingot" + name
-						);
-			
-			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, min * 3, ui), 
-					"III",
-					'I', "ingot" + name
-					);
+				addShapedRecipe(new ItemStack(JSTBlocks.blockTile, min * 3, i), "WWW", "III", "WWW", 'W', ins, 'I', "ingot" + name);
+			addShapedRecipe(new ItemStack(JSTBlocks.blockTile, min * 3, ui), "III", 'I', "ingot" + name);
 		}
 		Object[] inp = new Object[MathHelper.clamp(tier, 2, 5)];
 		Arrays.fill(inp, ins);

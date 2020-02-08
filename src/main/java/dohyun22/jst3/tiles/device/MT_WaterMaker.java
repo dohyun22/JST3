@@ -92,7 +92,7 @@ public class MT_WaterMaker extends MetaTileEnergyInput {
 				}
 			}
 		} else if (baseTile.isActive()) {
-			if (baseTile.getTimer() % 40 == 0) w.playSound(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, JSTSounds.PUMP, SoundCategory.BLOCKS, 0.25F, 1.0F, false);
+			if (baseTile.getTimer() % 40 == 0) w.playSound(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, 0.25F, 1.0F, false);
 			if (w.rand.nextInt(4) == 0) {
 	            double x = (double)baseTile.getPos().getX() + 0.5D;
 	            double z = (double)baseTile.getPos().getZ() + 0.5D;

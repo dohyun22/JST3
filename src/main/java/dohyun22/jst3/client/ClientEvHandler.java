@@ -1,6 +1,7 @@
 package dohyun22.jst3.client;
 
 import java.awt.Color;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,9 @@ import dohyun22.jst3.utils.JSTPotions;
 import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -42,6 +46,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -52,17 +57,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientEvHandler implements IResourceManagerReloadListener {
-	
+	private static Field inputField;
+
+	static {
+		if (JSTCfg.unlimitKC)
+			inputField = ReflectionUtils.getFieldObf(GuiChat.class, "field_146415_a", "inputField");
+	}
+
 	@Override
 	public void onResourceManagerReload(IResourceManager rm) {
 		ModelMTE.clearCache();
 	}
-	
+
 	@SubscribeEvent
 	public void textureStich(TextureStitchEvent.Pre ev){
 		TextureLoader.initTex(ev.getMap());
 	}
-	
+
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent ev) {
         IRegistry<ModelResourceLocation, IBakedModel> reg = ev.getModelRegistry();
@@ -71,7 +82,7 @@ public class ClientEvHandler implements IResourceManagerReloadListener {
         reg.putObject(new ModelResourceLocation(pf + "blockte#opaque=false"), ModelMTE.INSTANCE);
         reg.putObject(new ModelResourceLocation(pf + "blockte#inventory"), ModelMTE.INSTANCE);
     }
-    
+
 	@SubscribeEvent
 	public void onToolTip(ItemTooltipEvent ev) {
 		try {
@@ -79,7 +90,7 @@ public class ClientEvHandler implements IResourceManagerReloadListener {
 			if (st.isEmpty()) return;
 			String name = Item.REGISTRY.getNameForObject(st.getItem()).toString();
 			List<String> tl = ev.getToolTip();
-			if (JSTCfg.RIC2C && "ic2:cable".equals(name)) {
+			if (JSTCfg.rIC2C && "ic2:cable".equals(name)) {
 				String stn = tl.isEmpty() ? null : tl.get(0);
 				tl.clear();
 				if (stn != null) tl.add(stn);
@@ -124,6 +135,19 @@ public class ClientEvHandler implements IResourceManagerReloadListener {
 			}
 		}
 	}
+
+	@SubscribeEvent
+    public void kChatPatcher(GuiScreenEvent.InitGuiEvent.Post ev) {
+    	if (inputField != null) {
+    		GuiScreen g = ev.getGui();
+    		if (g instanceof GuiChat) {
+    			try {
+    				GuiTextField tf = (GuiTextField)inputField.get(g);
+    				tf.setMaxStringLength(256);
+    			} catch (Throwable t) {}
+    		}
+    	}
+    }
 
 	@SubscribeEvent
 	public void onBlockHighlight(DrawBlockHighlightEvent ev) {

@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.blocks.BlockTileEntity;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.compat.ic2.CompatIC2;
@@ -34,6 +35,7 @@ import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.ICropTile;
 import ic2.api.energy.EnergyNet;
+import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.BlockRailBase;
@@ -80,6 +82,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -101,7 +104,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.ForgeRegistry;
 
 public class EvHandler {
-	private static final HashMap<Integer, ArrayList<TileEntity>> toBeUnloaded = new HashMap();
+	private static final HashMap<Integer, ArrayList<BlockPos>> toBeUnloaded = new HashMap();
 	private static final String TAG_NAME = "JST3_CD";
 	private static boolean err;
 	
@@ -133,7 +136,7 @@ public class EvHandler {
 			}
 			
 			if (!(pl instanceof FakePlayer) && !pl.capabilities.isCreativeMode) {
-				if (JSTCfg.ECnc > 0 && EffectBlocks.netherOres.contains(w.getBlockState(ev.getPos()).getBlock())) {
+				if (JSTCfg.eCnc > 0 && EffectBlocks.netherOres.contains(w.getBlockState(ev.getPos()).getBlock())) {
 					int en = 0;
 					for (int dx = -1; dx <= 1; dx++) {
 						for (int dy = -1; dy <= 1; dy++) {
@@ -161,7 +164,7 @@ public class EvHandler {
 								if (!EffectBlocks.netherOres.contains(lb) || occ)
 									continue;
 
-								int exc = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, pl.getHeldItemMainhand()) > 0 ? JSTCfg.ECncST : JSTCfg.ECnc;
+								int exc = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, pl.getHeldItemMainhand()) > 0 ? JSTCfg.eCncST : JSTCfg.eCnc;
 								if (exc > 0 && en < 2 && w.rand.nextInt(exc) == 0) {
 									en++;
 									EntityPrimedOre po = new EntityPrimedOre(w, bx + 0.5, by + 0.5, bz + 0.5);
@@ -221,7 +224,7 @@ public class EvHandler {
 			}
 		}
 
-		if (JSTCfg.RIC2C) {
+		if (JSTCfg.rIC2C) {
 			if (ev.getHand() == EnumHand.OFF_HAND) {
 				ItemStack st2 = pl.getHeldItem(EnumHand.MAIN_HAND);
 				if (!st2.isEmpty() && "ic2:cable".equals(name)) {
@@ -394,10 +397,10 @@ public class EvHandler {
 	private static boolean nerf(Entity i) {
 		if (i instanceof EntityZombie) {
 			EntityZombie e = (EntityZombie) i;
-			if ((JSTCfg.NerfZombies >> 1 & 1) == 1) {
+			if ((JSTCfg.nerfZombies >> 1 & 1) == 1) {
 				if (e.isChild())
 					return true;
-			} else if ((JSTCfg.NerfZombies & 1) == 1) {
+			} else if ((JSTCfg.nerfZombies & 1) == 1) {
 				if (e.isChild()) {
 					e.setHealth(10.0F);
 					e.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0F);
@@ -405,7 +408,7 @@ public class EvHandler {
 					e.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0F);
 				}
 			}
-			if ((JSTCfg.NerfZombies >> 2 & 1) == 1)
+			if ((JSTCfg.nerfZombies >> 2 & 1) == 1)
 				e.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0F);
 		}
 		return false;
@@ -415,7 +418,7 @@ public class EvHandler {
 	public void onLivingUpdate(LivingUpdateEvent ev) {
 		Entity e = ev.getEntity();
 		World w = e.getEntityWorld();
-		if (!w.isRemote && (JSTCfg.NerfZombies & 1) == 1 && w.isDaytime() && e instanceof EntityZombie && !(e instanceof EntityHusk) && ((EntityZombie)e).isChild()) {
+		if (!w.isRemote && (JSTCfg.nerfZombies & 1) == 1 && w.isDaytime() && e instanceof EntityZombie && !(e instanceof EntityHusk) && ((EntityZombie)e).isChild()) {
 			EntityZombie ez = (EntityZombie) e;
 			float f = ez.getBrightness();
 			if (f > 0.5F && w.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && w.canSeeSky(new BlockPos(ez.posX, ez.posY + ez.getEyeHeight(), ez.posZ))) {
@@ -465,9 +468,15 @@ public class EvHandler {
 			long t = ev.world.getTotalWorldTime();
 			if (t % 10 == 0) {
 				int d = ev.world.provider.getDimension();
-				ArrayList<TileEntity> tes = toBeUnloaded.get(d);
-				if (tes != null) {
-					ev.world.tickableTileEntities.removeAll(tes);
+				ArrayList<BlockPos> pos = toBeUnloaded.get(d);
+				if (pos != null) {
+					for (BlockPos p : pos) {
+						TileEntity te = ev.world.getTileEntity(p);
+						if (te != null)
+							ev.world.tickableTileEntities.remove(te);
+						else
+							JSTChunkData.setBrokenMachine(ev.world, p, true);
+					}
 					toBeUnloaded.remove(d);
 				}
 			}
@@ -491,20 +500,27 @@ public class EvHandler {
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload ev) {
 		if (!ev.getWorld().isRemote && ev.getWorld().provider.getDimension() == 0 && !ev.getWorld().getMinecraftServer().isServerRunning()) {
-			DustHandler.resetTracker();
+			DustHandler.clear();
+			JSTChunkData.clear();
+			toBeUnloaded.clear();
 			err = false;
 		}
 	}
 
 	@SubscribeEvent
 	public void onChunkDataLoad(ChunkDataEvent.Load ev) {
-		if (ev.getWorld().isRemote) return;
+		World w = ev.getWorld();
+		if (w.isRemote) return;
 		if (ev.getData().hasKey(TAG_NAME, Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound tag = ev.getData().getCompoundTag(TAG_NAME);
 			if (!tag.hasNoTags()) {
-				if (tag.getInteger(JSTChunkData.DUST_TAG_NAME) > 0)
-					DustHandler.addToTracker(ev.getWorld(), ev.getChunk().getPos(), true);
-				JSTChunkData.setChunkData(ev.getWorld(), ev.getChunk().getPos(), tag, false);
+				ChunkPos cp = ev.getChunk().getPos();
+				JSTChunkData.setChunkData(w, cp, tag, false);
+				if (JSTChunkData.getFineDust(w, cp) > 0)
+					DustHandler.addToTracker(w, cp, true);
+				List<BlockPos> ls = JSTChunkData.getBrokenMachines(w, cp);
+				for (BlockPos p : ls)
+					scheduleTEUnload(w, p);
 			}
 		}
 	}
@@ -521,27 +537,41 @@ public class EvHandler {
 		}
 	}
 
-	public static void makeMachineGoHaywire(World w, BlockPos p) {
+	@SubscribeEvent
+	public void onSoundMissing(RegistryEvent.MissingMappings<SoundEvent> ev) {
+		for (RegistryEvent.MissingMappings.Mapping<SoundEvent> o : ev.getMappings())
+			if (JustServerTweak.MODID.equals(o.key.getResourceDomain()))
+				o.ignore();
+	}
+
+	public static boolean makeMachineGoHaywire(World w, BlockPos p) {
+		if (!w.isBlockLoaded(p)) return false;
 		TileEntity te = w.getTileEntity(p);
-		if (te == null) return;
+		if (te == null) return false;
 		boolean flag = false;
 		for (EnumFacing f : EnumFacing.VALUES) {
 			IEnergyStorage c = te.getCapability(CapabilityEnergy.ENERGY, f);
 			if (c != null && c.getEnergyStored() > 0) flag = true;
 		}
 		try {
-			if (!flag && JSTCfg.ic2Loaded && EnergyNet.instance.getSubTile(w, p) != null) flag = true;
+			if (!flag && JSTCfg.ic2Loaded && EnergyNet.instance.getSubTile(w, p) != null)
+				flag = true;
 		} catch (Throwable t) {}
-		if (flag) unloadTE(w, te);
+		if (flag) {
+			scheduleTEUnload(w, p);
+			JSTChunkData.setBrokenMachine(w, p, false);
+		}
+		return flag;
 	}
 
-	public static void unloadTE(World w, TileEntity te) {
+	public static void scheduleTEUnload(World w, BlockPos p) {
+		if (p == null) return;
 		int d = w.provider.getDimension();
-		ArrayList<TileEntity> ls = toBeUnloaded.get(d);
+		ArrayList<BlockPos> ls = toBeUnloaded.get(d);
 		if (ls == null) {
 			ls = new ArrayList();
 			toBeUnloaded.put(d, ls);
 		}
-		ls.add(te);
+		ls.add(p);
 	}
 }

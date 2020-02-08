@@ -7,6 +7,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -55,21 +56,19 @@ public class PacketCustomAuxSFX implements IMessage {
 				World w = FMLClientHandler.instance().getClient().world;
 				long d = msg.data;
 				BlockPos p = BlockPos.fromLong(msg.xyz);
+				double xd, yd, zd;
 				switch (msg.id) {
 				case 1:
-					if (d == 0)
+					xd = w.getBlockState(p).isFullCube() ? 0.2D : 0.0D;
+					if (d <= 0)
 						d = 10;
-					if (d < 0) {
-						w.playSound(p.getX() + 0.5F, p.getY() + 0.5F, p.getZ() + 0.5F, JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.5F, 1.0F, false);
-						d *= -1;
-					}
 					for (int i = 0; i < d; i++)
-						w.spawnParticle(EnumParticleTypes.REDSTONE, true, p.getX() + w.rand.nextFloat(), p.getY() + w.rand.nextFloat(), p.getZ() + w.rand.nextFloat(), 0.1D, 1.0D, 1.0D);
+						w.spawnParticle(EnumParticleTypes.REDSTONE, true, p.getX() - xd + w.rand.nextFloat() * (1.0D + xd * 2), p.getY() - xd + w.rand.nextFloat() * (1.0D + xd * 2), p.getZ() - xd + w.rand.nextFloat() * (1.0D + xd * 2), 0.1D, 1.0D, 1.0D);
 					break;
 				case 2:
 				{
 					BlockPos t = BlockPos.fromLong(msg.data);
-					double xd = (p.getX() + 0.5D) - (t.getX() + 0.5D), yd = (p.getY() + 0.5D) - (t.getY()), zd = (p.getZ() + 0.5D) - (t.getZ());
+					xd = (p.getX() + 0.5D) - (t.getX() + 0.5D); yd = (p.getY() + 0.5D) - (t.getY()); zd = (p.getZ() + 0.5D) - (t.getZ());
 					int cnt = (int)(Math.sqrt(xd * xd + yd * yd + zd * zd) / 0.3);
 					if (cnt < 4) return;
 					xd = xd / (double) cnt;
@@ -88,6 +87,14 @@ public class PacketCustomAuxSFX implements IMessage {
 								p2.setPos(cx + x, p.getY(), cz + z);
 								w.spawnParticle(EnumParticleTypes.REDSTONE, true, p2.getX() + 0.5, p2.getY() + 0.5, p2.getZ() + 0.5, 0.0D, 0.0D, 0.0D);
 							}
+					break;
+				case 4:
+					xd = p.getX() + 0.5D;
+					yd = p.getY() + 0.5D;
+					zd = p.getZ() + 0.5D;
+					double r = MathHelper.clamp(d, 5, 20);
+					for (double n = 0.0D; n < Math.PI * 2; n += Math.PI / (r * r * 0.5D))
+						w.spawnParticle(EnumParticleTypes.PORTAL, xd + Math.cos(n) * r, yd, zd + Math.sin(n) * r, Math.cos(n) * -r, 0.0D, Math.sin(n) * -r);
 					break;
 				}
 			} catch (Throwable t) {}

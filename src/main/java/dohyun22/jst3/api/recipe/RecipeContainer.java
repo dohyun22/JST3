@@ -8,6 +8,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import dohyun22.jst3.api.JSTConstants;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,6 +26,17 @@ public class RecipeContainer {
 	private final Object[] obj;
 	
 	private RecipeContainer(Object[] input, FluidStack[] finput, ItemStack[] output, FluidStack[] foutput, int engy, int time, Object[] obj) {
+		if (input != null) {
+			for (int n = 0; n < input.length; n++) {
+				Object o = input[n];
+				if (o instanceof Item)
+					input[n] = new ItemStack((Item)o);
+				else if (o instanceof Block)
+					input[n] = new ItemStack((Block)o);
+				else if (o instanceof String)
+					input[n] = new OreDictStack((String)o);
+			}
+		}
 		this.in = input;
 		this.fin = finput;
 		this.out = output;

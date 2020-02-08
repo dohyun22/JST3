@@ -59,7 +59,7 @@ public class JSTItems {
     			"mold_cable", "mold_plate", "mold_rod", null, null, null, null, null, null, null, //160~169: Reserved for molds
     			ac("cu_ingot", fl[1]), ac("cu_dust", fl[1]), ac("cu_plate", fl[1]), ac("sn_ingot", fl[1]), ac("sn_dust", fl[1]), ac("sn_plate", fl[1]), ac("pb_ingot", fl[1]), ac("pb_dust", fl[1]), ac("pb_plate", fl[1]), null,
     			null, null, null, "solder_ingot", "solder_dust", "solder_wire", null, null, null, null,
-    			"circ_board", "circ_board2", "circ_board3", "circ_board4", "comp_si", null, null, null, null, null
+    			"circ_board", "circ_board2", "circ_board3", "circ_board4", "comp_si", null, null, null, null, null,
     	};
 
 		for (int n = 0; n < obj.length; n++) {
@@ -100,7 +100,10 @@ public class JSTItems {
 		item1.registerMetaItem(10020, "tool_ion", new IB_IonCannon());
 		if (Loader.isModLoaded("toughasnails")) {
 		item1.registerMetaItem(10021, "tool_wpuri", new IB_WaterPurifier());
-		item1.registerMetaItem(10022, "tool_aircon", new IB_AirConditioner());}
+		item1.registerMetaItem(10022, "tool_aircon", new IB_AirConditioner());
+		item1.registerMetaItem(10023, "bottle", new IB_Bottle(0));
+		item1.registerMetaItem(10024, "bottle_w", new IB_Bottle(1));
+		item1.registerMetaItem(10025, "bottle_p", new IB_Bottle(2));}
 		item1.registerMetaItem(10030, "tool_ecart", new IB_ECartControl());
 		item1.registerMetaItem(10031, "ecart", new IB_ECart());
 		item1.registerMetaItem(10040, "tool_mts", new IB_MTS());
@@ -116,6 +119,7 @@ public class JSTItems {
 		item1.registerMetaItem(10050, "soldering_machine", new IB_SolderingIron());
 		item1.registerMetaItem(10051, "blueprint_write", new IB_BluePrint());
 		item1.registerMetaItem(10052, "tool_bp", new IB_BlockPlacer());
+		item1.registerMetaItem(10053, "tool_emp", new IB_EMP());
 
 		item1.registerMetaItem(10060, "ucell", new IB_UniversalCell(8000));
 		item1.registerMetaItem(10061, "ucell2", new IB_UniversalCell(32000));
@@ -182,10 +186,13 @@ public class JSTItems {
 		item1.registerMetaItem(12042, "chgr3", new IB_Charger(2400000, 3, false));
 		item1.registerMetaItem(12043, "chgr4", new IB_Charger(25000000, 4, false));
 		item1.registerMetaItem(12044, "chgr5", new IB_Charger(100000000, 5, false));
+		item1.registerMetaItem(12045, "chgr6", new IB_Charger(400000000, 6, false));
 		item1.registerMetaItem(12050, "chgs1", new IB_Charger(100000, 1, true));
 		item1.registerMetaItem(12051, "chgs2", new IB_Charger(600000, 2, true));
 		item1.registerMetaItem(12052, "chgs3", new IB_Charger(2400000, 3, true));
 		item1.registerMetaItem(12053, "chgs4", new IB_Charger(25000000, 4, true));
+		item1.registerMetaItem(12054, "chgs5", new IB_Charger(100000000, 5, true));
+		item1.registerMetaItem(12055, "chgs6", new IB_Charger(400000000, 6, true));
 
 		//Upgrades #13000
 		item1.registerMetaItem(13000, "upg_boiler", new IB_Upgrade("jst_boiler", "boiler"));

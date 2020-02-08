@@ -10,6 +10,7 @@ import dohyun22.jst3.items.behaviours.ItemBehaviour;
 import dohyun22.jst3.loader.JSTCfg;
 import dohyun22.jst3.network.JSTPacketHandler;
 import dohyun22.jst3.utils.JSTDamageSource;
+import dohyun22.jst3.utils.JSTPotions;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.block.state.IBlockState;
@@ -22,6 +23,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -80,6 +82,7 @@ public class IB_IonCannon extends ItemBehaviour {
 				IBlockState bs = w.getBlockState(p);
 				if (bs.getMaterial().blocksMovement()) {
 					JSTPacketHandler.playCustomEffect(w, p, 1, -10);
+					w.playSound(null, p, JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.5F, 1.0F);
 					break;
 				}
 				if (n % 2 == 1) continue;
@@ -87,14 +90,19 @@ public class IB_IonCannon extends ItemBehaviour {
 				if (!ls.isEmpty()) {
 					Entity r = pl.getRidingEntity();
 					if (r instanceof EntityLivingBase) ls.remove((EntityLivingBase)r);
-					Entity e = ls.get(w.rand.nextInt(ls.size()));
+					EntityLivingBase e = ls.get(w.rand.nextInt(ls.size()));
 					boolean flag = false;
-					ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(e.posX - 3.5F, e.posY - 3.5F, e.posZ - 3.5F, e.posX + 3.5F, e.posY + 3.5F, e.posZ + 3.5F), pr);
-					for (EntityLivingBase e2 : ls)
-						if (e2 != r && e2.attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl), 7)) {
-							JSTPacketHandler.playCustomEffect(w, e2.getPosition(), 1, -10);
+					ls = w.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(e.posX - 4.0F, e.posY - 4.0F, e.posZ - 4.0F, e.posX + 4.0F, e.posY + 4.0F, e.posZ + 4.0F), pr);
+					for (EntityLivingBase e2 : ls) {
+						double dmg = 8 / Math.max(e.getDistanceSq(e2) * 0.25F, 1);
+						if (dmg >= 1 && e2 != r && e2.attackEntityFrom(JSTDamageSource.causeEntityDamage("ion", pl), (int)dmg)) {
+							if (w.rand.nextInt(4) == 0 && JSTPotions.canEMP(e2) && e2.getActivePotionEffect(JSTPotions.emp) == null)
+								e2.addPotionEffect(new PotionEffect(JSTPotions.emp, 20));
+							w.playSound(null, e2.getPosition(), JSTSounds.SHOCK, SoundCategory.BLOCKS, 1.5F, 1.0F);
+							JSTPacketHandler.playCustomEffect(w, e2.getPosition(), 1, 10);
 							flag = true;
 						}
+					}
 					if (flag) break;
 				}
 			}

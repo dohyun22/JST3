@@ -74,14 +74,14 @@ public class JSTWorldgenHandler implements IWorldGenerator {
 	public void generate(Random rnd, int cx, int cz, World w, IChunkGenerator icg, IChunkProvider icp) {
 		int dim = w.provider.getDimension();
 		if (dim  == 0) {
-			if (w.getWorldType() != WorldType.FLAT && JSTCfg.VolcCnc > 0 && rnd.nextInt(JSTCfg.VolcCnc) == 0) {
+			if (w.getWorldType() != WorldType.FLAT && JSTCfg.volcCnc > 0 && rnd.nextInt(JSTCfg.volcCnc) == 0) {
 	            int lx = cx * 16 + 8;
 	            int ly = rnd.nextInt(24) + 5;
 	            int lz = cz * 16 + 8;
 	            new WorldGenVolcano().generate(w, rnd, new BlockPos(lx, ly, lz));
 			}
 			
-			if (JSTCfg.MarbCnc > 0 && rnd.nextInt(JSTCfg.MarbCnc) == 0) {
+			if (JSTCfg.marbCnc > 0 && rnd.nextInt(JSTCfg.marbCnc) == 0) {
 				int n = 2 + rnd.nextInt(3);
 				for (int a = 0; a < n; a++) {
 		            int lx = cx * 16 + 6 + rnd.nextInt(4);
@@ -99,7 +99,7 @@ public class JSTWorldgenHandler implements IWorldGenerator {
 					w.setBlockState(new BlockPos(x, y, z), JSTBlocks.blockOre.getStateFromMeta(3), 0);
 			}
 			
-			if (JSTCfg.OilSandCnc > 0 && rnd.nextInt(JSTCfg.OilSandCnc) == 0) {
+			if (JSTCfg.oilSandCnc > 0 && rnd.nextInt(JSTCfg.oilSandCnc) == 0) {
 	            int lx = cx * 16 + 8;
 	            int lz = cz * 16 + 8;
 	            int ly = w.getHeight(lx, lz) - 2;
@@ -108,7 +108,7 @@ public class JSTWorldgenHandler implements IWorldGenerator {
 					new WorldGenMinableJST(JSTBlocks.blockOre.getStateFromMeta(5), 36, 100000, BlockMatcher.forBlock(Blocks.SAND)).generate(w, rnd, p);
 			}
 		} else if (dim == 1) {
-			if (JSTCfg.EndBedrockOreCnc > 0 && rnd.nextInt(JSTCfg.EndBedrockOreCnc) == 0) {
+			if (JSTCfg.endBedrockOreCnc > 0 && rnd.nextInt(JSTCfg.endBedrockOreCnc) == 0) {
 				BlockPos p = new BlockPos(cx * 16 + 8, rnd.nextInt(40) + 10, cz * 16 + 8);
 				if (w.getBlockState(p).getBlock() == Blocks.END_STONE) {
 					int t = 0;

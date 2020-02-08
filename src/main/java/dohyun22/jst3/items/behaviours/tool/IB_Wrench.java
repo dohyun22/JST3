@@ -188,7 +188,7 @@ public class IB_Wrench extends IB_Damageable {
 		if (bs == null) return true;
 		Block b = bs.getBlock();
 		String str = b.getHarvestTool(bs);
-		return (str != null ? (str.equals("wrench") || str.equals("cutter")) : false) || bs.getMaterial() == Material.PISTON || b == Blocks.HOPPER || b == Blocks.DISPENSER || b == Blocks.DROPPER || b == Blocks.OBSERVER || allowedMachineList.contains(Block.REGISTRY.getNameForObject(bs.getBlock()).toString());
+		return (str != null ? (str.equals("wrench") || str.equals("cutter")) : false) || bs.getMaterial() == Material.PISTON || b == Blocks.HOPPER || b == Blocks.DISPENSER || b == Blocks.DROPPER || b == Blocks.OBSERVER || allowedMachineList.contains(JSTUtils.getRegName(bs));
 	}
 
 	@Override

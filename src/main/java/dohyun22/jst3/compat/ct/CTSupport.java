@@ -456,7 +456,7 @@ public class CTSupport {
 		}
 		if (in instanceof IItemStack) {
 			IItemStack ii = (IItemStack)in;
-			if (ii.getAmount() <= 0)
+			if (ii.getAmount() <= 0 || ii.getAmount() > 64)
 				return new AdvRecipeItem(((ItemStack)ii.getInternal()).getItem(), 0, ii.getMetadata());
 			return ((IItemStack)in).getInternal();
 		}

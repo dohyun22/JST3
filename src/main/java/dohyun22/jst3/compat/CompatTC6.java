@@ -17,6 +17,7 @@ public class CompatTC6 extends Loadable {
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 9022), null, null, new ItemStack[] {st, st2}, null, 5, 100);
 		MRecipes.addMagicFuel(st, 75000);
 		MRecipes.addMagicFuel(JSTUtils.getModItemStack("thaumcraft:crystal_essence"), 50000);
+		MRecipes.addMagicFuel(JSTUtils.getModItemStack("thaumcraft:primordial_pearl"), 50000000);
 		MRecipes.addPressRecipe(JSTUtils.getModItemStack("thaumcraft:ingot"), ItemList.molds[1], JSTUtils.getModItemStack("thaumcraft:plate", 1, 2), null, 10, 64);
 	}
 }

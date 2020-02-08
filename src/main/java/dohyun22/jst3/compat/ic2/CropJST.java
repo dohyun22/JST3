@@ -86,6 +86,10 @@ public class CropJST extends CropJSTBase {
 		return this;
 	}
 
+	public CropJST seed(List<ItemStack> st) {
+		return seed(st.toArray(new ItemStack[0]));
+	}
+
 	public CropJST light(int n) {
 		light = (byte)n;
 		return this;
@@ -111,7 +115,9 @@ public class CropJST extends CropJSTBase {
 		if (seeds != null && migration_id == null)
 			for (ItemStack s : seeds)
 				if (s != null && !s.isEmpty())
-					Crops.instance.registerBaseSeed(s, this, 1, 1, 1, 1);
+					try {
+						Crops.instance.registerBaseSeed(s, this, 1, 1, 1, 1);
+					} catch (Throwable t) {}
 		seeds = null;
 		loadTex();
 	}
@@ -165,15 +171,15 @@ public class CropJST extends CropJSTBase {
 		}
 		if (cr.getCurrentSize() < maxSize - 1)
 			return true;
-		if (biomes != null) {
-			boolean pass = false;
-			Biome b = cr.getWorldObj().getBiome(cr.getPosition());
-			for (BiomeDictionary.Type t : biomes)
-				if (BiomeDictionary.hasType(b, t))
-					pass = true;
-			if (!pass) return false;
-		}
 		if (cr.getCurrentSize() == maxSize - 1) {
+			if (biomes != null) {
+				boolean pass = false;
+				Biome b = cr.getWorldObj().getBiome(cr.getPosition());
+				for (BiomeDictionary.Type t : biomes)
+					if (BiomeDictionary.hasType(b, t))
+						pass = true;
+				if (!pass) return false;
+			}
 			if (blockBelow == null || blockBelow.length == 0) return true;
 			World w = cr.getWorldObj();
 			BlockPos p = cr.getPosition();

@@ -16,10 +16,11 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class JSTDamageSource {
-	public static DamageSource ELECTRIC = new DamageSource("electric");
-	public static DamageSource DELETE = new DamageSource("delete").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
-	public static DamageSource DUST = new DamageSource("finedust").setDamageIsAbsolute().setDamageBypassesArmor();
-	public static DamageSource FLAME = new DamageSource("flametrap").setFireDamage();
+	public static DamageSource ELECTRIC = new DamageSource("electric"),
+	DELETE = new DamageSource("delete").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode(),
+	DUST = new DamageSource("finedust").setDamageIsAbsolute().setDamageBypassesArmor(),
+	FLAME = new DamageSource("flametrap").setFireDamage(),
+	EMP = new DamageSource("emp").setDamageIsAbsolute().setDamageBypassesArmor();
 	public static final HashMap<EnumHazard, List<ItemStack>> HAZMATS = new HashMap();
 
 	public static DamageSource causeEntityDamage(String s, @Nullable Entity e) {
@@ -66,5 +67,9 @@ public class JSTDamageSource {
 			HAZMATS.put(eh, ls);
 		}
 		ls.add(st);
+	}
+
+	public static void addUniversalHazmat(ItemStack st) {
+		for (EnumHazard eh : EnumHazard.values()) addHazmat(eh, st);
 	}
 }

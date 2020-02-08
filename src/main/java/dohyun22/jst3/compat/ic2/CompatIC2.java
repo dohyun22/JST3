@@ -19,7 +19,6 @@ import dohyun22.jst3.loader.RecipeLoader;
 import dohyun22.jst3.recipes.ItemList;
 import dohyun22.jst3.recipes.MRecipes;
 import dohyun22.jst3.utils.JSTDamageSource;
-import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
 import dohyun22.jst3.utils.JSTFluids;
 import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
@@ -214,10 +213,9 @@ public class CompatIC2 extends Loadable {
 
 	@Override
 	public void postInit() {
-		Object obj = new ItemStack[] {JSTUtils.getModItemStack("ic2:hazmat_helmet", 1, 32767), JSTUtils.getModItemStack("ic2:hazmat_chestplate", 1, 32767), JSTUtils.getModItemStack("ic2:hazmat_leggings", 1, 32767), JSTUtils.getModItemStack("ic2:rubber_boots", 1, 32767)};
-	    for (ItemStack st : (ItemStack[]) obj)
-	    	for (EnumHazard hz : EnumHazard.values())
-	    		JSTDamageSource.addHazmat(hz, st);
+		Object obj = new String[] {"ic2:hazmat_helmet", "ic2:hazmat_chestplate", "ic2:hazmat_leggings", "ic2:rubber_boots", "ic2:quantum_helmet", "ic2:quantum_chestplate", "ic2:quantum_leggings", "ic2:quantum_boots"};
+	    for (String s : (String[]) obj)
+	    	JSTDamageSource.addUniversalHazmat(JSTUtils.getModItemStack(s, 1, 32767));
 
 		addScrapDrop("dustPlatinum", 0.075F);
 		addScrapDrop("dustLithium", 0.4F);
@@ -256,15 +254,16 @@ public class CompatIC2 extends Loadable {
 
 		addAmplifier("dustRedstone", 15000);
 		addAmplifier("dustNikolite", 30000);
-		addAmplifier("dustRuby", 400000);
+		addAmplifier("dustMagnesium", 100000);
 		addAmplifier("dustSapphire", 300000);
 		addAmplifier("dustPeridot", 300000);
+		addAmplifier("dustRuby", 400000);
 		addAmplifier("dustDiamond", 1000000);
 		addAmplifier("dustTungsten", 1000000);
+		addAmplifier(new ItemStack(JSTItems.item1, 1, 100), 1750000);
 		addAmplifier("dustUranium", 2500000);
 		addAmplifier(new ItemStack(JSTItems.item1, 1, 49), 50000000);
 		addAmplifier(new ItemStack(JSTItems.item1, 1, 50), 450000000);
-		addAmplifier(new ItemStack(JSTItems.item1, 1, 100), 1750000);
 
 		MRecipes.addSteam("ic2steam", 1);
 		MRecipes.addSteam("ic2superheated_steam", 2);
@@ -294,7 +293,7 @@ public class CompatIC2 extends Loadable {
 			}
 			st = new ItemStack(i, 1, 3);
 			MRecipes.addFusionBreederRecipe(new ItemStack(i, 1, 2), st);
-			MRecipes.addFusionBreederRecipe(new OreDictStack("ingotUranium"), st);
+			MRecipes.addFusionBreederRecipe("ingotUranium", st);
 			MRecipes.addFusionBreederRecipe(new ItemStack(JSTItems.item1, 1, 100), new ItemStack(i, 6, 5));
 			MRecipes.addFusionBreederRecipe(new ItemStack(i, 1, 3), new ItemStack(JSTItems.item1, 1, 78));
 			MRecipes.addSeparatorRecipe(new ItemStack(i, 10, 2), null, null, new ItemStack[] {new ItemStack(i, 1, 5)}, null, 100, 1500);
@@ -331,7 +330,7 @@ public class CompatIC2 extends Loadable {
 		fs = FluidRegistry.getFluidStack("ic2weed_ex", 1000);
 		st = JSTUtils.getModItemStack("ic2:crop_res", 1, 3);
 		if (fs != null && !st.isEmpty()) {
-			MRecipes.addChemMixerRecipe(new Object[] {st, new OreDictStack("dustRedstone")}, null, null, null, fs, 8, 300);
+			MRecipes.addChemMixerRecipe(new Object[] {st, "dustRedstone"}, null, null, null, fs, 8, 300);
 			MRecipes.addChemMixerRecipe(new Object[] {st}, new FluidStack(JSTFluids.acid, 1000), null, null, JSTUtils.modFStack(fs, 2000), 8, 300);
 		}
 		String[] str = {
@@ -384,8 +383,9 @@ public class CompatIC2 extends Loadable {
 		MRecipes.addPressRecipe(new OreDictStack("dustCoal", 8), new ItemStack(Items.FLINT), new ItemStack(it, 1, 17), null, 4, 100);
 		MRecipes.addPressRecipe(new ItemStack(it, 8, 17), null, new ItemStack(it, 1, 18), null, 4, 100);
 		MRecipes.addPressRecipe(new ItemStack(it, 1, 18), null, new ItemStack(Items.DIAMOND), null, 4, 200);
-		MRecipes.addPressRecipe(new OreDictStack("blockIron"), ItemList.molds[2], new ItemStack(it, 1, 29), null, 30, 200);
-		MRecipes.addPressRecipe(new OreDictStack("blockSteel"), ItemList.molds[2], new ItemStack(it, 1, 30), null, 30, 200);
+		MRecipes.addPressRecipe("blockIron", ItemList.molds[2], new ItemStack(it, 1, 29), null, 30, 200);
+		MRecipes.addPressRecipe("blockSteel", ItemList.molds[2], new ItemStack(it, 1, 30), null, 30, 200);
+		if (JSTUtils.getModItem("ic2:rotor_bronze") != null) MRecipes.addPressRecipe("blockBronze", ItemList.molds[2], new ItemStack(it, 1, 42), null, 30, 200);
 		st = new ItemStack(it, 1, 13);
 		MRecipes.addPressRecipe(new OreDictStack("dustCoal", 2), ItemList.molds[0], st, null, 4, 50);
 		MRecipes.addPressRecipe(new OreDictStack("dustCarbon", 4), ItemList.molds[0], st, null, 4, 50);
@@ -393,20 +393,20 @@ public class CompatIC2 extends Loadable {
 		it = JSTUtils.getModItem("ic2:casing");
 		String[] sf = new String[] {"Bronze", "Copper", "Gold", "Iron", "Lead", "Steel", "Tin"};
 		for (int n = 0; n < sf.length; n++)
-			MRecipes.addPressRecipe(new OreDictStack("plate" + sf[n]), ItemList.molds[1], new ItemStack(it, 2, n), null, 4, 64);
+			MRecipes.addPressRecipe("plate" + sf[n], ItemList.molds[1], new ItemStack(it, 2, n), null, 4, 64);
 		sf = new String[] {"Bronze", "Copper", "Gold", "Iron", "Lapis", "Lead", null, "Steel", "Tin"};
 		it = JSTUtils.getModItem("ic2:plate");
 		for (int n = 0; n < sf.length; n++)
 			if (sf[n] != null)
-				MRecipes.addPressRecipe(new OreDictStack("block" + sf[n]), ItemList.molds[1], new ItemStack(it, 1, n + 9), null, 16, 120);
+				MRecipes.addPressRecipe("block" + sf[n], ItemList.molds[1], new ItemStack(it, 1, n + 9), null, 16, 120);
 		obj = ItemList.molds[0];
-		MRecipes.addPressRecipe(new OreDictStack("ingotTin"), obj, getIC2Cable(4, 0, 3), null, 16, 64);
-		MRecipes.addPressRecipe(new OreDictStack("ingotCopper"), obj, getIC2Cable(0, 0, 3), null, 16, 64);
-		MRecipes.addPressRecipe(new OreDictStack("ingotGold"), obj, getIC2Cable(2, 0, 4), null, 16, 64);
-		MRecipes.addPressRecipe(new OreDictStack("ingotIron"), obj, getIC2Cable(3, 0, 4), null, 16, 64);
+		MRecipes.addPressRecipe("ingotTin", obj, getIC2Cable(4, 0, 3), null, 16, 64);
+		MRecipes.addPressRecipe("ingotCopper", obj, getIC2Cable(0, 0, 3), null, 16, 64);
+		MRecipes.addPressRecipe("ingotGold", obj, getIC2Cable(2, 0, 4), null, 16, 64);
+		MRecipes.addPressRecipe("ingotIron", obj, getIC2Cable(3, 0, 4), null, 16, 64);
 		st = getIC2Cable(3, 0, 5);
-		MRecipes.addPressRecipe(new OreDictStack("ingotAluminum"), obj, st, null, 16, 64);
-		MRecipes.addPressRecipe(new OreDictStack("ingotSteel"), obj, st, null, 16, 64);
+		MRecipes.addPressRecipe("ingotAluminum", obj, st, null, 16, 64);
+		MRecipes.addPressRecipe("ingotSteel", obj, st, null, 16, 64);
 		MRecipes.addLiquifierRecipe(new ItemStack(JSTItems.item1, 1, 46), FluidRegistry.getFluidStack("ic2uu_matter", 10), 10, 100);
 
 		st = JSTUtils.getModItemStack("ic2:resource");
@@ -564,13 +564,13 @@ public class CompatIC2 extends Loadable {
 		obj = "dustCarbon";
 		RecipeLoader.addShapelessRecipe(JSTUtils.getModItemStack("ic2:crafting", 1, 13), obj, obj, obj, obj, obj, obj, obj, obj);
 
-		if (JSTCfg.ExpensiveMassFab) {
+		if (JSTCfg.expensiveMassFab) {
 			st = JSTUtils.getModItemStack("ic2:te", 1, 61);
 			RecipeLoader.removeRecipeByOutput(st, true, true);
 			RecipeLoader.addShapedRecipe(st, "ICI", "MLM", "ICI", 'I', "plateChrome", 'C', "circuitPowerControl", 'M', JSTUtils.getModItemStack("ic2:resource", 1, 13), 'L', JSTUtils.getModItemStack("ic2:crafting", 1, 4));
 		}
 
-		if (JSTCfg.CheaperIC2) {
+		if (JSTCfg.cheaperIC2) {
 			RecipeLoader.addShapedRecipe(getIC2Cable(0, 0, 6), "CCC", 'C', "ingotCopper");
 			RecipeLoader.addShapedRecipe(getIC2Cable(0, 1, 6), "III", "CCC", "III", 'C', "ingotCopper", 'I', "itemRubber");
 			RecipeLoader.addShapedRecipe(getIC2Cable(2, 0, 12), "CCC", 'C', "ingotGold");
@@ -578,32 +578,32 @@ public class CompatIC2 extends Loadable {
 			RecipeLoader.addShapedRecipe(getIC2Cable(4, 0, 9), "CCC", 'C', "ingotTin");
 
 			st = JSTUtils.getModItemStack("ic2:crafting", 1, 1);
-			RecipeLoader.addShapedRecipe((ItemStack)st, "CCC", "RIR", "CCC", 'C', getIC2Cable(0, 1), 'R', "dustRedstone", 'I', "ingotIron");
-			RecipeLoader.addShapedRecipe((ItemStack)st, "CRC", "CIC", "CRC", 'C', getIC2Cable(0, 1), 'R', "dustRedstone", 'I', "ingotIron");
+			RecipeLoader.addShapedRecipe(st, "CCC", "RIR", "CCC", 'C', getIC2Cable(0, 1), 'R', "dustRedstone", 'I', "ingotIron");
+			RecipeLoader.addShapedRecipe(st, "CRC", "CIC", "CRC", 'C', getIC2Cable(0, 1), 'R', "dustRedstone", 'I', "ingotIron");
 
 			st = JSTUtils.getModItemStack("ic2:re_battery");
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
-			RecipeLoader.addShapedRecipe((ItemStack)st, " C ", "TRT", " R ", 'C', getIC2Cable(4, 1), 'T', "ingotTin", 'R', "dustRedstone");
+			RecipeLoader.addShapedRecipe(st, " C ", "TRT", " R ", 'C', getIC2Cable(4, 1), 'T', "ingotTin", 'R', "dustRedstone");
 
 			st = JSTUtils.getModItemStack("ic2:advanced_re_battery");
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
-			RecipeLoader.addShapedRecipe((ItemStack)st, "CSC", "BLB", 'C', getIC2Cable(0, 1), 'S', "dustSulfur", 'B', "ingotBronze", 'L', "dustLead");
+			RecipeLoader.addShapedRecipe(st, "CSC", "BLB", 'C', getIC2Cable(0, 1), 'S', "dustSulfur", 'B', "ingotBronze", 'L', "dustLead");
 
 			st = JSTUtils.getModItemStack("ic2:resource", 1, 12);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
-			RecipeLoader.addShapedRecipe((ItemStack)st, "III", "I I", "III", 'I', "ingotIron");
+			RecipeLoader.addShapedRecipe(st, "III", "I I", "III", 'I', "ingotIron");
 
 			st = JSTUtils.getModItemStack("ic2:ingot", 2);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
-			RecipeLoader.addShapedRecipe((ItemStack)st, "III", "BBB", "TTT", 'I', "ingotIron", 'B', "ingotBronze", 'T', "ingotTin");
+			RecipeLoader.addShapedRecipe(st, "III", "BBB", "TTT", 'I', "ingotIron", 'B', "ingotBronze", 'T', "ingotTin");
 
 			st = JSTUtils.getModItemStack("ic2:te", 1, 46);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
-			RecipeLoader.addShapedRecipe((ItemStack)st, " I ", "I I", "IFI", 'I', "ingotIron", 'F', Blocks.FURNACE);
+			RecipeLoader.addShapedRecipe(st, " I ", "I I", "IFI", 'I', "ingotIron", 'F', Blocks.FURNACE);
 
 			st = JSTUtils.getModItemStack("ic2:mining_pipe", 16);
 			RecipeLoader.removeRecipeByOutput((ItemStack)st, true, true);
-			RecipeLoader.addShapedRecipe((ItemStack)st, "I I", "I I", "ITI", 'I', "ingotIron", 'T', JSTUtils.getModItemStack("ic2:treetap"));
+			RecipeLoader.addShapedRecipe(st, "I I", "I I", "ITI", 'I', "ingotIron", 'T', JSTUtils.getModItemStack("ic2:treetap"));
 
 			RecipeLoader.addShapedRecipe(JSTUtils.getModItemStack("ic2:fence", 12), " H ", "III", "III", 'H', "craftingToolForgeHammer", 'I', "ingotIron");
 		}

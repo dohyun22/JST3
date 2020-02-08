@@ -135,22 +135,27 @@ public class MT_EnergyMeter extends MT_Cable {
 	
 	@Override
 	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {}
-	
-	@Override
-	public boolean isSideSolid(EnumFacing s) {
-		return true;
-	}
-	
+
 	@Override
 	public SoundType getSoundType(Entity e) {
 		return SoundType.METAL;
 	}
-	
+
+	@Override
+	public boolean isSideSolid(EnumFacing s) {
+		return true;
+	}
+
+	@Override
+	public boolean isSideOpaque(EnumFacing f) {
+		return true;
+	}
+
 	@Override
 	public boolean isOpaque() {
 		return true;
 	}
-	
+
 	@Override
 	protected long transferEnergy(EnumFacing dir, long input, long dist, ArrayList<BlockPos> loc, boolean sim) {
 		long ret = super.transferEnergy(dir, input, dist, loc, sim);

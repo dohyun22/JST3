@@ -61,6 +61,28 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 		return false;
 	}
 
+	@Override
+	@SideOnly(value = Side.CLIENT)
+	public String getModelKey() {
+		return "jst_dcwind" + tier;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public TextureAtlasSprite[] getDefaultTexture() {
+		TextureAtlasSprite s = tier < 0 ? getTETex("basic_side") : getTieredTex(tier);
+		TextureAtlasSprite w = getTETex("basic_wind");
+		return new TextureAtlasSprite[] {s, s, w, w, w, w};
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
+		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.dcgen.desc"));
+		int rng = Math.max(0, tier + 1);
+		ls.add(I18n.format("jst.tooltip.tile.dcgen.wind", 4 + rng, 2 + rng / 2));
+	}
+
 	private int cntBlocks(World w) {
 		BlockPos p = getPos();
 		int cnt = -1;
@@ -88,27 +110,5 @@ public class MetaTileDCWind extends MetaTileBase implements IDCGenerator {
 	    	return pwr;
 	    }
 		return pwr;
-	}
-
-	@Override
-	@SideOnly(value = Side.CLIENT)
-	public String getModelKey() {
-		return "jst_dcwind" + tier;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite[] getDefaultTexture() {
-		TextureAtlasSprite s = tier < 0 ? getTETex("basic_side") : getTieredTex(tier);
-		TextureAtlasSprite w = getTETex("basic_wind");
-		return new TextureAtlasSprite[] {s, s, w, w, w, w};
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
-		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.dcgen.desc"));
-		int rng = Math.max(0, tier + 1);
-		ls.add(I18n.format("jst.tooltip.tile.dcgen.wind", 4 + rng, 2 + rng / 2));
 	}
 }

@@ -314,7 +314,11 @@ public class MRecipes {
     }
     
     public static boolean isValid(Object obj) {
-    	if (obj instanceof ItemStack) {
+    	if (obj instanceof Item || obj instanceof Block) {
+    		return true;
+    	} else if (obj instanceof String) {
+    		return JSTUtils.oreValid((String)obj);
+    	} else if (obj instanceof ItemStack) {
     		return !((ItemStack)obj).isEmpty();
     	} else if (obj instanceof IRecipeItem) {
     		return ((IRecipeItem)obj).isValid();

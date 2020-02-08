@@ -91,17 +91,20 @@ public class CropLoader {
 
 		st = JSTUtils.getModItemStack("immersiveengineering:seed");
 		if (!st.isEmpty()) new CropJST("hemp", "BluSunrize", 4, 1, -350, new String[] {"Industrial", "Hemp", "Addictive"}, 3, 1, 0, 1, 2, 2).drop(1, JSTUtils.getModItemStack("immersiveengineering:material", 1, 4), st).seed(st).fin();
-		st = JSTUtils.getValidOne("cropBarley", "plantBarley");
-		if (!st.isEmpty()) new CropJST("barley", "mDiyo", 3, 1, 0, new String[] {"Barley", "Crop", "Edible"}, 2, 0, 3, 1, 2, 1).drop(1, st).seed(st).fin();
-		st = JSTUtils.getValidOne("cropRice", "plantRice", "plantWildrice");
-		if (!st.isEmpty()) new CropJST("rice", "glitchfiend", 3, 1, 0, new String[] {"Rice", "Crop", "Edible"}, 2, 0, 4, 0, 2, 1).drop(1, st).seed(st).fin();
-		st = JSTUtils.getModItemStack("biomesoplenty:bamboo");
-		if (!st.isEmpty()) new CropJST("bamboo", "glitchfiend", 3, 1, -200, new String[] {"Bamboo", "Stick"}, 3, 0, 1, 1, 1, 2).drop(1, st).seed(st).fin();
+		List<ItemStack> ls = JSTUtils.getAll("cropBarley", "plantBarley");
+		if (!ls.isEmpty()) new CropJST("barley", "mDiyo", 3, 1, 0, new String[] {"Barley", "Food"}, 2, 0, 3, 1, 2, 1).drop(1, ls.get(0)).seed(ls).fin();
+		ls = JSTUtils.getAll("cropRice", "plantRice", "plantWildrice", "seedRice");
+		if (!ls.isEmpty()) new CropJST("rice", "glitchfiend", 3, 1, 0, new String[] {"Rice", "Food"}, 2, 0, 3, 0, 2, 1).drop(1, ls.get(0)).seed(ls).fin();
+		ls = JSTUtils.getAll("cropBamboo", "plantBamboo", "biomesoplenty:bamboo");
+		if (!ls.isEmpty()) new CropJST("bamboo", "glitchfiend", 3, 1, -200, new String[] {"Bamboo", "Stick"}, 3, 0, 1, 1, 1, 2).drop(1, ls.get(0)).seed(ls).fin();
+		ls = JSTUtils.getAll("cropSoybean", "plantSoybean", "cropSoy", "plantSoy");
+		if (!ls.isEmpty()) new CropJST("soy", "bagu_chan", 4, 2, 0, new String[] {"Soy", "Food", "Allergen"}, 2, 0, 3, 0, 1, 0).drop(1, ls.get(0)).seed(ls).fin();
+
 		if (JSTCfg.tcLoaded) {
 			st = JSTUtils.getModItemStack("thaumcraft:shimmerleaf");
 			if (!st.isEmpty()) new CropJST("shimmerleaf", "Azanor", 3, 1, 0, new String[] {"Mercury", "Toxic", "Magic"}, 5, 2, 0, 1, 1, 0).drop(1, st).seed(st).biome(BiomeDictionary.Type.MAGICAL, BiomeDictionary.Type.FOREST).fin();
 			st = JSTUtils.getModItemStack("thaumcraft:cinderpearl");
-			if (!st.isEmpty()) new CropJST("cinderpearl", "Azanor", 3, 1, 0, new String[] {"Blaze", "Fire", "Magic"}, 6, 1, 0, 2, 2, 0).drop(1, st, Items.BLAZE_POWDER).seed(st).biome(BiomeDictionary.Type.MAGICAL, BiomeDictionary.Type.SANDY).fin();
+			if (!st.isEmpty()) new CropJST("cinderpearl", "Azanor", 3, 1, 0, new String[] {"Blaze", "Fire", "Magic"}, 6, 1, 0, 2, 2, 0).drop(1, st, Items.BLAZE_POWDER).seed(st).biome(BiomeDictionary.Type.MAGICAL, BiomeDictionary.Type.SANDY, BiomeDictionary.Type.NETHER).fin();
 		}
 
 		if (JSTUtils.isClient()) {

@@ -7,9 +7,9 @@ import dohyun22.jst3.api.IDust;
 import dohyun22.jst3.evhandler.DustHandler;
 import dohyun22.jst3.items.JSTItems;
 import dohyun22.jst3.utils.JSTDamageSource;
-import dohyun22.jst3.utils.JSTUtils;
 import dohyun22.jst3.utils.ReflectionUtils;
 import dohyun22.jst3.utils.JSTDamageSource.EnumHazard;
+import dohyun22.jst3.utils.JSTUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -34,17 +34,19 @@ public class ValueLoader extends Loadable {
 
 	@Override
 	public void postInit() {
-		if (JSTCfg.fineDust) DustHandler.init();
-	    JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_HELMET, 1, 32767));
-	    JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1, 32767));
-	    JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_LEGGINGS, 1, 32767));
-	    JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_BOOTS, 1, 32767));
-	    JSTDamageSource.addHazmat(EnumHazard.CHEMICAL, new ItemStack(JSTItems.mask, 1, 32767));
+		if (JSTCfg.fineDust)
+			DustHandler.init();
+		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_HELMET, 1, 32767));
+		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1, 32767));
+		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_LEGGINGS, 1, 32767));
+		JSTDamageSource.addHazmat(EnumHazard.ELECTRIC, new ItemStack(Items.CHAINMAIL_BOOTS, 1, 32767));
+		JSTDamageSource.addHazmat(EnumHazard.CHEMICAL, new ItemStack(JSTItems.mask, 1, 32767));
 	}
 
 	@Nullable
 	public static Class<? extends TileEntity> getTEClass(String id) {
-		if (TEreg != null) return TEreg.getObject(new ResourceLocation(id));
+		if (TEreg != null)
+			return TEreg.getObject(new ResourceLocation(id));
 		return null;
 	}
 }

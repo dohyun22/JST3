@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import dohyun22.jst3.JustServerTweak;
 import dohyun22.jst3.blocks.JSTBlocks;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -43,6 +44,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -580,17 +582,13 @@ public abstract class MetaTileBase {
 		long tr = maxEUTransfer();
 		long eu = Math.min(getMaxEnergy() - baseTile.energy, Math.min(tr, v));
 		if (!sim) {
-			if (JSTCfg.ovExplosion && tr > 0 && v > tr * 2L) {
-				BlockPos p = getPos();
-				getWorld().setBlockToAir(p);
-				getWorld().createExplosion(null, p.getX() + 0.5F, p.getY() + 0.5F, p.getZ() + 0.5F, 2.0F, false);
+			if (JSTCfg.ovExplosion && tr > 0 && v > tr * 2L && overload())
 				return eu;
-			}
 			baseTile.energy += eu;
 		}
 		return eu;
 	}
-	
+
 	public boolean canProvideEnergy() {
 		return false;
 	}
@@ -640,13 +638,13 @@ public abstract class MetaTileBase {
 			}
 		}
 	}
-	
+
 	public IBlockState doBlockUpdate() {
 		IBlockState bs = getWorld().getBlockState(getPos());
 		getWorld().notifyBlockUpdate(getPos(), bs, bs, 3);
 		return bs;
 	}
-	
+
 	public void updateLight() {
 		baseTile.cancelUpdate();
 		World w = getWorld();
@@ -655,12 +653,12 @@ public abstract class MetaTileBase {
 	    w.checkLightFor(EnumSkyBlock.BLOCK, getPos());
 	    w.addBlockEvent(getPos(), bs.getBlock(), 100, 0);
 	}
-	
+
 	/** NOTE: id 100 is used for updating light value. */
 	public void sendEvent(int id, int arg) {
 		getWorld().addBlockEvent(getPos(), getWorld().getBlockState(getPos()).getBlock(), id, arg);
 	}
-	
+
 	/** NOTE: id 100 is used for updating light value. */
 	public boolean receiveClientEvent(int id, int arg) {
 		if (id == 100) {
@@ -687,5 +685,13 @@ public abstract class MetaTileBase {
 	@Nullable
 	public MapColor getMapColor() {
 		return MapColor.IRON;
+	}
+
+	public boolean overload() {
+		BlockPos p = getPos();
+		getWorld().setBlockToAir(p);
+		getWorld().createExplosion(null, p.getX() + 0.5F, p.getY() + 0.5F, p.getZ() + 0.5F, 2.0F, false);
+		getWorld().playSound(null, p, JSTSounds.OVERLOAD, SoundCategory.BLOCKS, 2.5F, 1.0F);
+		return true;
 	}
 }

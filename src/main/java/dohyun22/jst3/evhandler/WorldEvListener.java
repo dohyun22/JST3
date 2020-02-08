@@ -20,7 +20,10 @@ public class WorldEvListener implements IWorldEventListener {
 	public void notifyBlockUpdate(World w, BlockPos p, IBlockState os, IBlockState ns, int flag) {
 		if (!w.isRemote) {
 			int d = EffectBlocks.getDust(ns);
-			if (d != 0) JSTChunkData.addFineDust(w, new ChunkPos(p), d, true);
+			ChunkPos cp = new ChunkPos(p);
+			if (d != 0) JSTChunkData.addFineDust(w, cp, d, true);
+			if (JSTChunkData.getBrokenMachines(w, cp).contains(p))
+				JSTChunkData.setBrokenMachine(w, p, true);
 		}
 	}
 

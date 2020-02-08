@@ -223,7 +223,7 @@ public class DustHandler {
 		}
 	}
 
-	public static void resetTracker() {
+	public static void clear() {
 		pollutedChunks.clear();
 	}
 

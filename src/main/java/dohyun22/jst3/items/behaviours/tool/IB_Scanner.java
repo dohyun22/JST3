@@ -1,6 +1,7 @@
 package dohyun22.jst3.items.behaviours.tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import dohyun22.jst3.tiles.MetaTileBase;
 import dohyun22.jst3.tiles.TileEntityMeta;
 import dohyun22.jst3.api.IScanSupport;
 import dohyun22.jst3.items.behaviours.ItemBehaviour;
+import dohyun22.jst3.utils.JSTChunkData;
 import dohyun22.jst3.utils.JSTSounds;
 import dohyun22.jst3.utils.JSTUtils;
 import ic2.api.crops.CropCard;
@@ -72,6 +74,7 @@ public class IB_Scanner extends ItemBehaviour {
 		} else {
 			JSTUtils.sendSimpleMessage(pl, TextFormatting.RED + "Not enough energy");
 		}
+		JSTUtils.LOG.info(Arrays.toString(JSTChunkData.getBrokenMachines(w, new ChunkPos(p)).toArray(new BlockPos[0])));
 		return EnumActionResult.SUCCESS;
 	}
 
@@ -259,9 +262,8 @@ public class IB_Scanner extends ItemBehaviour {
 
 	@Override
 	public boolean interactEntity(ItemStack st, EntityPlayer p, EntityLivingBase e, EnumHand h) {
-		if (p.world.isRemote)
-			return true;
-		
+		if (p.world.isRemote) return true;
+		if (e instanceof EntityPlayer) return false;
 		ArrayList<ITextComponent> str = new ArrayList();
 		int eu = doEntityScan(str, p, (EntityLivingBase)e);
 		if (eu <= this.getEnergy(st)) {
@@ -275,7 +277,6 @@ public class IB_Scanner extends ItemBehaviour {
 		} else {
 			JSTUtils.sendSimpleMessage(p, TextFormatting.RED + "Not enough energy");
 		}
-
 		return true;
 	}
 }

@@ -58,7 +58,7 @@ public class IB_BlockPlacer extends ItemBehaviour {
 					tag.removeTag("_cl");
 				}
 				if (b == null) b = Blocks.AIR;
-				w.setBlockState(b == Blocks.AIR ? p : p.offset(s), b.getStateFromMeta(m), 2);
+				w.setBlockState(b == Blocks.AIR ? p : p.offset(s), b.getStateFromMeta(m), 18);
 			}
 			w.playSound(null, p, JSTSounds.SWITCH2, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		} else {

@@ -12,11 +12,13 @@ import javax.annotation.Nullable;
 
 import dohyun22.jst3.api.recipe.OreDictStack;
 import dohyun22.jst3.loader.JSTCfg;
+import dohyun22.jst3.tiles.energy.MT_BioGen;
 import dohyun22.jst3.tiles.energy.MT_StirlingGen;
 import dohyun22.jst3.utils.JSTUtils;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -65,8 +67,8 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 	    return ret;
 	}
 	
-	public static List<ItemFuelRecipeWrapper> makeFGFuelList(IModRegistry rg) {
-		List<ItemStack> ls = rg.getIngredientRegistry().getFuels();
+	public static List<ItemFuelRecipeWrapper> makeFuelList(IModRegistry r) {
+		List<ItemStack> ls = r.getIngredientRegistry().getFuels();
 		List<ItemFuelRecipeWrapper> ret = new LinkedList();
 		for (ItemStack st : ls) {
 			int bt = MT_StirlingGen.getFuelValue(st);
@@ -80,7 +82,23 @@ public class ItemFuelRecipeWrapper implements IRecipeWrapper {
 		}
 		return ret;
 	}
-	
+
+	public static List<ItemFuelRecipeWrapper> makeBioFuelList(IModRegistry r) {
+		Collection<ItemStack> ls = r.getIngredientRegistry().getAllIngredients(VanillaTypes.ITEM);
+		List<ItemFuelRecipeWrapper> ret = new LinkedList();
+		for (ItemStack st : ls) {
+			int bt = MT_BioGen.getFuelValue(st);
+			if (bt > 0) {
+				List<List<ItemStack>> ls2 = new ArrayList();
+				List<ItemStack> ls3 = new ArrayList();
+				ls3.add(st);
+				ls2.add(ls3);
+				ret.add(new ItemFuelRecipeWrapper(ls2, bt, false));
+			}
+		}
+		return ret;
+	}
+
 	@Override
 	public void drawInfo(Minecraft mc, int w, int h, int mx, int my) {
 		String s = energy < 0 ? I18n.format("jst.msg.com.blacklist") : isComp ? Integer.toString(energy) : energy + " EU / " +  (energy * JSTCfg.RFPerEU) + " RF";

@@ -103,7 +103,7 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addMagicFuel(new ItemStack(Items.ENDER_PEARL), 16000);
 		MRecipes.addMagicFuel(new ItemStack(Items.ENDER_EYE), 32000);
 		MRecipes.addMagicFuel(new ItemStack(Items.BLAZE_ROD), 32000);
-		MRecipes.addMagicFuel(new ItemStack(Items.NETHER_STAR), 10000000);
+		MRecipes.addMagicFuel(new ItemStack(Items.NETHER_STAR), 25000000);
 		MRecipes.addMagicFuel(new ItemStack(Items.GHAST_TEAR), 500000);
 		MRecipes.addMagicFuel(new ItemStack(Items.SKULL, 1, 1), 800000);
 		MRecipes.addMagicFuel(new ItemStack(Items.SHULKER_SHELL), 2000000);
@@ -181,25 +181,26 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addFusionBreederRecipe(obj, new ItemStack(JSTItems.item1, 1, 78));
 		}
 
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("dustChrome")}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 64)}, 120, 2000);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("dustUnobtainium")}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 40)}, 32000, 1000);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("dustTungsten")}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 73)}, 2000, 1000);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("dustRhenium")}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 89)}, 2000, 1600);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("ingotIron", 4), new ItemStack(Items.COAL, 4, 32767)}, new ItemStack[] {JSTUtils.getFirstItem("ingotSteel", 4)}, 50, 250);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("ingotIron", 4), new OreDictStack("fuelCoke", 2)}, new ItemStack[] {JSTUtils.getFirstItem("ingotSteel", 4)}, 50, 200);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack("oreIron", 1), new ItemStack(JSTItems.item1, 2, 9017)}, new ItemStack[] {new ItemStack(Items.IRON_INGOT, 3), new ItemStack(JSTItems.item1, 2, 9000)}, 80, 200);
-		String pf = "plate";
-		obj = JSTUtils.oreValid(pf + "Steel") ? new OreDictStack(pf + "Steel") : JSTUtils.oreValid(pf + "Iron") ? new OreDictStack(pf + "Iron") : new ItemStack(Items.IRON_INGOT);
-		MRecipes.addSHFurnaceRecipe(new Object[] {new OreDictStack(pf + "Titanium"), obj}, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 69)}, 500, 250);
+		MRecipes.addSHFurnaceRecipe(new Object[] {"dustChrome"}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 64)}, 120, 2000);
+		MRecipes.addSHFurnaceRecipe(new Object[] {"dustUnobtainium"}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 40)}, 32000, 1000);
+		MRecipes.addSHFurnaceRecipe(new Object[] {"dustTungsten"}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 73)}, 2000, 1000);
+		MRecipes.addSHFurnaceRecipe(new Object[] {"dustRhenium"}, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 89)}, 2000, 1600);
+		obj = new OreDictStack("ingotIron", 4);
+		MRecipes.addSHFurnaceRecipe(new Object[] {obj, new ItemStack(Items.COAL, 4, 32767)}, new ItemStack[] {JSTUtils.getFirstItem("ingotSteel", 4)}, 50, 250);
+		MRecipes.addSHFurnaceRecipe(new Object[] {obj, new OreDictStack("fuelCoke", 2)}, new ItemStack[] {JSTUtils.getFirstItem("ingotSteel", 4)}, 50, 200);
+		MRecipes.addSHFurnaceRecipe(new Object[] {"oreIron", new ItemStack(JSTItems.item1, 2, 9017)}, new ItemStack[] {new ItemStack(Items.IRON_INGOT, 3), new ItemStack(JSTItems.item1, 2, 9000)}, 80, 200);
+		String pf = "plate", s;
+		obj = JSTUtils.oreValid(pf + "Steel") ? pf + "Steel" : JSTUtils.oreValid(pf + "Iron") ? pf + "Iron" : new ItemStack(Items.IRON_INGOT);
+		MRecipes.addSHFurnaceRecipe(new Object[] {pf + "Titanium", obj}, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 69)}, 500, 250);
 		
 		//AlloySmelting
-		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("dustRedstone", 4), new OreDictStack(JSTUtils.oreValid("ingotCopper") ? "ingotCopper" : "ingotIron", 1), new ItemStack(JSTItems.item1, 1, 25), 5, 100);
-		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("dustNikolite", 4), new OreDictStack(JSTUtils.oreValid("ingotSilver") ? "ingotSilver" : "ingotIron", 1), new ItemStack(JSTItems.item1, 1, 26), 5, 100);
+		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("dustRedstone", 4), JSTUtils.oreValid("ingotCopper") ? "ingotCopper" : "ingotIron", new ItemStack(JSTItems.item1, 1, 25), 5, 100);
+		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("dustNikolite", 4), JSTUtils.oreValid("ingotSilver") ? "ingotSilver" : "ingotIron", new ItemStack(JSTItems.item1, 1, 26), 5, 100);
 		boolean flag = JSTUtils.oreValid("ingotCopper");
 		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack(flag ? "ingotCopper" : "ingotGold", flag ? 3 : 1), new OreDictStack("ingotZinc", flag ? 1 : 3), new ItemStack(JSTItems.item1, 4, 36), 5, 100);
-		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotCopper", 3), new OreDictStack("ingotTin"), JSTUtils.getFirstItem("ingotBronze", 4), 5, 100);
-		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotGold"), new OreDictStack("ingotSilver"), JSTUtils.getFirstItem("ingotElectrum", 2), 5, 100);
-		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotIron", 2), new OreDictStack("ingotNickel"), JSTUtils.getFirstItem("ingotInvar", 3), 5, 100);
+		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotCopper", 3), "ingotTin", JSTUtils.getFirstItem("ingotBronze", 4), 5, 100);
+		MRecipes.addAlloyFurnaceRecipe2("ingotGold", "ingotSilver", JSTUtils.getFirstItem("ingotElectrum", 2), 5, 100);
+		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotIron", 2),"ingotNickel", JSTUtils.getFirstItem("ingotInvar", 3), 5, 100);
 		obj = new OreDictStack(JSTUtils.oreValid("ingotSteel") ? "ingotSteel" : "ingotIron");
 		MRecipes.addAlloyFurnaceRecipe2(obj, new OreDictStack("ingotSilicon"), JSTUtils.getFirstItem("ingotElectricalSteel"), 10, 200);
 		MRecipes.addAlloyFurnaceRecipe(new ItemStack(Blocks.SAND, 16, 32767), new ItemStack(Items.COAL, 8, 32767), new ItemStack(JSTItems.item1, 1, 33), 20, 500);
@@ -208,17 +209,17 @@ public class MRecipeLoader extends Loadable {
 		obj = new OreDictStack("ingotBismuth", 5);
 		MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotTin", 5), obj, st, 5, 200);
 		if (JSTUtils.oreValid("ingotConstantan")) {
-			obj = new OreDictStack("ingotCopper", 1);
-			MRecipes.addAlloyFurnaceRecipe2(obj, new OreDictStack("ingotNickel"), JSTUtils.getFirstItem("ingotConstantan", 2), 5, 200);
-			MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotConstantan"), obj, JSTUtils.getFirstItem("ingotCupronickel", 2), 5, 200);
+			obj = new OreDictStack("ingotCopper");
+			MRecipes.addAlloyFurnaceRecipe2(obj, "ingotNickel", JSTUtils.getFirstItem("ingotConstantan", 2), 5, 200);
+			MRecipes.addAlloyFurnaceRecipe2("ingotConstantan", obj, JSTUtils.getFirstItem("ingotCupronickel", 2), 5, 200);
 		} else {
-			MRecipes.addAlloyFurnaceRecipe2(new OreDictStack("ingotNickel"), new OreDictStack("ingotCopper", 3), JSTUtils.getFirstItem("ingotCupronickel", 4), 5, 200);
+			MRecipes.addAlloyFurnaceRecipe2("ingotNickel", new OreDictStack("ingotCopper", 3), JSTUtils.getFirstItem("ingotCupronickel", 4), 5, 200);
 		}
 
 		//Press
-		MRecipes.addPressRecipe(new OreDictStack("ingotSolder"), ItemList.molds[0], new ItemStack(JSTItems.item1, 2, 185), null, 10, 64);
+		MRecipes.addPressRecipe("ingotSolder", ItemList.molds[0], new ItemStack(JSTItems.item1, 2, 185), null, 10, 64);
 		MRecipes.addPressRecipe(new ItemStack(Items.BLAZE_POWDER, 5), ItemList.molds[2], new ItemStack(Items.BLAZE_ROD), null, 10, 64);;
-		MRecipes.addPressRecipe(new OreDictStack("plateSilicon", 16), new OreDictStack("ingotGold"), new ItemStack(JSTItems.item1, 1, 194), null, 16, 200);
+		MRecipes.addPressRecipe(new OreDictStack("plateSilicon", 16), "ingotGold", new ItemStack(JSTItems.item1, 1, 194), null, 16, 200);
 		st = JSTUtils.getModItemStack("ic2:misc_resource", 1, 4);
 		MRecipes.addPressRecipe(new OreDictStack("plankWood", 4), (st.isEmpty() ? ItemList.molds[1] : st), new ItemStack(JSTItems.item1, 6, 190), null, 10, 100);
 		MRecipes.addPressRecipe(new ItemStack(JSTItems.item1, 1, 105), ItemList.molds[1], new ItemStack(JSTItems.item1, 2, 191), null, 24, 100);
@@ -249,19 +250,19 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addAssemblerRecipe(new Object[] {obj, new OreDictStack(pf + "Iridium"), obj, new ItemStack (Items.ENDER_EYE, 6), new ItemStack(JSTItems.item1, 1, 11), new ItemStack (Items.ENDER_EYE, 6), obj, new OreDictStack(JSTUtils.oreValid(pf + "Enderium") ? pf + "Enderium" : "gemDiamond"), obj}, null, new ItemStack(JSTBlocks.block1, 1, 6), null, 200, 800);
 		}
 		obj = new OreDictStack("blockGold");
-		MRecipes.addAssemblerRecipe(new Object[] {obj, obj, obj, obj, new ItemStack(Items.APPLE), obj, obj, obj, obj}, null, new ItemStack(Items.GOLDEN_APPLE, 1, 1), ItemStack.EMPTY, 30, 800);
+		MRecipes.addAssemblerRecipe(new Object[] {obj, obj, obj, obj, Items.APPLE, obj, obj, obj, obj}, null, new ItemStack(Items.GOLDEN_APPLE, 1, 1), ItemStack.EMPTY, 30, 800);
 		obj = new ItemStack(Items.LEATHER, 2);
 		obj2 = new OreDictStack(pf + "Aluminum", 4);
 		st = new ItemStack(Blocks.END_ROD, 5);
 		MRecipes.addAssemblerRecipe(new Object[] {obj, obj2, obj, obj, obj2, obj, st, new OreDictStack("gemDiamond", 5), st}, null, new ItemStack(Items.ELYTRA), ItemStack.EMPTY, 50, 1200);
 		
 		obj = new ItemStack(JSTItems.item1, 1, 105);
-		MRecipes.addAssemblerRecipe(new Object[] {null, new OreDictStack("dustRedstone", 2), null, null, new OreDictStack(pf + "Silicon"), null, null, obj, null}, null, new ItemStack(JSTItems.item1, 10, 85), null, 10, 250);
-		MRecipes.addAssemblerRecipe(new Object[] {null, new OreDictStack("dustNikolite"), null, null, new OreDictStack(pf + "Silicon"), null, null, obj, null}, null, new ItemStack(JSTItems.item1, 10, 85), null, 10, 250);
-		MRecipes.addAssemblerRecipe(new Object[] {null, new OreDictStack(pf + "BlueAlloy"), null, null, new OreDictStack(pf + "Silicon", 2), null, null, obj, null}, null, new ItemStack(JSTItems.item1, 8, 83), null, 40, 100);
-		obj = new OreDictStack(pf + "Steel");
-		if (!JSTUtils.oreValid((OreDictStack) obj)) obj = new OreDictStack(pf + "Aluminum");
-		MRecipes.addAssemblerWRecycle(new Object[] {null, new OreDictStack(pf + "Aluminum"), null, null, new OreDictStack(pf + "Brass"), null, null, obj, null}, null, new ItemStack(JSTItems.item1, 2, 68), 120, 200);
+		MRecipes.addAssemblerRecipe(new Object[] {null, new OreDictStack("dustRedstone", 2), null, null, pf + "Silicon", null, null, obj, null}, null, new ItemStack(JSTItems.item1, 10, 85), null, 10, 250);
+		MRecipes.addAssemblerRecipe(new Object[] {null, "dustNikolite", null, null, pf + "Silicon", null, null, obj, null}, null, new ItemStack(JSTItems.item1, 10, 85), null, 10, 250);
+		MRecipes.addAssemblerRecipe(new Object[] {null, pf + "BlueAlloy", null, null, new OreDictStack(pf + "Silicon", 2), null, null, obj, null}, null, new ItemStack(JSTItems.item1, 8, 83), null, 40, 100);
+		s = pf + "Steel";
+		if (!JSTUtils.oreValid(s)) s = pf + "Aluminum";
+		MRecipes.addAssemblerWRecycle(new Object[] {null, pf + "Aluminum", null, null, pf + "Brass", null, null, s, null}, null, new ItemStack(JSTItems.item1, 2, 68), 120, 200);
 		
 		obj = ItemList.copy(ItemList.baseMaterial[8], 2, true);
 		MRecipes.addAssemblerRecipe(new Object[] {null, ItemList.copy(ItemList.cables[7], 4, true), null, obj, ItemList.copy(ItemList.coils[9], 10, true), obj, obj, new OreDictStack("circuitPowerControl", 10), obj}, null, new ItemStack(JSTItems.item1, 1, 12020), null, 10000, 400);
@@ -271,7 +272,7 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addAssemblerWRecycle(new Object[] {((Object[])obj)[0], convIngr(ItemList.circuits[3], 2), ((Object[])obj)[0], ((Object[])obj)[1], ItemList.machineBlock[0], ((Object[])obj)[1], ((Object[])obj)[2], ((Object[])obj)[2], ((Object[])obj)[2]}, null, new ItemStack(JSTBlocks.blockTile, 1, 5006), 30, 600);
 		obj = new Object[] {new OreDictStack("gemSapphire", 4), new ItemStack(JSTItems.item1, 1, 194), new ItemStack(JSTItems.item1, 2, 150)};
 		MRecipes.addAssemblerWRecycle(new Object[] {((Object[])obj)[0], convIngr(ItemList.circuits[4], 4), ((Object[])obj)[0], ((Object[])obj)[1], ItemList.machineBlock[1], ((Object[])obj)[1], ((Object[])obj)[2], ((Object[])obj)[2], ((Object[])obj)[2]}, null, new ItemStack(JSTBlocks.blockTile, 1, 5007), 30, 1200);
-		obj = new Object[] {new ItemStack(Blocks.DIAMOND_BLOCK, 1), new ItemStack(JSTItems.item1, 4, 194), new ItemStack(JSTItems.item1, 1, 103)};
+		obj = new Object[] {Blocks.DIAMOND_BLOCK, new ItemStack(JSTItems.item1, 4, 194), new ItemStack(JSTItems.item1, 1, 103)};
 		MRecipes.addAssemblerWRecycle(new Object[] {((Object[])obj)[0], convIngr(ItemList.circuits[5], 4), ((Object[])obj)[0], ((Object[])obj)[1], ItemList.machineBlock[2], ((Object[])obj)[1], ((Object[])obj)[2], ((Object[])obj)[2], ((Object[])obj)[2]}, null, new ItemStack(JSTBlocks.blockTile, 1, 5008), 30, 2400);
 		MRecipes.addAssemblerWRecycle(new Object[] {new ItemStack(Items.STRING, 4)}, null, new ItemStack(Blocks.WOOL), 5, 50);
 		obj = new OreDictStack(pf + "Iridium", 4);
@@ -307,6 +308,9 @@ public class MRecipeLoader extends Loadable {
 				o2, st, o2
 			}, fa[1], new ItemStack(JSTBlocks.blockTile, 1, 5076 + n), 60000, 400);
 		}
+		st = new ItemStack(JSTBlocks.blockTile, 16, 5008);
+		MRecipes.addAssemblerWRecycle(new Object[] {new ItemStack(JSTItems.item1, 1, 12044), st}, null, new ItemStack(JSTItems.item1, 1, 12054), 30, 200);
+		MRecipes.addAssemblerWRecycle(new Object[] {new ItemStack(JSTItems.item1, 1, 12045), JSTUtils.modStack(st, 64, -1)}, null, new ItemStack(JSTItems.item1, 1, 12055), 30, 200);
 
 		//Separator
 		MRecipes.addSeparatorRecipe(new OreDictStack("dustBauxite", 8), new ItemStack(JSTItems.item1, 2, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 7, 71), new ItemStack(JSTItems.item1, 1, 2), new ItemStack(JSTItems.item1, 2, 9009)}, null, 100, 800);
@@ -341,16 +345,16 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 2, 9000), null, new FluidStack(JSTFluids.naturalGas, 8000), new ItemStack[] {new ItemStack(JSTItems.item1, 2, 9009), st}, new FluidStack(JSTFluids.lng, 6000), 20, 800);
 		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.SAND, 16), new ItemStack(JSTItems.item1, 2, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 59), new ItemStack(JSTItems.item1, 2, 9017)}, null, 30, 500);
 		MRecipes.addSeparatorRecipe(new ItemStack(Items.QUARTZ, 16), new ItemStack(JSTItems.item1, 6, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 12, 59), new ItemStack(JSTItems.item1, 6, 9017), new ItemStack(JSTItems.item1, 1, 67)}, null, 50, 500);
-		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.NETHERRACK, 16), null, null, new ItemStack[] {new ItemStack(Items.REDSTONE), new ItemStack(Items.COAL), st}, null, 30, 1200);
+		MRecipes.addSeparatorRecipe(new OreDictStack("netherrack", 16), null, null, new ItemStack[] {new ItemStack(Items.REDSTONE), new ItemStack(Items.COAL), st}, null, 30, 1200);
 		st = JSTUtils.getFirstOrSecond("dustIron", 1, new ItemStack(Items.IRON_INGOT));
-		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.END_STONE, 16), new ItemStack(JSTItems.item1, 2, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9012), new ItemStack(JSTItems.item1, 1, 9013), st}, null, 30, 2400);
+		MRecipes.addSeparatorRecipe(new OreDictStack("endstone", 16), new ItemStack(JSTItems.item1, 2, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9012), new ItemStack(JSTItems.item1, 1, 9013), st}, null, 30, 2400);
 		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.OBSIDIAN, 8), new ItemStack(JSTItems.item1, 2, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 4, 59), st, new ItemStack(JSTItems.item1, 1, 93), new ItemStack(JSTItems.item1, 2, 9017)}, null, 30, 800);
 		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.DIRT, 16), null, null, new ItemStack[] {new ItemStack(Blocks.SAND, 15), new ItemStack(Items.CLAY_BALL, 1)}, null, 20, 800);
 		st = JSTUtils.getModItemStack("ic2:crafting", 1, 21);
 		if (st.isEmpty()) st = new ItemStack(Items.WHEAT_SEEDS, 1);
 		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.GRASS, 16), null, null, new ItemStack[] {new ItemStack(Blocks.SAND, 15), new ItemStack(Items.CLAY_BALL, 1), st}, null, 20, 800);
 		MRecipes.addSeparatorRecipe(new ItemStack(Items.GUNPOWDER, 4), null, null, new ItemStack[] {JSTUtils.getFirstItem("dustSaltpeter"), JSTUtils.getFirstItem("dustSulfur")}, null, 20, 400);
-		MRecipes.addSeparatorRecipe(new ItemStack(Blocks.SANDSTONE, 16), null, null, new ItemStack[] {new ItemStack(Blocks.SAND, 16), JSTUtils.getFirstItem("dustSaltpeter")}, null, 20, 800);
+		MRecipes.addSeparatorRecipe(new OreDictStack("sandstone", 16), null, null, new ItemStack[] {new ItemStack(Blocks.SAND, 16), JSTUtils.getFirstItem("dustSaltpeter")}, null, 20, 800);
 		MRecipes.addSeparatorRecipe(new OreDictStack("dustTin", 8), null, null, new ItemStack[] {JSTUtils.getFirstItem("dustIron"), new ItemStack(JSTItems.item1, 1, 32)}, null, 32, 400);
 		MRecipes.addSeparatorRecipe(new OreDictStack("dustCopper", 12), null, null, new ItemStack[] {JSTUtils.getFirstItem("dustGold"), JSTUtils.getFirstItem("dustCobalt")}, null, 32, 400);
 		MRecipes.addSeparatorRecipe(new OreDictStack("dustIridium", 10), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 90)}, null, 512, 200);
@@ -358,7 +362,7 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addSeparatorRecipe(new OreDictStack("dustSalt", 2), new ItemStack(JSTItems.item1, 1, 9000), null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 108), new ItemStack(JSTItems.item1, 1, 9019)}, null, 20, 200);
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 5, 9020), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9017), new ItemStack(JSTItems.item1, 4, 9016)}, null, 30, 800);
 		MRecipes.addSeparatorRecipe(new ItemStack(JSTItems.item1, 1, 9000), null, new FluidStack(JSTFluids.air, 5000), new ItemStack[] {new ItemStack(JSTItems.item1, 1, 9017)}, new FluidStack(JSTFluids.nitrogen, 4000), 30, 800);
-		MRecipes.addSeparatorRecipe(new ItemStack(Items.COAL, 1, 0), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 109)}, null, 30, 100);
+		MRecipes.addSeparatorRecipe(Items.COAL, null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 2, 109)}, null, 30, 100);
 		MRecipes.addSeparatorRecipe(new ItemStack(Items.COAL, 1, 1), null, null, new ItemStack[] {new ItemStack(JSTItems.item1, 1, 109)}, null, 30, 100);
 		st = new ItemStack(JSTItems.item1, 64, 109);
 		obj = new ItemStack[] {st, st};
@@ -380,8 +384,8 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addSeparatorRecipe(new OreDictStack("ingotInvar", 3), null, null, new ItemStack[] {new ItemStack(Items.IRON_INGOT, 2), JSTUtils.getFirstItem("ingotNickel")}, null, 16, 200);
 		MRecipes.addSeparatorRecipe(new OreDictStack("ingotElectrum", 2), null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotGold"), JSTUtils.getFirstItem("ingotSilver")}, null, 16, 200);
 		MRecipes.addSeparatorRecipe(new OreDictStack("ingotSteel", 10), null, null, new ItemStack[] {new ItemStack(Items.IRON_INGOT, 10), new ItemStack(JSTItems.item1, 1, 109)}, null, 16, 200);
-		MRecipes.addSeparatorRecipe(new OreDictStack("ingotRedAlloy"), null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotCopper", 1), new ItemStack(Items.REDSTONE, 4)}, null, 16, 200);
-		MRecipes.addSeparatorRecipe(new OreDictStack("ingotBlueAlloy"), null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotSilver", 1), new ItemStack(JSTItems.item1, 4, 27)}, null, 16, 200);
+		MRecipes.addSeparatorRecipe("ingotRedAlloy", null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotCopper", 1), new ItemStack(Items.REDSTONE, 4)}, null, 16, 200);
+		MRecipes.addSeparatorRecipe("ingotBlueAlloy", null, null, new ItemStack[] {JSTUtils.getFirstItem("ingotSilver", 1), new ItemStack(JSTItems.item1, 4, 27)}, null, 16, 200);
 
 		//ChemMixer
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 8, 9004), new ItemStack(JSTItems.item1, 2, 9001), new ItemStack(JSTItems.item1, 2, 9016), new OreDictStack("dustCarbon")}, null, new ItemStack(JSTItems.item1, 12, 9005), null, null, 30, 800);
@@ -397,7 +401,7 @@ public class MRecipeLoader extends Loadable {
 		st = new ItemStack(Blocks.SAND, 2);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 4, 105), st, new ItemStack(JSTItems.item1, 1, 9008)}, null, new ItemStack(JSTItems.item1, 4, 106), new ItemStack(JSTItems.item1, 1, 9000), null, 300, 250);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 4, 105), st}, new FluidStack(JSTFluids.lpg, 1000), new ItemStack(JSTItems.item1, 4, 106), null, null, 300, 250);
-		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(Items.COAL, 8, 32767), new ItemStack(Items.BLAZE_POWDER)}, null, new ItemStack(JSTItems.item1, 1, 98), null, null, 10, 300);
+		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(Items.COAL, 8, 32767), Items.BLAZE_POWDER}, null, new ItemStack(JSTItems.item1, 1, 98), null, null, 10, 300);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(Items.COAL, 8, 32767)}, new FluidStack(JSTFluids.fuel, 250), new ItemStack(JSTItems.item1, 4, 98), null, null, 10, 500);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 2, 98), new ItemStack(JSTItems.item1, 1, 9004)}, null, new ItemStack(JSTItems.item1, 8, 99), new ItemStack(JSTItems.item1, 1, 9000), null, 50, 400);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 4, 99), new ItemStack(JSTItems.item1, 1, 9005), new ItemStack(Items.ENDER_EYE)}, null, new ItemStack(JSTItems.item1, 4, 101), new ItemStack(JSTItems.item1, 1, 9000), null, 500, 100);
@@ -408,9 +412,9 @@ public class MRecipeLoader extends Loadable {
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9001), new ItemStack(JSTItems.item1, 1, 9019)}, null, new ItemStack(JSTItems.item1, 2, 9021), null, null, 15, 400);
 		st = JSTUtils.getFirstItem("dustSaltpeter", 5);
 		if (!st.isEmpty()) {
-			MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustSodium"), new ItemStack(JSTItems.item1, 1, 9016), new ItemStack(JSTItems.item1, 3, 9017)}, null, st, new ItemStack(JSTItems.item1, 4, 9000), null, 5, 100);
+			MRecipes.addChemMixerRecipe(new Object[] {"dustSodium", new ItemStack(JSTItems.item1, 1, 9016), new ItemStack(JSTItems.item1, 3, 9017)}, null, st, new ItemStack(JSTItems.item1, 4, 9000), null, 5, 100);
 			if (JSTUtils.oreValid("dustSulfur"))
-				MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustSaltpeter", 2), new OreDictStack("dustCarbon"), new OreDictStack("dustSulfur")}, null, new ItemStack(Items.GUNPOWDER, 5), null, null, 5, 100);
+				MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustSaltpeter", 2), "dustCarbon", "dustSulfur"}, null, new ItemStack(Items.GUNPOWDER, 5), null, null, 5, 100);
 		}
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 9005), new ItemStack(JSTItems.item1, 1, 9016)}, null, new ItemStack(Items.GUNPOWDER, 32), new ItemStack(JSTItems.item1, 2, 9000), null, 5, 100);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(Items.SUGAR, 16), new ItemStack(JSTItems.item1, 1, 9021)}, null, new ItemStack(JSTItems.item1, 16, 109), new ItemStack(JSTItems.item1, 1, 9000), null, 10, 400);
@@ -426,7 +430,7 @@ public class MRecipeLoader extends Loadable {
 		obj = new FluidStack(FluidRegistry.WATER, 1000);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTBlocks.block2, 8, 0)}, (FluidStack) obj, new ItemStack(Blocks.DIRT, 8), null, null, 8, 100);
 		MRecipes.addChemMixerRecipe(new Object[] {new ItemStack(JSTBlocks.block2, 8, 1)}, (FluidStack) obj, new ItemStack(Blocks.SAND, 8), null, null, 8, 100);
-		MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustBauxite", 8), new OreDictStack("dustMagnesium")}, new FluidStack(JSTFluids.chlorine, 1000), new ItemStack(JSTItems.item1, 7, 71), new ItemStack(JSTItems.item1, 2, 2), null, 200, 500);
+		MRecipes.addChemMixerRecipe(new Object[] {new OreDictStack("dustBauxite", 8), "dustMagnesium"}, new FluidStack(JSTFluids.chlorine, 1000), new ItemStack(JSTItems.item1, 7, 71), new ItemStack(JSTItems.item1, 2, 2), null, 200, 500);
 		obj = new OreDictStack("oreUranium");
 		if (JSTUtils.oreValid((OreDictStack)obj)) MRecipes.addChemMixerRecipe(new Object[] {obj, new OreDictStack("dustMagnesium", 2)}, null, JSTUtils.getFirstOrSecond("dustUranium", 4, "ingotUranium"), null, null, 400, 100);
 		obj = new OreDictStack("dustSulfur");
@@ -440,7 +444,7 @@ public class MRecipeLoader extends Loadable {
 		//CokeOven
 		MRecipes.addCokeOvenRecipe(new OreDictStack("logWood", 16), new ItemStack(Items.COAL, 40, 1), FluidRegistry.getFluidStack("creosote", 4000), 64, 400);
 		MRecipes.addCokeOvenRecipe(new ItemStack(Items.COAL, 16), JSTUtils.getFirstItem("fuelCoke", 16), FluidRegistry.getFluidStack("creosote", 8000), 64, 400);
-		MRecipes.addCokeOvenRecipe(new ItemStack(Blocks.COAL_BLOCK), JSTUtils.getFirstItem("blockFuelCoke"), FluidRegistry.getFluidStack("creosote", 4500), 64, 200);
+		MRecipes.addCokeOvenRecipe(Blocks.COAL_BLOCK, JSTUtils.getFirstItem("blockFuelCoke"), FluidRegistry.getFluidStack("creosote", 4500), 64, 200);
 		MRecipes.addCokeOvenRecipe(new OreDictStack("fuelCoke", 10), new ItemStack(JSTItems.item1, 10, 109), new FluidStack(JSTFluids.oil, 1000), 100, 200);
 
 		//Refinery
@@ -462,25 +466,25 @@ public class MRecipeLoader extends Loadable {
 
 		//Liquifier
 		obj = new FluidStack(JSTFluids.silicon, 144);
-		MRecipes.addLiquifierRecipe(new OreDictStack("ingotSilicon"), (FluidStack)obj, 10, 200);
-		MRecipes.addLiquifierRecipe(new OreDictStack("dustSilicon"), (FluidStack)obj, 10, 200);
-		MRecipes.addLiquifierRecipe(new OreDictStack("dustLithium"), new FluidStack(JSTFluids.lithium, 144), 8, 100);
-		MRecipes.addLiquifierRecipe(new OreDictStack("dustSodium"), new FluidStack(JSTFluids.sodium, 144), 8, 100);
-		MRecipes.addLiquifierRecipe(new OreDictStack("dustCarbon"), new FluidStack(JSTFluids.carbon, 144), 120, 100);
+		MRecipes.addLiquifierRecipe("ingotSilicon", (FluidStack)obj, 10, 200);
+		MRecipes.addLiquifierRecipe("dustSilicon", (FluidStack)obj, 10, 200);
+		MRecipes.addLiquifierRecipe("dustLithium", new FluidStack(JSTFluids.lithium, 144), 8, 100);
+		MRecipes.addLiquifierRecipe("dustSodium", new FluidStack(JSTFluids.sodium, 144), 8, 100);
+		MRecipes.addLiquifierRecipe("dustCarbon", new FluidStack(JSTFluids.carbon, 144), 120, 100);
 		obj = new FluidStack(JSTFluids.solder, 144);
-		MRecipes.addLiquifierRecipe(new OreDictStack("ingotSolder"), (FluidStack)obj, 8, 100);
-		MRecipes.addLiquifierRecipe(new OreDictStack("dustSolder"), (FluidStack)obj, 8, 100);
+		MRecipes.addLiquifierRecipe("ingotSolder", (FluidStack)obj, 8, 100);
+		MRecipes.addLiquifierRecipe("dustSolder", (FluidStack)obj, 8, 100);
 		MRecipes.addLiquifierRecipe(new ItemStack(JSTBlocks.blockOre, 1, 5), new FluidStack(JSTFluids.oil, 1000), 16, 200);
 		MRecipes.addLiquifierRecipe(new ItemStack(JSTItems.item1, 1, 151), new FluidStack(JSTFluids.oil, 500), 10, 100);
 		MRecipes.addLiquifierRecipe(new ItemStack(JSTItems.item1, 1, 15), FluidRegistry.getFluidStack("milk", 1000), 10, 100);
 
 		//Pulverizer
-		MRecipes.addGrindingRecipe(new ItemStack(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER, 5), 5, 150);
-		MRecipes.addGrindingRecipe(new ItemStack(Items.BONE), new ItemStack(Items.DYE, 6, 15), 5, 150);
+		MRecipes.addGrindingRecipe(Items.BLAZE_ROD, new ItemStack(Items.BLAZE_POWDER, 5), 5, 150);
+		MRecipes.addGrindingRecipe(Items.BONE, new ItemStack(Items.DYE, 6, 15), 5, 150);
 		MRecipes.addGrindingRecipe(new ItemStack(Blocks.STONE, 1, 32767), new ItemStack(Blocks.GRAVEL), 5, 150);
-		MRecipes.addGrindingRecipe(new ItemStack(Blocks.GRAVEL), new ItemStack(Items.FLINT), 5, 150);
-		MRecipes.addGrindingRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND), 5, 150);
-		MRecipes.addGrindingRecipe(new ItemStack(Items.REEDS), new ItemStack(Items.SUGAR, 2), 5, 75);
+		MRecipes.addGrindingRecipe(Blocks.GRAVEL, new ItemStack(Items.FLINT), 5, 150);
+		MRecipes.addGrindingRecipe(Blocks.COBBLESTONE, new ItemStack(Blocks.SAND), 5, 150);
+		MRecipes.addGrindingRecipe(Items.REEDS, new ItemStack(Items.SUGAR, 2), 5, 75);
 
 		fa = new FluidStack[] {new FluidStack(FluidRegistry.WATER, 4000), new FluidStack(JSTFluids.acid, 4000), new FluidStack(JSTFluids.mercury, 4000)};
 		addGrind("Iron", 4, null, false, "Nickel", false, fa);
@@ -526,20 +530,20 @@ public class MRecipeLoader extends Loadable {
 		addGrind(obj.toString(), 4, JSTUtils.oreValid("gem" + obj) ? "gem" : "crystal", false, "Platinum", true, fa);
 
 		fa[0] = JSTUtils.modFStack(fa[0], 1000);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustDiamond"), null, fa[0], new ItemStack(Items.DIAMOND), 64, 600);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustEmerald"), null, fa[0], new ItemStack(Items.EMERALD), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustCoal"), null, fa[0], new ItemStack(Items.COAL), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustRuby"), null, fa[0], new ItemStack(JSTItems.item1, 1, 16), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustPeridot"), null, fa[0], new ItemStack(JSTItems.item1, 1, 17), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustSapphire"), null, fa[0], new ItemStack(JSTItems.item1, 1, 18), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustLapis"), null, fa[0], new ItemStack(Items.DYE, 1, 4), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustNetherQuartz"), null, fa[0], new ItemStack(Items.QUARTZ), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustCertusQuartz"), null, fa[0], JSTUtils.getValidOne("gemCertusQuartz", "crystalCertusQuartz"), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustFluix"), null, fa[0], JSTUtils.getValidOne("gemFluix", "crystalFluix"), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustAmethyst"), null, fa[0], JSTUtils.getFirstItem("gemAmethyst"), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustAmber"), null, fa[0], JSTUtils.getFirstItem("gemAmber"), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustDilithium"), null, fa[0], JSTUtils.getValidOne("gemDilithium", "crystalDilithium"), 24, 400);
-		MRecipes.addCrystalRecipe(new OreDictStack("dustCarbon", 32), new OreDictStack("dustNiobium"), null, new ItemStack(JSTItems.item1, 1, 150), 250, 400);
+		MRecipes.addCrystalRecipe("dustDiamond", null, fa[0], new ItemStack(Items.DIAMOND), 64, 600);
+		MRecipes.addCrystalRecipe("dustEmerald", null, fa[0], new ItemStack(Items.EMERALD), 24, 400);
+		MRecipes.addCrystalRecipe("dustCoal", null, fa[0], new ItemStack(Items.COAL), 24, 400);
+		MRecipes.addCrystalRecipe("dustRuby", null, fa[0], new ItemStack(JSTItems.item1, 1, 16), 24, 400);
+		MRecipes.addCrystalRecipe("dustPeridot", null, fa[0], new ItemStack(JSTItems.item1, 1, 17), 24, 400);
+		MRecipes.addCrystalRecipe("dustSapphire", null, fa[0], new ItemStack(JSTItems.item1, 1, 18), 24, 400);
+		MRecipes.addCrystalRecipe("dustLapis", null, fa[0], new ItemStack(Items.DYE, 1, 4), 24, 400);
+		MRecipes.addCrystalRecipe("dustNetherQuartz", null, fa[0], new ItemStack(Items.QUARTZ), 24, 400);
+		MRecipes.addCrystalRecipe("dustCertusQuartz", null, fa[0], JSTUtils.getValidOne("gemCertusQuartz", "crystalCertusQuartz"), 24, 400);
+		MRecipes.addCrystalRecipe("dustFluix", null, fa[0], JSTUtils.getValidOne("gemFluix", "crystalFluix"), 24, 400);
+		MRecipes.addCrystalRecipe("dustAmethyst", null, fa[0], JSTUtils.getFirstItem("gemAmethyst"), 24, 400);
+		MRecipes.addCrystalRecipe("dustAmber", null, fa[0], JSTUtils.getFirstItem("gemAmber"), 24, 400);
+		MRecipes.addCrystalRecipe("dustDilithium", null, fa[0], JSTUtils.getValidOne("gemDilithium", "crystalDilithium"), 24, 400);
+		MRecipes.addCrystalRecipe(new OreDictStack("dustCarbon", 32), "dustNiobium", null, new ItemStack(JSTItems.item1, 1, 150), 250, 400);
 		MRecipes.addCrystalRecipe(new OreDictStack("dustCarbon", 32), JSTUtils.getValidOne("dustGold", "ingotGold"), null, new ItemStack(JSTItems.item1, 1, 150), 250, 400);
 		MRecipes.HeatExcFakeRecipes.add(RecipeContainer.newContainer(null, new FluidStack[] {new FluidStack(FluidRegistry.WATER, 2), new FluidStack(FluidRegistry.LAVA, 333)}, null, new FluidStack[] {new FluidStack(JSTFluids.steam, 16000), FluidRegistry.getFluidStack("ic2pahoehoe_lava", 333)}, 0, 0));
 
@@ -552,7 +556,8 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addBioRecipe(new OreDictStack("cropPotato", 12), fa[0], null, fa[1], 100, 250);
 			MRecipes.addBioRecipe(new OreDictStack("cropCarrot", 12), fa[0], null, fa[1], 100, 250);
 			MRecipes.addBioRecipe(new OreDictStack("treeLeaves", 20), fa[0], null, fa[1], 100, 250);
-			MRecipes.addBioRecipe(new OreDictStack("cropWheat", 20), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("cropWheat", 12), fa[0], null, fa[1], 100, 250);
+			MRecipes.addBioRecipe(new OreDictStack("cropRice", 12), fa[0], null, fa[1], 100, 250);
 			MRecipes.addBioRecipe(new OreDictStack("logWood", 12), fa[0], null, fa[1], 200, 200);
 			MRecipes.addBioRecipe(new ItemStack(Items.APPLE, 8), fa[0], null, fa[1], 100, 250);
 			MRecipes.addBioRecipe(new ItemStack(Blocks.BROWN_MUSHROOM, 10), fa[0], null, fa[1], 100, 250);
@@ -572,6 +577,8 @@ public class MRecipeLoader extends Loadable {
 			MRecipes.addBioRecipe(new OreDictStack("cropWalnut", 10), null, null, fa[0], 100, 400);
 			MRecipes.addBioRecipe(new OreDictStack("cropChestnut", 10), null, null, fa[0], 100, 400);
 			MRecipes.addBioRecipe(new OreDictStack("cropAlmond", 10), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("cropSoybean", 12), null, null, fa[0], 100, 400);
+			MRecipes.addBioRecipe(new OreDictStack("seedRice", 12), null, null, fa[0], 100, 400);
 		}
 
 		MRecipes.addCircuitBuildRecipe(new Object[] {new ItemStack(JSTItems.item1, 1, 190), new ItemStack(JSTItems.item1, 2, 85)}, new ItemStack(JSTItems.item1, 1, 86), 16, 300);

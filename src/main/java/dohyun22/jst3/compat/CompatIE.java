@@ -69,10 +69,10 @@ public class CompatIE extends Loadable {
 		DieselHandler.registerDrillFuel(JSTFluids.nitrofuel);
 		if (JSTCfg.gtceLoaded) {
 			Fluid f = FluidRegistry.getFluid("sulfuric_light_fuel");
-			DieselHandler.registerFuel(f, JSTCfg.BuffIEDieselGen ? 125 : 50);
+			DieselHandler.registerFuel(f, JSTCfg.buffIEDieselGen ? 125 : 50);
 			DieselHandler.registerDrillFuel(f);
 			f = FluidRegistry.getFluid("light_fuel");
-			DieselHandler.registerFuel(f, JSTCfg.BuffIEDieselGen ? 500 : 200);
+			DieselHandler.registerFuel(f, JSTCfg.buffIEDieselGen ? 500 : 200);
 			DieselHandler.registerDrillFuel(f);
 		}
 		if (JSTCfg.ic2Loaded) {
@@ -212,7 +212,7 @@ public class CompatIE extends Loadable {
 		
 		RecipeLoader.addShapedRecipe(JSTUtils.getModItemStack("immersiveengineering:stone_decoration", 8, 8), " G ", "GFG", " G ", 'G', "blockGlass", 'F', new ItemStack(JSTItems.item1, 1, 106));
 	
-		if (JSTCfg.BuffIEDieselGen) {
+		if (JSTCfg.buffIEDieselGen) {
 			DieselHandler.registerFuel(FluidRegistry.getFluid("biodiesel"), 480);
 			DieselHandler.registerFuel(FluidRegistry.getFluid("fuel"), 500);
 			DieselHandler.registerFuel(FluidRegistry.getFluid("diesel"), 500);

@@ -1,17 +1,18 @@
 package dohyun22.jst3.utils;
 
-import java.util.Map.Entry;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import dohyun22.jst3.evhandler.DustHandler;
 import dohyun22.jst3.loader.JSTCfg;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -24,13 +25,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public final class JSTChunkData {
 	/** Used for saving chunk data (i.e Oil in chunk, FineDust) */
 	private static final Map<Integer, Map<ChunkPos, NBTTagCompound>> DATA_CACHE = new HashMap();
-	public static final String FLUID_TAG_NAME = "Fluid";
-	public static final String DUST_TAG_NAME = "Dust";
+	public static final String FLUID_TAG_NAME = "Fluid", DUST_TAG_NAME = "Dust", BROKEN_TAG_NAME = "Broken";
 	public static final List<FRType> FLUID_RESOURCES = new ArrayList();
 	public static String[] data;
 	
@@ -218,7 +217,42 @@ public final class JSTChunkData {
 			if (c != null) c.markDirty();
 		}
 	}
-	
+
+	public static List<BlockPos> getBrokenMachines(World w, ChunkPos cp) {
+		NBTTagCompound tag = getChunkData(w, cp);
+		List<BlockPos> r = new ArrayList();
+		if (tag != null) {
+			short[] a = JSTUtils.nbtToShortArray(tag, BROKEN_TAG_NAME);
+			for (short s : a) r.add(JSTUtils.backToBlockPos(cp, s));
+		}
+		return r;
+	}
+
+	public static void setBrokenMachine(World w, BlockPos p, boolean fix) {
+		ChunkPos cp = new ChunkPos(p);
+		NBTTagCompound tag = getChunkData(w, cp);
+		if (tag == null)
+			tag = new NBTTagCompound();
+		short[] a = JSTUtils.nbtToShortArray(tag, BROKEN_TAG_NAME);
+		short rp = JSTUtils.toRelativePos(p);
+		HashSet<Short> l = new HashSet();
+		for (short s : a) l.add(s);
+		if (fix) l.remove(rp);
+		else l.add(rp);
+		if (l.isEmpty())
+			tag.removeTag(BROKEN_TAG_NAME);
+		else {
+			a = new short[l.size()];
+			int n = 0;
+			for (Short s : l) {
+				a[n] = s;
+				n++;
+			}
+			JSTUtils.shortArrayToNBT(tag, a, BROKEN_TAG_NAME);
+		}
+		setChunkData(w, cp, tag, true);
+	}
+
 	@Nullable
 	public static FluidStack getFluidForChunk(World w, ChunkPos cp) {
 		List<FRType> ls = getFluidsForChunk(w, cp);
@@ -344,6 +378,10 @@ public final class JSTChunkData {
 			ret += itemWeight + ";" + fluid + ";" + min + ";" + range + ";" + Arrays.toString(dims == null ? new int[0] : dims) + ";" + Arrays.toString(dimsBL == null ? new int[0] : dimsBL) + ";" + Arrays.toString(biomes == null ? new Object[0] : biomes) + ";" + Arrays.toString(biomesBL == null ? new Object[0] : biomesBL);
 			return ret;
 		}
+	}
+
+	public static void clear() {
+		DATA_CACHE.clear();
 	}
 	
 	//Seed: -5061253281198407478

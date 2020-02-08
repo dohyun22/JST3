@@ -50,7 +50,7 @@ public class JustServerTweak {
 	public static CommonProxy proxy;
 	
 	public static final String MODID = "jst3";
-	public static final String VERSION = "3.6.3MC1.12";
+	public static final String VERSION = "3.6.4MC1.12";
 	public static final String NAME = "Just Server Tweak 3";
 
 	@Mod.Instance(JustServerTweak.MODID)

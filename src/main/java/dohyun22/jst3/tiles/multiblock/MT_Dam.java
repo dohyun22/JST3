@@ -85,7 +85,7 @@ public class MT_Dam extends MT_Multiblock {
 			}
 		}
 		for (EnumFacing f : dir) {
-			for (int n = 1; n <= 50; n++) {
+			for (int n = 1; n <= 60; n++) {
 				p2 = p.offset(f, n);
 				int a = check(p2, false, flag);
 				if (a == -1)
@@ -114,8 +114,8 @@ public class MT_Dam extends MT_Multiblock {
 			MT_EnergyPort p = getEnergyPort(0, true);
 			if (p != null && turbines > 0) {
 				if (flow <= 0) flow = MetaTileDCWind.updateWind(flow, w.rand);
-				double eu = (water1 + water2) * 1.5 * (flow / 10.0D);
-				eu += Math.abs(water1 - water2);
+				double eu = (water1 + water2) * 2.5D * (1.0D + ((flow - 12.5D) / 50.0D));
+				eu += Math.abs(water1 - water2) * 3.0D;
 				if (damNear) eu /= 10.0D;
 				eu = Math.min(eu, turbines * 256);
 				if (p.baseTile.energy + (int) eu <= p.getMaxEnergy())

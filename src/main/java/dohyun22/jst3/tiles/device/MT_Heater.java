@@ -23,6 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -74,6 +75,7 @@ public class MT_Heater extends MetaTileEnergyInput implements IGenericGUIMTE {
 		addSupport("ic2.core.block.machine.tileentity.TileEntityIronFurnace", new String[] {"fuel", "totalFuel"}, new Object[] {800, 800}, new int[] {0}, 40, false);
 		addSupport("net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter", new String[] {"burnTime", "totalBurnTime"}, new Object[] {800, 800}, new int[] {0}, 40, false);
 		addSupport("moze_intel.projecte.gameObjs.tiles.RMFurnaceTile", new String[] {"furnaceBurnTime", "currentItemBurnTime"}, new Object[] {800, 800}, new int[] {0}, 40, false);
+		addSupport("cn.mcmod.tofucraft.tileentity.TileEntitySaltFurnace", new String[] {"furnaceBurnTime", "currentItemBurnTime"}, new Object[] {800, 800}, new int[] {0}, 40, false);
 	}
 
 	@Override
@@ -196,14 +198,15 @@ public class MT_Heater extends MetaTileEnergyInput implements IGenericGUIMTE {
 	@SideOnly(Side.CLIENT)
 	public void getInformation(ItemStack st, World w, List<String> ls, boolean adv) {
 		ls.addAll(JSTUtils.getListFromTranslation("jst.tooltip.tile.heater"));
-		List<String> ls2 = JSTUtils.getListFromTranslation("jst.tooltip.tile.heater.supp");
+		String[] s = JSTUtils.getArrayFromString(I18n.format("jst.tooltip.tile.heater.supp"));
 		try {
-			ls.add(ls2.get(0));
-			if (JSTCfg.ic2Loaded) ls.add(ls2.get(1));
-			if (JSTCfg.ticLoaded) ls.add(ls2.get(2));
-			if (JSTCfg.tcLoaded) ls.add(ls2.get(3));
-			if (Loader.isModLoaded("torchmaster")) ls.add(ls2.get(4));
-			if (Loader.isModLoaded("projecte")) ls.add(ls2.get(5));
+			ls.add(s[0]);
+			if (JSTCfg.ic2Loaded) ls.add(s[1]);
+			if (JSTCfg.ticLoaded) ls.add(s[2]);
+			if (JSTCfg.tcLoaded) ls.add(s[3]);
+			if (Loader.isModLoaded("torchmaster")) ls.add(s[4]);
+			if (Loader.isModLoaded("projecte")) ls.add(s[5]);
+			if (Loader.isModLoaded("tofucraft")) ls.add(s[6]);
 		} catch (Exception e) {}
 	}
 	
